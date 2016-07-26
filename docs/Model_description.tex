@@ -1,3 +1,4 @@
+
 \title{A simple statistical model describing fire through its limitations}
 \author{
         Douglas Kelley \\
@@ -18,6 +19,11 @@
 
 \documentclass[12pt]{article}
 
+\usepackage[english]{babel}
+\usepackage{graphicx}
+\usepackage{natbib}
+
+
 \begin{document}
 \maketitle
 
@@ -37,6 +43,22 @@ Finally, Section~\ref{conclusions} gives the conclusions.
 \section{Previous work}\label{previous work}
 A much longer \LaTeXe{} example was written by Gil~\cite{Gil:02}.
 
+
+\begin{figure}[!ht]
+  \centering
+    \includegraphics[width=0.67\textwidth]{../figs/gfedComparison.png}
+   
+  \caption{Bechmark comparisons against GFED4s \citep{Giglio2013}.}
+\end{figure}
+
+
+\begin{figure}[!ht]
+  \centering
+    \includegraphics[width=0.67\textwidth]{../figs/limitation_lines.png}
+   
+  \caption{Limitation covers.}
+\end{figure}
+
 \section{Results}\label{results}
 In this section we describe the results.
 
@@ -44,7 +66,7 @@ In this section we describe the results.
 We worked hard, and achieved very little.
 
 \bibliographystyle{abbrv}
-\bibliography{main}
+\bibliography{Model_description}
 
 \end{document}
 This is never printed
