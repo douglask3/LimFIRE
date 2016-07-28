@@ -1,5 +1,5 @@
 source('cfg.r')
-graphics.off()
+ if (!exists('AGUplot')) graphics.off()
 
 fig_fname = 'figs/limitation_map.png'
 
@@ -73,49 +73,60 @@ fs_mod[[2]][is.na(fs_mod[[2]])] = 1
 #########################################################################
 
 ## Set up plotting window
-png(fig_fname, width = 9, height = 6 * 2.75/3, unit = 'in', res = 300)
-layout(rbind(1:2,3:4, 5, 5), heights = c(4, 4, 1))
+ if (!exists('AGUplot')) {
+    png(fig_fname, width = 9, height = 6 * 2.75/3, unit = 'in', res = 300)
+    layout(rbind(1:2,3:4, 5, 5), heights = c(4, 4, 1))
+}
 
 par(mar = c(0,0,0,0), oma = c(0,0,1,0))
 
 ## Plot limitation and sesativity
-plot_limtations_and_sensativity_plots <- function(pmod, labs) {
+plot_limtations_and_sensativity_plots <- function(pmod, labs, plotAA = TRUE, plotFS = TRUE) {
     xy = xyFromCell(pmod[[1]], 1:length(pmod[[1]]))
-    pmod = lapply(pmod[-1], values)
-        
+    pmod = lapply(pmod[-1], values) 
+    
     plot_4way(xy[,1], xy[,2], pmod[[3]] / 1.5, pmod[[1]], pmod[[2]], pmod[[4]],
               x_range=c(-180,180),y_range=c(-60,90),
               cols=rev(c("FF","CC","99","55","11")),
               coast.lwd=par("lwd"),
-             add_legend=FALSE, smooth_image=FALSE,smooth_factor=5)
-    
-    mtext(labs[1], line = -1, adj = 0.05)
+              add_legend=FALSE, smooth_image=FALSE,smooth_factor=5)
+
+    mtext(labs[1], line = -1 - exists('AGUplot'), adj = 0.05)
     
     convert2sensativity <- function(x) 1 - 2*abs(x - 0.5)
     pmod = lapply(pmod, convert2sensativity)
 
+    
     plot_4way(xy[,1], xy[,2], pmod[[3]], pmod[[1]], pmod[[2]], pmod[[4]],
               x_range=c(-180,180),y_range=c(-60,90),
               cols=rev(c("FF","CC","99","55","11")),
               coast.lwd=par("lwd"),
-             add_legend=FALSE, smooth_image=FALSE,smooth_factor=5)
-             
-    mtext(labs[2], line = -1, adj = 0.05)
+              add_legend=FALSE, smooth_image=FALSE,smooth_factor=5)
+           
+    mtext(labs[2], line = -1 - exists('AGUplot') , adj = 0.05)
+    
+}
+       
+
+if (!exists('AGUplot')) {
+    labs = c('a) Annual average controls on fire', 'b) Annual average sensitivity',
+             'c) Controls on fire during the fire season', 'd) Sensitivity during the fire season')
+    plot_limtations_and_sensativity_plots(aa_mod, labs[1:2])
 }
 
-
-labs = c('a) Annual average controls on fire', 'b) Annual average sensitivity',
-         'c) Controls on fire during the fire season', 'd) Sensitivity during the fire season')
-plot_limtations_and_sensativity_plots(aa_mod, labs[1:2])
 plot_limtations_and_sensativity_plots(fs_mod, labs[3:4])
 
 
+
 ## Add legend
-par(mar = c(3, 10, 0, 8))
+par(mar = c(3 + exists('AGUplot') * 0, 10, 0, 8))
 add_raster_4way_legend(cols = rev(c("FF","CC","99","55","11")),
                        labs = c('<- Moisture', 'Fuel ->', 'Igntions ->', 'Supression'))
 
 ## add footer
-par(fig = c(0, 1, 0, 1), mar = rep(0, 4))
-points(0.5, 0.5, col = 'white', cex = 0.05)
-dev.off.gitWatermark()
+
+if (!exists('AGUplot')) {
+    par(fig = c(0, 1, 0, 1), mar = rep(0, 4))
+    points(0.5, 0.5, col = 'white', cex = 0.05)
+    dev.off.gitWatermark()
+}
