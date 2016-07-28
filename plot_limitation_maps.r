@@ -91,7 +91,7 @@ plot_limtations_and_sensativity_plots <- function(pmod, labs, plotAA = TRUE, plo
               coast.lwd=par("lwd"),
               add_legend=FALSE, smooth_image=FALSE,smooth_factor=5)
 
-    mtext(labs[1], line = -1 - exists('AGUplot'), adj = 0.05)
+    mtext(labs[1], line = -1, adj = 0.05)
     
     convert2sensativity <- function(x) 1 - 2*abs(x - 0.5)
     pmod = lapply(pmod, convert2sensativity)
@@ -103,7 +103,7 @@ plot_limtations_and_sensativity_plots <- function(pmod, labs, plotAA = TRUE, plo
               coast.lwd=par("lwd"),
               add_legend=FALSE, smooth_image=FALSE,smooth_factor=5)
            
-    mtext(labs[2], line = -1 - exists('AGUplot') , adj = 0.05)
+    mtext(labs[2], line = -1 , adj = 0.05)
     
 }
        
@@ -119,7 +119,7 @@ plot_limtations_and_sensativity_plots(fs_mod, labs[3:4])
 
 
 ## Add legend
-par(mar = c(3 + exists('AGUplot') * 0, 10, 0, 8))
+par(mar = c(3 + exists('AGUplot') * 3.5, 10, 0, 8))
 add_raster_4way_legend(cols = rev(c("FF","CC","99","55","11")),
                        labs = c('<- Moisture', 'Fuel ->', 'Igntions ->', 'Supression'))
 

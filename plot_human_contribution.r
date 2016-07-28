@@ -14,9 +14,11 @@ cont_cols1 = fire_cols
 cont_lims2 = cont_lims1
 cont_cols2 = c("#FFFFFF", "#00EEFF", "#0022AA", "#000033") 
 
-labs = c('a) Full model burnt area', 'b) No human ignitions', 'c) No humans', 'd) Burnt Area from human ignitions', 'e) Contribution of humans',
-         'f) % Contribution of human igntions', 'g) % Contribution of humans') 
- 
+if (!exists('AGUplot')) {
+    labs = c('a) Full model burnt area', 'b) No human ignitions', 'c) No humans', 'd) Burnt Area from human ignitions', 'e) Contribution of humans',
+             'f) % Contribution of human igntions', 'g) % Contribution of humans') 
+}
+
 control = runIfNoFile(mod_file[1], runLimFIREfromstandardIns, fireOnly = TRUE)
 noIgnit = runIfNoFile(mod_file[2], runLimFIREfromstandardIns, fireOnly = TRUE, 
                   remove = "pas")
@@ -40,7 +42,7 @@ par(mar = c(0,0,0,0))
 
 
 
-mtextStandard <- function(...) mtext(...)
+mtextStandard <- function(...) mtext(..., adj = 0.05)
 
 standard_legend <- function(cols = fire_cols, lims = fire_lims, dat,
                             plot_loc = c(0.35,0.75,0.65,0.78)) {
