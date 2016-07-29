@@ -8,8 +8,8 @@ mod_file = paste(mod_file, c('', 'noHumanIngnitions', 'noHumans'), '.nc', sep ='
 diff_lims1 = c(0, 0.1, 1, 2, 5) 
 diff_cols1 = fire_cols
 
-diff_lims2 = c(-20, -10, -5, -2, -1, -0.1, 0.1, 1, 2, 5) 
-diff_cols2 = c('#000033', '#0022AA',  '#00EEFF', 'white', '#FFEE00', '#AA2200')
+diff_lims2 = c(-20, -10, -5, -2, -1, -0.1, 0.1, 1) 
+diff_cols2 = c('#000033', '#0022AA',  '#00EEFF', 'white', '#FF7700')
 
 
 cont_lims1 = c(0, 2, 5, 10, 20, 40, 60, 80)
