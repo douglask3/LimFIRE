@@ -9,10 +9,10 @@ layout(rbind(c(1, 2),
              c(5, 7)), heights = c(4, 3, 4, 1.333))
              
 
-labs = c('', '', 'Limits on fire', 'Sensativity of fire')
+labs = c('', '', 'Limits on fire', 'Sensitivity of fire')
 source("plot_limitation_maps.r")
 
-labs = c('', '', '', 'Human igntion contribution to fire', 'Overall human contribution to fire')
+labs = c('', '', '', 'Impact of human ignition on fire', 'Impact of human ignition and land use on fire')
 source("plot_human_contribution.r")
 
 dev.off.gitWatermark()
