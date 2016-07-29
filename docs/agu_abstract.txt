@@ -1,14 +1,12 @@
-﻿What limits fire: 
-Authors: Douglas Kelley, Ioannis Bistinas, Rhys Whitley, ??Chantelle Burton??, ??Beccy Wilebore??, ??Elenour Blyth??
-
-Global fire models normally attempt to simulate fire through representation of fuel load, fuel moisture dynamics, natural and anthropagenic ignitions, and land use supression processes (see fireMIP). However, a lack of information on their temporal or spatial distribution has meant that simulated relative contribution of these controls are often left un-evaluated, and therefore the representation of the processes leading to burnt area uncertain. Here, we optimize remote sensed, meteorological and simple modelled representations of each fire control against GFED burnt area observations using “fire limitation” framework, and use to map limitation and sensitivity of fire frequency to each control. 
+﻿What limits fire where: limitations and senativvity on fire frequency
+Authors: Douglas Kelley, Ioannis Bistinas, Rhys Whitley, and a couple of others.
 
 
-Over most of the world, fire frequancy is limited by fuel (desert and dry grassland areas) or moisture (forested areas, particularly in tropical rainforests). However, outside of these areas, fire frequancy is limited by anthropagenic land supression and avaiable igntions. Ignitions are only limiting in areas of high fire frequency such as tropical savannah and grassland, where seasonal moisture avaibbility rsult in productuion of abundant fuel loads, which dry out … . 
+Global fire models typically simulate fire through representation of fuel load, fuel moisture, natural and anthropogenic ignitions, and land use suppression (see fireMIP).  A lack of information on their temporal or spatial distribution has meant that the simulated relative contribution of these controls remains untested, and therefore the representation of the processes leading to burnt area in fire models uncertain. Despite this, the assumption that burnt area is directly proportional to the number of fire starts, particularly those by people, has become pervasive throughout much of the fire modelling community.
 
-In these areas, human ignitions only contribute a small fraction of fire (%), and is completely offset by supression through anthrogenic land cover change everywhere except NE Aus.
+Here, we map the limitation and sensitivity of fire frequency to each control by optimizing remote sensed, meteorological and simple modelled representations of each fire control against GFED burnt area observations using “fire limitation” framework. <<how the framework works>>.
 
-Despite being limited by igntions, these areas are relatively insesative to changes in igntions, generally sensative to land use change/
+Fuel moisture is shown to be the main limitation of fire over much of the world, (% weighted average even during local dry season), particularly in the humid tropical rainforests and cold, slow drying boreal areas. Fuel is the next main limitation (% annually and % in the dry season) especially in deserts, but also extending into grassland areas during thre dry season. These are followed by land use change (%) and then ignitions, which is only the limiting factor in savanna and dry woodland, were seasonal build up and rapid drying of fuel removed all other limitation. Human ignitions only contribute a small fraction of fire (%), and is completely offset by suppression through anthropogenic land cover change everywhere except a small region of north-eastern Australia. In areas where ignitions are a limiting factor, changes in fire frequency are actually more sensitive to other controls, typically land use suppression. <<explain>>.
 
 Key areas of weakness in many DGVMS (over burning in southern Aus, India) are areas with very high land use supression
 
@@ -16,11 +14,26 @@ Main Conclusions
 This demonstrates that, although human igntions have a small but signifcant impact on burnt area over a limited geographic extent, that this shouldnt impact burnt area. But it does!
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 Aims
-We test the widely assumed dependence of fire frequency on ignition rates – particularly human igntions – found in many 
+We test the widely assumed dependence of fire frequency on ignition rates – particularly human igntions – found in many
 Not just DGVMS – gneral assumption that ignitions are important
- are evidently incorrect. 
+ are evidently incorrect.
 
 
 Methods
 	Using a mix of remote sensed observations and simple contained models, we determine the burnt area through limiations on fire: fuel disconity (fAPAR/??MODIS NPP??); moisture (atomospheric drying power, precip and live-fuel moisture); ignitions (natural via lightning flash count, and athropagenic via population density and pasture cover); and anthropgenic land use supression (popdens and cropland). This simple limiatation model is optimised against GFED observations.
+
