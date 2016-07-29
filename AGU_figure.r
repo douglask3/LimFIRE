@@ -5,8 +5,8 @@ png("figs/aguplot.png", width = 9, height = 6.53, unit = 'in', res = 300)
 
 layout(rbind(c(1, 2),
              c(3, 3),
-             c(4, 6),
-             c(5, 7)), heights = c(4, 3, 4, 1.333))
+             c(4, 5),
+             c(6, 6)), heights = c(4, 3, 4, 1.333))
              
 
 labs = c('', '', 'Limits on fire', 'Sensitivity of fire')
