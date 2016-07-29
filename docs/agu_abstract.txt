@@ -10,27 +10,3 @@ Fuel moisture is shown to be the main limitation of fire over much of the world,
 
 These findings have major implications for assessing the processes behind simulation of fire regimes, and the direction of future fire model development. As ignitions only have an impact on burnt area over a limited geographic extent, more effort should instead be directed into correct simulation of fuel loads and moisture. The assumption that humans causes much of the worlds fire is also clearly incorrect, and adequate simulation of suppression through land use should become a priority.
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Aims
-We test the widely assumed dependence of fire frequency on ignition rates – particularly human igntions – found in many
-Not just DGVMS – gneral assumption that ignitions are important
- are evidently incorrect.
-
-
-Methods
-	Using a mix of remote sensed observations and simple contained models, we determine the burnt area through limiations on fire: fuel disconity (fAPAR/??MODIS NPP??); moisture (atomospheric drying power, precip and live-fuel moisture); ignitions (natural via lightning flash count, and athropagenic via population density and pasture cover); and anthropgenic land use supression (popdens and cropland). This simple limiatation model is optimised against GFED observations.
-
