@@ -82,12 +82,12 @@ par(mar = c(0,0,0,0), oma = c(0,0,1,0))
 plot_limtations_and_sensativity_plots <- function(pmod, labs) {
     xy = xyFromCell(pmod[[1]], 1:length(pmod[[1]]))
     pmod = lapply(pmod[-1], values)
-        
-    plot_4way(xy[,1], xy[,2], pmod[[3]] / 1.5, pmod[[1]], pmod[[2]], pmod[[4]],
+    
+    plot_4way(xy[,1], xy[,2], pmod[[3]] / 2, pmod[[1]], pmod[[2]], pmod[[4]],
               x_range=c(-180,180),y_range=c(-60,90),
               cols=rev(c("FF","CC","99","55","11")),
               coast.lwd=par("lwd"),
-             add_legend=FALSE, smooth_image=FALSE,smooth_factor=5)
+             add_legend=FALSE, smooth_image=FALSE,smooth_factor=2)
     
     mtext(labs[1], line = -1, adj = 0.05)
     
