@@ -16,9 +16,7 @@ add_raster_4way_legend <- function(labs = letters[1:4], limits = c(0.25, 0.5, 0.
     legend.xyz = add_3way(1, xpos = c(0.00, 0.20))    
     legend.xyz = add_3way(2, xpos = c(0.34, 0.54)) 
     legend.xyz = add_3way(3, xpos = c(0.56, 0.76))    
-    legend.xyz = add_3way(4, xpos = c(0.80, 1.00))  
-    print("yay")
-    
+    legend.xyz = add_3way(4, xpos = c(0.80, 1.00))     
     
     legend.z = rasterFromXYZ(apply(legend.xyz[,  1:3   ],2,as.numeric))
     legend.e = rasterFromXYZ(apply(legend.xyz[,c(1:2,4)],2,as.numeric))
@@ -70,14 +68,7 @@ add_raster_3way_legend_for_4way <- function(legend.z, cols, limits = c(0.25, 0.5
         gr = cut_results_col(gr)
         rd = cut_results_col(rd)
         
-        xcols = paste('#', rd, gr, bl, sep = '')
-        #xcols = lighten(xcols, lighten_factor)
-        #xcols =  darken(xcols,  darken_factor)
-        
-        #z =  z + nz #sapply(xcols, function(i) which(i == unique(xcols))) + nz
-        #nz = max(z)
-        #points(x, y, col = xcols, pch = 19, cex = 0.01)
-        
+        xcols = paste('#', rd, gr, bl, sep = '')        
         xyz = rbind(xyz, cbind(x, y, NaN, hash, xcols))
     }
     
