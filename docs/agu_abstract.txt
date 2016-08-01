@@ -1,5 +1,5 @@
 ﻿What limits fire where and when: limitations and sensitivity on fire frequency
-Authors: Douglas Kelley, Ioannis Bistinas, Rhys Whitley, and a couple of others.
+Authors: Douglas Kelley, Ioannis Bistinas, Rhys Whitley, and maybe a couple of others.
 
 
 Global fire models typically simulate fire through representation of fuel load, moisture, natural and anthropogenic ignitions, and land use suppression. A lack of information on the temporal or spatial distribution of these controls has meant that simulation of their relative contributions are largely untested. Therefore the representation of the processes leading to burnt area in fire models is highly uncertain. Despite this, the assumption that burnt area is proportional to the number of fire starts, particularly those started by people, has become pervasive throughout much of the fire modeling community with many models showing significant increases in burnt area with human ignitions.
