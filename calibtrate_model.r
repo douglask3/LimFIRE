@@ -11,7 +11,7 @@ nout = 0.000001
                     
 lower_params = list(         f1 = nout, f2 = nout,
                     M = 0  , m1 = nout, m2 = nout,
-                    H = 0  , i1 = nout, i2 = nout,
+                    H = 0  , i1 = 0.4 , i2 = nout,
                     P = 0  , s1 = nout, s2 = nout)
                     
 upper_params = list(         f1 = 9E9 , f2 = 10   ,
