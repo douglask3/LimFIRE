@@ -5,23 +5,23 @@ inter_file_name = 'temp/driving_data.csv'
 
 start_params = list(         f1 = 100 , f2 = 1/200,
                     M = 1  , m1 = 10  , m2 = 0.1  ,
-                    H = 1  , i1 = 0.05,
+                    H = 1  , i1 = 50,
                     P = 1  , s1 = 1   , s2 = 0.01   )
                     
 lower_params = list(         f1 = 0.0 , f2 = 0.0,
                     M = 0  , m1 = 0.0 , m2 = 0.0,
-                    H = 0  , i1 = 0.0 ,
+                    H = 0  , i1 = 1 ,
                     P = 0  , s1 = 0.0 , s2 = 0.0)
                     
 upper_params = list(         f1 = 9E9 , f2 = 10,
                     M = 9E9, m1 = 9E9 , m2 = 10  ,
                     H = 9E9, i1 = 100 ,
                     P = 9E9, s1 = 9E9 , s2 = 10   )
+  
+Obs = ObsRasters2DataFrame()
 
-Obs = ObsRasters2DataFrame(Obs)
 
 
-browser()
 nls_bootstrap <- function() {
     index = sample(1:ncells, 100000, replace = FALSE)
     dat = Obs[index, ]
@@ -38,15 +38,10 @@ nboots = 1
 ncells = dim(Obs)[1]
 resStore = c()
 
-#while (nboots < 10 || (testBoot && nboots < 100)) {
-
 for (i in 1:100) {
     nboots = nboots + 1
     res = nls_bootstrap()
-    #res1 = res0 * (1-1/nboots) + res / nboots
-    #if (all(signif(res, 4) == signif(res0, 4))) testBoot = FALSE else testBoot = TRUE
     resStore = rbind(resStore, res)
 }
-
 
 write.csv( resStore, file = coefficants_file)             
