@@ -24,6 +24,7 @@ plot_4way <- function(x, y, A, B, C, D, x_range = c(-180, 180), y_range = c(-90,
     }
 
     ncols = length(cols)
+
     mag = A + B + C
     
     A = A/mag
@@ -53,24 +54,29 @@ plot_4way <- function(x, y, A, B, C, D, x_range = c(-180, 180), y_range = c(-90,
     
     z = 1:length(Az)
     zcols = paste("#", cols[Az], cols[Bz], cols[Cz], sep = "")
-    zcols = mapply(lighten, zcols    )
-    zcols = mapply( darken, zcols, Dz)
+    
+    #zcols = mapply(lighten, zcols    )
+    #zcols = mapply( darken, zcols, Dz)
     
     
-    z = rasterFromXYZ(cbind(x, y, z))
+    z = rasterFromXYZ(cbind(x, y,  z))
+    e = rasterFromXYZ(cbind(x, y, length(limits) + 2 - Dz))
     
     lims = (min.raster(z, na.rm = TRUE):max.raster(z, na.rm = TRUE) -  0.5)[-1]
     
+        
     plotFun <- function(add) plot_raster_from_raster(z, cols = zcols[sort(unique(z))], 
         limits = lims, x_range = x_range, y_range = y_range, 
         smooth_image = FALSE, smooth_factor = NULL, readyCut = TRUE, 
-        add_legend = FALSE, add = add, ...)
+        add_legend = FALSE, add = add, 
+        e = e, limits_error = 0.5 + 1:length(limits),  ePatternRes = 5,  ePatternThick = 1,
+        ...)
     
     plotFun(add)
     
-    if (add_legend) 
-        add_raster_4way_legend(cols, limits, ...)
-        
-    plotFun(TRUE)
+    if (add_legend) {
+        add_raster_4way_legend(cols, limits, ...)            
+        plotFun(TRUE)
+    }
     return(out)
 }
