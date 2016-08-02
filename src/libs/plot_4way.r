@@ -24,7 +24,8 @@ plot_4way <- function(x, y, A, B, C, D, x_range = c(-180, 180), y_range = c(-90,
     }
 
     ncols = length(cols)
-    mag = A + B + C# + D
+
+    mag = A + B + C
     
     A = A/mag
     B = B/mag

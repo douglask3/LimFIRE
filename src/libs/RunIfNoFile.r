@@ -8,7 +8,7 @@ runIfNoFile <- function(file, FUN, ..., test = TRUE) {
     r = FUN(...)
     
     if (is.raster(r)) r = writeRaster(r, file, overwrite = TRUE)
-    else if (is.list(r))
+    else if (class(r) == 'list')
         r = mapply(writeRaster, r, file, MoreArgs = list(overwrite = TRUE))
     else if (is.data.frame(r)) 
         write.csv(r, file)

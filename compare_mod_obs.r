@@ -4,6 +4,8 @@ fig_file = 'figs/gfedComparison.png'
  
 mod = runIfNoFile(mod_file, runLimFIREfromstandardIns, fireOnly = TRUE)
 obs = lapply(drive_fname, stack)[["fire"]]
+
+cols = fire_cols; lims = fire_lims
  
 ###########################################################################
 ## Annual Average                                                        ##
