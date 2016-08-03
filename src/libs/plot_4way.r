@@ -1,5 +1,5 @@
 plot_4way <- function(x, y, A, B, C, D, x_range = c(-180, 180), y_range = c(-90, 
-    90), limits = c(0.33, 0.5, 0.67), cols = c("FF", "CC", "99", 
+    90), limits = c(0.25, 0.5, 0.75), cols = c("FF", "CC", "99", 
     "55", "11"), add_legend = TRUE, smooth_image = FALSE, smooth_factor = 5, 
     add = FALSE, ...) 
 {
@@ -64,12 +64,13 @@ plot_4way <- function(x, y, A, B, C, D, x_range = c(-180, 180), y_range = c(-90,
     
     lims = (min.raster(z, na.rm = TRUE):max.raster(z, na.rm = TRUE) -  0.5)[-1]
     
-        
+    
     plotFun <- function(add) plot_raster_from_raster(z, cols = zcols[sort(unique(z))], 
         limits = lims, x_range = x_range, y_range = y_range, 
         smooth_image = FALSE, smooth_factor = NULL, readyCut = TRUE, 
         add_legend = FALSE, add = add, 
-        e = e, limits_error = 0.5 + 1:length(limits),  ePatternRes = 5,  ePatternThick = 1,
+        e = e, limits_error = 0.5 + 1:length(limits),  
+        ePatternRes = 30,  ePatternThick = 0.2, e_polygon = FALSE,
         ...)
     
     plotFun(add)

@@ -1,5 +1,5 @@
 add_raster_4way_legend <- function(labs = letters[1:4], limits = c(0.25, 0.5, 0.75),
-                                   nx = ny * 12.5, ny = 100, ...) {
+                                   nx = ny * 12.5, ny = 150, ...) {
     
     limits5 = c(0, limits, 1)
     add_3way <- function(i, xpos) {
@@ -25,7 +25,7 @@ add_raster_4way_legend <- function(labs = letters[1:4], limits = c(0.25, 0.5, 0.
     
     plot_raster_from_raster(legend.z, cols = cols, limits = limits, smooth_image = FALSE, coast.lwd = NULL, 
                              add_legend = FALSE, e = legend.e, invert_e = FALSE,  limits_error = seq(1.5, 3.5),
-                             add = TRUE,  ePatternRes = 3, ePatternThick = 1)
+                             add = TRUE,  ePatternRes = 30,  ePatternThick = 0.2, e_polygon = FALSE)
     
 
     text(x = 0.10 * nx, y = -0.25 * ny, labs[1], xpd = TRUE           )
