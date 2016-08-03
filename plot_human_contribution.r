@@ -59,8 +59,8 @@ standard_legend <- function(cols = fire_cols, lims = fire_lims, dat,
 standard_legend2 <- function(...)
         standard_legend(plot_loc = c(0.2, 0.9, 0.65, 0.78), ...)
 
-                  
-mtext.burntArea <- function() mtext('Burnt Area (%)', cex = 0.8, line = -5)                  
+
+mtext.burntArea <- function(txt = 'Burnt Area (%)') mtext(txt, cex = 0.8, line = -5)                  
 
 
 if (exists('AGUplot')) plot = FALSE else plot = TRUE     
@@ -85,7 +85,7 @@ plot_raster(noAnythi, diff_lims2, diff_cols2)
 mtextStandard(labs[5])
 
 standard_legend2(diff_cols2, diff_lims2, dat = noAnyth)
-mtext.burntArea()
+mtext.burntArea('Change in burnt area land(%)')
 
 if (!exists('AGUplot')) {
     noIgnit = 100 * noIgnit / control
@@ -94,12 +94,12 @@ if (!exists('AGUplot')) {
     plot_raster(noIgnit, cont_lims1, cont_cols1)
     mtextStandard(labs[6])
     standard_legend2(cont_cols1, cont_lims1, dat = noIgnit)
-    mtext.burntArea()
+    mtext.burntArea('Change in burnt area (%)')
 
     plot_raster(noAnyth, cont_lims2, cont_cols2)
     mtextStandard(labs[7])
     standard_legend2(cont_cols2, cont_lims2, dat = noAnyth)
-    mtext.burntArea()
+    mtext.burntArea('Change in burnt area (%)')
     
     dev.off.gitWatermark()
 }

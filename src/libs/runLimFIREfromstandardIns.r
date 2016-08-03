@@ -1,4 +1,5 @@
-runLimFIREfromstandardIns <- function(fireOnly = FALSE, remove = NULL) {
+runLimFIREfromstandardIns <- function(fireOnly = FALSE, remove = NULL, 
+                                      ...) {
     Obs = lapply(drive_fname, stack)
     params = read.csv(coefficants_file)[,-1]
     params = apply(as.matrix(params),2, mean)
@@ -14,7 +15,7 @@ runLimFIREfromstandardIns <- function(fireOnly = FALSE, remove = NULL) {
                              params['f1'],  params['f2'],  
                 params['M'], params['m1'],  params['m2'],  
                 params['H'], params['i1'],  
-                params['P'], params['s1'],  params['s2'], fireOnly)
+                params['P'], params['s1'],  params['s2'], fireOnly, ...)
     }
     if (fireOnly) return(layer.apply(1:nlayers(Obs[[1]]), runMonthly))
     mod = runMonthly(1)

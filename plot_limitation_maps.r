@@ -6,19 +6,30 @@ fig_fname = 'figs/limitation_map.png'
 mod_files = paste(outputs_dir, '/LimFIRE_',
                  c('fire', 'fuel','moisture','ignitions','supression'),
                   sep = '')
-                 
-aa_mod_files = paste(mod_files, '-aa.nc', sep = '')
-fs_mod_files = paste(mod_files, '-fs.nc', sep = '')
-   mod_files = paste(mod_files,    '.nc', sep = '')
 
-mod = runIfNoFile(mod_files, runLimFIREfromstandardIns)
+
+   lm_mod_files = paste(mod_files,    '-lm', sep = '')
+   sn_mod_files = paste(mod_files,    '-sn', sep = '')
+                  
+aa_lm_mod_files = paste(lm_mod_files, '-aa.nc', sep = '')
+aa_sn_mod_files = paste(sn_mod_files, '-aa.nc', sep = '')
+fs_lm_mod_files = paste(lm_mod_files, '-fs.nc', sep = '')
+fs_sn_mod_files = paste(sn_mod_files, '-fs.nc', sep = '')
+
+   lm_mod_files = paste(lm_mod_files,    '.nc', sep = '')
+   sn_mod_files = paste(sn_mod_files,    '.nc', sep = '')
+
+lm_mod = runIfNoFile(lm_mod_files, runLimFIREfromstandardIns)
+sn_mod = runIfNoFile(sn_mod_files, runLimFIREfromstandardIns, sensitivity = TRUE)
 
 #########################################################################
 ## Annual Average                                                      ##
 #########################################################################
 
-aa_mod = runIfNoFile(aa_mod_files, function(x) lapply(x, mean), mod)
-aa_mod[[2]][is.na(aa_mod[[2]])] = 1
+aa_lm_mod = runIfNoFile(aa_lm_mod_files, function(x) lapply(x, mean), lm_mod)
+aa_sn_mod = runIfNoFile(aa_sn_mod_files, function(x) lapply(x, mean), sn_mod)
+aa_lm_mod[[2]][is.na(aa_lm_mod[[2]])] = 100
+aa_sn_mod[[2]][is.na(aa_sn_mod[[2]])] = 100
 
 
 #########################################################################
@@ -64,8 +75,9 @@ maxFireLimiation <- function(x) {
     return(out)
 }
 
-fs_mod = runIfNoFile(fs_mod_files, function(x) lapply(x, maxFireLimiation), mod)
-fs_mod[[2]][is.na(fs_mod[[2]])] = 1
+fs_lm_mod = runIfNoFile(fs_lm_mod_files, function(x) lapply(x, maxFireLimiation), lm_mod)
+fs_sn_mod = runIfNoFile(fs_sn_mod_files, function(x) lapply(x, maxFireLimiation), sn_mod)
+fs_lm_mod[[2]][is.na(fs_lm_mod[[2]])] = 1
 
 
 #########################################################################
@@ -81,7 +93,7 @@ fs_mod[[2]][is.na(fs_mod[[2]])] = 1
 par(mar = c(0,0,0,0), oma = c(0,0,1,0))
 
 plot_4way_standard <- function(xy, pmod) {
-    plot_4way(xy[,1], xy[,2], pmod[[3]] / 2, pmod[[1]], pmod[[2]], pmod[[4]],
+    plot_4way(xy[,1], xy[,2], pmod[[3]], pmod[[1]], pmod[[2]], pmod[[4]],
               x_range=c(-180,180),y_range=c(-60,90),
               cols=rev(c("FF","CC","99","55","11")),
               coast.lwd=par("lwd"),
@@ -90,7 +102,7 @@ plot_4way_standard <- function(xy, pmod) {
 }
 
 calculate_weightedAverage <- function(xy, pmod) {
-    pmod[[3]] = pmod[[3]]/4
+    #pmod[[3]] = pmod[[3]]/4
     pmod = layer.apply(pmod, function(i) rasterFromXYZ(cbind(xy, i)))
     pmod = pmod / sum(pmod)
     pmod = layer.apply(pmod, function(i) sum.raster(i * area(i), na.rm = TRUE))
@@ -100,21 +112,37 @@ calculate_weightedAverage <- function(xy, pmod) {
 }
 
 ## Plot limitation and sesativity
-plot_limtations_and_sensativity_plots <- function(pmod, labs, plot = TRUE) {
-    xy = xyFromCell(pmod[[1]], 1:length(pmod[[1]]))
-    pmod = lapply(pmod[-1], values)
-    
-    if (plot) plot_4way_standard(xy, pmod)
-    pcs = calculate_weightedAverage(xy, pmod)
-    if (plot) mtext(labs[1], line = -1, adj = 0.05)
-    
-    convert2sensativity <- function(x) 1 - 2*abs(x - 0.5)
-    pmod = lapply(pmod, convert2sensativity)
 
+plot_limtations_and_sensativity_plots <- function(lm_pmod, sn_pmod, labs, plot = TRUE) {
     
-    if (plot) plot_4way_standard(xy, pmod)
-    pcs = rbind(pcs, calculate_weightedAverage(xy, pmod))
-    if (plot) mtext(labs[2], line = -1, adj = 0.05)
+    plot_pmod <- function(pmod, lab) {
+        xy = xyFromCell(pmod[[1]], 1:length(pmod[[1]]))
+        pmod = lapply(pmod, values)
+    
+        if (plot) plot_4way_standard(xy, pmod)
+        pcs = calculate_weightedAverage(xy, pmod)
+        if (plot) mtext(lab, line = -1, adj = 0.05)
+        return(pcs)
+    }
+    lm_pmod = lm_pmod[-1]
+    lm_pmod[[3]] = lm_pmod[[3]] / 3
+    lm_pmod[[4]] = lm_pmod[[4]] * 0.6
+    pcs = plot_pmod(lm_pmod, labs[1])
+    
+    sn_pmod = sn_pmod[-1]
+    
+    
+    #sn2snFire <- function(i) {
+    #    index = index[-i]
+    #    l = sn_pmod[[i]] 
+    #    for (j in lm_pmod[index]) l = l * j
+    #    return(l)
+    #}
+    #index = 1:length(sn_pmod)
+    #sn_pmod = lapply(index, sn2snFire)
+    
+    pcs = rbind(pcs, plot_pmod(sn_pmod, labs[2]))
+
     return(pcs)
 }
        
@@ -125,8 +153,10 @@ if (!exists('AGUplot')) {
     plot = TRUE
 } else plot = FALSE
 
-pc_aa = plot_limtations_and_sensativity_plots(aa_mod, labs[1:2], plot = plot)
-pc_fs = plot_limtations_and_sensativity_plots(fs_mod, labs[3:4])
+
+pc_aa = plot_limtations_and_sensativity_plots(aa_lm_mod, aa_sn_mod, labs[1:2], plot = plot)
+pc_fs = plot_limtations_and_sensativity_plots(fs_lm_mod, fs_sn_mod, labs[3:4])
+
 
 
 ## Add legend
