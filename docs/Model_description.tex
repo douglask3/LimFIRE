@@ -58,7 +58,57 @@ Finally, Section~\ref{conclusions} gives the conclusions.
 
 \section{Methods}
 
-\subsection{Fuel}
+\subsection{Model}
+
+\begin{equation}
+    F=\Pi_{i} (1 - l_i)
+\end{equation}
+
+where F is the fractional burnt area, and $l_i$ is the limitation imposed by fuel, moisture, igntions or supresssion.
+\newline
+
+or
+
+\begin{equation} 
+    F=\Pi_{i} F_i 
+\end{equation}
+
+where F is the fractional burnt area, and $F_i$ is the maximum burnt area allowed due to available fuel, moisture, igntions or supresssion. ie, 
+
+\begin{equation}
+    F_i = 1 - l_i
+\end{equation}
+
+\begin{equation}
+    f(x) = (1 + a * e^{-b \cdot x})
+\end{equation}
+
+\begin{equation}
+    l_{w} = 1 - f(w)
+\end{equation}
+
+\begin{equation}
+    l_{\omega} = f(\omega)
+\end{equation}
+
+\begin{equation}
+    l_{ig} = 1 - f(ig)
+\end{equation}
+
+\begin{equation}
+    l_{s} = 1- f(s)
+\end{equation}
+
+\subsection{Fuel ($w$)}
+
+\subsection{Moisture ($\omega$)}
+
+\subsection{Igntions ($ig$)}
+
+\subsection{Supression ($s$)}
+
+
+
 
 \begin{equation}
     x=\frac{1+y}{1+2z^2}
@@ -72,7 +122,7 @@ A much longer \LaTeXe{} example was written by Gil~\cite{Gil:02}.
   \centering
     \includegraphics[width=0.67\textwidth]{../figs/gfedComparison.png}
    
-  \caption{Bechmark comparisons against GFED4s \citep{Giglio2013}.}
+  \caption{Benchmark comparisons against GFED4s \citep{Giglio2013}.}
 \end{figure}
 
 
