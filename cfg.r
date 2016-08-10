@@ -19,6 +19,9 @@ clim_layers =  115:282
 
 ml = c(31,28,31,30,31,30,31,31,30,31,30,31)
 
+fire_cols = c("#FFFFFF", "#FFEE00", "#AA2200", "#330000")
+fire_lims = c(0, 1, 2, 5, 10, 20, 50)
+
 coefficants_file = 'outputs/coefficants'
 
 drive_fname = c(alpha   = 'alpha',
