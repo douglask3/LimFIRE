@@ -99,20 +99,28 @@ where F is the fractional burnt area, and $F_i$ is the maximum burnt area allowe
     l_{s} = 1- f(s)
 \end{equation}
 
-\subsection{Fuel ($w$)}
+\subsubsection{Fuel ($w$)}
 
-\subsection{Moisture ($\omega$)}
+\subsubsection{Moisture ($\omega$)}
 
-\subsection{Igntions ($ig$)}
+\subsubsection{Igntions ($ig$)}
 
-\subsection{Supression ($s$)}
+\subsubsection{Supression ($s$)}
 
+\subsection{analysis}
 
-
+\subsubsection{limitation}
 
 \begin{equation}
-    x=\frac{1+y}{1+2z^2}
+    \bar{l_{i}} = \frac{l_{i}}{\sum_{j} l_{j}}
 \end{equation}
+
+\subsubsection{sensitivity}
+
+\begin{equation}
+    \bar{dl_{i}} = \frac{dl_{i} \cdot \Pi_{j} l_{j}}{l_{i}}
+\end{equation}
+
 
 \section{Previous work}\label{previous work}
 A much longer \LaTeXe{} example was written by Gil~\cite{Gil:02}.
@@ -137,7 +145,7 @@ A much longer \LaTeXe{} example was written by Gil~\cite{Gil:02}.
 In this section we describe the results.
 
 \section{Conclusions}\label{conclusions}
-We worked hard, and achieved very little.
+
 
 \bibliographystyle{abbrv}
 \bibliography{Model_description}
