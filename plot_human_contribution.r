@@ -43,7 +43,7 @@ if (!exists('AGUplot')) {
                  height = c(1, 0.3, 1, 0.3, 1, 0.3))
     
     mtextStandard <- function(...) mtext(..., line = -2)
-} else mtextStandard <- function(...) mtext(..., adj = 0.05)
+} else mtextStandard <- function(...) mtext(..., line = -1)
 par(mar = c(0,0,0,0))
 
 
@@ -78,14 +78,16 @@ if (plot) {
 noIgnit = control - noIgnit
 noAnythi = control - noAnyth  
 
-plot_raster(noIgnit, diff_lims2,diff_cols2)
-mtextStandard(labs[4])
-
+if (plot) {
+    plot_raster(noIgnit, diff_lims2,diff_cols2)
+    mtextStandard(labs[4])
+}
+    
 plot_raster(noAnythi, diff_lims2, diff_cols2)
 mtextStandard(labs[5])
 
 standard_legend2(diff_cols2, diff_lims2, dat = noAnyth)
-mtext.burntArea('Change in burnt area land(%)')
+mtext.burntArea('Change in burnt area (% land)')
 
 if (!exists('AGUplot')) {
     noIgnit = 100 * noIgnit / control

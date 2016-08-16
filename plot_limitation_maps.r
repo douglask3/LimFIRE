@@ -113,21 +113,21 @@ calculate_weightedAverage <- function(xy, pmod) {
 
 ## Plot limitation and sesativity
 
-plot_limtations_and_sensativity_plots <- function(lm_pmod, sn_pmod, labs, plot = TRUE) {
+plot_limtations_and_sensativity_plots <- function(lm_pmod, sn_pmod, labs, plot = rep(TRUE, 2)) {
     
-    plot_pmod <- function(pmod, lab) {
+    plot_pmod <- function(pmod, lab, plot) {
         xy = xyFromCell(pmod[[1]], 1:length(pmod[[1]]))
         pmod = lapply(pmod, values)
     
         if (plot) plot_4way_standard(xy, pmod)
         pcs = calculate_weightedAverage(xy, pmod)
-        if (plot) mtext(lab, line = -1, adj = 0.05)
+        if (plot) mtext(lab, line = -1)
         return(pcs)
     }
     lm_pmod = lm_pmod[-1]
     lm_pmod[[3]] = lm_pmod[[3]] / 3
     lm_pmod[[4]] = lm_pmod[[4]] * 0.6
-    pcs = plot_pmod(lm_pmod, labs[1])
+    pcs = plot_pmod(lm_pmod, labs[1], plot[1])
     
     sn_pmod = sn_pmod[-1]
     
@@ -141,7 +141,7 @@ plot_limtations_and_sensativity_plots <- function(lm_pmod, sn_pmod, labs, plot =
     #index = 1:length(sn_pmod)
     #sn_pmod = lapply(index, sn2snFire)
     
-    pcs = rbind(pcs, plot_pmod(sn_pmod, labs[2]))
+    pcs = rbind(pcs, plot_pmod(sn_pmod, labs[2], plot[2]))
 
     return(pcs)
 }
@@ -150,17 +150,17 @@ plot_limtations_and_sensativity_plots <- function(lm_pmod, sn_pmod, labs, plot =
 if (!exists('AGUplot')) {
     labs = c('a) Annual average controls on fire', 'b) Annual average sensitivity',
          'c) Controls on fire during the fire season', 'd) Sensitivity during the fire season')
-    plot = TRUE
-} else plot = FALSE
+    plot = rep(TRUE, 2)
+} else plot = c(FALSE, FALSE, TRUE, FALSE)
 
 
-pc_aa = plot_limtations_and_sensativity_plots(aa_lm_mod, aa_sn_mod, labs[1:2], plot = plot)
-pc_fs = plot_limtations_and_sensativity_plots(fs_lm_mod, fs_sn_mod, labs[3:4])
+pc_aa = plot_limtations_and_sensativity_plots(aa_lm_mod, aa_sn_mod, labs[1:2], plot = plot[1:2])
+pc_fs = plot_limtations_and_sensativity_plots(fs_lm_mod, fs_sn_mod, labs[3:4], plot = plot[3:4])
 
 
 
 ## Add legend
-par(mar = c(3 + exists('AGUplot') * 3.5, 10, 0, 8))
+par(mar = c(3 + exists('AGUplot') * 0, 10 - 8 * exists('AGUplot'), 0, 8 - 6 * exists('AGUplot')))
 add_raster_4way_legend(cols = rev(c("FF","CC","99","55","11")),
                        labs = c('<- Moisture', 'Fuel ->', 'Igntions ->', 'Land Use'))
 
