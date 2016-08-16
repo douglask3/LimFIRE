@@ -84,20 +84,14 @@ where F is the fractional burnt area, and $F_i$ is the maximum burnt area allowe
 \end{equation}
 
 \begin{equation}
-    l_{w} = 1 - f(w)
-\end{equation}
-
-\begin{equation}
-    l_{\omega} = f(\omega)
-\end{equation}
-
-\begin{equation}
-    l_{ig} = 1 - f(ig)
-\end{equation}
-
-\begin{equation}
+\begin{split}
+    l_{w} = 1 - f(w) \\
+    l_{\omega} = f(\omega) \\
+    l_{ig} = 1 - f(ig) \\
     l_{s} = 1- f(s)
+\end{split}
 \end{equation}
+
 
 \subsubsection{Fuel ($w$)}
 
@@ -107,20 +101,31 @@ where F is the fractional burnt area, and $F_i$ is the maximum burnt area allowe
 
 \subsubsection{Supression ($s$)}
 
-\subsection{analysis}
+\subsection{Analysis}
 
-\subsubsection{limitation}
-
-\begin{equation}
-    \bar{l_{i}} = \frac{l_{i}}{\sum_{j} l_{j}}
-\end{equation}
-
-\subsubsection{sensitivity}
+\subsubsection{Limitation}
 
 \begin{equation}
-    \bar{dl_{i}} = \frac{dl_{i} \cdot \Pi_{j} l_{j}}{l_{i}}
+    \bar{l_{i, X}} = \frac{l_{i, X}}{\sum_{j} l_{j, X}}
 \end{equation}
 
+\subsubsection{Sensitivity}
+
+\begin{equation}
+    \bar{dl_{i, X}} = \frac{dl_{i, X} \cdot \Pi_{j} l_{j, X}}{l_{i, X}}
+\end{equation}
+
+where $dl_{i, X}$ is the gradient of $l_{i, X}$ relative to the maximum possible gradient of $l_{i}$, i.e:
+
+\begin{equation}
+    dl_{i, X} = \frac{dl_{i, X} / dx}{dl_{i, l = 0.5} / dx}
+\end{equation}
+
+where
+
+\begin{equation}
+    \frac{dl_{i}}{dx} 
+\end{equation}
 
 \section{Previous work}\label{previous work}
 A much longer \LaTeXe{} example was written by Gil~\cite{Gil:02}.
@@ -143,6 +148,12 @@ A much longer \LaTeXe{} example was written by Gil~\cite{Gil:02}.
 
 \section{Results}\label{results}
 In this section we describe the results.
+
+\subsection{Benchmarking}
+
+\subsection{Limitations}
+
+\subsection{Sensitivity}
 
 \section{Conclusions}\label{conclusions}
 
