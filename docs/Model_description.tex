@@ -65,10 +65,73 @@ Finally, Section~\ref{conclusions} gives the conclusions.
 
 \section{Methods}
 
-\subsection{Fuel}
+\subsection{Model}
 
 \begin{equation}
-    x=\frac{1+y}{1+2z^2}
+    F=\Pi_{i} (1 - l_i)
+\end{equation}
+
+where F is the fractional burnt area, and $l_i$ is the limitation imposed by fuel, moisture, igntions or supresssion.
+\newline
+
+or
+
+\begin{equation} 
+    F=\Pi_{i} F_i 
+\end{equation}
+
+where F is the fractional burnt area, and $F_i$ is the maximum burnt area allowed due to available fuel, moisture, igntions or supresssion. ie, 
+
+\begin{equation}
+    F_i = 1 - l_i
+\end{equation}
+
+\begin{equation}
+    f(x) = (1 + a * e^{-b \cdot x})
+\end{equation}
+
+\begin{equation}
+\begin{split}
+    l_{w} = 1 - f(w) \\
+    l_{\omega} = f(\omega) \\
+    l_{ig} = 1 - f(ig) \\
+    l_{s} = 1- f(s)
+\end{split}
+\end{equation}
+
+
+\subsubsection{Fuel ($w$)}
+
+\subsubsection{Moisture ($\omega$)}
+
+\subsubsection{Igntions ($ig$)}
+
+\subsubsection{Supression ($s$)}
+
+\subsection{Analysis}
+
+\subsubsection{Limitation}
+
+\begin{equation}
+    \bar{l_{i, X}} = \frac{l_{i, X}}{\sum_{j} l_{j, X}}
+\end{equation}
+
+\subsubsection{Sensitivity}
+
+\begin{equation}
+    \bar{dl_{i, X}} = \frac{dl_{i, X} \cdot \Pi_{j} l_{j, X}}{l_{i, X}}
+\end{equation}
+
+where $dl_{i, X}$ is the gradient of $l_{i, X}$ relative to the maximum possible gradient of $l_{i}$, i.e:
+
+\begin{equation}
+    dl_{i, X} = \frac{dl_{i, X} / dx}{dl_{i, l = 0.5} / dx}
+\end{equation}
+
+where
+
+\begin{equation}
+    \frac{dl_{i}}{dx} 
 \end{equation}
 
 \section{Previous work}\label{previous work}
@@ -79,7 +142,7 @@ A much longer \LaTeXe{} example was written by Gil~\cite{Gil:02}.
   \centering
     \includegraphics[width=0.67\textwidth]{../figs/gfedComparison.png}
    
-  \caption{Bechmark comparisons against GFED4s \citep{Giglio2013}.}
+  \caption{Benchmark comparisons against GFED4s \citep{Giglio2013}.}
 \end{figure}
 
 
@@ -93,8 +156,14 @@ A much longer \LaTeXe{} example was written by Gil~\cite{Gil:02}.
 \section{Results}\label{results}
 In this section we describe the results.
 
+\subsection{Benchmarking}
+
+\subsection{Limitations}
+
+\subsection{Sensitivity}
+
 \section{Conclusions}\label{conclusions}
-We worked hard, and achieved very little.
+
 
 \bibliographystyle{abbrv}
 \bibliography{Model_description}

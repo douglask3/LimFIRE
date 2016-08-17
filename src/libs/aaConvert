@@ -1,0 +1,5 @@
+aaConvert <- function(x, plot = TRUE) {
+    x = sum(x) * 12 * 100 / nlayers(x)
+    if (plot) plot_raster(x, lims, cols)
+    return(x)
+}
