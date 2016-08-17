@@ -1,29 +1,3 @@
-
-\title{A simple statistical model describing fire through its limitations}
-\author{
-        Douglas Kelley \\
-                Centre for Ecology and Hydrology\\
-                    Maclean Building \\
-                    Crowmarsh Gifford \\
-                    Wallingford \\
-                    Oxfordshire \\
-                    United Kingdom
-	\textbf{Email:} douglas.i.kelley@gmail.com \\
-	\textbf{Web}: douglask3.github.io
-            \and
-        Ioannis Bistinas\\
-                Vrije Universiteit Amsterdam\\
-                    Faculty of Earth and Life Sciences \\
-                    Amsterdam \\
-                    Netherlands\\
-            \textit{and}
-                University of Reading\\
-                Department of Meteorology\\
-                Reading\\
-                United Kingdom
-}
-\date{\today}
-
 \documentclass[12pt]{article}
 
 \usepackage[english]{babel}
@@ -31,7 +5,50 @@
 \usepackage{natbib}
 \usepackage{gitinfo2}
 \usepackage{amsmath}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{authblk}
 
+\renewcommand\Authands{ and }
+\newcommand\tab[1][1cm]{\hspace*{#1}}
+
+\title{A simple statistical model describing burnt area through limitations on fire}
+
+\author[1]{Kelley, Douglas \thanks{\textbf{Email:} douglas.i.kelley@gmail.com
+                                   \textbf{Web}: douglask3.github.io}}
+\author[2, 3]{Bistinas, Ioannis}
+\author[4, 5]{Whitley, R}
+\author[1]{Marthews, T}
+
+\affil[1]{Centre for Ecology and Hydrology\\
+          Maclean Building \\
+          Crowmarsh Gifford \\
+          Wallingford \\
+          Oxfordshire \\
+          United Kingdom}
+
+\affil[2]{Vrije Universiteit Amsterdam\\
+          Faculty of Earth and Life Sciences \\
+          Amsterdam \\
+          Netherlands}
+
+\affil[3]{University of Reading\\
+          Department of Meteorology\\
+          Reading\\
+          United Kingdom}
+
+\affil[4]{Suncorp Group \\
+          Personal Lines Pricing Research \\
+          Sydney \\
+          Australia}
+
+\affil[5]{Macquarie University \\
+          Department of Biological Sciences \\
+          Sydney \\
+          Australia}
+
+
+    
 
 \begin{document}
 \maketitle
@@ -39,6 +56,8 @@
 \begin{abstract}
 LimFIRE is a simple statistical model that simulates limitations of fire. Perfect fire conditions are imagined for a location or grid cell, with full fuel coverage, no moisture, saturated igntions and no agricultural or urban fragmentation. In such conditions, 100\% of the land area burns. This is analogous to areas in Northern Australia and parts of the sahel, with areas burning more than once a year. Burnt area is reduced if the location has discontinuous fuel loads  (e.g. desert areas), has fuel to moist to burn (meg. Humid evergreen forests), a lack of ignition (shown to be an influence of inter Annual variability in some parts of the tropical vdv and Southern Australia Bradstock), or human fire suppression (e.g. cropland or urban areas).
 \end{abstract}
+
+
 
 \begin{center}
     \textbf{git info}
