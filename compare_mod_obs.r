@@ -4,6 +4,8 @@ fig_file = 'figs/gfedComparison.png'
  
 mod = runIfNoFile(mod_file, runLimFIREfromstandardIns, fireOnly = TRUE)
 obs = lapply(drive_fname, stack)[["fire"]]
+
+cols = fire_cols; lims = fire_lims
  
 ###########################################################################
 ## Annual Average                                                        ##
@@ -20,15 +22,6 @@ layout(rbind(c(1, 2),
              c(9, 0)),
              heights = c(1, 0.2, 1, 0.2, 1, 1.3))
              
-
-cols = c("#FFFFFF", "#FFEE00", "#AA2200", "#330000")
-lims = c(0, 1, 2, 5, 10, 20, 50)
-aaConvert <- function(x) {
-    x = sum(x) * 12 * 100 / nlayers(x)
-    plot_raster(x, lims, cols)
-    return(x)
-}
-
 X = aaConvert(obs); Y = aaConvert(mod)
 add_raster_legend2(cols, lims, add = FALSE,
                plot_loc = c(0.35,0.75,0.65,0.78), dat = X,

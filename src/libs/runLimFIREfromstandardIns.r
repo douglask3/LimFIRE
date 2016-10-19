@@ -1,7 +1,9 @@
-runLimFIREfromstandardIns <- function(fireOnly = FALSE) {
+runLimFIREfromstandardIns <- function(fireOnly = FALSE, remove = NULL) {
     Obs = lapply(drive_fname, stack)
     params = read.csv(coefficants_file)[,-1]
     params = apply(as.matrix(params),2, mean)
+    
+    if (!is.null(remove)) for (i in remove) Obs[[i]][] = 0
     
     runMonthly <- function(i) {
         cat("simulation fire for month ", i, "\n")
