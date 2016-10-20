@@ -1,34 +1,39 @@
 \section{Methods}
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Overview                                                                            %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Overview}
-It is assumed that 100\% burnt area will occur under perfect fire conditions -  i.e. full fuel coverage, no moisture, saturated igntions and no agricultural or urban fragmentation. This is analogous to areas in Northern Australia and parts of the sahel which experiance buring each year.
+The framework assumes that 100\% burnt area will occur under perfect fire conditions -  i.e. full fuel coverage, no moisture, saturated igntions and no agricultural or urban fragmentation. This is analogous to areas in Northern Australia and parts of the sahel which experiance buring each year.
 Burnt area is reduced as each limitation becomes sub-optimal, i.e.
     fuel loads become discontinuous  (e.g. desert areas)
     or too moist (e.g. Humid evergreen forests),
-    if their is lack of ignition \citep[shown to be an influence inter annual variability in parts Southern Australia][](bradstock2010biogeographic),
+    if their is lack of ignition %\citep[shown to be an influence inter annual variability in parts Southern Australia][](bradstock2010biogeographic),
     or with increased human influance on the landscape (e.g. cropland or urban areas).
 Fraction burnt area ($F$) is therefore the product of the maximum allowed burnt area for each limitation ($F_i$)
 \begin{equation}
     F=\Pi_{i} F_i
 \end{equation}
 
-$F_i$ is
+This maxium burnt area is related to fuel loads, moisture, ignitions or supression via the logit function, as per \citet{bistinas2014causal}:
+
 \begin{equation}
     f(x) = (1 + a * e^{-b \cdot x})
 \end{equation}
 
-Our analysis is based on the principle of multiple regressions,
-which enables underlying relationships with several predictor
-variables to be teased out even in the presence of (moderate)
-correlations between the predictors. The finding that a
-given predictor has a statistically significant effect on the prediction
-means there is a relationship that remains after the
-effects of the other predictors have been taken into account.
-The form of the burnt-area data – lying between 0 and 1, but
-over-dispersed and with many (∼ 90 %) zero values – rules
-out the use of ordinary least-squares regression, and calls
 
+%Our analysis is based on the principle of multiple regressions,
+%which enables underlying relationships with several predictor
+%variables to be teased out even in the presence of (moderate)
+%correlations between the predictors. The finding that a
+%given predictor has a statistically significant effect on the prediction
+%means there is a relationship that remains after the
+%effects of the other predictors have been taken into account.
+%The form of the burnt-area data – lying between 0 and 1, but
+%over-dispersed and with many (∼ 90 %) zero values – rules
+%out the use of ordinary least-squares regression, and calls
 Fire increases with increasing fuel load ($F_w$) and igntions ($F_{ig}$), and decreases with moisture ($F_{\omega}$) and anthropagenic supression ($F_s$). Therefore:
+
 \begin{equation}
     \begin{split}
         F_{w} = f(w) \\
@@ -38,24 +43,102 @@ Fire increases with increasing fuel load ($F_w$) and igntions ($F_{ig}$), and de
     \end{split}
 \end{equation}
 
-where
-
-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Limitations                                                                         %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Inputs}
 
 \subsubsection{Fuel ($w$)}
+There are two options for fuel load:
+\begin{enumerate}
+    \item \textit{NPP product} as a proxy for total fuel load
+    \item \textit{A measure of fractional cover} as a proxy for fuel continuity (i.e, annual mean or maximum fAPAR, as used by \citet{knorr2014impact,knorr2016climate} or MODIS fractional cover)
+\end{enumerate}
+
+It could be that we use the measure most apprprate for the application.
+
 
 \subsubsection{Moisture ($\omega$)}
 
-\paragraph(Live Fuel)
-\citep[$\alpha$ ---  measure of availability of water for plants, and a good index for fuel moisture content ---][]{prentice1993simulation}
+Moisture is split between live and dead fuel:
 
-\paragraph(Dead Fuel)
+\begin{equation}
+    \omega = live + M \cdot dead
+\end{equation}
+%\citep{
+where M is an optimized parameter.
+
+\paragraph{Live Fuel}
+
+
+The ratio of actual to potential evaporation \citep[$\alpha$][]{prentice1993simulation}, a measure of available water in relation to plant demand, is used to describe fractional water content of live fuel as per \citet{harrison2010fire, bistinas2014causal}
+
+\paragraph{Dead Fuel}
+based on \citep{viney1991review}
+
+\begin{equation}
+     m_{mq})=
+        \begin{cases}
+            10 - (T - H_r) / 4 ,& \text{if } Pr\leq 3 \text{mm}\\
+            100,              & \text{otherwise}
+        \end{cases}
+\end{equation}
+
 
 \subsubsection{Igntions ($ig$)}
 
+\begin{equation}
+    ig = L_{ig} + P \cdot Pasture + D \cdot Population\text{ }Density
+\end{equation}
+
+But could add background igntions
+
+\begin{equation}
+     ig = 1 + N * L_{ig} + P \cdot Pasture + D \cdot Population\text{ }Density
+\end{equation}
+
+
+\paragraph{Lightning}
+
+\begin{equation}
+    CG = L * min(1, 0.0408 \cdot FL^{-0.4180}
+\end{equation}
+
+\begin{equation}
+    L_{ig} = 0.8533 \cdot CG \cdot e^{-2.835 \cdot WD}
+\end{equation}
+    
+
+\paragraph{Pasture and population density}
+
+
 \subsubsection{Supression ($s$)}
 
+\begin{equation}
+    s = urban + C \cdot Crop
+\end{equation}
+
+\paragraph{Cropland}
+
+\paragraph{Urban Area}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Optimization                                                                        %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Optimization}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Benchmarking                                                                        %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Benchmarking}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Analysis                                                                            %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Analysis}
+
 
 \subsubsection{Limitation}
 
