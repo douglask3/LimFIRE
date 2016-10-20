@@ -1,0 +1,74 @@
+\section{Methods}
+
+\subsection{Overview}
+It is assumed that 100\% burnt area will occur under perfect fire conditions - with full fuel coverage, no moisture, saturated igntions and no agricultural or urban fragmentation. This is analogous to areas in Northern Australia and parts of the sahel which experiance almsot compelet buring each year. Fractional burnt area ($F$) is reduced as each limitation factor ($F_{i}$) becomes sub-optimal, i.e. fuel loads become discontinuous  (e.g. desert areas) or too moist (e.g. Humid evergreen forests), if their is lack of ignition \citep[shown to be an influence inter annual variability in parts Southern Australia][](bradstock2010biogeographic), or with increased human influance on the landscape (e.g. cropland or urban areas).
+
+\begin{equation}
+    F=\Pi_{i} F_i
+\end{equation}
+
+%\begin{equation}
+%    F_i = 1 - l_i
+%\end{equation}
+
+
+
+\begin{equation}
+\begin{split}
+    F_{w} = f(w) \\
+    F_{\omega} = 1 - f(\omega) \\
+    F_{ig} = f(ig) \\
+    F_{s} = 1- f(s)
+\end{split}
+\end{equation}
+
+where
+\begin{equation}
+    f(x) = (1 + a * e^{-b \cdot x})
+\end{equation}
+
+
+\subsubsection{Fuel ($w$)}
+
+\subsubsection{Moisture ($\omega$)}
+
+\paragraph(Live Fuel)
+\citep[$\alpha$ ---  measure of availability of water for plants, and a good index for fuel moisture content ---][]{prentice1993simulation}
+
+\paragraph(Dead Fuel)
+
+\subsubsection{Igntions ($ig$)}
+
+\subsubsection{Supression ($s$)}
+
+\subsection{Analysis}
+
+\subsubsection{Limitation}
+
+\begin{equation}
+    \bar{l_{i, X}} = \frac{l_{i, X}}{\sum_{j} l_{j, X}}
+\end{equation}
+
+\subsubsection{Sensitivity}
+
+\begin{equation}
+    \bar{dl_{i, X}} = \frac{dl_{i, X} \cdot \Pi_{j} l_{j, X}}{l_{i, X}}
+\end{equation}
+
+where $dl_{i, X}$ is the gradient of $l_{i, X}$ relative to the maximum possible gradient of $l_{i}$, i.e:
+
+\begin{equation}
+    dl_{i, X} = \frac{dl_{i, X} / dx}{dl_{i, l = 0.5} / dx}
+\end{equation}
+
+where
+
+\begin{equation}
+    \frac{dl_{i}}{dx}
+\end{equation}
+
+\begin{figure}[!ht]
+  \centering
+    \includegraphics[width=0.67\textwidth]{Model_schematic.pdf}
+  \caption{Model description.}
+\end{figure}
