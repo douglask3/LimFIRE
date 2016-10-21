@@ -10,7 +10,7 @@
 The framework calculates burnt area based on the maximum allowed burnt area from limitations imposed by fuel, moisture, ignition, and anthropagenic supression controls.
 The framework could probably be used on a range of temporal and spatial resolutions
 \hlb{(scale dependancy might be something to test in the future?)}.
-But here, burnt area is calculated monthly on a 0.5 degree CRUTS3.22 grid \citep{harris2014cru}, between Jan 2000 and Dec 2010 (the period of data overlap). Parameters relating these limiations to fire are optimized against GFED4s remote sensed burnt area observations \citep{Giglio2013}.
+But here, burnt area is calculated monthly on a 0.5$^{\circ}$ CRUTS3.22 grid \citep{harris2014cru}, between Jan 2000 and Dec 2010 (the period of data overlap). Parameters relating these limiations to fire are optimized against GFED4s remote sensed burnt area observations \citep{Giglio2013}.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Overview                                                                            %%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -112,7 +112,7 @@ monthly $AVP$ comes from CRUTS.22 $SVP$ was calculated from mean monthly tempuar
 
 \begin{equation}
     SVP = 6.11 \cdot 10^{\frac{7.5 \cdot T}{237.5 + T}}
-\end{equation} 
+\end{equation}
 
 \subsubsection{Igntions ($ig$)}
 
@@ -173,8 +173,9 @@ where $C$ and $H$ are optimized parameters.
 %% Optimization                                                                        %%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Optimization}
+
 \begin{shaded}
-The framework is optimized against GFED4s observations \citep{Giglio2013} using normalised least square r-package \citep{rstats}. This is likley to change though, so I wont descibe it yet 
+The framework is optimized against GFED4s observations \citep{Giglio2013}, regridded to a 0.5$^{\circ}$ resolution, using normalised least square r-package \citep{rstats}. This is likley to change though, so I wont descibe it yet
 \end{shaded}
 
 Optimization is performed on equation ~\ref{equ:LimFIRE} to ~\ref{equ:Supression}. Each limitation optimizes two parameters associated with it's maximum expected burnt area (equations ~\ref{equ:LimFIRE.x} and ~\ref{equ:LimFIRE.x}, see figure ~\ref{Logistic_fun_fig}). Paramters relating different fuel moisture, ignition and supressions sources are also optimzed (see table ~\ref{tab:optimize})
@@ -206,7 +207,7 @@ Optimization is performed on equation ~\ref{equ:LimFIRE} to ~\ref{equ:Supression
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Benchmarking}
 \begin{shaded}
-To assess performance of reconstructed burnt area, I'll probably use NME for annual average, seasonal and inter-annual comparisons \citep{kelley2013comprehensive} as reccomended by fireMIP \citet{gmd-2016-237, hantson2016status}, and maybe McFaddens $R^{2}$ as per \citep{bistinas2014causal}. Annual average NME comparison comes out at 0.46, which is better then benchmarking null models descibed in \citet{kelley2013comprehensive}, and outperforms coupled vegetation-fire models contributing to fireMIP \citep{hantson2016status}, although this is to be expected as the framework is driven by and optimized to observations \citep{kelley2013comprehensive}.
+To assess performance of reconstructed burnt area, we'll probably use NME for annual average, seasonal and inter-annual comparisons \citep{kelley2013comprehensive} as reccomended by fireMIP \citet{gmd-2016-237, hantson2016status}, and maybe McFaddens $R^{2}$ as per \citep{bistinas2014causal}. Annual average NME comparison comes out at 0.46, which is better then benchmarking null models descibed in \citet{kelley2013comprehensive}, and outperforms coupled vegetation-fire models contributing to fireMIP \citep{hantson2016status}, although this is to be expected as the framework is driven by and optimized to observations \citep{kelley2013comprehensive}.
 \end{shaded}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Analysis                                                                            %%
@@ -216,17 +217,20 @@ To assess performance of reconstructed burnt area, I'll probably use NME for ann
 
 \subsubsection{Limitation}
 
+The relative importance of each controls on fire was assessed as:
+
 \begin{equation}
-    \bar{l_{i, X}} = \frac{l_{i, X}}{\sum_{j} l_{j, X}}
+    \bar{L_{i, X}} = \frac{L_{i, X}}{\sum_{j} L_{j, X}}
 \end{equation}
+where $L_{i, X} = 1 - F_{i,X}$ is the individual contribution of each control $i$ at point $X$.
 
 \subsubsection{Sensitivity}
 
 \begin{equation}
-    \bar{dl_{i, X}} = \frac{dl_{i, X} \cdot \Pi_{j} l_{j, X}}{l_{i, X}}
+    \bar{\partial L_{i, X}} = \frac{\partial L_{i, X} \cdot \Pi_{j} L_{j, X}}{L_{i, X}}
 \end{equation}
 
-where $dl_{i, X}$ is the gradient of $l_{i, X}$ relative to the maximum possible gradient of $l_{i}$, i.e:
+where $\partial L_{i, X}$ is the gradient of $L_{i, X}$ relative to the maximum possible gradient of $L_{i}$, i.e:
 
 \begin{equation}
     dl_{i, X} = \frac{dl_{i, X} / dx}{dl_{i, l = 0.5} / dx}
