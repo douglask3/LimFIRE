@@ -9,6 +9,14 @@
 \usepackage[utf8]{inputenc}
 \usepackage{authblk}
 \usepackage{color,soul}
+\usepackage{xcolor}
+\usepackage{framed}
+\usepackage{multirow}
+
+\definecolor{Mycolor2}{HTML}{BBBBEE}
+
+\colorlet{shadecolor}{Mycolor2}
+\DeclareRobustCommand{\hlb}[1]{{\sethlcolor{Mycolor2}\hl{#1}}}
 
 \renewcommand\Authands{ and }
 \newcommand\tab[1][1cm]{\hspace*{#1}}

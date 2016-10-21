@@ -7,27 +7,32 @@
 
 \section{Methods}
 
-The framework calculates monthly fire from limitations imposed by fuel, moisture, ignition, and anthropagenic supression controls on a 0.5 degree CRUTS3.22 grid \citep{harris2014cru}, between Jan 2000 and Dec 2010 (the period of data overlap). Parameters relating these limiations to fire are optimized against GFED4s remote sensed burnt area observations \citep{Giglio2013}.
+The framework calculates burnt area based on the maximum allowed burnt area from limitations imposed by fuel, moisture, ignition, and anthropagenic supression controls.
+The framework could probably be used on a range of temporal and spatial resolutions
+\hlb{(scale dependancy might be something to test in the future?)}.
+But here, burnt area is calculated monthly on a 0.5 degree CRUTS3.22 grid \citep{harris2014cru}, between Jan 2000 and Dec 2010 (the period of data overlap). Parameters relating these limiations to fire are optimized against GFED4s remote sensed burnt area observations \citep{Giglio2013}.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Overview                                                                            %%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \subsection{Overview}
-The framework assumes that 100\% burnt area occurs in perfect fire conditions,  i.e. complete fuel coverage, no moisture, saturated igntions and no agricultural or urban fragmentation. This is analogous to areas in Northern Australia and parts of the sahel which experiance buring each year.
+The framework assumes that 100\% burnt area occurs in perfect fire conditions,  i.e. complete fuel coverage, no moisture, saturated igntions and no agricultural or urban fragmentation. This is analogous to the dry season in tropical savanna and grasslands \citep{kelley2014modelling}, particularly parts of Northern Australia \citep{murphy2013fire} and the sahel which experiance buring each year.
 Burnt area is reduced as each limitation becomes sub-optimal, i.e.
     fuel loads become discontinuous  (e.g. desert areas)
     or too moist (e.g. Humid evergreen forests),
-    if their is lack of ignition \citep[shown to be an influence inter annual variability in parts Southern Australia][](bradstock2010biogeographic),
+    if their is lack of ignition \citep[shown to influence inter annual variability in parts Southern Australia][](bradstock2010biogeographic),
     or with increased human influance on the landscape (e.g. cropland or urban areas).
-Fraction burnt area ($F$) is therefore the product of the maximum allowed burnt area for each limitation ($F_i$)
+Fraction burnt area ($F$) is the product of the maximum allowed burnt area for each limitation ($F_i$)
 \begin{equation}
     F=\Pi_{i} F_i
+    \label{equ:LimFIRE}
 \end{equation}
 
-This maxium burnt area is related to fuel loads, moisture, ignitions and supression via the logistic function, as per \citet{bistinas2014causal} (see figure ~\ref{Logistic_fun_fig}):
+A limitations maximum burnt area is related to fuel loads, moisture, ignitions and supression via the logistic function, as per \citet{bistinas2014causal} (see figure ~\ref{Logistic_fun_fig}):
 
 \begin{equation}
     f(x) = 1 / (1 + e^{-k \cdot (x - x_0)})
+    \label{equ:fx}
 \end{equation}
 where $k$ descibed the steepness of the curve and $x_0$ is the curves midpoint.
 
@@ -38,7 +43,7 @@ where $k$ descibed the steepness of the curve and $x_0$ is the curves midpoint.
   \label{Logistic_fun_fig}
 \end{figure}
 
-As fire increases with increasing fuel load ($F_w$) and igntions ($F_{ig}$), and decreases with moisture ($F_{\omega}$) and anthropagenic supression ($F_s$), therefore:
+Fire increases with increasing fuel load ($F_w$) and igntions ($F_{ig}$), and decreases with moisture ($F_{\omega}$) and anthropagenic supression ($F_s$). Therefore:
 
 \begin{equation}
     \begin{split}
@@ -47,6 +52,7 @@ As fire increases with increasing fuel load ($F_w$) and igntions ($F_{ig}$), and
         F_{ig} = f(ig) \\
         F_{s} = 1- f(s)
     \end{split}
+    \label{equ:LimFIRE.x}
 \end{equation}
 
 
@@ -55,16 +61,16 @@ As fire increases with increasing fuel load ($F_w$) and igntions ($F_{ig}$), and
 %% Limitations                                                                         %%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Inputs}
-
+\begin{shaded}
 \subsubsection{Fuel ($w$)}
 There are two options for us to choose from:
 \begin{enumerate}
     \item \textit{NPP product} as a proxy for total fuel load. Thi is the option I'm using at the moment. The product comes from Terra/MODIS Net Primary Production Yearly L4 Global 1 km MOD17A3 \citep{nasa2012terra}
-    \item \textit{A measure of fractional cover} as a proxy for fuel continuity (i.e, annual mean or maximum fAPAR, as used by \citet{knorr2014impact,knorr2016climate} or MODIS fractional cover). \citet{bistinas2014causal} uses SeaWiFs fAPAR, but this product finishes in 2007, so would reduce our comprison period. Other fAPAR/Fractional cover products would probably cover a larger period.
+    \item \textit{A measure of fractional cover} as a proxy for fuel continuity (i.e, annual mean or maximum fAPAR, as used by \citet{knorr2014impact,knorr2016climate} or MODIS fractional cover). \citet{bistinas2014causal} uses SeaWiFs fAPAR \hl{(is that right Yannis?)}, but this product finishes in 2007, so would reduce our comprison period. Other fAPAR/Fractional cover products would probably cover a larger period.
 \end{enumerate}
 
 It could be that we use the measure most apprprate for a given application.
-
+\end{shaded}
 \subsubsection{Moisture ($\omega$)}
 
 $\omega$ represents mean fractional water content, and is split between live and dead fuel:
@@ -76,7 +82,8 @@ $\omega$ represents mean fractional water content, and is split between live and
 where M is an optimized parameter, representing the importance of dead fuel moisture realtive tom live.
 
 \paragraph{Live Fuel.}
-The ratio of actual to potential evaporation \citep[$\alpha$][]{prentice1993simulation}, a measure of available water in relation to plant demand, is used to describe fractional water content of live fuel as per \citet{harrison2010fire, bistinas2014causal}
+The ratio of actual to potential evaporation \citep[$\alpha$][]{prentice1993simulation}, a measure of available water in relation to plant demand, is used to describe fractional water content of live fuel as per \citet{harrison2010fire, bistinas2014causal}.
+$\alpha$ is calculated from CRUTS3.22 monthly mean tempuarture, cloud cover and precipitation using the STASH model \citep{sykes1996bioclimatic} r-package \citep{rstash}. \hlb{At the moment, elevation, is set to zero and field capacity to 140 - Rhys, I guess this will have to change?}. STASH was spun up by recycling 1950 climate data for 40 years, and then run from 1950 to 2010. Simulated $\alpha$ from 2000-2010 was then used for teh rest of the analysis.
 
 \paragraph{Dead Fuel} moisture is represented by a simple equilibrium moisture content ($m_{mq}$) calculation from \citep{viney1991review} which combines daily precipitaion ($Pr$) and atmopheric drying potential via temprature ($T$) and relative humidity ($H_r$):
 
@@ -95,29 +102,40 @@ On a monthly timestep, this simplifies to:
         (10 - (T - H_r) / 4) \cdot (1 - WD)
         + 100 \cdot WD
 \end{equation}
-where WD is the fraction of wet days, defined as a day where $Pr > 3mm$.
+where WD is the monthly fraction of wet days from CRU TS3.22, defined as a day where $Pr > 3mm$. $H_r$ was calculated as the ratio of actual to saturated vapour pressure \hlb{ref??}:
 
+\begin{equation}
+    H_r = 100 \cdot AVP / SVP
+\end{equation}
+
+monthly $AVP$ comes from CRUTS.22 $SVP$ was calculated from mean monthly tempuarture as per \citet{walter2000asce}
+
+\begin{equation}
+    SVP = 6.11 \cdot 10^{\frac{7.5 \cdot T}{237.5 + T}}
+\end{equation} 
 
 \subsubsection{Igntions ($ig$)}
 
-Igntions combines lightning igntions ($L_{ig}$), ignitions from pasture and local population.
+Igntions combines sources from lightning ($L_{ig}$), pasture and local population.
 
 \begin{equation}
     ig = L_{ig} + P \cdot Pasture + D \cdot Population\text{ }Density
 \end{equation}
 where P and D are opimized paramters.
 
-But could add background igntions could also be considered
+\begin{shaded}
+    We could also add background igntions:
 
-\begin{equation}
-     ig = 1 + N \cdot L_{ig} + P \cdot Pasture + D \cdot Population\text{ }Density
-\end{equation}
-where N, P and D are opimized paramters describing the importance of their respective ignition source relative to background igntions.
+    \begin{equation}
+        ig = 1 + N \cdot L_{ig} + P \cdot Pasture + D \cdot Population\text{ }Density
+    \end{equation}
+    where N, P and D are opimized paramters describing the importance of their respective ignition source relative to background igntions.
+\end{shaded}
 
 \paragraph{Lightning}
 
 Lightning is calculated from flash counts
-from the Lightning Imaging Sensor \citep[LIS][http://grip.nsstc.nasa.gov/]{christian1999optical, christian1999lightning}.
+from the Lightning Imaging Sensor Climateology \citep[LIS][http://grip.nsstc.nasa.gov/]{christian1999optical, christian1999lightning}. \hlb{Are there other products that could be used instead?}
 This contains both cloud-to-ground (avavailbe for igntions) and inter-cload (not avavailbe for ignitions) strikes.
 CG lighting is calculated using \citet{kelley2014improved}:
 
@@ -125,12 +143,13 @@ CG lighting is calculated using \citet{kelley2014improved}:
     CG = L * min(1, 0.0408 \cdot FL^{-0.4180}
 \end{equation}
 
+\begin{shaded}
 \citet{kelley2014improved} also extracted dry-only lighting as available igntion sources. I'm implementing this as the moment, but I'm not to sure if I should:
 
 \begin{equation}
     L_{ig} = 0.8533 \cdot CG \cdot e^{-2.835 \cdot WD}
 \end{equation}
-
+\end{shaded}
 
 \paragraph{Pasture and population density}
 \label{Pasture}
@@ -142,6 +161,7 @@ Supression combines urban and cropland area and population desnity
 
 \begin{equation}
     s = urban + C \cdot Crop + H \cdot Population\text{ }Density
+    \label{equ:Supression}
 \end{equation}
 
 where $C$ and $H$ are optimized parameters.
@@ -153,13 +173,41 @@ where $C$ and $H$ are optimized parameters.
 %% Optimization                                                                        %%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Optimization}
+\begin{shaded}
+The framework is optimized against GFED4s observations \citep{Giglio2013} using normalised least square r-package \citep{rstats}. This is likley to change though, so I wont descibe it yet 
+\end{shaded}
 
+Optimization is performed on equation ~\ref{equ:LimFIRE} to ~\ref{equ:Supression}. Each limitation optimizes two parameters associated with it's maximum expected burnt area (equations ~\ref{equ:LimFIRE.x} and ~\ref{equ:LimFIRE.x}, see figure ~\ref{Logistic_fun_fig}). Paramters relating different fuel moisture, ignition and supressions sources are also optimzed (see table ~\ref{tab:optimize})
+
+\begin{table}[]
+\centering
+\caption{Optimized paramters obviosuly, to be filled in}
+\label{tab:optimize}
+\begin{tabular}{llll}
+\hline
+\multicolumn{2}{c}{\textbf{Parameter}} & \multicolumn{1}{c}{\textbf{Bound}} & \multicolumn{1}{c}{\textbf{Value}} \\ \hline
+\multirow{2}{*}{Fuel}             & k  &                                    &                                    \\
+                                  & x0 &                                    &                                    \\ \hline
+\multirow{3}{*}{Moisture}         & k  &                                    &                                    \\
+                                  & xo &                                    &                                    \\
+                                  & M  &                                    &                                    \\ \hline
+\multirow{4}{*}{Igntions}         & k  &                                    &                                    \\
+                                  & x0 &                                    &                                    \\
+                                  & P  &                                    &                                    \\
+                                  & D  &                                    &                                    \\ \hline
+\multirow{4}{*}{Human Supression} & k  &                                    &                                    \\
+                                  & x0 &                                    &                                    \\
+                                  & C  &                                    &                                    \\
+                                  & H  &                                    &                                    \\ \hline
+\end{tabular}
+\end{table}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Benchmarking                                                                        %%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Benchmarking}
-
-
+\begin{shaded}
+To assess performance of reconstructed burnt area, I'll probably use NME for annual average, seasonal and inter-annual comparisons \citep{kelley2013comprehensive} as reccomended by fireMIP \citet{gmd-2016-237, hantson2016status}, and maybe McFaddens $R^{2}$ as per \citep{bistinas2014causal}. Annual average NME comparison comes out at 0.46, which is better then benchmarking null models descibed in \citet{kelley2013comprehensive}, and outperforms coupled vegetation-fire models contributing to fireMIP \citep{hantson2016status}, although this is to be expected as the framework is driven by and optimized to observations \citep{kelley2013comprehensive}.
+\end{shaded}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Analysis                                                                            %%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
