@@ -225,19 +225,21 @@ The relative importance of each controls on fire was assessed as:
 where $L_{i, X} = 1 - F_{i,X}$ is the individual contribution of each control $i$ at point $X$.
 
 \subsubsection{Sensitivity}
-
+\begin{shaded}
 \begin{equation}
-    \bar{\partial L_{i, X}} = \frac{\partial L_{i, X} \cdot \Pi_{j} L_{j, X}}{L_{i, X}}
+    \bar{\partial L_{i, x}} = \frac{\partial L_{i, x} \cdot \Pi_{j} L_{j, x}}{L_{i, x}}
 \end{equation}
 
-where $\partial L_{i, X}$ is the gradient of $L_{i, X}$ relative to the maximum possible gradient of $L_{i}$, i.e:
+where $\partial L_{i, x}$ is the gradient of $L_{i, x}$ relative to the maximum possible gradient of $L_{i}$, occuring when $x = x_{0}$ i.e:
 
 \begin{equation}
-    dl_{i, X} = \frac{dl_{i, X} / dx}{dl_{i, l = 0.5} / dx}
+    \partial l_{i, x} = \frac{\partial l_{i, x} / \partial X}
+                             {\partial l_{i, x_{0}} / \partial x}
 \end{equation}
 
-where
+Another option for measuring sensitivity could be the change required for a control to hit a specific level of burnt area to induce major changes in land surface.
+For example, assessing amazon risk of fire-induced tipping point. Holding the contribution of ignition, fuel load and land use constant, we could calculate the change in moisture needed to increase burnt area to the level expected for Savanna roughly 1\% in South America according to \cite{lehmann2011deciphering} (figure ????).
+From this, it would be easy to work out a required change in climate variables (humidity, temperature, ET etc, or any combination of these) required to hit this 'fire tipping point'.
+We could do the same with land use/ignitions as well, but moisture is the biggest limitation for most of the deepest parts of the Amazon and probably the one you could get the best estimates for potential change.
 
-\begin{equation}
-    \frac{dl_{i}}{dx}
-\end{equation}
+\end{shaded}
