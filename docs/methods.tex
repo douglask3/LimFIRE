@@ -17,25 +17,26 @@ Here, burnt area is calculated monthly on a 0.5$^{\circ}$ CRUTS3.22 grid \citep{
 
 \subsection{Overview}
 
-The framework assumes that 100\% burnt area occurs in perfect fire conditions,  i.e. complete fuel coverage, no moisture, saturated igntions and no agricultural or urban fragmentation. This is analogous to the dry season in tropical savanna and grasslands \citep{kelley2014modelling}, particularly parts of Northern Australia \citep{murphy2013fire} and the sahel (\hlb{??Ref??}) which experiance buring each year.
+The framework assumes that 100\% burnt area occurs in perfect fire conditions,  i.e. complete fuel coverage, no moisture, saturated igntions and no agricultural or urban fragmentation. This is analogous to the dry season in tropical savanna and grasslands \citep{kelley2014modelling}, particularly parts of Northern Australia \citep{murphy2013fire} and the sahel (\hlb{??Ref??}) which experiance complete buring each year.
 Burnt area is reduced as each control becomes sub-optimal, i.e.
     fuel loads become discontinuous  (e.g. desert areas)
     or too moist (e.g. Humid evergreen forests),
-    if their is lack of ignition (shown to influence inter annual variability in parts Southern Australia \cite{bradstock2010biogeographic}),
+    if their is lack of ignition (shown to influence inter annual variability in parts Southern Australia \cite{bradstock2010biogeographic} \hlb{and probably some other places}),
     or with increased human influance on the landscape (e.g. cropland or urban areas).
 Fractional burnt area ($F$) is the product of the maximum allowed burnt area for each control ($F_i$)
 \begin{equation}
     F=\Pi_{i} F_i
     \label{equ:LimFIRE}
 \end{equation}
+\hlb{Is it widley known that $\Pi$ means product?}
 
-A controls maximum burnt area is related to fuel loads, moisture, ignitions and supression via the logistic function, as per \citet{bistinas2014causal} (see figure ~\ref{fig:Logistic_fun}):
+A controls maximum burnt area is related to fuel loads, moisture, ignitions and supression via the logistic function, as per \citet{bistinas2014causal}:
 
 \begin{equation}
     f(x) = 1 / (1 + e^{-k \cdot (x - x_0)})
     \label{equ:fx}
 \end{equation}
-where $k$ descibed the steepness of the curve and $x_0$ is the curves midpoint.
+where $k$ descibed the steepness of the curve and $x_0$ is the curves midpoint (see figure ~\ref{fig:Logistic_fun}).
 
 \begin{figure}[!ht]
   \centering
@@ -66,8 +67,8 @@ Fire increases with increasing fuel load ($F_w$) and igntions ($F_{ig}$), and de
 \subsubsection{Fuel ($w$)}
 There are two options for us to choose from:
 \begin{enumerate}
-    \item \textit{NPP product} as a proxy for total fuel load. Thi is the option I'm using at the moment. The product comes from Terra/MODIS Net Primary Production Yearly L4 Global 1 km MOD17A3 \citep{nasa2012terra}
-    \item \textit{A measure of fractional cover} as a proxy for fuel continuity (i.e, annual mean or maximum fAPAR, as used by \citet{knorr2014impact,knorr2016climate} or MODIS fractional cover). \citet{bistinas2014causal} uses SeaWiFs fAPAR \hl{(is that right Yannis?)}, but this product finishes in 2007, so would reduce our comprison period. Other fAPAR/Fractional cover products would probably cover a larger period.
+    \item \textit{NPP product} as a proxy for total fuel load. This is the option I'm using at the moment. The product comes from Terra/MODIS Net Primary Production Yearly L4 Global 1 km MOD17A3 \citep{nasa2012terra}
+    \item \textit{A measure of fractional cover} as a proxy for fuel continuity (i.e, annual mean or maximum fAPAR, as used by \citet{knorr2014impact,knorr2016climate} or MODIS fractional cover). \citet{bistinas2014causal} uses SeaWiFs fAPAR \hl{(is that right Yannis?)}, but this product was discontinued in 2005, so would reduce our comprison period. Other fAPAR/Fractional cover products would probably cover a larger period.
 \end{enumerate}
 
 It could be that we use the measure most apprprate for a given application. But we'd probably just use the one for the first paper?
@@ -137,7 +138,7 @@ where P and D are opimized paramters.
 \paragraph{Lightning}
 is calculated from
 from the Lightning Imaging Sensor flash count climateology (LIS \cite{christian1999lightning}, http://grip.nsstc.nasa.gov/). \hlb{Are there other products that could be used instead?}
-This contains both cloud-to-ground (avavailbe for igntions) and inter-cload (not available for ignitions) strikes.
+This product contains both cloud-to-ground (avavailbe for igntions) and inter-cload (not available for ignitions) strikes.
 CG lighting is calculated using \citet{kelley2014improved}:
 
 \begin{equation}
@@ -176,10 +177,10 @@ where $C$ and $H$ are optimized parameters.
 \subsection{Optimization}
 
 \begin{shaded}
-The framework is optimized against GFED4s observations \citep{Giglio2013}  using normalised least square r-package \citep{rstats}. GFED4s was regridded from 0.25 to a 0.5$^{\circ}$ resolution using ``resample'' in the raster r-package \citep{rraster}. This is likley to change though, so I wont descibe it any more for the moment.
+The framework is optimized against GFED4s observations \citep{Giglio2013}  using normalised least squares in R \citep{rstats}.  This is likley to change though, so I wont descibe it any more for the moment. GFED4s was regridded from 0.25 to a 0.5$^{\circ}$ resolution using ``resample'' in the raster r-package \citep{rraster}.
 \end{shaded}
 
-Optimization is performed on equation ~\ref{equ:LimFIRE} to ~\ref{equ:Supression}. Each limitation optimizes two parameters associated with it's maximum expected burnt area (equations ~\ref{equ:fx} and ~\ref{equ:LimFIRE.x}, see figure ~\ref{fig:Logistic_fun}).
+Optimization is performed on equation ~\ref{equ:LimFIRE} to ~\ref{equ:Supression}. Each control optimizes two parameters associated with it's maximum expected burnt area (equations ~\ref{equ:fx} and ~\ref{equ:LimFIRE.x}, see figure ~\ref{fig:Logistic_fun}).
 Paramters relating different fuel moisture, ignition and supressions sources are also optimzed (see table ~\ref{tab:optimize})
 
 \begin{table}[]
@@ -209,9 +210,8 @@ Paramters relating different fuel moisture, ignition and supressions sources are
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Benchmarking}
 \begin{shaded}
-To assess performance of reconstructed burnt area, we'll probably use NME for annual average, seasonal and inter-annual comparisons \citep{kelley2013comprehensive} as reccomended by fireMIP \citet{gmd-2016-237, hantson2016status}, and maybe McFaddens $R^{2}$ as per \citep{bistinas2014causal}. Annual average NME comparison comes out at 0.46, which is better then benchmarking null models descibed in \citet{kelley2013comprehensive}, and outperforms coupled vegetation-fire models contributing to fireMIP \citep{hantson2016status}, although this is to be expected as the framework is driven by and optimized to observations \citep{kelley2013comprehensive}.
+To assess performance of reconstructed burnt area, we'll probably use NME to compare reconstructed fire from the framework with GFED (figure ~\ref{fig:benchmark}) for annual average, seasonal and inter-annual comparisons \citep{kelley2013comprehensive} as reccomended by fireMIP \citet{gmd-2016-237, hantson2016status}, and maybe McFaddens $R^{2}$ as per \citep{bistinas2014causal}. Annual average NME comparison comes out at 0.46, which is better then benchmarking null models descibed in \citet{kelley2013comprehensive}, and outperforms coupled vegetation-fire models contributing to fireMIP \citep{hantson2016status}, although this is to be expected as the framework is driven by, and optimized to, observations \citep{kelley2013comprehensive}.
 
-Yannis/Rhys - any thoughts on this?
 \end{shaded}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Analysis                                                                            %%
@@ -226,14 +226,13 @@ The relative importance of each controls was assessed as:
 \begin{equation}
     \bar{L_{i, X}} = \frac{L_{i, X}}{\sum_{j} L_{j, X}}
 \end{equation}
-where $L_{i, X} = 1 - F_{i,X}$ is the individual contribution of each control $i$ for conditions $X$.
+where $L_{i, X} = 1 - F_{i,X}$ is the individual contribution of each control $i$ for conditions $X$. By definition, $\sum_{i} \bar{L_{i,X}} = 1$, for each location (figures ~\ref{fig:lim_sen_maps} and ~\ref{fig:agu_plot}).
 
 \subsubsection{Sensitivity}
 
 
-
 \begin{shaded}
-    There's two ways I can think of that we could assess sensitivity to each control. We could compare the gradient of each control around the cells current conditions. Alterntaive, we could calculate the required change in each control to induce a ``significant'' change in fire regime. The first would be a nice way of classificying different locations, along the same way as limitarions (i.e, Australian Tropical Savanna is xx \% senstiave to changes in fuel load, and yy \% to moisture). The second would be harder to normalise across controls, but might be easier to relate to actual changes in climate (i.e, xx $^{\circ}$ increase in tempurature would increase fire to expected levels for Savanna; increase in yy \% of agriuclutural land would reduce fire in non-agricultural land to that expected for forests etc)
+    There's two ways I can think of that we could assess sensitivity to each control. We could compare the gradient of each control around the cells current conditions (figure ~\ref{fig:lim_sen_maps}). Alterntaive, we could calculate the required change in each control to induce a ``significant'' change in fire regime. The first would be a nice way of classificying different locations, along the same way as limitarions (i.e, Australian Tropical Savanna is xx \% senstiave to changes in fuel load, and yy \% to moisture - see e.g. figure ~\ref{fig:lim_sen_maps}). The second would be harder to normalise across controls, but might be easier to relate to actual changes in climate (i.e, xx $^{\circ}$ increase in tempurature would increase fire to expected levels for Savanna - see e.g. figure ~\ref{fig:amazon}; increase in yy \% of agriuclutural land would reduce fire in non-agricultural land to that expected for forests etc)
 
 \paragraph{options 1}
 
@@ -251,6 +250,6 @@ where $\partial L_{i, x}$ is the gradient of $L_{i, x}$ relative to the maximum 
 \paragraph{options 2}
 for measuring sensitivity is to calculate the change required for a control to alter burnt area enough to induce major alterations in i.e vegetation cover.
 For example, assessing amazon risk of fire-induced tipping point. Holding the contribution of ignition, fuel load and land use constant, we could calculate the change in moisture needed to increase burnt area to the level expected for Savanna (roughly 1\% in South America according to \cite{lehmann2011deciphering}).
-It would be easy to work out a required change in climate variables (humidity, temperature, ET etc, or any combination of these) required to hit this 'fire tipping point'.
+It would be easy to work out a required change in climate variables (humidity, temperature, ET etc, or any combination of these) required to hit this 'fire tipping point' (figure ~\ref{fig:amazon}).
 
 \end{shaded}
