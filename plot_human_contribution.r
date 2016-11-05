@@ -3,7 +3,7 @@
 #########################################################################
 source('cfg.r')
 
-grab_cache = TRUE
+grab_cache = FALSE
 
 ## output filename
 mod_file = 'outputs/LimFIRE_fire'
@@ -36,7 +36,7 @@ labs = c('a) Full model burnt area', 'b) No human ignitions', 'c) No humans', 'd
 control = runIfNoFile(mod_file[1], runLimFIREfromstandardIns, fireOnly = TRUE,
                                                         test = grab_cache)
 noIgnit = runIfNoFile(mod_file[2], runLimFIREfromstandardIns, fireOnly = TRUE, 
-                  remove = "pas",                       test = grab_cache)
+                  remove = c("pas",         "popdens"), test = grab_cache)
 noAnyth = runIfNoFile(mod_file[3], runLimFIREfromstandardIns, fireOnly = TRUE, 
                   remove = c("pas", "crop", "popdens"), test = grab_cache)
 
