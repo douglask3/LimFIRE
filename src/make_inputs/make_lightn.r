@@ -22,6 +22,7 @@ make_lightn <- function(i) {
     m = monthOfYear(i)    
     L = lightn[[m]]
     L = lightningIgnitions(L)    
+    
     return(L)
 }
 
