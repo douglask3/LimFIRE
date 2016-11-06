@@ -59,15 +59,7 @@ layout(rbind(c(1,  2,  3),
 
 
 
-mtextStandard <- function(...) mtext(..., line = -2)
-
-standard_legend <- function(cols = fire_cols, lims = fire_lims, dat,
-                            plot_loc = c(0.35,0.75,0.65,0.78)) {
-    add_raster_legend2(cols, lims, add = FALSE,
-               plot_loc = plot_loc, dat = dat,
-               transpose = FALSE,
-               srt = 0)
-} 
+mtextStandard <- function(...) mtext(..., line = -2) 
 
 standard_legend2 <- function(...)
         standard_legend(plot_loc = c(0.2, 0.9, 0.65, 0.78), ...)
