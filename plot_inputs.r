@@ -7,32 +7,46 @@ graphics.off()
 
 grab_cache = TRUE
 
-names = names(drive_fname)
-
 fignames = paste('figs/',
-                c('inputs_mean','inputs_fireSeason', 'input_correlation'),
+                c('inputs_mean','inputs_fireSeason', 
+                  'measure_mean', 'measure_fire',
+                  'input_correlation'),
                 '.pdf', sep = '')
 
-cols = list(alpha   = c('white', '#AA00AA', '#220022'),
-            emc     = c('white', '#00AAAA', '#002222'),
-            npp     = c('white', '#77DD00', '#004400'),
-            crop    = c('white', '#AAAA00', '#222200'),
-            pas     = c('white', '#CC8800', '#441100'),
-            urban   = c('white', 'grey'   , 'black'  ),
-            popdens = c('white', 'grey'   , 'black'  ),
-            Lightn  = c('black', '#0000FF', 'yellow'  ),
-            fire    = c('white', '#EE9900', '#440000'))
+names_input = names(drive_fname)
 
-lims = list(alpha   = c(0.2, 0.4, 0.6, 0.8, 1.0),
-            emc     = c(5, 10, 20, 40, 60, 80),
-            npp     = c(0, 1000, 2000, 4000, 10000),
-            crop    = c(0.1, 0.3, 1, 3, 10, 30),
-            pas     = c(1, 2, 5, 10, 20, 50),
-            urban   = c(0.001, 0.1, 1, 5, 10),
-            popdens = c(0.01, 0.1, 1, 10, 100, 1000),
-            Lightn  = c(0.01, 0.1, 0.2, 0.5, 1, 2, 3),
-            fire    = c(0.001, 0.002, 0.005, 0.010, 0.020, 0.050))
+cols_input = list(alpha   = c('white', '#AA00AA', '#220022'),
+                  emc     = c('white', '#00AAAA', '#002222'),
+                  npp     = c('white', '#77DD00', '#004400'),
+                  crop    = c('white', '#AAAA00', '#222200'),
+                  pas     = c('white', '#CC8800', '#441100'),
+                  urban   = c('white', 'grey'   , 'black'  ),
+                  popdens = c('white', 'grey'   , 'black'  ),
+                  Lightn  = c('black', '#0000FF', 'yellow'  ),
+                  fire    = c('white', '#EE9900', '#440000'))
 
+lims_input = list(alpha   = c(0.2, 0.4, 0.6, 0.8, 1.0),
+                  emc     = c(5, 10, 20, 40, 60, 80),
+                  npp     = c(0, 1000, 2000, 4000, 10000),
+                  crop    = c(0.1, 0.3, 1, 3, 10, 30),
+                  pas     = c(1, 2, 5, 10, 20, 50),
+                  urban   = c(0.001, 0.1, 1, 5, 10),
+                  popdens = c(0.01, 0.1, 1, 10, 100, 1000),
+                  Lightn  = c(0.01, 0.1, 0.2, 0.5, 1, 2, 3),
+                  fire    = c(0.001, 0.002, 0.005, 0.010, 0.020, 0.050))
+
+                  
+cols_msure = list(fuel    = c('white', '#33FF33', '#002200'),
+                  moisture= c('white', '#3333FF', '#000022'),
+                  igntions= c('white', '#FF3333', '#220000'),
+                  supress = c('white', 'grey'   , 'black'  ))
+                  
+lims_msure = list(fuel    = c(0, 1000, 2000, 4000, 10000),
+                  moisture= c(5, 10, 20, 40, 60, 80),
+                  igntions= c(0.001, 0.1, 0.2, 0.5, 1, 2, 3),
+                  supress = c(0.01, 0.1, 1, 10, 100, 1000))
+
+names_msure= names(cols_msure)                  
 #########################################################################
 ## open data                                                           ##
 #########################################################################
@@ -59,10 +73,10 @@ Obs_fire = lapply(drive_fname, openMean, fire.stack, '-season.nc', fire_season)
 ## Plot maps                                                           ##
 #########################################################################
    
-plot_inputs <- function(Obs, fname, ...) {
+plot_inputs <- function(Obs, fname, names = names_input,
+                        lims = lims_input, cols = cols_input, ...) {
     print(fname)
     
-
     plot_input <- function(x, lim, col, name) {
         plot_raster(x, lim, col, quick = TRUE, ...)
         mtext(name, line = -1)
@@ -78,8 +92,26 @@ plot_inputs <- function(Obs, fname, ...) {
 }
 
 plot_inputs(Obs_mean, fignames[1])
-plot_inputs(Obs_fire, fignames[2], missCol = 'grey')
+plot_inputs(Obs_fire, fignames[2])
 
+#########################################################################
+## Plot overall                                                        ##
+#########################################################################
+fnames = fnames = c('nnfire', 'fuel', 'moisture', 'igntions', 'supression')
+fnames_mod  = paste('temp/', fnames    , '-measuresOnly.nc', sep = '')
+fnames_mean = paste('temp/', fnames[-1], '-measuresMean.nc', sep = '')
+fnames_fire = paste('temp/', fnames[-1], '-measuresFire.nc', sep = '')
+                
+measures = runIfNoFile(fnames_mod, runLimFIREfromstandardIns,
+                       just_measures = TRUE, test = grab_cache)
+measures = measures[-1]
+measures_mean = runIfNoFile(fnames_mean, function(i) lapply(i, mean), measures)
+measures_fire = runIfNoFile(fnames_fire, function(i) lapply(i, fire.stack, fire_season()), measures)
+
+
+plot_inputs(measures_mean, fignames[3], names_msure, lims_msure, cols_msure)              
+plot_inputs(measures_fire, fignames[4], names_msure, lims_msure, cols_msure)              
+browser()
 #########################################################################
 ## Plot cross correlarion                                              ##
 #########################################################################
@@ -126,7 +158,9 @@ plot_density <- function(i, j) {
 
 nplots = length(Obs)
 
-pdf(fignames[3], height = 3 * nplots, width = 3 * nplots)
+pdf(fignames[5], height = 3 * nplots, width = 3 * nplots)
     par(mfrow = c(nplots, nplots), mar = rep(0, 4))
     lapply(1:nplots, function(i) lapply(1:nplots, plot_density, i))
 dev.off.gitWatermark()
+
+
