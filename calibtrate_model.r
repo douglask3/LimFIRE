@@ -38,21 +38,21 @@ upper_params = list(         f1 = 9E9 , f2 = 10,
                     H = 9E9, A  = 9E9,
                              i1 = 9E9 , i2 = 10,
                     P = 9E9, s1 = 9E9 , s2 = 10   )
-                    
+
 Obs = ObsRasters2DataFrame()
 
 nls_bootstrap <- function() {
     index = sample(1:ncells, 100000, replace = FALSE)
     dat = Obs[index, ]
-    res = nls( fire ~ LimFIRE(npp, alpha, emc, 0, Lightn, pas, crop, popdens,
-                        f1, f2, M, m1, m2, 1, H, A, i1, i2, P, s1, s2, fireOnly = TRUE), 
-                data = dat, algorithm = "port",
-                start = start_params, lower = lower_params, upper = upper_params,
-                trace = TRUE, control = cntr)
+    res = nls(fire ~ LimFIRE(npp, alpha, emc, 0, Lightn, pas, crop, popdens,
+                             f1, f2, M, m1, m2, 1, H, A, i1, i2, P, s1, s2,
+                             fireOnly = TRUE), 
+              data = dat, algorithm = "port",
+              start = start_params, lower = lower_params, upper = upper_params,
+              trace = TRUE, control = cntr)
 
     return(coefficients(res))
 }
-
 
 ncells = dim(Obs)[1]
 resStore = c()
