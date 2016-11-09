@@ -50,53 +50,25 @@ names_msure= names(cols_msure)
 #########################################################################
 ## open data                                                           ##
 #########################################################################
+fire_season = fire_season()
 
-
+## Individual inputs
 openMean <- function(fname_in, FUN = mean.stack, fname_ext = '-mean.nc', ...){
     fname_out = replace.str(fname_in , 'outputs/', 'temp/')
     fname_out = replace.str(fname_out, '.nc', fname_ext)
     return(runIfNoFile(fname_out, FUN, fname_in, ..., test = grab_cache))
 }
 
-## open Obs
+# open Obs
 Obs = lapply(drive_fname, stack)
 
-## monthly mean                    
+# monthly mean                    
 Obs_mean = lapply(drive_fname, openMean)
 
-## monthly mean during fire season height
-fire_season = fire_season()
+# monthly mean during fire season height
 Obs_fire = lapply(drive_fname, openMean, fire.stack, '-season.nc', fire_season)
 
-
-#########################################################################
-## Plot maps                                                           ##
-#########################################################################
-   
-plot_inputs <- function(Obs, fname, names = names_input,
-                        lims = lims_input, cols = cols_input, ...) {
-    print(fname)
-    
-    plot_input <- function(x, lim, col, name) {
-        plot_raster(x, lim, col, quick = TRUE, ...)
-        mtext(name, line = -1)
-        standard_legend(col, lim, x)
-    }
-    
-    pdf(fname, height = 9, width = 18)
-        layout(matrix(1:(2*length(lims)), nrow = ceiling(sqrt(length(lims)))*2), height = rep(c(1, 0.3), 3))
-
-        par(mar = rep(0.5, 4))
-        mapply(plot_input, Obs, lims, cols, names)
-    dev.off.gitWatermark()
-}
-
-plot_inputs(Obs_mean, fignames[1])
-plot_inputs(Obs_fire, fignames[2])
-
-#########################################################################
-## Plot overall                                                        ##
-#########################################################################
+## Combined Inputs (i.e, fuel, mositure, igntions, supression measures)
 fnames = fnames = c('nnfire', 'fuel', 'moisture', 'igntions', 'supression')
 fnames_mod  = paste('temp/', fnames    , '-measuresOnly.nc', sep = '')
 fnames_mean = paste('temp/', fnames[-1], '-measuresMean.nc', sep = '')
@@ -108,10 +80,38 @@ measures = measures[-1]
 measures_mean = runIfNoFile(fnames_mean, function(i) lapply(i, mean), measures)
 measures_fire = runIfNoFile(fnames_fire, function(i) lapply(i, fire.stack, fire_season()), measures)
 
+#########################################################################
+## Plot maps                                                           ##
+#########################################################################
+plot_inputs <- function(Obs, fname, names = names_input,
+                        lims = lims_input, cols = cols_input, ...) {
+    print(fname)
+    
+    plot_input <- function(x, lim, col, name) {
+        plot_raster(x, lim, col, quick = TRUE, ...)
+        mtext(name, line = -0.67)
+        standard_legend(col, lim, x)
+    }
+    
+    nplts = length(lims)
+    nrows = ceiling(sqrt(length(lims)))
+    
+    pdf(fname, height = 2.5 * nrows, width = 4.5 * ceiling(nplts/nrows))
+        layout(matrix(1:(2*nplts), nrow = nrows * 2), height = rep(c(1, 0.3), 3))
 
+        par(mar = rep(0.5, 4))
+        mapply(plot_input, Obs, lims, cols, names)
+    dev.off.gitWatermark()
+}
+
+## Plot Individuals
+plot_inputs(Obs_mean, fignames[1])
+plot_inputs(Obs_fire, fignames[2])
+
+## Plot measures
 plot_inputs(measures_mean, fignames[3], names_msure, lims_msure, cols_msure)              
 plot_inputs(measures_fire, fignames[4], names_msure, lims_msure, cols_msure)              
-browser()
+
 #########################################################################
 ## Plot cross correlarion                                              ##
 #########################################################################
@@ -159,7 +159,7 @@ plot_density <- function(i, j) {
 nplots = length(Obs)
 
 pdf(fignames[5], height = 3 * nplots, width = 3 * nplots)
-    par(mfrow = c(nplots, nplots), mar = rep(0, 4))
+    par(mfrow = c(nplots, nplots), mar = c(1.5, 2.5, 2.5,1.5))
     lapply(1:nplots, function(i) lapply(1:nplots, plot_density, i))
 dev.off.gitWatermark()
 
