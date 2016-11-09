@@ -156,11 +156,10 @@ plot_density <- function(i, j) {
     mtext(title)
 }
 
-nplots = length(Obs)
+nplots = length(Obs) - 1 # -1 to remove fire
 
 pdf(fignames[5], height = 3 * nplots, width = 3 * nplots)
     par(mfrow = c(nplots, nplots), mar = c(1.5, 2.5, 2.5,1.5))
     lapply(1:nplots, function(i) lapply(1:nplots, plot_density, i))
 dev.off.gitWatermark()
-
 
