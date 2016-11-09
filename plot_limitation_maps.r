@@ -6,7 +6,8 @@ graphics.off()
 
 grab_cache = TRUE
 
-fig_fname = 'figs/limitation_map.png'
+fig_fname       = 'figs/limitation_map.png'
+fig_fname_indiv = 'figs/ind_limiataions'
 
 
 labs = c('a) Annual average controls on fire', 'b) Annual average sensitivity',
@@ -101,6 +102,29 @@ fs_sn_mod = cal_fire_season_average(sn_mod_files, sn_mod)
 #########################################################################
 ## Plotting and tableing                                               ##
 #########################################################################
+plot_limitations_1by1 <- function(pmod, fname) {
+    mask = sum(layer.apply(pmod[-1], is.na)) > 0
+    lim = seq(0, 0.9, by = 0.1)
+    col = c('white', 'grey', 'black')
+        
+    plot_limitations_1by1 <- function(mod, name) {
+        mod[mask] = NaN
+        plot_raster(mod, lim, col, quick = TRUE)
+        mtext(name, line = -1.5)
+    }
+    fname = paste(fig_fname_indiv, fname, '.pdf', sep = '')
+    pdf(fname, height = 5.25, width = 9)
+        mat = rbind(c(1, 2), c(3, 4), c(5, 5))
+        layout(mat, height = c(1, 1, 0.33333))
+        par(mar = rep(0, 4))
+        mapply(plot_limitations_1by1, pmod[-1], c('fuel', 'moisture', 'igntions', 'suppression'))
+        standard_legend(col, lim, pmod[[2]], plot_loc = c(0.2,0.8,0.65,0.78))
+    dev.off.gitWatermark()
+}
+
+plot_limitations_1by1(aa_lm_mod, 'aa')
+plot_limitations_1by1(fs_lm_mod, 'fs')
+
 
 ## function for calculating pcs for table
 calculate_weightedAverage <- function(xy, pmod) {
