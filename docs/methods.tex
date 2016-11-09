@@ -75,6 +75,27 @@ It could be that we use the measure most appropriate for a given application. Bu
 \end{shaded}
 \colorlet{shadecolor}{Mycolor2}
 
+\begin{figure}[!ht]
+  \centering
+    \includegraphics[width=0.67\textwidth]{../figs/inputs_mean.pdf}
+  \caption{Monthly means of each framework input \hlb{add units} and GFEDv4.}
+  \label{fig:Monthly_mean_ins}
+\end{figure}
+
+\begin{figure}[!ht]
+  \centering
+    \includegraphics[width=0.67\textwidth]{../figs/inputs_fireSeason.pdf}
+  \caption{Monthly means in months of maximum fire of each framework input \hlb{add units} and GFEDv4 mean maximum monthly burnt area.}
+  \label{fig:Season_mean_ins}
+\end{figure}
+
+\begin{figure}[!ht]
+  \centering
+    \includegraphics[width=0.67\textwidth]{../figs/input_correlation.pdf}
+  \caption{Input correlations.}
+  \label{fig:Corr_ins}
+\end{figure}
+
 \subsubsection{Moisture ($\omega$)}
 
 $\omega$ represents mean fractional water content, and is split between live and dead fuel:
@@ -138,6 +159,21 @@ where P and D are optimized parameters.
     where N, P and D are opimized paramters describing the contribution of their respective ignition source relative to background igntions.
 \end{shaded}
 
+
+\begin{figure}[!ht]
+  \centering
+    \includegraphics[width=0.67\textwidth]{../figs/measure_mean.pdf}
+  \caption{Monthly means of each control. \hlb{add units?}}
+  \label{fig:Monthly_mean_controls}
+\end{figure}
+
+\begin{figure}[!ht]
+  \centering
+    \includegraphics[width=0.67\textwidth]{../figs/measure_fire.pdf}
+  \caption{Monthly means in months of maximum fire of each control. \hlb{add units?}}
+  \label{fig:Season_mean_controls}
+\end{figure}
+
 \paragraph{Lightning}
 is calculated from
 from the Lightning Imaging Sensor flash count climatology (LIS \cite{christian1999lightning}, http://grip.nsstc.nasa.gov/). \hlb{Are there other products that could be used instead?}
@@ -192,6 +228,20 @@ where $C$ and $H$ are optimised parameters.
 \begin{shaded}
     The framework is optimised against GFED4s observations \citep{Giglio2013}  using normalised least squares in R \citep{rstats}.  This is likely to change, though, so I won't describe it anymore for the moment. GFED4s was re-gridded from 0.25 to a 0.5$^{\circ}$ resolution using ``resample'' in the raster r-package \citep{rraster}.
 \end{shaded}
+
+\begin{figure}[!ht]
+  \centering
+    \includegraphics[width=0.67\textwidth]{../figs/ind_limiataionsaa.pdf}
+  \caption{Annual average limitation of each control.}
+  \label{fig:Annual_average_con}
+\end{figure}
+
+\begin{figure}[!ht]
+  \centering
+    \includegraphics[width=0.67\textwidth]{../figs/ind_limiataionsfs.pdf}
+  \caption{Fire season average limitiation of each control.}
+  \label{fig:Season_con}
+\end{figure}
 
 Optimization is performed on equation ~\ref{equ:LimFIRE} to ~\ref{equ:Supression} (figure ~\ref{fig:lim_lines}). Each control optimizes two parameters associated with it's maximum expected burnt area (equations ~\ref{equ:fx} and ~\ref{equ:LimFIRE.x}, see figure ~\ref{fig:Logistic_fun}).
 Parameters relating different fuel moisture, ignition and suppression sources are also optimized (see table ~\ref{tab:optimize})
