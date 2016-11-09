@@ -42,7 +42,7 @@ cols_msure = list(fuel    = c('white', '#33FF33', '#002200'),
                   supress = c('white', 'grey'   , 'black'  ))
                   
 lims_msure = list(fuel    = c(0, 1000, 2000, 4000, 10000),
-                  moisture= c(5, 10, 20, 40, 60, 80),
+                  moisture= c(5, 10, 15, 20, 30, 40),
                   igntions= c(0.001, 0.1, 0.2, 0.5, 1, 2, 3),
                   supress = c(0.01, 0.1, 1, 10, 100, 1000))
 
@@ -84,7 +84,7 @@ plot_inputs <- function(Obs, fname, names = names_input,
     }
     
     pdf(fname, height = 9, width = 18)
-        layout(matrix(1:18, nrow = 6), height = rep(c(1, 0.3), 3))
+        layout(matrix(1:(2*length(lims)), nrow = ceiling(sqrt(length(lims)))*2), height = rep(c(1, 0.3), 3))
 
         par(mar = rep(0.5, 4))
         mapply(plot_input, Obs, lims, cols, names)
