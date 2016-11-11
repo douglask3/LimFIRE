@@ -12,15 +12,21 @@ do
     chmod +x $f
 done
 
+rm *.bbl
+rm *.aux
+rm *.blg
+rm *.log
+ 
+pdflatex notes.tex
 pdflatex Model_description.tex
 bibtex Model_description
 pdflatex Model_description.tex
 pdflatex Model_description.tex
 
-rm Model_description.bbl
-rm Model_description.aux
-rm Model_description.blg
-rm Model_description.log
+rm *.bbl
+rm *.aux
+rm *.blg
+rm *.log
 
 
-gnome-open Model_description.pdf
+xpdf Model_description.pdf
