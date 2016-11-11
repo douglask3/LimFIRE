@@ -1,4 +1,6 @@
 source('cfg.r')
+graphics.off()
+
 fig_file = 'figs/limitation_lines.png'
 inter_obs_file = 'temp/samplesObs.csv'
  
@@ -13,10 +15,12 @@ plotFireVsVar <- function(i, fun, ps,
     params = params[, ps]
     if (length(i) == 1) i = mod[, i]
     else {
-        P = mean(params[,1])
-        i = (mod[,i[1]] + P * mod[, i[2]]) #/ (1 + P)
-        params = as.matrix(params[, -1])
-        if (dim(params)[2]==1) params = params * 33 ## Remove
+        index = 1:(length(i) - 1)
+        P = apply(as.matrix(params[, index]), 2, mean)
+        P = c(1, P)
+        i = sweep(mod[i], 2, P, '*')
+        i = apply(i, 1, sum)
+        params = as.matrix(params[, -index])
     }
     
     x = seq(xlim[1], xlim[2], length.out = 1000)
@@ -62,7 +66,7 @@ par(mfrow = c(4, 1), mar = c(4,4,3, 4))
 
 plotFireVsVar('npp', LimFIRE.fuel, c('f1', 'f2'), 'green', 'NPP (g/m2)', c(0, 10000))
 plotFireVsVar(c('alpha', 'emc'), LimFIRE.moisture, c('M','m1', 'm2'), 'blue', 'Moisture (fraction)', c(0, 30))
-plotFireVsVar(c('Lightn', 'pas'), LimFIRE.ignitions, c('H','i1'), 'red', 'igntions (/m2)', c(0, 3))
+plotFireVsVar(c('Lightn', 'pas', 'popdens'), LimFIRE.ignitions, c('H','A', 'i1', 'i2'), 'red', 'igntions (/m2)', c(0, 300))
 plotFireVsVar(c('crop', 'popdens'), LimFIRE.supression, c('P','s1', 's2'), 'purple', 'land cover (%)', c(0, 100))
 
 dev.off.gitWatermark()

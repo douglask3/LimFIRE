@@ -1,0 +1,1 @@
+mean.stack <- function(...) mean(stack(...))
