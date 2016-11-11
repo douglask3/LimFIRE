@@ -6,7 +6,7 @@
 
 
 \section{Methods}
-The framework calculates burnt area based on the maximum allowed burnt area from limitations imposed by four controls: fuel, moisture, ignition, and anthropogenic suppression. These controls are described from remote sensed and meteorological observations and parameters relating controls to fire are optimised against Global Fire Emissions Database (GFED4s) burnt area observations \citep{Giglio2013}.
+The framework calculates burnt area based on the maximum allowed burnt area from limitations imposed by four controls: fuel, moisture, ignition, and anthropogenic suppression. These controls are described from remote sensed and meteorological observations. Parameters relating controls to fire are optimised against Global Fire Emissions Database (GFED4s) burnt area observations \citep{Giglio2013}.
 The framework could probably be used on a range of temporal and spatial resolutions
 \hlb{(scale dependency might be something to test in the future?)}.
 Here, burnt area is calculated monthly on a 0.5$^{\circ}$ CRUTS3.22 grid \citep{harris2014cru}, between Jan 2000 and Dec 2010 (the period of data overlap).
@@ -30,7 +30,7 @@ Fractional burnt area ($F$) is the product of the maximum allowed burnt area for
 \end{equation}
 \hlb{Is it widley known that $\Pi$ means product?}
 
-A controls maximum burnt area is related to fuel loads, moisture, ignitions and suppression via the logistic function, as per \citet{bistinas2014causal}:
+A controls maximum burnt area is related to fuel loads, moisture, ignitions or suppression via the logistic function, as per \citet{bistinas2014causal}:
 
 \begin{equation}
     f(x) = 1 / (1 + e^{-k \cdot (x - x_0)})
@@ -68,24 +68,21 @@ Fire increases with increasing fuel load ($F_w$) and igntions ($F_{ig}$), and de
 \colorlet{shadecolor}{Mycolor3}
 \begin{shaded}
 \subsubsection{Fuel ($w$)}
-The framework will use a measure of fractional cover as a proxy for fuel continuity (i.e, annual mean or maximum fAPAR, as used by \citet{knorr2014impact,knorr2016climate} or MODIS fractional cover). \citet{bistinas2014causal} uses SeaWiFs fAPAR \hl{(is that right Yannis?)}, but this product was discontinued in 2005, so would reduce our comparison period. Other fAPAR/Fractional cover products would probably cover a larger period.
-
-
-It could be that we use the measure most appropriate for a given application. But we'd probably just use the one for the first paper?
+The framework will use a measure of fractional cover as a proxy for fuel continuity (i.e, annual mean or maximum fAPAR, as used by \citet{knorr2014impact,knorr2016climate} or MODIS fractional cover). \citet{bistinas2014causal} uses SeaWiFs fAPAR, but this product was discontinued in 2005, so would reduce our comparison period. Other fAPAR/Fractional cover products would probably cover a larger period.
 \end{shaded}
 \colorlet{shadecolor}{Mycolor2}
 
 \begin{figure}[!ht]
   \centering
     \includegraphics[width=0.67\textwidth]{../figs/inputs_mean.pdf}
-  \caption{Monthly means of each framework input \hlb{add units} and GFEDv4.}
+  \caption{Monthly means of each framework input \hlr{add units} and GFEDv4.}
   \label{fig:Monthly_mean_ins}
 \end{figure}
 
 \begin{figure}[!ht]
   \centering
     \includegraphics[width=0.67\textwidth]{../figs/inputs_fireSeason.pdf}
-  \caption{Monthly means during the fire season for each input \hlb{add units} and GFEDv4 training data. ``Fire season'' is defined as the month with heighest burnt area, calculated each year.}
+  \caption{Monthly means during the fire season for each input \hlr{add units} and GFEDv4 training data. ``Fire season'' is defined as the month with heighest burnt area, calculated each year.}
   \label{fig:Season_mean_ins}
 \end{figure}
 
@@ -111,7 +108,7 @@ The ratio of actual to potential evaporation \citep[$\alpha$][]{prentice1993simu
 $\alpha$ is calculated from CRUTS3.22 monthly mean temperature, cloud cover and precipitation using the STASH model \citep{sykes1996bioclimatic} r-package \citep{rstash}. \hlb{At the moment, elevation, is set to zero and field capacity to 140 - Rhys, I guess this will have to change? Any suggestions for data?}. STASH was spun up by recycling 1950 climate data for 40 years and then run from 1950 to 2010. Simulated $\alpha$ from 2000-2010 used for the rest of the analysis.
 
 \begin{shaded}
-\paragraph{Atmosphere-controlled} could be represented using either STASH outputs or by a simple equilibrium moisture content calculation ($m_{mq}$).
+\paragraph{Atmosphere-controlled} ($atm$) could be represented using either STASH outputs or by a simple equilibrium moisture content calculation ($m_{mq}$).
 \begin{itemize}
 
 \item \textbf{STASH}. The ratio of condensation rate ($Con$) and atmospheric evaportaive demand (i.e $PET$) could be used to calculate ``fuel drying speed'' ($FDS$):
@@ -119,7 +116,7 @@ $\alpha$ is calculated from CRUTS3.22 monthly mean temperature, cloud cover and 
     \begin{equation}
         FDS = \frac{Con}{PET}
     \end{equation}
-    here, when $FDS>1$, daily condensation occurs more rapidly drying, and fuel load mositure will increase, and when $FDS<1$, fuel drys faster then condenstation and fuel moisture will decrease. \\
+    here, when $FDS>1$, daily condensation occurs more rapidly than drying, and fuel load mositure will increase, and when $FDS<1$, fuel drys faster then condenstation and fuel moisture will decrease. \\
     \\
     There are a few things to consider here:
 
@@ -134,7 +131,7 @@ $\alpha$ is calculated from CRUTS3.22 monthly mean temperature, cloud cover and 
         or give FDS a maximum value of 1, which is also equivilent to a wetday:
 
         \begin{equation}
-            FDS = WD + (1 - WD) \cdot \max(Con/PET)
+            FDS = WD + (1 - WD) \cdot \min(1, Con/PET)
         \end{equation}
         where $WD$ is fractional wet days
         \\
@@ -223,36 +220,27 @@ where P and D are optimized parameters.
 \begin{figure}[!ht]
   \centering
     \includegraphics[width=0.67\textwidth]{../figs/measure_mean.pdf}
-  \caption{Monthly means of each control. \hlb{add units?}}
+  \caption{Monthly means of each control. \hlr{add units?}}
   \label{fig:Monthly_mean_controls}
 \end{figure}
 
 \begin{figure}[!ht]
   \centering
     \includegraphics[width=0.67\textwidth]{../figs/measure_fire.pdf}
-  \caption{Monthly means of each control during the fire season. \hlb{add units?}}
+  \caption{Monthly means of each control during the fire season. \hlr{add units?}}
   \label{fig:Season_mean_controls}
 \end{figure}
 
 \paragraph{Lightning}
 is calculated from
 from the Lightning Imaging Sensor flash count climatology (LIS \cite{christian1999lightning}, http://grip.nsstc.nasa.gov/). \hlb{Are there other products that could be used instead?}
-This product contains both cloud-to-ground (available for ignition) and inter-cloud (not available for ignitions) strikes.
-CG lighting is calculated using \citet{kelley2014improved}:
+This product contains both cloud-to-ground ($CG$ - available for ignition) and inter-cloud (not available for ignitions) strikes.
+$CG$ lighting is calculated using \citet{kelley2014improved}:
 
 \begin{equation}
-    CG = L * min(1, 0.0408 \cdot FL^{-0.4180}
+    L_{ig} = FL * min(1, 0.0408 \cdot FL^{-0.4180})
 \end{equation}
-
-\colorlet{shadecolor}{Mycolor3}
-\begin{shaded}
-    \citet{kelley2014improved} also extracted dry-only lighting as available ignition sources. I'm implementing this at the moment, but I'm not too sure if I should:
-
-\begin{equation}
-    L_{ig} = 0.8533 \cdot CG \cdot e^{-2.835 \cdot WD}
-\end{equation}
-\end{shaded}
-\colorlet{shadecolor}{Mycolor2}
+where FL is the flash count recorded by LIS over a 0.5 degree cell.
 
 \paragraph{Pasture and population density}
 \label{Pasture}
@@ -273,13 +261,17 @@ where $C$ and $H$ are optimised parameters.
 
 
 \begin{figure}[!ht]
+\colorlet{shadecolor}{Mycolor3}
+\begin{shaded}
   \centering
     \includegraphics[width=0.67\textwidth]{../figs/limitation_lines.png}
 
   \caption{Limitation contribution for each control.}
   \label{fig:lim_lines}
-\end{figure}
+\end{shaded}
+\colorlet{shadecolor}{Mycolor2}
 
+\end{figure}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Optimization                                                                        %%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -303,7 +295,8 @@ where $C$ and $H$ are optimised parameters.
   \label{fig:Season_con}
 \end{figure}
 
-Optimization is performed on equation ~\ref{equ:LimFIRE} to ~\ref{equ:Supression} (figure ~\ref{fig:lim_lines}). Each control optimizes two parameters associated with it's maximum expected burnt area (equations ~\ref{equ:fx} and ~\ref{equ:LimFIRE.x}, see figure ~\ref{fig:Logistic_fun}).
+Optimization is performed on equation ~\ref{equ:LimFIRE} to ~\ref{equ:LimFIRE.x}, 4, 15, 16 and 18 % un-hardcode equations numbers
+(figure ~\ref{fig:lim_lines}). Each control optimizes two parameters associated with it's maximum expected burnt area (equations ~\ref{equ:fx} and ~\ref{equ:LimFIRE.x}, see figure ~\ref{fig:Logistic_fun}).
 Parameters relating different fuel moisture, ignition and suppression sources are also optimized (see table ~\ref{tab:optimize})
 
 \begin{table}[]
@@ -333,12 +326,15 @@ Parameters relating different fuel moisture, ignition and suppression sources ar
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Benchmarking                                                                        %%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
 \begin{figure}[!ht]
+\colorlet{shadecolor}{Mycolor3}
+\begin{shaded}
   \centering
     \includegraphics[width=0.9\textwidth]{../figs/gfedComparison.png}
   \caption{Benchmark comparisons against GFED4s \citep{Giglio2013}.}
   \label{fig:benchmark}
+\end{shaded}
+\colorlet{shadecolor}{Mycolor2}
 \end{figure}
 
 \subsection{Benchmarking}
@@ -353,15 +349,17 @@ To assess performance of reconstructed burnt area, we'll probably use NME to com
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Analysis}
 
-
 \begin{figure}[!ht]
+\colorlet{shadecolor}{Mycolor3}
+\begin{shaded}
   \centering
     \includegraphics[width=0.9\textwidth]{../figs/limitation_map.png}
 
   \caption{Limitation and sensitivity.}
   \label{fig:lim_sen_maps}
+\end{shaded}
+\colorlet{shadecolor}{Mycolor2}
 \end{figure}
-
 
 \subsubsection{Limitation}
 
@@ -417,8 +415,9 @@ It would be easy to work out a required change in climate variables (humidity, t
 \end{shaded}
 %\pagebreak
 \section{Some other results}
-
 \begin{figure}[!ht]
+\colorlet{shadecolor}{Mycolor3}
+\begin{shaded}
   \centering
     \includegraphics[width=0.8\textwidth]{../figs/HumanImpactMap_small.png}
 
@@ -426,11 +425,17 @@ It would be easy to work out a required change in climate variables (humidity, t
             a) Increases in burnt area from human induced fire starts.
             b) Changes in burnt area from human fire starts and suppression.}
     \label{fig:human_impact}
+\end{shaded}
+\colorlet{shadecolor}{Mycolor2}
 \end{figure}
 
 \begin{figure}
+\colorlet{shadecolor}{Mycolor3}
+\begin{shaded}
   \centering
     \includegraphics[width=0.67\textwidth]{../figs/cropland_noCrop_impact.png}
 
   \caption{The impact of cropland on burnt area in non-cropland within the same grid cell.}
+\end{shaded}
+\colorlet{shadecolor}{Mycolor2}
 \end{figure}
