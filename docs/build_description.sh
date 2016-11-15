@@ -1,6 +1,8 @@
 ## Copy reqired hooks
 hooksPath="gitinfoHooks/"
 hooksDir="../.git/hooks/"
+export TEXMFHOME=texmf
+
 
 fnames=`ls $hooksPath`
 cp `find $hooksPath | tail -n +2` $hooksDir
