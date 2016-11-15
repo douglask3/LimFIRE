@@ -9,6 +9,30 @@ Here, burnt area is calculated monthly on a 0.5$^{\circ}$ CRUTS3.22 grid \citep{
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \input{sections/methods/Overview}
 \input{sections/methods/Inputs}
+
+\begin{table}[]
+\centering
+\caption{Optimized paramters obviosuly, to be filled in.}
+\label{tab:optimize}
+\begin{tabular}{llll}
+\hline
+\multicolumn{2}{c}{\textbf{Parameter}} & \multicolumn{1}{c}{\textbf{Bound}} & \multicolumn{1}{c}{\textbf{Value}} \\ \hline
+\multirow{2}{*}{Fuel}             & $k_{w}$         &                                    &                                    \\
+                                  & $x_{0,w}$       &                                    &                                    \\ \hline
+\multirow{3}{*}{Moisture}         & $k_{\omega}$    &                                    &                                    \\
+                                  & $x_{0, \omega}$ &                                    &                                    \\
+                                  & $M$             &                                    &                                    \\ \hline
+\multirow{4}{*}{Igntions}         & $k_{ig}$        &                                    &                                    \\
+                                  & $x_{0, ig}$     &                                    &                                    \\
+                                  & $P$             &                                    &                                    \\
+                                  & $D$             &                                    &                                    \\ \hline
+\multirow{4}{*}{Human Supression} & $k_{s}$         &                                    &                                    \\
+                                  & $x_{0, s}$      &                                    &                                    \\
+                                  & $C$             &                                    &                                    \\
+                                  & $H$             &                                    &                                    \\ \hline
+\end{tabular}
+\end{table}
+
 \input{sections/methods/Optimization}
 \input{sections/methods/Benchmarking}
 \input{sections/methods/Analysis}
