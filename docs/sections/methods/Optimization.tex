@@ -1,0 +1,46 @@
+\subsection{Optimization}
+
+\begin{shaded}
+    The framework is optimised against GFED4s observations \citep{Giglio2013}  using normalised least squares in R \citep{rstats}.  This is likely to change, though, so I won't describe it anymore for the moment. GFED4s was re-gridded from 0.25 to a 0.5$^{\circ}$ resolution using ``resample'' in the raster r-package \citep{rraster}.
+\end{shaded}
+
+\begin{figure}[!ht]
+  \centering
+    \includegraphics[width=0.67\textwidth]{../figs/ind_limiataionsaa.pdf}
+  \caption{Annual average limitation of each control.}
+  \label{fig:Annual_average_con}
+\end{figure}
+
+\begin{figure}[!ht]
+  \centering
+    \includegraphics[width=0.67\textwidth]{../figs/ind_limiataionsfs.pdf}
+  \caption{Fire season average limitiation of each control.}
+  \label{fig:Season_con}
+\end{figure}
+
+Optimization is performed on equation ~\ref{equ:LimFIRE} to ~\ref{equ:LimFIRE.x}, 4, 15, 16 and 18 % un-hardcode equations numbers
+(figure ~\ref{fig:lim_lines}). Each control optimizes two parameters associated with it's maximum expected burnt area (equations ~\ref{equ:fx} and ~\ref{equ:LimFIRE.x}, see figure ~\ref{fig:Logistic_fun}).
+Parameters relating different fuel moisture, ignition and suppression sources are also optimized (see table ~\ref{tab:optimize})
+
+\begin{table}[]
+\centering
+\caption{Optimized paramters obviosuly, to be filled in.}
+\label{tab:optimize}
+\begin{tabular}{llll}
+\hline
+\multicolumn{2}{c}{\textbf{Parameter}} & \multicolumn{1}{c}{\textbf{Bound}} & \multicolumn{1}{c}{\textbf{Value}} \\ \hline
+\multirow{2}{*}{Fuel}             & $k_{w}$         &                                    &                                    \\
+                                  & $x_{0,w}$       &                                    &                                    \\ \hline
+\multirow{3}{*}{Moisture}         & $k_{\omega}$    &                                    &                                    \\
+                                  & $x_{0, \omega}$ &                                    &                                    \\
+                                  & $M$             &                                    &                                    \\ \hline
+\multirow{4}{*}{Igntions}         & $k_{ig}$        &                                    &                                    \\
+                                  & $x_{0, ig}$     &                                    &                                    \\
+                                  & $P$             &                                    &                                    \\
+                                  & $D$             &                                    &                                    \\ \hline
+\multirow{4}{*}{Human Supression} & $k_{s}$         &                                    &                                    \\
+                                  & $x_{0, s}$      &                                    &                                    \\
+                                  & $C$             &                                    &                                    \\
+                                  & $H$             &                                    &                                    \\ \hline
+\end{tabular}
+\end{table}
