@@ -18,6 +18,7 @@ rm *.bbl
 rm *.aux
 rm *.blg
 rm *.log
+rm *.dvi
  
 pdflatex notes.tex
 pdflatex Model_description.tex
@@ -29,6 +30,6 @@ rm *.bbl
 rm *.aux
 rm *.blg
 rm *.log
-
+rm *.dvi
 
 xpdf Model_description.pdf
