@@ -1,0 +1,217 @@
+\section{Fire Limitation Skype-up, 25/10/2016}
+
+\subsection{Framework}
+
+\begin{itemize}
+\itemsep1pt\parskip0pt\parsep0pt
+\item
+  The framework should be flexible and easily accessible so other people can use it for their own projects.
+\item
+  The initial paper should use free available, global data, so that it could be reproduced as the basis for other people's projects.
+\item
+  Less accessible data could be introduced in later studies to answer more specific/regional science questions.
+\end{itemize}
+
+\subsection{Control Categories}
+
+\subsubsection{Fuel}
+
+\begin{itemize}
+\itemsep1pt\parskip0pt\parsep0pt
+\item
+  Decided it would be better to use a fuel (dis-)continuity proxy (i.e fAPAR, modis fractional cover etc) rather than fuel/production (such as NPP products) as:
+
+\begin{itemize}
+\itemsep1pt\parskip0pt\parsep0pt
+\item
+  Fuel continuity is what the framework should really be describing
+\item
+  All NPP products we could think of are a bit dubious
+\end{itemize}
+
+\end{itemize}
+
+
+
+\begin{itemize}
+\itemsep1pt\parskip0pt\parsep0pt
+\item
+  SeaWIFS (used in Yannis' paper) discontinued in 2005, so ideally need to find other products covering longer timespan.
+\end{itemize}
+
+\paragraph{Actions}
+
+\begin{itemize}
+\itemsep1pt\parskip0pt\parsep0pt
+\item
+  Yannis to look into other fAPAR/ fractional cover products. These don't need to be on a monthly timestep - annual would be fine cos we may convert sub-annual data to fuel-load coverage with something like a 12-month running mean or max. But monthly/sub-monthly would be better.
+\end{itemize}
+
+\subsubsection{Moisture}
+
+\paragraph{Live fuel:}
+
+\begin{itemize}
+\itemsep1pt\parskip0pt\parsep0pt
+\item
+  Uncertainty about how STASH actually works, and if r-stash has all the SPLASH stuff in it.
+\end{itemize}
+
+\paragraph{Dead Fuel:}
+
+\begin{itemize}
+\itemsep1pt\parskip0pt\parsep0pt
+\item
+  Question as to whether an atmospheric drying potential index is sensible for dead fuel moisture: Dead fuel is connected to the soil and would be influenced by soil moisture as well.
+\item
+  Could fuel be aggregated into one measure (such as in GLOBFIRM, SIMFIRE or INFERNO)? Or could both soil-controlled and atmosphere-controlled components be obtained from the ~same source (i.e. STASH)?
+\end{itemize}
+
+\paragraph{Actions:}
+
+\begin{itemize}
+\itemsep1pt\parskip0pt\parsep0pt
+\item
+  Chantelle: See if there are fire danger indices shown to be a good measure for fuel moisture outside of their development range (or did we decide this was a no-go already?)
+\item
+  Doug:
+
+\begin{itemize}
+\itemsep1pt\parskip0pt\parsep0pt
+\item
+  Find out what happens in STASH.
+\item
+  See what SPLASH uses for elevation and field capacity.
+\item
+  Look for elevation maps for STASH
+\item
+  See if STASH could provide some description of dead fuel or fuel as a whole
+\item
+  I'll also see what SIMFIRE does as well.
+\end{itemize}
+
+\end{itemize}
+
+
+
+\begin{itemize}
+\itemsep1pt\parskip0pt\parsep0pt
+\item
+  Toby: Dig out a global soil/field capacity map.
+\item
+  Did someone mention ECMWF top soil moisture product as well?
+\end{itemize}
+
+\subsubsection{Lightning}
+
+\begin{itemize}
+\itemsep1pt\parskip0pt\parsep0pt
+\item
+  Don't remove wet lightning - thus would be double-counting moisture
+\item
+  Might be able to replace LIS data with non-climatological lightning data from met office
+\end{itemize}
+
+\paragraph{Actions:}
+
+\begin{itemize}
+\itemsep1pt\parskip0pt\parsep0pt
+\item
+  Chantelle: Look into met office lightning data. Check to see if it id flash count, ground strikes etc. Kerry Smout-Day might have some information (I'll forward you an email from her)
+\end{itemize}
+
+\subsubsection{Anthropogenic Suppression}
+
+\begin{itemize}
+\itemsep1pt\parskip0pt\parsep0pt
+\item
+  HYDE is a good product compared to e.g. GRUMP, which has problems with within country aggregation.
+\item
+  Yannis has info of different pop dens datasets and why HYDE is a good choice that he could dig out at some point if required.
+\item
+  Probably only need urban or pop density, so will decide on which variable to use when other points below have been addressed.
+\item
+  It would be nice to test GDP at some point, but probably no good global GDP products.
+\item
+  Human Footprint index might be useful for either information about specific impacts (i.e, road fragmentation) or general human disturbance.
+\item
+  There are some road products as well which could help describe fragmentation (and possibly ignitions? Although that might be a can of worms only to be opened if we run out of spaghetti. Or when someone uses the framework for a regional study (i.e. Amazon?))
+
+\end{itemize}
+
+\paragraph{Actions:}
+
+\begin{itemize}
+\itemsep1pt\parskip0pt\parsep0pt
+\item
+  Chantelle: See if there are any new GDP products without administrative area aggregation problems.
+\item
+  Chantelle: Find out info about CARDOSO road product (although this is probably for future studies rather than now).
+\item
+  Toby: Info about GROADS product
+\item
+  Yannis: Look into Human Footprint Index product, inc. what fields are used to construct it and if these fields are available separately.
+\end{itemize}
+
+\hfill \break
+
+\textit{Anyone looking into datasets, remember to check to see:}
+
+\begin{itemize}
+\itemsep1pt\parskip0pt\parsep0pt
+\item
+  If they are something we could make a 0.5-degree resolution map from
+\item
+  That if they change rapidly (i.e lightning), that they are on at least a monthly timestep.
+\item
+  If that have had some kind of evaluation
+\item
+  Are freely available
+\end{itemize}
+
+\subsection{Optimization}
+
+\begin{itemize}
+\itemsep1pt\parskip0pt\parsep0pt
+\item
+  Rhys suggests using pymc (python package), to perform the following:
+
+\begin{itemize}
+\itemsep1pt\parskip0pt\parsep0pt
+\item
+  Using Bayesian approach
+\item
+  Requires priors estimates
+\item
+  Produces posterior distribution of parameters
+\item
+  Pathway to parameter estimate and distribution of posterior gives idea of significance and confidence of parameter
+\item
+  Identifies correlation between parameter estimates
+\item
+  Rhys: does that sound right?
+\item
+  Does this use metropolis-hastings algorithm?
+\end{itemize}
+\end{itemize}
+
+
+
+\begin{itemize}
+\itemsep1pt\parskip0pt\parsep0pt
+\item
+  It would be good for Toby and Rhys to chat about optimisation at some point.
+\item
+  Did we decide anything about testing for variable correlation before optimisation?
+\end{itemize}
+
+\subsection{Benchmarking}
+
+\begin{itemize}
+\itemsep1pt\parskip0pt\parsep0pt
+\item
+  Benchmarking procedure to be worked out later.
+\item
+  Question about training vs testing data. I.e, should data be trained on x \% of data points and benchmarked against remaining y points?
+\end{itemize}
+                    

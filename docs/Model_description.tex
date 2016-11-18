@@ -1,95 +1,108 @@
-
-\title{A simple statistical model describing fire through its limitations}
-\author{
-        Douglas Kelley \\
-                Centre for Ecology and Hydrology\\
-	Maclean Building \\
-	Crowmarsh Gifford \\
-	Wallingford \\
-	Oxfordshire, OX10 8BB \\
-	\textbf{Email:} douglas.i.kelley@gmail.com \\
-	\textbf{Web}: douglask3.github.io
-%            \and
-%        Yossi Gil\\
-%        Department of Computer Science\\
-%        Technion---Israel Institute of Technology\\
-%        Technion City, Haifa 32000, \underline{Israel}
-}
-\date{\today}
-
 \documentclass[12pt]{article}
 
 \usepackage[english]{babel}
 \usepackage{graphicx}
-\usepackage{natbib}
+\usepackage[numbers]{natbib}
 \usepackage{gitinfo2}
 \usepackage{amsmath}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{authblk}
+\usepackage{color,soul}
+\usepackage{xcolor}
+\usepackage{framed}
+\usepackage{multirow}
+
+\usepackage{enumitem}
+\setlist{
+  noitemsep,
+  listparindent=\parindent,
+  parsep=0pt,
+}
+
+\definecolor{Mycolor2}{HTML}{BBBBEE}
+\definecolor{Mycolor3}{HTML}{EEBBBB}
+
+\colorlet{shadecolor}{Mycolor2}
+\DeclareRobustCommand{\hlb}[1]{{\sethlcolor{Mycolor2}\hl{#1}}}
+\DeclareRobustCommand{\hlr}[1]{{\sethlcolor{Mycolor3}\hl{#1}}}
+
+\renewcommand\Authands{ and }
+\newcommand\tab[1][1cm]{\hspace*{#1}}
+
+\title{A simple statistical model describing burnt area through limitations on fire}
+
+\author[2]{Bistinas, I}
+\author[5, 6]{Burton, C}
+\author[1]{Kelley, D \thanks{\textbf{Email:} douglas.i.kelley@gmail.com
+                                   \textbf{Web}: douglask3.github.io}}
+\author[1]{Marthews, T}
+\author[3]{Whitley, R}
 
 
+\affil[1]{Centre for Ecology and Hydrology,
+          Maclean Building,
+          Crowmarsh Gifford,
+          Wallingford,
+          Oxfordshire,
+          United Kingdom}
+
+\affil[2]{Vrije Universiteit Amsterdam,
+          Faculty of Earth and Life Sciences,
+          Amsterdam,
+          Netherlands}
+
+\affil[3]{Suncorp Group,
+          Personal Lines Pricing Research,
+          Sydney,
+          Australia}
+
+\affil[5]{Met Office UK,
+          Exeter,
+          UK}
+
+\affil[6]{Geography,
+          University of Exeter,
+          Exeter,
+          UK}
 \begin{document}
 \maketitle
-
-\begin{abstract}
-LimFIRE is a simple statistical model that simulates limitations of fire. Perfect fire conditions are imagined for a location or grid cell, with full fuel coverage, no moisture, saturated igntions and no agricultural or urban fragmentation. In such conditions, 100\% of the land area burns. This is analogous to areas in Northern Australia and parts of the sahel, with areas burning more than once a year. Burnt area is reduced if the location has discontinuous fuel loads  (e.g. desert areas), has fuel to moist to burn (meg. Humid evergreen forests), a lack of ignition (shown to be an influence of inter Annual variability in some parts of the tropical vdv and Southern Australia Bradstock), or human fire suppression (e.g. cropland or urban areas).
-\end{abstract}
-
+\vspace*{-1.5cm}
 \begin{center}
     \textbf{git info}
 
         git url: https://github.com/douglask3/LimFIRE
-	
-	git revision no: \gitAbbrevHash	
 
-	Last commit author: \gitAuthorName,  \gitAuthorEmail
-	
-	Branch: \gitReferences	
+	    git revision no: \gitAbbrevHash
 
-	Revision Date: \gitAuthorIsoDate 
+        Last commit author: \gitAuthorName,  \gitAuthorEmail
+
+	    Branch: \gitReferences
+
+	    Revision Date: \gitAuthorIsoDate
 \end{center}
 
-\section{Introduction}
-LimFIRE is a simple statistical model that simulates limitations of fire. Perfect fire conditions are imagined for a location or grid cell, with full fuel coverage, no moisture, saturated igntions and no agricultural or urban fragmentation. In such conditions, 100\% of the land area burns. This is analogous to areas in Northern Australia and parts of the sahel, with areas burning more than once a year. Burnt area is reduced if the location has discontinuous fuel loads  (e.g. desert areas), has fuel to moist to burn (meg. Humid evergreen forests), a lack of ignition (shown to be an influence of inter Annual variability in some parts of the tropical vdv and Southern Australia Bradstock), or human fire suppression (e.g. cropland or urban areas).
+\begin{shaded}
+    Blue highlights is stuff to decide
+\end{shaded}
+\colorlet{shadecolor}{Mycolor3}
+    \begin{shaded}
+        pink highlights is yet to be implmented or needs updating.
+    \end{shaded}
+\colorlet{shadecolor}{Mycolor2}
 
-\paragraph{Outline}
-The remainder of this article is organized as follows.
-Section~\ref{previous work} gives account of previous work.
-Our new and exciting results are described in Section~\ref{results}.
-Finally, Section~\ref{conclusions} gives the conclusions.
+\newpage
 
-\section{Methods}
+\input{abstract}
 
-\subsection{Fuel}
+\input{sections/introduction}
+\input{sections/methods}
+\input{sections/results}
+\input{sections/conclusions}
+\input{sections/applications}
 
-\begin{equation}
-    x=\frac{1+y}{1+2z^2}
-\end{equation}
-
-\section{Previous work}\label{previous work}
-A much longer \LaTeXe{} example was written by Gil~\cite{Gil:02}.
-
-
-\begin{figure}[!ht]
-  \centering
-    \includegraphics[width=0.67\textwidth]{../figs/gfedComparison.png}
-   
-  \caption{Bechmark comparisons against GFED4s \citep{Giglio2013}.}
-\end{figure}
-
-
-\begin{figure}[!ht]
-  \centering
-    \includegraphics[width=0.67\textwidth]{../figs/limitation_lines.png}
-   
-  \caption{Limitation covers.}
-\end{figure}
-
-\section{Results}\label{results}
-In this section we describe the results.
-
-\section{Conclusions}\label{conclusions}
-We worked hard, and achieved very little.
-
-\bibliographystyle{abbrv}
+\pagebreak
+\bibliographystyle{plainnat}
 \bibliography{Model_description}
 
 \end{document}

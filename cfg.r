@@ -40,6 +40,7 @@ nms = names(drive_fname)
 drive_fname = paste(outputs_dir, drive_fname, min(years), '-', max(years), '.nc', sep = '')
 names(drive_fname) = nms
 
+coefficants_file = paste(coefficants_file, gitVersionNumber(), '.csv', sep = '-')
 
 try(memSafeFile.remove(), silent = TRUE)
 memSafeFile.initialise('temp/tempGenerated')
