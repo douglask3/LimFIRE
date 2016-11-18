@@ -34,16 +34,16 @@ LimFIRE <- function(fuel, moisture_live, moisture_dead,
     Ignitions  = FUN.ignitions (ignitions , i1, i2)
     Supression = FUN.supression(supression, s1, s2)
     
-    Fire = (1 - Fuel) * (1 - Moisture) * (1 - Ignitions) * (1 - Supression)
+    Fire = Fuel* Moisture * Ignitions * Supression
     
     if (fireOnly) return(Fire)
     return(list(Fire, Fuel, Moisture, Ignitions, Supression))
 }
 
-LimFIRE.fuel       <- function(...) 1-f1(...)
-LimFIRE.moisture   <- function(...)   f1(...)
-LimFIRE.ignitions  <- function(...) 1-f1(...)
-LimFIRE.supression <- function(...)   f1(...)
+LimFIRE.fuel       <- function(...)   f1(...)
+LimFIRE.moisture   <- function(...) 1-f1(...)
+LimFIRE.ignitions  <- function(...)   f1(...)
+LimFIRE.supression <- function(...) 1-f1(...)
 
 dLimFIRE.fuel       <- function(...) 1-df1(...)
 dLimFIRE.moisture   <- function(...)   df1(...)

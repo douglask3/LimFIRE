@@ -3,41 +3,41 @@ cntr = nls.control(warnOnly = TRUE, maxiter = 100)
 
 inter_file_name = 'temp/driving_data.csv'
 
-start_params = list(         f1 = 100 , f2 = 1/200,
-                    M = 1  , m1 = 10  , m2 = 0.1  ,
+start_params = list(         f1 = 1 , f2 = 1000,
+                    M = 1  , m1 = 10  , m2 = 20  ,
                     L = 1  , H = 1    , A  = 1   ,
-                             i1 = 100 , i2 = 1/200,
-                    P = 1  , s1 = 1   , s2 = 0.01   )
+                             i1 = 1 , i2 = 1/200,
+                    P = 1  , s1 = 1   , s2 = 50   )
                     
 lower_params = list(         f1 = 0.0 , f2 = 0.0,
                     M = 0  , m1 = 0.0 , m2 = 0.0,
-                    L = 0  , H  = 0   , A  = 0   ,
+                    L = 0  , H  = 0   , A  = 0  ,
                              i1 = 0.0 , i2 = 0.0,
                     P = 0  , s1 = 0.0 , s2 = 0.0)
                     
-upper_params = list(         f1 = 9E9 , f2 = 10,
-                    M = 9E9, m1 = 9E9 , m2 = 10,
+upper_params = list(         f1 = 9E9 , f2 = 10000,
+                    M = 9E9, m1 = 9E9 , m2 = 100,
                     L = 9E9, H = 9E9, A  = 9E9   ,
-                             i1 = 9E9 , i2 = 10,
-                    P = 9E9, s1 = 9E9 , s2 = 10   )
-
-start_params = list(         f1 = 100 , f2 = 1/200,
-                    M = 1  , m1 = 10  , m2 = 0.1  ,
-                    H = 1  , A  = 1,
-                             i1 = 100, i2 = 1/200,
-                    P = 1  , s1 = 1   , s2 = 0.01   )
+                             i1 = 9E9 , i2 = 9E9,
+                    P = 9E9, s1 = 9E9 , s2 = 9E9   )
+                    
+start_params = list(         f1 = 1 , f2 = 1000,
+                    M = 1  , m1 = 10  , m2 = 20  ,
+                    H = 1    , A  = 1   ,
+                             i1 = 1 , i2 = 1/200,
+                    P = 1  , s1 = 1   , s2 = 50   )
                     
 lower_params = list(         f1 = 0.0 , f2 = 0.0,
                     M = 0  , m1 = 0.0 , m2 = 0.0,
-                    H = 0  , A  = 0.0,
+                    H  = 0   , A  = 0  ,
                              i1 = 0.0 , i2 = 0.0,
                     P = 0  , s1 = 0.0 , s2 = 0.0)
                     
-upper_params = list(         f1 = 9E9 , f2 = 10,
-                    M = 9E9, m1 = 9E9 , m2 = 10  ,
-                    H = 9E9, A  = 9E9,
-                             i1 = 9E9 , i2 = 10,
-                    P = 9E9, s1 = 9E9 , s2 = 10   )
+upper_params = list(         f1 = 9E9 , f2 = 10000,
+                    M = 9E9, m1 = 9E9 , m2 = 100,
+                    H = 9E9, A  = 9E9   ,
+                             i1 = 9E9 , i2 = 9E9,
+                    P = 9E9, s1 = 9E9 , s2 = 9E9   )
 
 Obs = ObsRasters2DataFrame()
 
@@ -57,7 +57,7 @@ nls_bootstrap <- function() {
 ncells = dim(Obs)[1]
 resStore = c()
 
-for (i in 1:100) {
+for (i in 1:10) {
    cat('\n==================\n',
        ' Bootstrap ', i, 
        '\n==================\n')
