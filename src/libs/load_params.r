@@ -1,12 +1,11 @@
 param <- function(p, FUN = median) {
     params = read.csv(coefficants_file)[,-1]
     params_mean = apply(as.matrix(params),2, FUN)
-    nps = nrow(params_mean)
     
     if (class(params_mean) == "numeric")
         params_mean = t(params_mean)
  
-    
+    nps = nrow(params_mean)
    
     fillParam <- function(pp) {
         param =  try(params_mean[, pp], silent = TRUE)
