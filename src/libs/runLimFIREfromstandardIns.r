@@ -13,7 +13,8 @@ runLimFIREfromstandardIns <- function(fireOnly = FALSE, remove = NULL,
                 Obs[["crop"  ]][[i]], Obs[["popdens"]][[i]],
                             param(    'w0'),  param('kw'    ),  
                 param('M'), param('omega0'),  param('komega'),  
-                param('L'), param(     'P'),  param('D'     ),
+                param('P'),
+                param('D'),
                             param(   'ig0'),  param('kig'   ),  
                 param('H'), param(    's0'),  param('ks'    ), fireOnly, ...)
     }
