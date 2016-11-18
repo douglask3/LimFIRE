@@ -3,49 +3,54 @@ cntr = nls.control(warnOnly = TRUE, maxiter = 100)
 
 inter_file_name = 'temp/driving_data.csv'
 
-start_params = list(         f1 = 1 , f2 = 1000,
-                    M = 1  , m1 = 10  , m2 = 20  ,
-                    L = 1  , H = 1    , A  = 1   ,
-                             i1 = 1 , i2 = 1/200,
-                    P = 1  , s1 = 1   , s2 = 50   )
+start_params = list(         w0     =  1000  , kw     =    1,
+                    M =   1, omega0 =     0.3, komega =    5,
+                    L =   1, P      =     1  , D      =    1,
+                             ig0    =     0  , kig    =  100,
+                    H =   1, s0     =    50  , ks     =   50)
                     
-lower_params = list(         f1 = 0.0 , f2 = 0.0,
-                    M = 0  , m1 = 0.0 , m2 = 0.0,
-                    L = 0  , H  = 0   , A  = 0  ,
-                             i1 = 0.0 , i2 = 0.0,
-                    P = 0  , s1 = 0.0 , s2 = 0.0)
+lower_params = list(         w0     =     0  , kw     =    0,
+                    M =   0, omega0 =     0  , komega =    0,
+                    L =   0, P      =     0  , D      =    0,
+                             ig1    =   -10  , kig    =    0,
+                    H =   0, s0     =     0  , ks     =    0)
                     
-upper_params = list(         f1 = 9E9 , f2 = 10000,
-                    M = 9E9, m1 = 9E9 , m2 = 100,
-                    L = 9E9, H = 9E9, A  = 9E9   ,
-                             i1 = 9E9 , i2 = 9E9,
-                    P = 9E9, s1 = 9E9 , s2 = 9E9   )
+upper_params = list(         w0     = 10000  , kw     =  9E9,
+                    M = 9E9, omega0 =     1  , komega =  9E9,
+                    L = 9E9, P      =   9E9  , D      =  9E9,
+                             ig0    =   10   , kig    =  9E9,
+                    H = 9E9, s0     =   100  , ks     =  9E9)
                     
-start_params = list(         f1 = 1 , f2 = 1000,
-                    M = 1  , m1 = 10  , m2 = 20  ,
-                    H = 1    , A  = 1   ,
-                             i1 = 1 , i2 = 1/200,
-                    P = 1  , s1 = 1   , s2 = 50   )
-                    
-lower_params = list(         f1 = 0.0 , f2 = 0.0,
-                    M = 0  , m1 = 0.0 , m2 = 0.0,
-                    H  = 0   , A  = 0  ,
-                             i1 = 0.0 , i2 = 0.0,
-                    P = 0  , s1 = 0.0 , s2 = 0.0)
-                    
-upper_params = list(         f1 = 9E9 , f2 = 10000,
-                    M = 9E9, m1 = 9E9 , m2 = 100,
-                    H = 9E9, A  = 9E9   ,
-                             i1 = 9E9 , i2 = 9E9,
-                    P = 9E9, s1 = 9E9 , s2 = 9E9   )
 
+start_params = list(         w0     =  1000  , kw     =    1,
+                    M =   1, omega0 =     0.3, komega =    5,
+                             P      =     1  , D      =    1,
+                             ig0    =     0  , kig    =  100,
+                    H =   1, s0     =    50  , ks     =   50)
+                    
+lower_params = list(         w0     =     0  , kw     =    0,
+                    M =   0, omega0 =     0.15,komega =    0,
+                             P      =     0  , D      =    0,
+                             ig1    =   -10  , kig    =    0,
+                    H =   0, s0     =     0  , ks     =    0)
+                    
+upper_params = list(         w0     = 10000  , kw     =  9E9,
+                    M = 9E9, omega0 =     0.5, komega =  9E9,
+                             P      =   9E9  , D      =  9E9,
+                             ig0    =   10   , kig    =  9E9,
+                    H = 9E9, s0     =   100  , ks     =  9E9)
+                    
+                    
 Obs = ObsRasters2DataFrame()
+
 
 nls_bootstrap <- function() {
     index = sample(1:ncells, 100000, replace = FALSE)
     dat = Obs[index, ]
+    
     res = nls(fire ~ LimFIRE(npp, alpha, emc, 0, Lightn, pas, crop, popdens,
-                             f1, f2, M, m1, m2, 1, H, A, i1, i2, P, s1, s2,
+                             w0, kw, M, omega0, komega, 
+                             1, P, D, ig0, kig, H, s0, ks,
                              fireOnly = TRUE), 
               data = dat, algorithm = "port",
               start = start_params, lower = lower_params, upper = upper_params,
@@ -57,7 +62,7 @@ nls_bootstrap <- function() {
 ncells = dim(Obs)[1]
 resStore = c()
 
-for (i in 1:10) {
+for (i in 1:4) {
    cat('\n==================\n',
        ' Bootstrap ', i, 
        '\n==================\n')
