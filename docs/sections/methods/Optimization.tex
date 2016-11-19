@@ -1,0 +1,10 @@
+\subsection{Optimization}
+
+\begin{shaded}
+    The framework is optimised against GFED4s observations \citep{Giglio2013}  using normalised least squares in R \citep{rstats}.  This is likely to change, though, so I won't describe it anymore for the moment. GFED4s was re-gridded from 0.25 to a 0.5$^{\circ}$ resolution using ``resample'' in the raster r-package \citep{rraster}.
+
+
+Optimization is performed on equation ~\ref{equ:LimFIRE} to ~\ref{equ:LimFIRE.x}, 4, 15, 16 and 18 % un-hardcode equations numbers
+(figure ~\ref{fig:lim_lines}). Each control optimizes two parameters associated with it's maximum expected burnt area (equations ~\ref{equ:fx} and ~\ref{equ:LimFIRE.x}, see figure ~\ref{fig:Logistic_fun}).
+Parameters relating different fuel moisture, ignition and suppression sources are also optimized (see table ~\ref{tab:optimize})
+\end{shaded}

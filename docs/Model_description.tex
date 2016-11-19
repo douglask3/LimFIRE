@@ -13,11 +13,19 @@
 \usepackage{framed}
 \usepackage{multirow}
 
+\usepackage{enumitem}
+\setlist{
+  noitemsep,
+  listparindent=\parindent,
+  parsep=0pt,
+}
+
 \definecolor{Mycolor2}{HTML}{BBBBEE}
 \definecolor{Mycolor3}{HTML}{EEBBBB}
 
 \colorlet{shadecolor}{Mycolor2}
 \DeclareRobustCommand{\hlb}[1]{{\sethlcolor{Mycolor2}\hl{#1}}}
+\DeclareRobustCommand{\hlr}[1]{{\sethlcolor{Mycolor3}\hl{#1}}}
 
 \renewcommand\Authands{ and }
 \newcommand\tab[1][1cm]{\hspace*{#1}}
@@ -29,44 +37,37 @@
 \author[1]{Kelley, D \thanks{\textbf{Email:} douglas.i.kelley@gmail.com
                                    \textbf{Web}: douglask3.github.io}}
 \author[1]{Marthews, T}
-\author[3, 4]{Whitley, R}
+\author[3]{Whitley, R}
 
 
-\affil[1]{Centre for Ecology and Hydrology\\
-          Maclean Building \\
-          Crowmarsh Gifford \\
-          Wallingford \\
-          Oxfordshire \\
+\affil[1]{Centre for Ecology and Hydrology,
+          Maclean Building,
+          Crowmarsh Gifford,
+          Wallingford,
+          Oxfordshire,
           United Kingdom}
 
-\affil[2]{Vrije Universiteit Amsterdam\\
-          Faculty of Earth and Life Sciences \\
-          Amsterdam \\
+\affil[2]{Vrije Universiteit Amsterdam,
+          Faculty of Earth and Life Sciences,
+          Amsterdam,
           Netherlands}
 
-\affil[3]{Suncorp Group \\
-          Personal Lines Pricing Research \\
-          Sydney \\
+\affil[3]{Suncorp Group,
+          Personal Lines Pricing Research,
+          Sydney,
           Australia}
 
-\affil[4]{Macquarie University \\
-          Department of Biological Sciences \\
-          Sydney \\
-          Australia}
-
-\affil[5]{Met Office UK \\
-          Exeter \\
+\affil[5]{Met Office UK,
+          Exeter,
           UK}
 
-\affil[6]{Geography \\
-          University of Exeter \\
-          Exeter \\
+\affil[6]{Geography,
+          University of Exeter,
+          Exeter,
           UK}
-
-
 \begin{document}
 \maketitle
-
+\vspace*{-1.5cm}
 \begin{center}
     \textbf{git info}
 
@@ -80,14 +81,25 @@
 
 	    Revision Date: \gitAuthorIsoDate
 \end{center}
+
+\begin{shaded}
+    Blue highlights is stuff to decide
+\end{shaded}
+\colorlet{shadecolor}{Mycolor3}
+    \begin{shaded}
+        pink highlights is yet to be implmented or needs updating.
+    \end{shaded}
+\colorlet{shadecolor}{Mycolor2}
+
 \newpage
 
-\input{abstract}
-%\input{introduction}
-\input{methods}
-%\input{results}
-%\input{conclusions}
-%\input{applications}
+\input{sections/abstract}
+
+\input{sections/introduction}
+\input{sections/methods}
+\input{sections/results}
+\input{sections/conclusions}
+\input{sections/applications}
 
 \pagebreak
 \bibliographystyle{plainnat}
