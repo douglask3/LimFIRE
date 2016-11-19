@@ -27,8 +27,8 @@ make_emc <- function(i) {
 	Tas = dat[[2]][[i]]
 	Hr = realtive_humidity(Vap, Tas)
 	emc = fuel_moisture_equilibrium(0, Hr, Tas)
-        
-    emc = emc * (1-Wet) + 100 * Wet
+    
+    emc = emc * (1-Wet) + Wet
         
     return(emc)
 }

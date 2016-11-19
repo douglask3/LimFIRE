@@ -12,11 +12,15 @@ do
     chmod +x $f
 done
 
-
-rm Model_description.bbl
-rm Model_description.aux
 pdflatex Model_description.tex
 bibtex Model_description
 pdflatex Model_description.tex
 pdflatex Model_description.tex
-xpdf Model_description.pdf
+
+rm Model_description.bbl
+rm Model_description.aux
+rm Model_description.blg
+rm Model_description.log
+
+
+gnome-open Model_description.pdf
