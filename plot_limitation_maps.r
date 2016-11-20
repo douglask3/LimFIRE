@@ -24,7 +24,7 @@ mod_files = paste(outputs_dir, '/LimFIRE_',
 
 lm_mod_files = paste(mod_files,    '-lm', sep = '')
 sn_mod_files = paste(mod_files,    '-sn', sep = '')
-                  
+
 
 runLimFIRE <- function(fname, ...){
     fname = paste(fname,    '.nc', sep = '')
@@ -51,16 +51,16 @@ aa_sn_mod = cal_annual_average(sn_mod_files, sn_mod)
 ## Fire Season                                                         ##
 #########################################################################
 
-which.maxMonth <- function(x) {    
+which.maxMonth <- function(x) {
     nyears = nlayers(x) / 12
-    
+
     forYear <- function(yr) {
         index = ((yr - 1) * 12 + 1):(yr * 12)
         y = x[[index]]
         y = which.max(y)
         return(y)
     }
-    
+
     return(layer.apply(1:nyears, forYear))
 }
 
@@ -74,13 +74,13 @@ maxFireLimiation <- function(x) {
     forYear <- function(yr) {
         index = ((yr - 1) * 12 + 1):(yr * 12)
         y = values(x[[index]])
-        
+
         mnths = values(maxMonth[[yr]])
-        
+
         for (i in 1:length(mnths))
             if (is.na(mnths[i])) z[i] = mean(y[i,])
                 else z[i] = y[i, mnths[i]]
-        
+
         out[] = z
         return(out)
     }
@@ -106,7 +106,7 @@ plot_limitations_1by1 <- function(pmod, fname) {
     mask = sum(layer.apply(pmod[-1], is.na)) > 0
     lim = seq(0, 0.9, by = 0.1)
     col = c('white', 'grey', 'black')
-        
+
     plot_limitations_1by1 <- function(mod, name) {
         mod[mask] = NaN
         plot_raster(mod, lim, col, quick = TRUE)
@@ -125,6 +125,14 @@ plot_limitations_1by1 <- function(pmod, fname) {
 plot_limitations_1by1(aa_lm_mod, 'aa')
 plot_limitations_1by1(fs_lm_mod, 'fs')
 
+
+plot_4way_standard <- function(xy, pmod) {
+    plot_4way(xy[,1], xy[,2], pmod[[3]], pmod[[1]], pmod[[2]], pmod[[4]],
+              x_range=c(-180,180),y_range=c(-60,90),
+              cols=rev(c("FF","CC","99","55","11")),
+              coast.lwd=par("lwd"),
+              add_legend=FALSE, smooth_image=FALSE,smooth_factor=5)
+
 ## function for calculating pcs for table
 calculate_weightedAverage <- function(xy, pmod) {
     pmod = layer.apply(pmod, function(i) rasterFromXYZ(cbind(xy, i)))
@@ -132,12 +140,13 @@ calculate_weightedAverage <- function(xy, pmod) {
     pmod = layer.apply(pmod, function(i) sum.raster(i * area(i), na.rm = TRUE))
     pmod = unlist(pmod)
     pmod = round(100 * pmod / sum(pmod))
-    
+
 }
+
 
 ## Plot limitation or sesativity, and outputting pcs 
 plot_pmod <- function(pmod, lab) {
-    
+
     pmod = pmod[-1] # remove first element of simulated fire
     xy = xyFromCell(pmod[[1]], 1:length(pmod[[1]]))
     pmod = lapply(pmod, values)
@@ -147,29 +156,37 @@ plot_pmod <- function(pmod, lab) {
               cols=rev(c("FF","CC","99","55","11")),
               coast.lwd=par("lwd"),
               add_legend=FALSE, smooth_image=FALSE,smooth_factor=5)
-              
+
     pcs = calculate_weightedAverage(xy, pmod)
     mtext(lab, line = -1, adj = 0.05)
+
     return(pcs)
 }
-       
-
 
 ## Set up plotting window
-png(fig_fname, width = 9, height = 6 * 2.75/3, unit = 'in', res = 300)
-layout(rbind(1:2,3:4, 5, 5), heights = c(4, 4, 1))
+if (!exists('AGUplot')) {
+    ## Set up plotting window
+    png(fig_fname, width = 9, height = 6 * 2.75/3, unit = 'in', res = 300)
+    layout(rbind(1:2,3:4, 5, 5), heights = c(4, 4, 1))
+}
 
 par(mar = c(0,0,0,0), oma = c(0,0,1,0))
 
+if (!exists('AGUplot')) {
+    labs = c('a) Annual average controls on fire', 'b) Annual average sensitivity',
+         'c) Controls on fire during the fire season', 'd) Sensitivity during the fire season')
 
-## Plot and put pcs in table
-pc_out = rbind(
-            'annual average limitation'  = plot_pmod(aa_lm_mod, labs[1]), 
-            'annual average sensitivity' = plot_pmod(aa_sn_mod, labs[2]),
-            'fire season limitation'     = plot_pmod(fs_lm_mod, labs[3]),
-            'fire season sensitivity'    = plot_pmod(fs_sn_mod, labs[4]))
+    ## Plot and put pcs in table
+    pc_out = rbind(
+             'annual average limitation'  = plot_pmod(aa_lm_mod, labs[1]),
+             'annual average sensitivity' = plot_pmod(aa_sn_mod, labs[2]),
+             'fire season limitation'     = plot_pmod(fs_lm_mod, labs[3]),
+             'fire season sensitivity'    = plot_pmod(fs_sn_mod, labs[4]))
 
-colnames(pc_out) = c('Fuel Discontinuity', 'Moisture', 'Ignitions', 'Land use')
+
+    colnames(pc_out) = c('Fuel Discontinuity', 'Moisture', 'Ignitions', 'Land use')
+
+} else plot_pmod(fs_lm_mod, labs[3])
 
 ## Add legend
 par(mar = c(3 + exists('AGUplot') * 0, 10 - 8 * exists('AGUplot'), 0, 8 - 6 * exists('AGUplot')))
