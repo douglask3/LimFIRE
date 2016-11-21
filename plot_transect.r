@@ -31,8 +31,14 @@ sn_mod = runIfNoFile(sn_mod_files, runLimFIREfromstandardIns, sensitivity = TRUE
 c(cells, coords) := findTrasectCells(transect, mod[[1]][[1]])
 
 #################################################################
-## plot                                                        ##
+## plot setup                                                        ##
 #################################################################
+
+
+#################################################################
+## plot Lines                                                        ##
+#################################################################
+## Window
 plot(c(0, length(cells)), c(minv*10, 1), axes = FALSE, type = 'n', xlab = '', ylab = '')#, log = 'y')
 axis(2)
 
@@ -41,11 +47,11 @@ axis(1, at = index, labels = coords[1, index])
 axis(1, at = index, labels = coords[2, index], line = 3)
 
 
-mod = rev(lm_mod)
+mod = lm_mod
 
 
 
-plot_lines <- function(dat, col, sc, sf, fill, rev) {#
+plot_lines <- function(dat, col, sc, sf, fill, rev) {
     col_plg = make.transparent(col, 0.9)
     col_pnt = make.transparent(col, 0.997)
     is = layer.apply(dat, function(r) {       
@@ -70,7 +76,7 @@ plot_lines <- function(dat, col, sc, sf, fill, rev) {#
    
 }
 
-mapply(plot_lines, mod, rev(cols),
+mapply(plot_lines, rev(mod), rev(cols),
        c(1, 1,1,1, 12), c(0.4, 0.7, 0, 0, 0),
        fill = c(F, F, F, T, F),
        rev  = c(T, T, T, T, F))
