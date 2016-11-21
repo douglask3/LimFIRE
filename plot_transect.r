@@ -33,25 +33,27 @@ c(cells, coords) := findTrasectCells(transect, mod[[1]][[1]])
 #################################################################
 ## plot setup                                                        ##
 #################################################################
-
-
+mod = lm_mod
+par(mfcol = c(4,2), mar = c(1, 2, 0, 1), oma = c(4, 0, 0, 0))
 #################################################################
 ## plot Lines                                                        ##
 #################################################################
 ## Window
-plot(c(0, length(cells)), c(minv*10, 1), axes = FALSE, type = 'n', xlab = '', ylab = '')#, log = 'y')
-axis(2)
+plot_window <- function(axs) {
+    plot(c(0, length(cells)), c(minv*10, 1), axes = FALSE, type = 'n', xlab = '', ylab = '')#, log = 'y')
+    axis(2)
+    index = round(seq(1, length(cells), length.out = 5))
+    if (axs) {
+        axis(1, at = index, labels = coords[1, index])
+        axis(1, at = index, labels = coords[2, index], line = 3)
+    } else {
+        axis(1, at = index, labels = rep('', length(index)))
+    }
+}
 
-index = round(seq(1, length(cells), length.out = 5))
-axis(1, at = index, labels = coords[1, index])
-axis(1, at = index, labels = coords[2, index], line = 3)
-
-
-mod = lm_mod
-
-
-
-plot_lines <- function(dat, col, sc, sf, fill, rev) {
+## Actual plotting data
+plot_lines <- function(dat, col, sc, sf, fill, rev, axs) {
+    if (nplot) plot_window(axs)
     col_plg = make.transparent(col, 0.9)
     col_pnt = make.transparent(col, 0.997)
     is = layer.apply(dat, function(r) {       
@@ -75,8 +77,11 @@ plot_lines <- function(dat, col, sc, sf, fill, rev) {
     lines(mn, col = col, lwd = 2)
    
 }
-
-mapply(plot_lines, rev(mod), rev(cols),
-       c(1, 1,1,1, 12), c(0.4, 0.7, 0, 0, 0),
-       fill = c(F, F, F, T, F),
-       rev  = c(T, T, T, T, F))
+for (nplot in c(T, F)) {
+    mapply(plot_lines, rev(mod), rev(cols),
+           c(1, 1,1,1, 12), c(0.4, 0.7, 0, 0, 0),
+           fill = c(F, F, F, T, F),
+           rev  = c(T, T, T, T, F),
+           axs  = c(F, F, F, T, F))
+    if (nplot) plot_window(TRUE)
+}
