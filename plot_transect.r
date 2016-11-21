@@ -1,3 +1,6 @@
+#################################################################
+## cfg                                                         ##
+#################################################################
 source('cfg.r')
 graphics.off()
 
@@ -7,42 +10,29 @@ cols = c('orange', 'green', 'blue', 'red', 'black')
 
 transect = rbind(c(30, -30), c(0, 35))
 
+minv = 0.0000001
+
 mod_files = paste(outputs_dir, '/LimFIRE_',
                  c('fire', 'fuel','moisture','ignitions','supression'),
                   sep = '')
 
+#################################################################
+## load                                                        ##
+#################################################################
 
+## limitations
 lm_mod_files = paste(mod_files,    '-lm.nc', sep = '')
 sn_mod_files = paste(mod_files,    '-sn.nc', sep = '')
 
 lm_mod = runIfNoFile(lm_mod_files, runLimFIREfromstandardIns)
 sn_mod = runIfNoFile(sn_mod_files, runLimFIREfromstandardIns, sensitivity = TRUE)
 
-
-## find transect xys
-findTrasectCells <- function(transect, dat) {
-    dxy = apply(transect, 2, diff); dxy = dxy[1]/dxy[2]
-
-    findPoints <- function(x, x0, dx, y0) c(x, y0 + (x - x0)*dx)
-
-
-    if (abs(dxy) > 1) {
-        coords = sapply(seq(transect[1,1],transect[2,1],-0.125),
-                        findPoints, transect[1,1], (1/dxy), transect[1,2])
-    } else {
-        coords = sapply(seq(transect[1,2],transect[2,2],0.125),
-                        findPoints, transect[1,2],     dxy, transect[1,1])
-        coords = coords[2:1, ]
-    }
-    
-    cells = cellFromXY(dat, t(coords))
-    return(list(cells, coords))
-}
-
-minv = 0.0000001
-
+## transect info
 c(cells, coords) := findTrasectCells(transect, mod[[1]][[1]])
 
+#################################################################
+## plot                                                        ##
+#################################################################
 plot(c(0, length(cells)), c(minv*10, 1), axes = FALSE, type = 'n', xlab = '', ylab = '')#, log = 'y')
 axis(2)
 
