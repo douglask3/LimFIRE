@@ -90,14 +90,6 @@ layout(rbind(1:2,3:4, 5, 5), heights = c(4, 4, 1))
 
 par(mar = c(0,0,0,0), oma = c(0,0,1,0))
 
-plot_4way_standard <- function(xy, pmod) {
-    plot_4way(xy[,1], xy[,2], pmod[[3]], pmod[[1]], pmod[[2]], pmod[[4]],
-              x_range=c(-180,180),y_range=c(-60,90),
-              cols=rev(c("FF","CC","99","55","11")),
-              coast.lwd=par("lwd"),
-              add_legend=FALSE, smooth_image=FALSE,smooth_factor=5)
-
-}
 
 calculate_weightedAverage <- function(xy, pmod) {
     #pmod[[3]] = pmod[[3]]/4
@@ -113,10 +105,7 @@ calculate_weightedAverage <- function(xy, pmod) {
 plot_limtations_and_sensativity_plots <- function(lm_pmod, sn_pmod, labs) {
     
     plot_pmod <- function(pmod, lab) {
-        xy = xyFromCell(pmod[[1]], 1:length(pmod[[1]]))
-        pmod = lapply(pmod, values)
-    
-        plot_4way_standard(xy, pmod)
+        plot_4way_standard(pmod)
         pcs = calculate_weightedAverage(xy, pmod)
         mtext(lab, line = -1, adj = 0.05)
         return(pcs)

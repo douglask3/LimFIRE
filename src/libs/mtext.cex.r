@@ -1,0 +1,1 @@
+mtext.cex <- function(...) mtext(..., cex = par("cex"))
