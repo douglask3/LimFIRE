@@ -7,12 +7,14 @@ library(rasterPlot)
 library(plotrix)
 library(mapdata)
 library(mapplots)
+library(mapproj)
 data(worldHiresMapEnv)
 
 
 setupProjectStructure(dirn = c("outputs", "data", "temp", "figs"))
 sourceAllLibs('src/libs')
 sourceAllLibs('src/LimFIRE')
+sourceAllLibs('../rasterextrafuns/rasterPlotFunctions/R/')
 
 years       = 2000:2014
 clim_layers =  115:282
