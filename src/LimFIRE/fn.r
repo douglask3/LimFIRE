@@ -13,8 +13,8 @@ df1 <- function(x, a, b, d = 0.1) {
     return(dx / dhalf)
 }
 
-f2 <- function(x, a) {
-    x = x * a
+f2 <- function(x, a, b) {
+    x = b + x * a
     return(x / (x + 1))
 }
 
