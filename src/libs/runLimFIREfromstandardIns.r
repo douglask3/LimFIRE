@@ -3,19 +3,23 @@ runLimFIREfromstandardIns <- function(fireOnly = FALSE, remove = NULL,
     
     Obs = lapply(drive_fname, stack)
     if (!is.null(remove)) for (i in remove) Obs[[i]][] = 0
-    
+     
     runMonthly <- function(i) {
         cat("simulating fire for month ", i, "\n")
         
-        LimFIRE(Obs[["npp"   ]][[i]],
-                Obs[["alpha" ]][[i]], Obs[["emc"    ]][[i]], 0, 
-                Obs[["Lightn"]][[i]], Obs[["pas"    ]][[i]],
-                Obs[["crop"  ]][[i]], Obs[["popdens"]][[i]],
-                            param('f1'),  param('f2'),  
-                param('M'), param('m1'),  param('m2'),  
-                param('L'), param('H' ),  param('A' ),
-                            param('i1'),  param('i2'),  
-                param('P'), param('s1'),  param('s2'), fireOnly, ...)
+        out = LimFIRE(Obs[["npp"   ]][[i]],
+                      Obs[["alpha" ]][[i]], Obs[["emc"    ]][[i]], 
+                      Obs[["Lightn"]][[i]], Obs[["pas"    ]][[i]],
+                      Obs[["crop"  ]][[i]], Obs[["popdens"]][[i]],
+                                  param(    'w0'),  param('kw'    ),  
+                      param('M'), param('omega0'),  param('komega'),  
+                      param('P'),
+                      param('D'),
+                                  param(   'ig0'),  param('kig'   ),  
+                      param('H'), param(    's0'),  param('ks'    ), fireOnly, ...)
+                      
+        for (i in 2:length(out)) out[[i]] = 1 - out[[i]]
+        return(out)
     }
     if (fireOnly) return(layer.apply(1:nlayers(Obs[[1]]), runMonthly))
     mod = runMonthly(1)

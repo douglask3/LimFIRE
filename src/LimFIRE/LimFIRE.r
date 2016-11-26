@@ -1,9 +1,8 @@
-LimFIRE <- function(fuel, moisture_live, moisture_dead,
-                    background_igntions, lightning, human_ignitions,
-                    agriculture, popdens,
-                    f1, f2, M, m1, m2, L, H, A, i1, i2, P, s1, s2, 
+LimFIRE <- function(w, omega_live, omega_dead,
+                    Lig, pas, crop, popdens,
+                    w0, kw, M, omega0, komega, P, ig0, H, s0, ks, 
                     fireOnly = FALSE, sensitivity = FALSE,
-                    just_measures = FALSE) {
+                    just_measures = FALSE, fire = NULL) {
     
     if (sensitivity) {
         FUN.fuel       = dLimFIRE.fuel
@@ -17,35 +16,34 @@ LimFIRE <- function(fuel, moisture_live, moisture_dead,
         FUN.supression = LimFIRE.supression            
     }
     
-    moisture   = (moisture_live + M * moisture_dead    ) / (1 + M)
-    ignitions  = background_igntions + L * lightning     + H * human_ignitions +
-                                            A * popdens
-    if (background_igntions > 0) ignitions = ignitions / (1 + L + H + A)
-    
-    supression = (agriculture   + P * popdens          ) / (1 + P)
+    fuel       = w
+    moisture   = (omega_live + M * omega_dead) / (1 + M)
+    ignitions  = (Lig + P * pas)               / (1 + P)
+    supression = (crop + H * popdens)          / (1 + H)
     
     if (just_measures) {
         fire = fuel
         fire[] = 0.0
         return(list(fire, fuel, moisture, ignitions, supression))
     }
-    Fuel       = FUN.fuel      (fuel      , f1, f2)
-    Moisture   = FUN.moisture  (moisture  , m1, m2)
-    Ignitions  = FUN.ignitions (ignitions , i1, i2)
-    Supression = FUN.supression(supression, s1, s2)
     
-    Fire = Fuel* Moisture * Ignitions * Supression
+    Fuel       = FUN.fuel      (fuel      , w0    , kw    )     
+    Moisture   = FUN.moisture  (moisture  , omega0, komega)
+    Ignitions  = FUN.ignitions (ignitions , ig0           )
+    Supression = FUN.supression(supression, s0    , ks    )
+    
+    Fire = (1 - Fuel) * (1 - Moisture) * (1 - Ignitions) * (1 - Supression)
     
     if (fireOnly) return(Fire)
     return(list(Fire, Fuel, Moisture, Ignitions, Supression))
 }
 
-LimFIRE.fuel       <- function(...)   f1(...)
-LimFIRE.moisture   <- function(...) 1-f1(...)
-LimFIRE.ignitions  <- function(...)   f1(...)
-LimFIRE.supression <- function(...) 1-f1(...)
+LimFIRE.fuel       <- function(...) 1-f1(...)
+LimFIRE.moisture   <- function(...)   f1(...)
+LimFIRE.ignitions  <- function(...) 1-f2(...)
+LimFIRE.supression <- function(...)   f1(...)
 
-dLimFIRE.fuel       <- function(...) 1-df1(...)
-dLimFIRE.moisture   <- function(...)   df1(...)
-dLimFIRE.ignitions  <- function(...) 1-df1(...)
-dLimFIRE.supression <- function(...)   df1(...)
+dLimFIRE.fuel       <- function(...)   df1(...)
+dLimFIRE.moisture   <- function(...) 1-df1(...)
+dLimFIRE.ignitions  <- function(...)   df1(...)
+dLimFIRE.supression <- function(...) 1-df1(...)

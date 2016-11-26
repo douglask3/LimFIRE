@@ -126,15 +126,12 @@ plot_limitations_1by1(aa_lm_mod, 'aa')
 plot_limitations_1by1(fs_lm_mod, 'fs')
 
 
-
-
 plot_4way_standard <- function(xy, pmod) {
     plot_4way(xy[,1], xy[,2], pmod[[3]], pmod[[1]], pmod[[2]], pmod[[4]],
               x_range=c(-180,180),y_range=c(-60,90),
               cols=rev(c("FF","CC","99","55","11")),
               coast.lwd=par("lwd"),
               add_legend=FALSE, smooth_image=FALSE,smooth_factor=5)
-
 
 ## function for calculating pcs for table
 calculate_weightedAverage <- function(xy, pmod) {
@@ -146,7 +143,8 @@ calculate_weightedAverage <- function(xy, pmod) {
 
 }
 
-## Plot limitation or sesativity, and outputting pcs
+
+## Plot limitation or sesativity, and outputting pcs 
 plot_pmod <- function(pmod, lab) {
 
     pmod = pmod[-1] # remove first element of simulated fire
@@ -161,6 +159,7 @@ plot_pmod <- function(pmod, lab) {
 
     pcs = calculate_weightedAverage(xy, pmod)
     mtext(lab, line = -1, adj = 0.05)
+
     return(pcs)
 }
 
@@ -183,6 +182,7 @@ if (!exists('AGUplot')) {
              'annual average sensitivity' = plot_pmod(aa_sn_mod, labs[2]),
              'fire season limitation'     = plot_pmod(fs_lm_mod, labs[3]),
              'fire season sensitivity'    = plot_pmod(fs_sn_mod, labs[4]))
+
 
     colnames(pc_out) = c('Fuel Discontinuity', 'Moisture', 'Ignitions', 'Land use')
 
