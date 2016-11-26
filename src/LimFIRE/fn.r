@@ -1,13 +1,22 @@
-f1 <- function(x, a, b) 1/(1 + a * exp(-b * x))
+f1 <- function(x, a, b, zeroPoint = NULL) {
+    f1A <- function(xi) 1/(1 + a * exp(-b * xi))
 
+    y = f1A(x)
+    if (!is.null(zeroPoint)) {
+        y  = 1 - y
+        yn = 1 - f1A(zeroPoint)
+        y  = y / yn
+        y  = 1 - y
+    }
+    return(y)
+}
 
 df1 <- function(x, a, b, d = 0.1) {       
-    df1_fun <- function(i) f1(i - d, a, b) - f1(i + d, a, b)
-    
+    df1_fun <- function(i) f1(i + d, a, b) - f1(i - d, a, b)
     
     xhalf =  -(1/b) * log(1/a)
     dhalf = df1_fun(xhalf)
-    
+    abcd
     dx    = df1_fun(x)
     
     return(dx / dhalf)

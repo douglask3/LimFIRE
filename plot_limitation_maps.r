@@ -146,14 +146,16 @@ plot_limtations_and_sensativity_plots <- function(lm_pmod, sn_pmod, labs) {
     sn_pmod = sn_pmod[-1]
        
     
-    #sn2snFire <- function(i) {
-    #    index = index[-i]
-    #    l = sn_pmod[[i]] 
-    #    for (j in lm_pmod[index]) l = l * j
-    #    return(l)
-    #}
-    #index = 1:length(sn_pmod)
-    #sn_pmod = lapply(index, sn2snFire)
+    sn2snFire <- function(i) {
+        index = index[-i]
+        l = sn_pmod[[i]] 
+        for (j in lm_pmod[index]) l = l * (1 - j)
+        return(l)
+    }
+    index = 1:length(sn_pmod)
+    
+    sn_pmod = lapply(index, sn2snFire)
+    sn_pmod[[3]]= sn_pmod[[3]]/2 ## zero-point start correction
     
     pcs = rbind(pcs, plot_pmod(sn_pmod, labs[2], fire))
     return(pcs)

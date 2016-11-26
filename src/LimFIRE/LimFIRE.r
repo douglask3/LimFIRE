@@ -31,12 +31,12 @@ LimFIRE <- function(fuel, moisture_live, moisture_dead,
     return(list(Fire, Fuel, Moisture, Ignitions, Supression))
 }
 
-LimFIRE.fuel       <- function(...) 1-f1(...)
-LimFIRE.moisture   <- function(...)   f1(...)
-LimFIRE.ignitions  <- function(...) 1-f2(...)
-LimFIRE.supression <- function(...)   f1(...)
+LimFIRE.fuel       <- function(...) 1 - f1(...)
+LimFIRE.moisture   <- function(...)     f1(...)
+LimFIRE.ignitions  <- function(...) 1 - f2(...)
+LimFIRE.supression <- function(...)     f1(...)
 
-dLimFIRE.fuel       <- function(...) 1-df1(...)
-dLimFIRE.moisture   <- function(...)   df1(...)
-dLimFIRE.ignitions  <- function(...) 1-df2(...)
-dLimFIRE.supression <- function(...)   df1(...)
+dLimFIRE.fuel       <- function(...)    df1(...)
+dLimFIRE.moisture   <- function(...)    df1(...)
+dLimFIRE.ignitions  <- function(...)    df2(...)
+dLimFIRE.supression <- function(...)    df1(...)
