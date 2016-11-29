@@ -2,7 +2,7 @@
 
 \RequirePackage{pgf}
 
-\pgfdeclareimage[width=1.0\paperwidth]{air-header}{air-header}
+\pgfdeclareimage[width=1.0\paperwidth]{fire-header-image}{fire-header}
 
 \setbeamertemplate{blocks}[rounded][shadow=true]
 \setbeamercovered{transparent}
@@ -15,7 +15,7 @@
 \definecolor{airgray}{HTML}{686868}
 \definecolor{airlightgray}{HTML}{eeeeee}
 \definecolor{airblue}{rgb}{.13 ,.43 ,.68}
-\setbeamercolor*{Title bar}{fg=airdarkblue}
+\setbeamercolor*{Title bar}{fg=white}
 \setbeamercolor*{Location bar}{fg=airorange,bg=airlightgray}
 \setbeamercolor*{frametitle}{parent=Title bar}
 \setbeamercolor*{block title}{bg=airlightblue,fg=white}
@@ -26,7 +26,7 @@
 \usecolortheme[named=airorange]{structure}
 
 \setbeamerfont{section in head/foot}{size=\tiny,series=\normalfont}
-\setbeamerfont{frametitle}{size=\Large}
+\setbeamerfont{frametitle}{size=\Large, series=\bfseries}
 
 %\setbeamertemplate{headline}
 \setbeamertemplate{frametitle}
@@ -41,7 +41,7 @@
 
 \setbeamertemplate{headline}
 {
-  \pgfuseimage{air-header}
+  \pgfuseimage{fire-header-image}
   \vskip -1.95cm
   \linethickness{0.0pt}
 
@@ -67,4 +67,3 @@
     \insertframenumber/\inserttotalframenumber
   \end{beamercolorbox}}
 }
-
