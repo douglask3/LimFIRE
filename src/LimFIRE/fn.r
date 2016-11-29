@@ -16,7 +16,7 @@ df1 <- function(x, a, b, d = 0.1) {
     
     xhalf =  -(1/b) * log(1/a)
     dhalf = df1_fun(xhalf)
-    abcd
+    
     dx    = df1_fun(x)
     
     return(dx / dhalf)
