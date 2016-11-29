@@ -56,14 +56,28 @@
   \end{beamercolorbox}}
 }
 
+
+%\setbeamertemplate{footline}{\addtocounter{framenumber}{-1}}
+
 \setbeamertemplate{footline}
 {
-  \linethickness{0.25pt}
-  \framelatex{
-  \begin{beamercolorbox}[leftskip=.3cm,wd=\paperwidth,ht=0.3\beamer@headheight,sep=0.1cm]{Location bar}
-    \usebeamerfont{section in head/foot}%
-    \insertshortauthor~|~\insertshorttitle
-    \hfill
-    \insertframenumber/\inserttotalframenumber
-  \end{beamercolorbox}}
+    \vspace*{-10cm}
+    \ifnum \insertpagenumber>1
+
+        \begin{flushleft}
+        \hspace*{0.3cm}\includegraphics[width=2.0cm]{cehlogo945}\hspace*{8cm}
+                      \includegraphics[width=2.0cm]{nerc-long-logo-large}
+
+        \end{flushleft}
+      \vspace*{-0.4cm}
+      \linethickness{0.25pt}
+      \framelatex{
+      \begin{beamercolorbox}[leftskip=.3cm,wd=\paperwidth,ht=0.3\beamer@headheight,sep=0.1cm]{Location bar}
+        \usebeamerfont{section in head/foot}%
+        \insertshortauthor~|~\insertshorttitle
+        \hfill
+        \insertframenumber/\inserttotalframenumber
+      \end{beamercolorbox}}
+    \fi
+
 }
