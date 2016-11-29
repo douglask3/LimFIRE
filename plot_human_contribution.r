@@ -36,7 +36,7 @@ load_experiments <- function(file, remove)
     runIfNoFile(file, runLimFIREfromstandardIns, fireOnly = TRUE, remove = remove)
                  
 experiments = mapply(load_experiments, mod_file, remove)
-                 
+               
 #################################################################
 ## Setup plot                                                  ##
 #################################################################
@@ -45,8 +45,8 @@ par(mar = c(0,0,0,0))
                  
 layout(rbind(c(1,  2,  3, 4),
              rep(5, 4), 
-             c(0,  6,  7, 8), 
-             c(0,  9,  9, 9)),
+             c(6,  8,  9, 10), 
+             c(7, 11, 11, 11)),
              heights = c(1, 0.3, 1, 0.3))
 
 
@@ -54,11 +54,11 @@ layout(rbind(c(1,  2,  3, 4),
 mtextStandard <- function(...) mtext(..., line = -2)
 
 standard_legend <- function(cols = fire_cols, lims = fire_lims, dat,
-                            plot_loc = c(0.35,0.75,0.65,0.78)) {
+                            plot_loc = c(0.35,0.75,0.65,0.78), ...) {
     add_raster_legend2(cols, lims, add = FALSE,
                plot_loc = plot_loc, dat = dat,
                transpose = FALSE,
-               srt = 0)
+               srt = 0, ...)
 } 
 
 standard_legend2 <- function(...)
@@ -87,6 +87,28 @@ experiments = mapply(aaPlot, experiments, labs1)
 standard_legend(dat = experiments[[1]])
 mtext.burntArea()
 
+#################################################################
+## plot no. ignitions from source                              ##
+#################################################################
+openMean <- function(fname_in, FUN = mean.stack, fname_ext = '-mean.nc', ...){
+    fname_out = replace.str(fname_in , 'outputs/', 'temp/')
+    fname_out = replace.str(fname_out, '.nc', fname_ext)
+    return(runIfNoFile(fname_out, FUN, fname_in, ...))
+}
+
+# monthly mean      
+param   = mean(read.csv(coefficants_file)[,'H'])           
+sources = lapply(drive_fname[c('pas', 'Lightn')], openMean)
+sources[[1]] = sources[[1]] * param
+
+ratio = sources[[1]]/sources[[2]]
+lims = c(1/4, 1/3, 1/2, 1/1.0001, 1.0001, 2, 3, 4)
+cols = c('#004400', 'green', 'white', 'purple', '#220022')
+plot_raster(ratio, lims, cols, quick = TRUE)
+mtextStandard('human:lightn igntions')
+
+standard_legend2(cols, lims, dat = experiments[[1]], 
+                 labelss = c('', '1/4', '1/3', '1/2', '       1', '', '2', '3', '4'))
 #################################################################
 ## Plot Differce                                               ##
 #################################################################
