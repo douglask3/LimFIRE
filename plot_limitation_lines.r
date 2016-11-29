@@ -14,7 +14,8 @@ plotFireVsVar <- function(i, fun, ps,
     if (length(i) == 1) i = mod[, i]
     else {
         P = mean(params[,1])
-        i = (mod[,i[1]] + P * mod[, i[2]]) #/ (1 + P)
+        print(P)
+        i = (mod[,i[1]] + P * mod[, i[2]]) / (1 + P)
         params = as.matrix(params[, -1])
         if (dim(params)[2]==1) params = params * 33 ## Remove
     }
