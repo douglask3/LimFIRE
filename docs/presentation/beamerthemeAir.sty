@@ -2,7 +2,7 @@
 
 \RequirePackage{pgf}
 
-\pgfdeclareimage[width=1.0\paperwidth]{fire-header-image}{fire-header}
+\pgfdeclareimage[width=1.0\paperwidth]{header-image}{fire-header}
 
 \setbeamertemplate{blocks}[rounded][shadow=true]
 \setbeamercovered{transparent}
@@ -31,17 +31,17 @@
 %\setbeamertemplate{headline}
 \setbeamertemplate{frametitle}
 {
-  \vskip-0.25\beamer@headheight
+  \vskip-0.10\beamer@headheight
   \vskip-\baselineskip
   \vskip-0.2cm
   \hskip0.7cm\usebeamerfont*{frametitle}\insertframetitle
-  \vskip-0.10em
+  \vskip-0.15em
   \hskip0.7cm\usebeamerfont*{framesubtitle}\insertframesubtitle
 }
 
 \setbeamertemplate{headline}
 {
-  \pgfuseimage{fire-header-image}
+  \pgfuseimage{header-image}
   \vskip -1.95cm
   \linethickness{0.0pt}
 
