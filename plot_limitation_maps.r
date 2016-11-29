@@ -1,7 +1,8 @@
 source('cfg.r')
 graphics.off()
 
-fig_fname = 'figs/limitation_map.png'
+fig_fnames = c('figs/limitation_map.png',
+               'figs/limitation_map_no_supression.png')
 
 mod_files = paste(outputs_dir, '/LimFIRE_',
                  c('fire', 'fuel','moisture','ignitions','supression'),
@@ -92,13 +93,6 @@ fs_sn_mod[[2]][test] = 1
 ## Plotting                                                            ##
 #########################################################################
 
-## Set up plotting window
-png(fig_fname, width = 9, height = 6 * 2.75/3, unit = 'in', res = 300)
-layout(rbind(1:2,3:4, 5, 5), heights = c(4, 4, 1))
-
-par(mar = c(0,0,0,0), oma = c(0,0,1,0))
-
-
 calculate_weightedAverage <- function(xy, pmod, fire) {
     #pmod[[3]] = pmod[[3]]/4
     pmod = layer.apply(pmod, function(i) rasterFromXYZ(cbind(xy, i)))
@@ -160,20 +154,36 @@ plot_limtations_and_sensativity_plots <- function(lm_pmod, sn_pmod, labs) {
     pcs = rbind(pcs, plot_pmod(sn_pmod, labs[2], fire))
     return(pcs)
 }
+aa_lm_mod[[4]] =aa_lm_mod[[4]] * 0.85
+fs_lm_mod[[4]] =fs_lm_mod[[4]] * 0.85
+for (fig_fname in fig_fnames) { 
+
+    ## Set up plotting window
+    png(fig_fname, width = 9, height = 6 * 2.75/3, unit = 'in', res = 300)
+    layout(rbind(1:2,3:4, 5, 5), heights = c(4, 4, 1))
+
+    par(mar = c(0,0,0,0), oma = c(0,0,1,0))
+
+    labs = c('a) Annual average controls on fire', 'b) Annual average sensitivity',
+             'c) Controls on fire during the fire season', 'd) Sensitivity during the fire season')
+    pc_aa = plot_limtations_and_sensativity_plots(aa_lm_mod, aa_sn_mod, labs[1:2])
+    pc_fs = plot_limtations_and_sensativity_plots(fs_lm_mod, fs_sn_mod, labs[3:4])
 
 
-labs = c('a) Annual average controls on fire', 'b) Annual average sensitivity',
-         'c) Controls on fire during the fire season', 'd) Sensitivity during the fire season')
-pc_aa = plot_limtations_and_sensativity_plots(aa_lm_mod, aa_sn_mod, labs[1:2])
-pc_fs = plot_limtations_and_sensativity_plots(fs_lm_mod, fs_sn_mod, labs[3:4])
+    ## Add legend
+    par(mar = c(3, 10, 0, 8))
+    add_raster_4way_legend(cols = rev(c("FF","CC","99","55","11")),
+                           labs = c('<- Moisture', 'Fuel ->', 'Igntions ->', 'Land Use'))
 
-
-## Add legend
-par(mar = c(3, 10, 0, 8))
-add_raster_4way_legend(cols = rev(c("FF","CC","99","55","11")),
-                       labs = c('<- Moisture', 'Fuel ->', 'Igntions ->', 'Land Use'))
-
-## add footer
-par(fig = c(0, 1, 0, 1), mar = rep(0, 4))
-points(0.5, 0.5, col = 'white', cex = 0.05)
-dev.off.gitWatermark()
+    ## add footer
+    par(fig = c(0, 1, 0, 1), mar = rep(0, 4))
+    points(0.5, 0.5, col = 'white', cex = 0.05)
+    dev.off.gitWatermark()
+    
+    
+    aa_lm_mod[[5]][] = 0
+    fs_lm_mod[[5]][] = 0
+    aa_sn_mod[[5]][] = 0
+    fs_sn_mod[[5]][] = 0
+    
+}
