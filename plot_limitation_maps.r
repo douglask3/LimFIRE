@@ -149,7 +149,7 @@ plot_limtations_and_sensativity_plots <- function(lm_pmod, sn_pmod, labs) {
     index = 1:length(sn_pmod)
     
     sn_pmod = lapply(index, sn2snFire)
-    sn_pmod[[3]]= sn_pmod[[3]]/2 ## zero-point start correction
+    sn_pmod[[3]]= sn_pmod[[3]]#/2 ## zero-point start correction
     
     pcs = rbind(pcs, plot_pmod(sn_pmod, labs[2], fire))
     return(pcs)
@@ -159,8 +159,8 @@ fs_lm_mod[[4]] =fs_lm_mod[[4]] * 0.85
 for (fig_fname in fig_fnames) { 
 
     ## Set up plotting window
-    png(fig_fname, width = 9, height = 6 * 2.75/3, unit = 'in', res = 300)
-    layout(rbind(1:2,3:4, 5, 5), heights = c(4, 4, 1))
+    png(fig_fname, width = 9, height = 6 * 2.75/3 * 8/9, unit = 'in', res = 300)
+    layout(rbind(1:2,3:4), heights = c(4, 4))
 
     par(mar = c(0,0,0,0), oma = c(0,0,1,0))
 
@@ -168,12 +168,6 @@ for (fig_fname in fig_fnames) {
              'c) Controls on fire during the fire season', 'd) Sensitivity during the fire season')
     pc_aa = plot_limtations_and_sensativity_plots(aa_lm_mod, aa_sn_mod, labs[1:2])
     pc_fs = plot_limtations_and_sensativity_plots(fs_lm_mod, fs_sn_mod, labs[3:4])
-
-
-    ## Add legend
-    par(mar = c(3, 10, 0, 8))
-    add_raster_4way_legend(cols = rev(c("FF","CC","99","55","11")),
-                           labs = c('<- Moisture', 'Fuel ->', 'Igntions ->', 'Land Use'))
 
     ## add footer
     par(fig = c(0, 1, 0, 1), mar = rep(0, 4))
