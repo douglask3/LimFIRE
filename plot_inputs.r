@@ -12,6 +12,16 @@ fignames = paste('figs/',
 
 names = names(drive_fname)
 
+titls = list(alpha   = 'Soil Moisture',
+             emc     = 'Drying rate',
+             npp     = 'Net Primary Production',
+             crop    = 'Cropland',
+             pas     = 'Pasture land',
+             urban   = 'Urban',
+             popdens = 'Population Density',
+             Lightn  = 'Lightning Stikes',
+             fire    = 'Burnt Area')
+
 cols =  list(alpha   = c('white', '#AA00AA', '#220022'),
              emc     = c('white', '#00AAAA', '#002222'),
              npp     = c('white', '#77DD00', '#004400'),
@@ -22,8 +32,8 @@ cols =  list(alpha   = c('white', '#AA00AA', '#220022'),
              Lightn  = c('black', '#0000FF', 'yellow'  ),
              fire    = c('white', '#EE9900', '#440000'))
 
-lims =  list(alpha   = c(5, 10, 20, 40, 60, 80),
-             emc     = c(5, 10, 20, 40, 60, 80),
+lims =  list(alpha   = c(10, 20, 40, 60, 80),
+             emc     = c(10, 20, 40, 60, 80),
              npp     = c(0, 1, 2, 4, 8),
              crop    = c(0.1, 0.3, 1, 3, 10, 30),
              pas     = c(1, 2, 5, 10, 20, 50),
@@ -32,7 +42,7 @@ lims =  list(alpha   = c(5, 10, 20, 40, 60, 80),
              Lightn  = c(0.01, 0.1, 0.2, 0.5, 1, 2, 3),
              fire    = c(1, 2, 5, 10, 20, 50))
              
-scles = list(alpha   = 100,
+scles = list(alpha   = 100/1.2,
              emc     = 1,
              npp     = 1/1000,
              crop    = 1,
@@ -40,7 +50,7 @@ scles = list(alpha   = 100,
              urban   = 1,
              popdens = 1,
              Lightn  = 1,
-             fire    = 100 * 12)
+             fire    = 1200)
 
 units = list(alpha   = '% moisture content',
              emc     = '% equilibrium moisture content',
@@ -79,7 +89,7 @@ Obs_fire = lapply(drive_fname, openMean, fire.stack, '-season.nc', fire_season)
 #########################################################################
 plot_inputs <- function(Obs, fname, ...) {
     
-    plot_input <- function(x, scle, lim, col, name, unit) {
+    plot_input <- function(x, scle, lim, col, titl, name, unit) {
         fname = paste(fname, '-', name, '.png', sep = '')
         print(fname)
         png(fname, height =     5*2/3, width = 6, units = 'in', res = 150)
@@ -87,12 +97,13 @@ plot_inputs <- function(Obs, fname, ...) {
             layout(matrix(1:2, nrow = 2), height = c(1, 0.3))
             
             plot_raster(x * scle, lim, col, quick = TRUE, ...)
+            mtext(titl, cex = 1.5)
+            
             standard_legend(col, lim, x)
             mtext(unit, line = -0.33, adj = 0.57)
         dev.off.gitWatermark()  
-        browser()
     }
-    mapply(plot_input, Obs, scles, lims, cols, names, units)    
+    mapply(plot_input, Obs, scles, lims, cols, titls, names, units)    
 }
 
 plot_inputs(Obs_mean, fignames[1])
