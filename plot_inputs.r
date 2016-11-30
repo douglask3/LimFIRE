@@ -8,10 +8,7 @@ graphics.off()
 grab_cache = TRUE
 
 fignames = paste('figs/',
-                c('inputs_mean','inputs_fireSeason', 
-                  'measure_mean', 'measure_fire',
-                  'input_correlation'),
-                '.pdf', sep = '')
+                c('inputs_mean','inputs_fireSeason'), '.pdf', sep = '')
 
 names_input = names(drive_fname)
 
@@ -36,17 +33,7 @@ lims_input = list(alpha   = c(0.2, 0.4, 0.6, 0.8, 1.0),
                   fire    = c(0.001, 0.002, 0.005, 0.010, 0.020, 0.050))
 
                   
-cols_msure = list(fuel    = c('white', '#33FF33', '#002200'),
-                  moisture= c('white', '#3333FF', '#000022'),
-                  igntions= c('white', '#FF3333', '#220000'),
-                  supress = c('white', 'grey'   , 'black'  ))
                   
-lims_msure = list(fuel    = c(0, 1000, 2000, 4000, 10000),
-                  moisture= c(5, 10, 15, 20, 30, 40),
-                  igntions= c(0.001, 0.1, 0.2, 0.5, 1, 2, 3),
-                  supress = c(0.01, 0.1, 1, 10, 100, 1000))
-
-names_msure= names(cols_msure)                  
 #########################################################################
 ## open data                                                           ##
 #########################################################################
@@ -68,17 +55,6 @@ Obs_mean = lapply(drive_fname, openMean)
 # monthly mean during fire season height
 Obs_fire = lapply(drive_fname, openMean, fire.stack, '-season.nc', fire_season)
 
-## Combined Inputs (i.e, fuel, mositure, igntions, supression measures)
-fnames = fnames = c('nnfire', 'fuel', 'moisture', 'igntions', 'supression')
-fnames_mod  = paste('temp/', fnames    , '-measuresOnly.nc', sep = '')
-fnames_mean = paste('temp/', fnames[-1], '-measuresMean.nc', sep = '')
-fnames_fire = paste('temp/', fnames[-1], '-measuresFire.nc', sep = '')
-                
-measures = runIfNoFile(fnames_mod, runLimFIREfromstandardIns,
-                       just_measures = TRUE, test = grab_cache)
-measures = measures[-1]
-measures_mean = runIfNoFile(fnames_mean, function(i) lapply(i, mean), measures)
-measures_fire = runIfNoFile(fnames_fire, function(i) lapply(i, fire.stack, fire_season()), measures)
 
 #########################################################################
 ## Plot maps                                                           ##
@@ -107,59 +83,3 @@ plot_inputs <- function(Obs, fname, names = names_input,
 ## Plot Individuals
 plot_inputs(Obs_mean, fignames[1])
 plot_inputs(Obs_fire, fignames[2])
-
-## Plot measures
-plot_inputs(measures_mean, fignames[3], names_msure, lims_msure, cols_msure)              
-plot_inputs(measures_fire, fignames[4], names_msure, lims_msure, cols_msure)              
-
-#########################################################################
-## Plot cross correlarion                                              ##
-#########################################################################
- den_dims = c(10, 10)
- 
-plot_density <- function(i, j) {
-    x = lims[[i]]
-    y = lims[[j]]
-    
-    fname = paste(c('temp/', names[c(i,j)], 'density.csv'), collapse = '-')  
-    
-    find_den <- function() {
-        X0 = Obs[[i]]
-        Y0 = Obs[[j]]
-               
-        den = matrix(0, length(x) + 1, length(y) + 1)
-        
-        for (layer in 1:nlayers(X0)) {
-            print(layer)
-            X = cut_results(X0[[layer]], x)
-            Y = cut_results(Y0[[layer]], y)
-            
-            msk = !is.na(X) & !is.na(Y)
-            X = X[msk]
-            Y = Y[msk]
-            for (k in 1:length(x)) for (l in 1:length(y))
-                den[k, l] = den[k, l] + sum(X == k & Y == l)
-        }
-        return(den)
-    }
-    den = runIfNoFile(fname, find_den, test = grab_cache)
-    
-    image(as.matrix(den), axes = FALSE)
-    add_axis <- function(v, side) {
-        d = 0.5/(length(v)-1)
-        at = seq(d, 1 - d, length.out = length(v))
-        axis(at = at, labels = v, side = side)
-    }
-    add_axis(x, 1)
-    add_axis(y, 2)
-    title = paste(names[c(i,j)], collapse = ' vs. ')
-    mtext(title)
-}
-
-nplots = length(Obs) - 1 # -1 to remove fire
-
-pdf(fignames[5], height = 3 * nplots, width = 3 * nplots)
-    par(mfrow = c(nplots, nplots), mar = c(1.5, 2.5, 2.5,1.5))
-    lapply(1:nplots, function(i) lapply(1:nplots, plot_density, i))
-dev.off.gitWatermark()
-
