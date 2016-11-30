@@ -3,16 +3,18 @@
 #################################################################
 source('cfg.r')
 graphics.off()
-mod_file = 'outputs/LimFIRE_fire'
 
+
+## output filename
+mod_file = 'outputs/LimFIRE_fire'
 fig_file = 'figs/IgntionInfo.png'
 
+## limits and colours
 diff_lims1 = c(0, 0.1, 1, 2, 5) 
 diff_cols1 = fire_cols
 
 diff_lims2 = c(-20, -10, -5, -2, -1, -0.1, 0.1, 1, 2, 5) 
 diff_cols2 = c('#000033', '#0022AA',  '#00EEFF', 'white', '#FFEE00', '#AA2200')
-
 
 cont_lims1 = c(0, 2, 5, 10, 20, 40, 60, 80)
 cont_cols1 = fire_cols
@@ -72,7 +74,6 @@ mtext.burntArea <- function(txt = 'Burnt Area (%)')
 #################################################################
 ## plot annual average                                         ##
 #################################################################
-
 addBeforeEx <- function(i, add)
     paste(strsplit(filename(i[[1]]), '.nc')[[1]], add, '.nc', sep = '')
 
