@@ -7,7 +7,7 @@ graphics.off()
 
 ## output filename
 mod_file = 'outputs/LimFIRE_fire'
-fig_file = 'figs/IgntionInfo.png'
+fig_file = 'figs/IgntionInfo'
 
 ## limits and colours
 diff_lims1 = c(0, 0.1, 1, 2, 5) 
@@ -27,8 +27,6 @@ remove      = list(NULL        , "Lightn"                , "pas"                
 labs1       =    c('Burnt Area', 'Human ignitions only'  , 'Lightning igntions only', 'No Humans') 
 labs2       =    c(              '+ Lightning ignitions' , '+ Human igntions'       , 'Human Impact') 
  
-#labs1 = paste(letters[1:length(labs1)], ') ', labs, sep = "")
-
 #################################################################
 ## Open data                                                   ##
 #################################################################
@@ -40,17 +38,28 @@ load_experiments <- function(file, remove)
 experiments = mapply(load_experiments, mod_file, remove)
                
 #################################################################
-## Setup plot                                                  ##
+## Setup plots                                                 ##
 #################################################################
-png(fig_file, width = 12, height = 6, units = 'in', res = 300)
-par(mar = c(0,0,0,0))
-                 
-layout(rbind(c(1,  2,  3, 4),
-             rep(5, 4), 
-             c(6,  8,  9, 10), 
-             c(7, 11, 11, 11)),
-             heights = c(1, 0.3, 1, 0.3))
+openPlot <- function(fname, width, height, ...) {
+    fname = paste(fig_file, fname, '.png', sep = '')
+    png(fname, width = width, height = height,
+        units = 'in', res = 300)
+    par(mar = c(0,0,0,0))
+    layout(...)
+}
 
+openPlot('burntArea', 6, 4, rbind(1,2), heights = c(1, 0.3))
+openPlot('SourceAdding', 8, 6, rbind(1:2,c(3,3), 4:5, c(6,6)),
+         heights = c(1, 0.3, 1, 0.3))
+openPlot('NoHumans    ', 5, 6, rbind(1, 2, 3, 4),
+         heights = c(1, 0.3, 1, 0.3))
+openPlot('sourceImportance', 6, 4, rbind(1,2), heights = c(1, 0.3))
+
+
+graphics.off.gitWatermark <- function (...) {
+    while ((which <- dev.cur()) != 1) dev.off.gitWatermark(which, ...)
+    invisible()
+}
 
 
 mtextStandard <- function(...) mtext(..., line = -2)
@@ -69,16 +78,21 @@ mtext.burntArea <- function(txt = 'Burnt Area (%)')
 addBeforeEx <- function(i, add)
     paste(strsplit(filename(i[[1]]), '.nc')[[1]], add, '.nc', sep = '')
 
-aaPlot <- function(i, j) {
+aaPlot <- function(i, j, p, L) {
+    dev.set(p + 1)
     fname = addBeforeEx(i, 'aaConvert')
     i = aaConvert(i, quick = TRUE, fname = fname)
     mtextStandard(j)
+    if (L) {
+        standard_legend(dat = experiments[[1]])
+        mtext.burntArea()
+    }
     return(i)
 }
 
-experiments = mapply(aaPlot, experiments, labs1) 
-standard_legend(dat = experiments[[1]])
-mtext.burntArea()
+experiments = mapply(aaPlot, experiments, labs1,
+                     c(1, 2, 2, 3), c(T, F, T, T)) 
+
 
 #################################################################
 ## plot no. ignitions from source                              ##
@@ -97,24 +111,28 @@ sources[[1]] = sources[[1]] * param
 ratio = sources[[1]]/sources[[2]]
 lims = c(1/4, 1/3, 1/2, 1/1.0001, 1.0001, 2, 3, 4)
 cols = c('#004400', 'green', 'white', 'purple', '#220022')
-plot_raster(ratio, lims, cols, quick = TRUE)
-mtextStandard('human:lightn igntions')
+dev.set(4 + 1)
+    plot_raster(ratio, lims, cols, quick = TRUE)
+    mtextStandard('human:lightn igntions')
 
-standard_legend2(cols, lims, dat = experiments[[1]], 
-                 labelss = c('', '1/4', '1/3', '1/2', '       1', '', '2', '3', '4'))
+    standard_legend2(cols, lims, dat = experiments[[1]], 
+                     labelss = c('', '1/4', '1/3', '1/2', '       1', '', '2', '3', '4'))
 #################################################################
 ## Plot Differce                                               ##
 #################################################################
-diffPlot <- function(i, j) {
+diffPlot <- function(i, j, p, L) {
+    dev.set(p + 1)
     i = experiments[[1]] - i
     plot_raster(i, diff_lims2, diff_cols2, quick = TRUE)
     mtextStandard(j)
+    if (L) {
+        standard_legend2(diff_cols2, diff_lims2, dat = experiments[[1]])
+        mtext.burntArea('Change in burnt area (%)')
+    }
     return(i)
 }
 
-experiments = mapply(diffPlot, experiments[-1], labs2)
-standard_legend2(diff_cols2, diff_lims2, dat = experiments[[1]])
-mtext.burntArea('Change in burnt area (%)')
-
+experiments = mapply(diffPlot, experiments[-1], labs2,
+                     c(2, 2, 3), c(F, T, T))
 #################################################################
-dev.off.gitWatermark()
+graphics.off.gitWatermark()
