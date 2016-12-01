@@ -55,13 +55,6 @@ openPlot('NoHumans    ', 5, 6, rbind(1, 2, 3, 4),
          heights = c(1, 0.3, 1, 0.3))
 openPlot('sourceImportance', 6, 4, rbind(1,2), heights = c(1, 0.3))
 
-
-graphics.off.gitWatermark <- function (...) {
-    while ((which <- dev.cur()) != 1) dev.off.gitWatermark(which, ...)
-    invisible()
-}
-
-
 mtextStandard <- function(...) mtext(..., line = -2)
 
 standard_legend2 <- function(...)
