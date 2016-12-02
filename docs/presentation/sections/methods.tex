@@ -1,5 +1,29 @@
 \section{Methods}
 \pgfdeclareimage[width=1.0\paperwidth]{header-image}{header_images/Sierra_Calderona}
+\def \yayandwow#1#2#3{Testing one arg #1 #2 #3}
+
+\def \inputMap#1#2#3#4 {
+    \begin{backgroundblock}{#1}{#2}
+        \begin{tikzpicture}
+            \node[anchor=south west,inner sep=0] (image) at (0,0) {
+                \includegraphics[width=4.0cm]{images/inputs/#3}
+            };
+            \node[align=center, font = {\tiny}] at (2.15cm, 2.33cm) {#4};
+        \end{tikzpicture}
+    \end{backgroundblock}
+}
+
+\def \inputMapA#1#2 {
+    \inputMap{5cm}{1.33cm}{#1}{#2}
+}
+\def \inputMapB#1#2 {
+    \inputMap{6.67cm}{3.67cm}{#1}{#2}
+}
+\def \inputMapC#1#2 {
+    \inputMap{8.33cm}{6cm}{#1}{#2}
+}
+
+
 \begin{frame}
     \frametitle{Fire limitation framework}
     \framesubtitle{Spatial and Temporal controls on fire}
@@ -48,7 +72,6 @@
 
     \end{tikzpicture}
 
-
     \begin{textblock*}{5cm}(6.67cm,2cm)
         \visible<6->{
             \begin{tikzpicture}[scale=0.67]
@@ -81,6 +104,26 @@
         }
     \end{textblock*}
 
-    %Stuff to include:
-    %   Monthly -> Inter annual and seasonal controls
+
+    \only<2> {
+        \inputMapA{inputs_mean-npp}{MODIS NPP}
+    }
+
+    \only<3> {
+        \inputMapA{inputs_mean-alpha}{STASH $\frac{Actual}{Potenital}$ Evapotranspiration}
+        \inputMapB{inputs_mean-emc}{Equilibrium Fuel Moisture Content}
+    }
+
+    \only<4> {
+        \inputMapA{inputs_mean-Lightn}{LIS/OTD}
+        \inputMapB{inputs_mean-popdens}{HYDE Popdens}
+        \inputMapC{inputs_mean-pas}{HYDE Pasture}
+    }
+
+    \only<5> {
+        \inputMapA{inputs_mean-fire}{Global Fire Emission Database (GFED)}
+        %?% Make bigger
+    }
+    %?% Stuff to include:
+    %?%   Monthly -> Inter annual and seasonal controls
 \end{frame}
