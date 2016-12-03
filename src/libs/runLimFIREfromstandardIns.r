@@ -1,4 +1,4 @@
-runLimFIREfromstandardIns <- function(fireOnly = FALSE, remove = NULL, 
+runLimFIREfromstandardIns <- function(fireOnly = FALSE, remove = NULL, scale_igntions = 1,
                                       ...) {
     Obs = lapply(drive_fname, stack)
     params = read.csv(coefficants_file)[,-1]
@@ -8,6 +8,11 @@ runLimFIREfromstandardIns <- function(fireOnly = FALSE, remove = NULL,
     
     runMonthly <- function(i) {
         cat("simulation fire for month ", i, "\n")
+        if (scale_igntions != 1) {
+            Obs[["Lightn"]][[i]] = Obs[["Lightn"]][[i]] * scale_igntions
+            Obs[["pas"]][[i]] = Obs[["pas"]][[i]] * scale_igntions
+            
+        }
         LimFIRE(Obs[["npp"   ]][[i]],
                 Obs[["alpha" ]][[i]], Obs[["emc"    ]][[i]], 
                 Obs[["Lightn"]][[i]], Obs[["pas"    ]][[i]],
