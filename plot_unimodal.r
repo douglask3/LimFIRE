@@ -123,7 +123,7 @@ fire  = mean(fire)*1200
 ## plot alpha
 plot_raster(alpha, quick = TRUE, lims = MstrLims, cols = MstrCols)
 standard_legend(cols = MstrCols, lims = MstrLims, dat = alpha)
-mtext('Seasonality of vailable moisture', line = -0.5)
+mtext('Seasonality of available moisture', line = -0.5)
 dev.off.advance()
 
 ## plot fire
