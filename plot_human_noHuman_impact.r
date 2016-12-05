@@ -8,12 +8,12 @@ fig_fname  = 'figs/human_noHuman_impact.png'
 mod_file   = 'outputs/LimFIRE_fire'
 mod_file   = paste(mod_file, c('', 'noCrops', 'noPopdens'), '.nc', sep ='')
 
-xVars      = c('crop', 'popdens')
+xVars      = list('crop', c('pas', 'popdens'))
 
 labs       = c('a) Cropland', 'b) Population Density')
 xUnits     = c('% cover', 'no. people / km2')
 
-grab_cache = FALSE
+grab_cache = TRUE
 
 #########################################################################
 ## Run Model                                                           ##
@@ -22,7 +22,7 @@ control = runIfNoFile(mod_file[1], runLimFIREfromstandardIns, fireOnly = TRUE,
                                        test = grab_cache)
 control = mean(control)
 
-plot_impact <- function(mod_filei, xVar, lab, xUnit, noneLand = FALSE) {
+plot_impact <- function(mod_filei, xVar, lab, xUnit, noneLand = FALSE, log = '') {
 
     noVar  = runIfNoFile(mod_filei, runLimFIREfromstandardIns, fireOnly = TRUE, 
                          remove = xVar, test = grab_cache)
@@ -42,6 +42,7 @@ plot_impact <- function(mod_filei, xVar, lab, xUnit, noneLand = FALSE) {
     mask   = !(is.na(impact) | is.na(xVar))
     impact = impact[mask]
     xVar   = xVar  [mask] 
+    if (log == 'x') xVar[xVar < 0.01] = 0.01
 
     if (!noneLand) {
         sp        = smooth.spline(xVar, impact)
@@ -59,7 +60,9 @@ plot_impact <- function(mod_filei, xVar, lab, xUnit, noneLand = FALSE) {
     ## plot window
     yrange = quantile(fImpact, probs = c(0.001, 0.999))
     yrange = range(c(yrange, 0), na.rm = TRUE)
-    plot  (range(x), 100 * yrange, type = 'n', xlab = xUnit, ylab = 'Impact (% of burnt area)')
+    xrange = range(x)
+    
+    plot  (range(x), 100 * yrange, type = 'n', xlab = xUnit, ylab = 'Impact (% of burnt area)', log = log)
 
     ## plot
     points(xVar, fImpact * 100, col =  make.transparent('black', 0.97), pch = 16)
@@ -70,7 +73,7 @@ plot_impact <- function(mod_filei, xVar, lab, xUnit, noneLand = FALSE) {
 png(fig_fname, width = 9, height = 12, unit = 'in', res = 300)
 par(mfrow = c(2,1))
 
-mapply(plot_impact, mod_file[-1], xVars, labs, xUnits, c(FALSE, TRUE))
+mapply(plot_impact, mod_file[-1], xVars, labs, xUnits, c(FALSE, TRUE), c('', 'x'))
 
 ## footer
 dev.off.gitWatermark()
