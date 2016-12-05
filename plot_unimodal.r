@@ -32,7 +32,7 @@ graphics.off()
 endTest = FALSE
 while (!endTest) {
 nplot = 1
-figName = paste(figDir, '/p', doff, '.png', sep = '')
+figName = paste(figDir, '/p', doff + 1, '.png', sep = '')
 png(figName, height = 4, width = 8, units = 'in', res = 300)
 lmat = cbind(2:5, 1)
 
