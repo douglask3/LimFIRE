@@ -3,17 +3,37 @@
 #################################################################
 source('cfg.r')
 
+figDir = 'figs/unimodal/'
+
 p1 = 100; p2 = 10
 colMstr = "blue"; colFuel = "green"; colFire = "orange"
 
 MstrCols = c('white','cyan', '#00221F')
 MstrLims =  c(0.01,0.05, 0.1,0.2,0.3, 0.4)
 
+doff = 0;
+dev.off.advance <- function() {
+    print(doff)
+    print(nplot)
+    print('-----')
+    if (doff < nplot) {        
+        dev.off.gitWatermark()
+        doff <<- nplot
+        eval.parent(parse(text = "next"), 1)
+    } else {        
+        nplot <<- nplot + 1
+    }
+}
+
 #################################################################
 ## Setup plot                                                  ##
 #################################################################
 graphics.off()
-png('figs/unimodal.png', height = 4, width = 8, units = 'in', res = 300)
+endTest = FALSE
+while (!endTest) {
+nplot = 1
+figName = paste(figDir, '/p', doff, '.png', sep = '')
+png(figName, height = 4, width = 8, units = 'in', res = 300)
 lmat = cbind(2:5, 1)
 
 layout(lmat, heights = c(1,0.3,1, 0.3))
@@ -27,19 +47,6 @@ par(oma = c(0,0,1,0))
 #################################################################
 plot.new()
 
-## Axis
-arrows( 0.0, -0.1,  1.0, -0.1, col = colMstr, lwd = 5, xpd = TRUE)
-mtext('Moisture', side = 1, cex = 1.33)
-
-arrows( 0.0, -0.2,  1.0, -0.2, col = colFuel, lwd = 5, xpd = TRUE)
-mtext('Fuel', side = 1, cex = 1.33, line = 1.8)
-
-arrows( 1.0, -0.1,  0.0, -0.1, col = colMstr , lwd = 5, xpd = TRUE)
-
-arrows(-0.1,  0.0, -0.1,  1.0, col = colFire, lwd = 5, xpd = TRUE)
-mtext('Fire', side = 2, cex = 1.33, line = -0.3)
-
-
 ## Lines
 x = seq(0, 1, by = 0.001)
 
@@ -48,23 +55,59 @@ fuel     = 1- LimFIRE.fuel    (x, p1, p2)
 
 addLine <- function(y, col, lwd = 5, alpha = 0.5)
     lines(x, y, col = make.transparent(col, alpha), lwd = 5)
+
+## Axis
+arrows( 0.0, -0.1,  1.0, -0.1, col = colMstr, lwd = 5, xpd = TRUE)
+mtext('Moisture', side = 1, cex = 1.33)
+dev.off.advance()
+
+arrows(-0.1,  0.0, -0.1,  1.0, col = colFire, lwd = 5, xpd = TRUE)
+mtext('Fire', side = 2, cex = 1.33, line = -0.3)
+addLine(fuel * moisture, colFire)
+dev.off.advance()
+
+arrows( 0.0, -0.2,  1.0, -0.2, col = colFuel, lwd = 5, xpd = TRUE)
+mtext('Fuel', side = 1, cex = 1.33, line = 1.8)
+dev.off.advance()
    
 addLine(moisture, colMstr)
 addLine(fuel    , colFuel)
 
-addLine(fuel * moisture, colFire)
+dev.off.advance()
 
 ## Dry/wet Season
-i = seq(1, 18, length.out = 180)
-i = c((1/rev(i)), i)
+pv = seq(1, 18, length.out = 180)
+pv = c((1/rev(pv)), pv)
 
-for (i in i) {
+np = 0
+
+addLines <- function(i, alpha = 0.95) {
     mstr = 1 - LimFIRE.moisture(x, p1*i, p2)
-    addLine(fuel * mstr, colFire, alpha = 0.95)
-    addLine(mstr, colMstr, alpha = 0.95)
-    
+    addLine(fuel * mstr, colFire, alpha = alpha)
+    addLine(mstr, colMstr, alpha = alpha)
 }
 
+addLines(pv[1], 0.5)
+addLine(fuel  , colFuel, alpha = 0.3)
+dev.off.advance()
+
+plotQuater <- function(m) {
+    index  = seq(((m-1) *90) + 1, m *90)
+    sapply(pv[index], addLines)
+}
+
+plotQuater(1)
+dev.off.advance()
+
+plotQuater(2)
+dev.off.advance()
+
+plotQuater(3)
+dev.off.advance()
+
+plotQuater(4)
+addLines(tail(pv, 1), 0.5)
+dev.off.advance()
 #################################################################
 ## Seasonality and fire maps                                   ##
 #################################################################
@@ -81,8 +124,12 @@ fire  = mean(fire)*1200
 plot_raster(alpha, quick = TRUE, lims = MstrLims, cols = MstrCols)
 standard_legend(cols = MstrCols, lims = MstrLims, dat = alpha)
 mtext('Seasonality of vailable moisture', line = -0.5)
+dev.off.advance()
+
 ## plot fire
 plot_raster(fire, quick = TRUE)
 standard_legend(dat = fire)
 mtext('% Annual Burnt Area', line = -0.5)
 dev.off.gitWatermark()
+endTest = TRUE
+}
