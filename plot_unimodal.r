@@ -40,7 +40,7 @@ arrows(-0.1,  0.0, -0.1,  1.0, col = colFire, lwd = 5, xpd = TRUE)
 mtext('Fire', side = 2, cex = 1.33, line = -0.3)
 
 
-## Lines                                                        ##
+## Lines
 x = seq(0, 1, by = 0.001)
 
 moisture = 1- LimFIRE.moisture(x, p1, p2)
@@ -54,15 +54,7 @@ addLine(fuel    , colFuel)
 
 addLine(fuel * moisture, colFire)
 
-## Dry/wet Season                                              ##
-#wet = 1- LimFIRE.moisture(x, p1/6, p2)
-#dry = 1- LimFIRE.moisture(x, p1*6, p2)
-#
-#polygon(c(x, rev(x)), c(wet, rev(dry)), 
-#        col = make.transparent('blue', 0.9), border = NA)
-        
-#addLine(fuel * dry, "red")
-
+## Dry/wet Season
 i = seq(1, 18, length.out = 180)
 i = c((1/rev(i)), i)
 
