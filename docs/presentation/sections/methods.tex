@@ -126,21 +126,24 @@
     %?%   Monthly -> Inter annual and seasonal controls
 \end{frame}
 
-\begin{frame}<1-2>[label=controlMaps]
-    \frametitle{Controls on fire}
-    \framesubtitle{Geographic controls}
-    \begin{textblock*}{11cm}(0.5cm,1.5cm)
+\def \controlsSide#1#2#3 {
+    \begin{frame}<#2>[label=#3]
+        \frametitle{Controls on fire}
+        \framesubtitle{Geographic controls}
+        \begin{textblock*}{11cm}(0.5cm,1.5cm)
+            \begin{tikzpicture}
+                \node[anchor=south west,inner sep=0] (image) at (0,0) {
+                    \includegraphics[width=11.0cm]{images/#1}
+                };
+                \visible<-2> {\draw[white, fill = white] (5.5,3.0) -- (12.0,3.0) -- (12.0,5.9) -- (5.5,5.9) -- (5.5,3.0);}
+                \visible<-1> {\draw[white, fill = white] (0.0,0.0) -- ( 5.5,0.0) -- ( 5.5,3.0) -- (0.0,3.0) -- (0.0,0.0);}
+                \visible<-2> {\draw[white, fill = white] (5.5,3.0) -- (12.0,3.0) -- (12.0,0.0) -- (5.5,0.0) -- (5.5,3.0);}
+                %\visible<-4> {\draw[white, fill = white] (0.0,0) -- (12.0,0) -- (12.0,1.0) -- (0.0,1.0) -- (0.0,0);}
+            \end{tikzpicture}
+        \end{textblock*}
+    \end{frame}
+}
 
 
-        \begin{tikzpicture}
-            \node[anchor=south west,inner sep=0] (image) at (0,0) {
-                \includegraphics[width=11.0cm]{images/limitation_map_no_supression}
-            };
 
-            \visible<-2> {\draw[white, fill = white] (5.5,3.0) -- (12.0,3.0) -- (12.0,5.9) -- (5.5,5.9) -- (5.5,3.0);}
-            \visible<-1> {\draw[white, fill = white] (0.0,0.0) -- ( 5.5,0.0) -- ( 5.5,3.0) -- (0.0,3.0) -- (0.0,0.0);}
-            \visible<-2> {\draw[white, fill = white] (5.5,3.0) -- (12.0,3.0) -- (12.0,0.0) -- (5.5,0.0) -- (5.5,3.0);}
-            %\visible<-4> {\draw[white, fill = white] (0.0,0) -- (12.0,0) -- (12.0,1.0) -- (0.0,1.0) -- (0.0,0);}
-        \end{tikzpicture}
-    \end{textblock*}
-\end{frame}
+\controlsSide{limitation_map_no_supression}{1-2}{controlMapsNoLand}
