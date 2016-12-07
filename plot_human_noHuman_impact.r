@@ -55,8 +55,9 @@ plot_impact <- function(mod_filei, xVar, lab, xUnit, noneLand = FALSE, log = '')
 #########################################################################
     ## calculate trend line
     x      = seq(min(xVar), max(xVar), length.out = 1000)
+	
     y      = predict(loess(fImpact ~ xVar), x)
-
+	y[y < -1] = -1
     ## plot window
     yrange = quantile(fImpact, probs = c(0.001, 0.999))
     yrange = range(c(yrange, 0), na.rm = TRUE)
