@@ -3,13 +3,11 @@
 \pgfdeclareimage[width=1.0\paperwidth]{header-image}{header_images/helicopter}
 \againframe<5->{framework}
 
-\controlsSide{limitation_map}{2}{controlMaps}
 
-\begin{frame}
+\begin{frame}<2>[label=controlMaps]
     \frametitle{So Humans have no impact of fire?}
     \framesubtitle{Land use}
-    %Start of with increase in burnt area from Igntions
-    %Then add in land framgentation
+    \controlsSide{limitation_map}
 \end{frame}
 
 \pgfdeclareimage[width=1.0\paperwidth]{header-image}{header_images/Mirador_de_Garbi}
@@ -38,7 +36,12 @@
 
 \pgfdeclareimage[width=1.0\paperwidth]{header-image}{header_images/firefighter}
 
-\againframe<2-3>{controlMaps}
+\begin{frame}<2-3>
+    \frametitle{Sensitivity to Controls}
+    \controlsSide{limitation_map}
+\end{frame}
+
+%\againframe<2-3>{controlMaps}
 
 \begin{frame}
     \frametitle{Fire sensitivity}

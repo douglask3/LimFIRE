@@ -61,24 +61,24 @@
 %  \tableofcontents[section=1,hidesubsections]
 %\end{frame}
 
-\AtBeginSection[]
+%\AtBeginSection[]
 {
   \pgfdeclareimage[width=1.0\paperwidth]{header-image}{header_images/fire}
-  \frame<handout:0>
-  {
-    \frametitle{Outline}
-    \tableofcontents[currentsection,hideallsubsections]
-  }
+%  \frame<handout:0>
+%  {
+%    \frametitle{Outline}
+%    \tableofcontents[currentsection,hideallsubsections]
+%  }
 }
 
-\AtBeginSubsection[]
-{
-  \frame<handout:0>
-  {
-    \frametitle{Outline}
-    \tableofcontents[sectionstyle=show/hide,subsectionstyle=show/shaded/hide]
-  }
-}
+%\AtBeginSubsection[]
+%{
+%  \frame<handout:0>
+%  {
+%    \frametitle{Outline}
+%    \tableofcontents[sectionstyle=show/hide,subsectionstyle=show/shaded/hide]
+%  }
+%}
 
 \newcommand<>{\highlighton}[1]{%
   \alt#2{\structure{#1}}{{#1}}
@@ -96,6 +96,6 @@
 \input{sections/ignitions}
 \input{sections/fragmentation}
 \input{sections/conclusion}
-\input{sections/examples}
+%\input{sections/examples}
 
 \end{document}
