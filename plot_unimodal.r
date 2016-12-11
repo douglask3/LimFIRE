@@ -5,6 +5,9 @@ source('cfg.r')
 
 figDir = 'figs/unimodal/'
 
+alphaFile = 'outputs/alpha2000-2014.nc'
+fireFile  = 'outputs/fire2000-2014.nc'
+
 p1 = 100; p2 = 10
 colMstr = "blue"; colFuel = "green"; colFire = "orange"
 
@@ -24,6 +27,15 @@ dev.off.advance <- function() {
         nplot <<- nplot + 1
     }
 }
+
+#################################################################
+## Open Data												   ##
+#################################################################
+alpha = stack(alphaFile)
+fire  = stack(fireFile )
+
+alpha = PolarConcentrationAndPhase(alpha)[[2]]
+fire  = mean(fire)*1200
 
 #################################################################
 ## Setup plot                                                  ##
@@ -71,8 +83,11 @@ mtext('Fuel', side = 1, cex = 1.33, line = 1.8)
 dev.off.advance()
    
 addLine(moisture, colMstr)
-addLine(fuel    , colFuel)
+text(0.9, 0.2, 'too wet', col = '#0000AA', cex = 1.5)
+dev.off.advance()
 
+addLine(fuel    , colFuel)
+text(0.1, 0.2, 'Not enough\nfuel', col = '#00AA00', cex = 1.5)
 dev.off.advance()
 
 ## Dry/wet Season
@@ -112,13 +127,6 @@ dev.off.advance()
 ## Seasonality and fire maps                                   ##
 #################################################################
 par(mar = rep(0,4))
-
-## Open Data
-alpha = stack(alphaFile)
-fire  = stack(fireFile )
-
-alpha = PolarConcentrationAndPhase(alpha)[[2]]
-fire  = mean(fire)*1200
 
 ## plot alpha
 plot_raster(alpha, quick = TRUE, lims = MstrLims, cols = MstrCols)
