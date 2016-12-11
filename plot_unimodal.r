@@ -8,7 +8,7 @@ figDir = 'figs/unimodal/'
 alphaFile = 'outputs/alpha2000-2014.nc'
 fireFile  = 'outputs/fire2000-2014.nc'
 
-p1 = 100; p2 = 10
+p1 = 150; p2 = 10
 colMstr = "blue"; colFuel = "green"; colFire = "orange"
 
 MstrCols = c('white','cyan', '#00221F')
@@ -62,8 +62,8 @@ plot.new()
 ## Lines
 x = seq(0, 1, by = 0.001)
 
-moisture = 1- LimFIRE.moisture(x, p1, p2)
-fuel     = 1- LimFIRE.fuel    (x, p1, p2)
+moisture = 1- LimFIRE.moisture(x, p1*1.5, p2)
+fuel     = 1- LimFIRE.fuel    (x, p1*0.5, p2)
 
 addLine <- function(y, col, lwd = 5, alpha = 0.5)
     lines(x, y, col = make.transparent(col, alpha), lwd = 5)
@@ -71,12 +71,12 @@ addLine <- function(y, col, lwd = 5, alpha = 0.5)
 ## Axis
 arrows( 0.0, -0.1,  1.0, -0.1, col = colMstr, lwd = 5, xpd = TRUE)
 mtext('Moisture', side = 1, cex = 1.33)
-dev.off.advance()
+#dev.off.advance()
 
 arrows(-0.1,  0.0, -0.1,  1.0, col = colFire, lwd = 5, xpd = TRUE)
 mtext('Fire', side = 2, cex = 1.33, line = -0.3)
 addLine(fuel * moisture, colFire)
-dev.off.advance()
+#dev.off.advance()
 
 arrows( 0.0, -0.2,  1.0, -0.2, col = colFuel, lwd = 5, xpd = TRUE)
 mtext('Fuel', side = 1, cex = 1.33, line = 1.8)
@@ -90,39 +90,9 @@ addLine(fuel    , colFuel)
 text(0.1, 0.2, 'Not enough\nfuel', col = '#00AA00', cex = 1.5)
 dev.off.advance()
 
-## Dry/wet Season
-pv = seq(1, 18, length.out = 180)
-pv = c((1/rev(pv)), pv)
-
-np = 0
-
-addLines <- function(i, alpha = 0.95) {
-    mstr = 1 - LimFIRE.moisture(x, p1*i, p2)
-    addLine(fuel * mstr, colFire, alpha = alpha)
-    addLine(mstr, colMstr, alpha = alpha)
-}
-
-addLines(pv[1], 0.5)
-addLine(fuel  , colFuel, alpha = 0.3)
+text(0.5, 0.2, 'Seasonal\nClimate', col = '#880088', cex = 1.5)
 dev.off.advance()
 
-plotQuater <- function(m) {
-    index  = seq(((m-1) *90) + 1, m *90)
-    sapply(pv[index], addLines)
-}
-
-plotQuater(1)
-dev.off.advance()
-
-plotQuater(2)
-dev.off.advance()
-
-plotQuater(3)
-dev.off.advance()
-
-plotQuater(4)
-addLines(tail(pv, 1), 0.5)
-dev.off.advance()
 #################################################################
 ## Seasonality and fire maps                                   ##
 #################################################################
@@ -132,7 +102,7 @@ par(mar = rep(0,4))
 plot_raster(alpha, quick = TRUE, lims = MstrLims, cols = MstrCols)
 standard_legend(cols = MstrCols, lims = MstrLims, dat = alpha)
 mtext('Seasonality of available moisture', line = -0.5)
-dev.off.advance()
+#dev.off.advance()
 
 ## plot fire
 plot_raster(fire, quick = TRUE)
