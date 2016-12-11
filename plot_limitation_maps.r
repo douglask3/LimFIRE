@@ -2,7 +2,10 @@ source('cfg.r')
 graphics.off()
 
 fig_fnames = c('figs/limitation_map.png',
-               'figs/limitation_map_no_supression.png')
+               'figs/limitation_map_light.png',
+               'figs/limitation_map_noColour.png',
+               'figs/limitation_map_no_supression.png',
+               'figs/limitation_map_no_supression_light.png')
 
 mod_files = paste(outputs_dir, '/LimFIRE_',
                  c('fire', 'fuel','moisture','ignitions','supression'),
@@ -93,7 +96,7 @@ fs_sn_mod[[2]][test] = 1
 ## Plotting                                                            ##
 #########################################################################
 
-calculate_weightedAverage <- function(xy, pmod, fire) {
+calculate_weightedAverage <- function(xy, pmod, fire, ...) {
     #pmod[[3]] = pmod[[3]]/4
     pmod = layer.apply(pmod, function(i) rasterFromXYZ(cbind(xy, i)))
     
@@ -108,10 +111,10 @@ calculate_weightedAverage <- function(xy, pmod, fire) {
 }
 
 ## Plot limitation and sesativity
-plot_limtations_and_sensativity_plots <- function(lm_pmod, sn_pmod, labs) {
+plot_limtations_and_sensativity_plots <- function(lm_pmod, sn_pmod, labs, alpha) {
     
     plot_pmod <- function(pmod, lab, ...) {
-        c(xy, pmod) := plot_4way_standard(pmod)
+        c(xy, pmod) := plot_4way_standard(pmod, alpha = alpha)
         pcs = calculate_weightedAverage(xy, pmod, ...)
         mtext(lab, line = -1, adj = 0.05)
         return(pcs)
@@ -156,8 +159,10 @@ plot_limtations_and_sensativity_plots <- function(lm_pmod, sn_pmod, labs) {
 }
 aa_lm_mod[[4]] =aa_lm_mod[[4]] * 0.85
 fs_lm_mod[[4]] =fs_lm_mod[[4]] * 0.85
-for (fig_fname in fig_fnames) { 
 
+
+
+plot_fig <- function(fig_fname, alpha) {
     ## Set up plotting window
     png(fig_fname, width = 9, height = 6 * 2.75/3 * 8/9, unit = 'in', res = 300)
     layout(rbind(1:2,3:4), heights = c(4, 4))
@@ -166,18 +171,22 @@ for (fig_fname in fig_fnames) {
 
     labs = c('a) Annual average controls on fire', 'b) Annual average sensitivity',
              'c) Controls on fire during the fire season', 'd) Sensitivity during the fire season')
-    pc_aa = plot_limtations_and_sensativity_plots(aa_lm_mod, aa_sn_mod, labs[1:2])
-    pc_fs = plot_limtations_and_sensativity_plots(fs_lm_mod, fs_sn_mod, labs[3:4])
+    pc_aa = plot_limtations_and_sensativity_plots(aa_lm_mod, aa_sn_mod, labs[1:2], alpha)
+    pc_fs = plot_limtations_and_sensativity_plots(fs_lm_mod, fs_sn_mod, labs[3:4], alpha)
 
     ## add footer
     par(fig = c(0, 1, 0, 1), mar = rep(0, 4))
     points(0.5, 0.5, col = 'white', cex = 0.05)
     dev.off.gitWatermark()
-    
-    
-    aa_lm_mod[[5]][] = 0
-    fs_lm_mod[[5]][] = 0
-    aa_sn_mod[[5]][] = 0
-    fs_sn_mod[[5]][] = 0
-    
-}
+}  
+
+plot_fig(fig_fnames[1], 0)
+plot_fig(fig_fnames[2], 0.3)
+plot_fig(fig_fnames[3], 1.0)
+
+aa_lm_mod[[5]][] = 0
+fs_lm_mod[[5]][] = 0
+aa_sn_mod[[5]][] = 0
+fs_sn_mod[[5]][] = 0
+plot_fig(fig_fnames[4],0)
+plot_fig(fig_fnames[5],0.3)

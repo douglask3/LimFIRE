@@ -1,6 +1,6 @@
 plot_4way <- function(x, y, A, B, C, D, x_range = c(-180, 180), y_range = c(-90, 
     90), limits = c(0.33, 0.5, 0.67), cols = c("FF", "CC", "99", 
-    "55", "11"), add_legend = TRUE, smooth_image = FALSE, smooth_factor = 5, 
+    "55", "11"), alpha = 0, add_legend = TRUE, smooth_image = FALSE, smooth_factor = 5, 
     add = FALSE, ...) 
 {
 
@@ -54,6 +54,7 @@ plot_4way <- function(x, y, A, B, C, D, x_range = c(-180, 180), y_range = c(-90,
     
     z = 1:length(Az)
     zcols = paste("#", cols[Az], cols[Bz], cols[Cz], sep = "")
+	zcols = make.transparent(zcols, alpha)
     
     #zcols = mapply(lighten, zcols    )
     #zcols = mapply( darken, zcols, Dz)
