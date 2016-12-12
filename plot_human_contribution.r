@@ -36,7 +36,7 @@ load_experiments <- function(file, remove)
     runIfNoFile(file, runLimFIREfromstandardIns, fireOnly = TRUE, remove = remove)
                  
 experiments = mapply(load_experiments, mod_file, remove)
-               
+
 #################################################################
 ## Setup plots                                                 ##
 #################################################################
@@ -69,12 +69,13 @@ mtext.burntArea <- function(txt = 'Burnt Area (%)')
 ## plot annual average                                         ##
 #################################################################
 addBeforeEx <- function(i, add)
-    paste(strsplit(filename(i[[1]]), '.nc')[[1]], add, '.nc', sep = '')
+    paste(strsplit(i, '.nc')[[1]], add, '.nc', sep = '')
 
-aaPlot <- function(i, j, p, L) {
+aaPlot <- function(i, f, j, p, L, s) {
     dev.set(p + 1)
-    fname = addBeforeEx(i, 'aaConvert')
-    i = aaConvert(i, quick = TRUE, fname = fname)
+    fname = addBeforeEx(f, 'aaConvert')
+    i = aaConvert(i, quick = TRUE, fname = fname) 
+	i = i * s
     mtextStandard(j)
     if (L) {
         standard_legend(dat = experiments[[1]])
@@ -83,8 +84,8 @@ aaPlot <- function(i, j, p, L) {
     return(i)
 }
 
-experiments = mapply(aaPlot, experiments, labs1,
-                     c(1, 2, 2, 3), c(T, F, T, T)) 
+experiments = mapply(aaPlot, experiments, names(experiments), labs1,
+                     c(1, 2, 2, 3), c(T, F, T, T), c(1,1,1,1)) 
 
 
 #################################################################
@@ -97,19 +98,23 @@ openMean <- function(fname_in, FUN = mean.stack, fname_ext = '-mean.nc', ...){
 }
 
 # monthly mean      
-param   = mean(read.csv(coefficants_file)[,'H'])           
+param   = mean(read.csv(coefficants_file)[,'H']) * 6         
 sources = lapply(drive_fname[c('pas', 'Lightn')], openMean)
 sources[[1]] = sources[[1]] * param
 
 ratio = sources[[1]]/sources[[2]]
 lims = c(1/4, 1/3, 1/2, 1/1.0001, 1.0001, 2, 3, 4)
-cols = c('#004400', 'green', 'white', 'purple', '#220022')
+cols = c('#003300', 'green', 'white', 'purple', '#220022')
 dev.set(4 + 1)
     plot_raster(ratio, lims, cols, quick = TRUE)
     mtextStandard('human:lightn igntions')
 
     standard_legend2(cols, lims, dat = experiments[[1]], 
-                     labelss = c('', '1/4', '1/3', '1/2', '       1', '', '2', '3', '4'))
+                     labelss = c('', '4 x', '3 x', '2 x', '       equal', '', '2 x', '3 x', '4 x'))
+	
+	
+    mtext('Human                   Natural', line = -4, cex = 0.8)
+	mtext('More natural igntions     More human igntions')
 #################################################################
 ## Plot Differce                                               ##
 #################################################################
