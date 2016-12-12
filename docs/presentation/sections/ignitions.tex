@@ -1,21 +1,20 @@
 \section{Ignitions}
 \pgfdeclareimage[width=1.0\paperwidth]{header-image}{header_images/red_lightn}
 
-\begin{frame}
+\begin{frame}<1-3>
     \frametitle{Igntions}
     \framesubtitle{Humans and Natural < Humans + Natural}
 
+	\begin{textblock*}{12cm}(0cm,1.5cm)
     \begin{tikzpicture}
         \node[anchor=south west,inner sep=0] (image) at (0,0) {
-            \includegraphics[width=11.0cm]{images/igntitions/IgntionInfoSourceAdding}
+            \includegraphics[width=12.0cm]{images/igntitions/IgntionInfoSourceAdding}
         };
 
-        \visible<-1> {\draw[white, fill = white] (5.5,5) -- (12.0,5) -- (12.0,8.4) -- (5.5,8.4) -- (5.5,5);}
-        \visible<-2> {\draw[white, fill = white] (0.0,0) -- ( 5.5,0) -- ( 5.5,4.0) -- (0.0,4.0) -- (0.0,0);}
-        \visible<-3> {\draw[white, fill = white] (5.5,4) -- (12.0,4) -- (12.0,0.0) -- (5.5,0.0) -- (5.5,4);}
-        \visible<-4> {\draw[white, fill = white] (0.0,0) -- (12.0,0) -- (12.0,1.0) -- (0.0,1.0) -- (0.0,0);}
+        \visible<-1> {\draw[white, fill = white] (6.0,4.4) -- (12.0,4.4) -- (12.0,7.4) -- (6.0,7.4) -- (6.0,4.4);}
+        \visible<-2> {\draw[white, fill = white] (0.0,1.0) -- (12.0,1.0) -- (12.0,4.5) -- (0.0,4.5) -- (0.0,1.0);}
     \end{tikzpicture}
-
+	\end{textblock*}
 \end{frame}
 
 \begin{frame}
