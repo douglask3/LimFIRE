@@ -2,7 +2,7 @@ source('cfg.r')
 graphics.off()
 
 fig_fnames = paste('figs/seasonal_casestudy',
-				 c('Africa', 'Asia'), '.png', sep = '')
+				 c('Africa', 'Asia1', 'Asia2'), '.png', sep = '')
 
 mod_files  = paste(outputs_dir, '/LimFIRE_',
                   c('fire', 'fuel','moisture','ignitions','supression'),
@@ -11,16 +11,21 @@ mod_files  = paste(outputs_dir, '/LimFIRE_',
 
 extents    = list(Africa = c(extent( 10, 45, 5, 12),
 		                     extent(-25, 45, -20, -10)),
-			      Asia   = c(extent(73,85,5, 25),
+			      Asia1  = c(extent(73,85,5, 25),
+			                 extent(146,151, -45, -26)),
+			      Asia2  = c(extent(73,85,5, 25),
 			                 extent(146,151, -45, -26)))
 							 
 limIndexs  =  list(2:4,
-                   2:5)
+                   2:5,
+				   2:5)
 
+limWithout =  list(NULL, NULL, 5)
+				   
 lm_mod = runIfNoFile(mod_files, runLimFIREfromstandardIns)
 
 
-plotExtent <- function(extent, limIndex) {
+plotExtent <- function(extent, limIndex, limWithout) {
 	lm_crp = lapply(lm_mod, crop, extent)
 
 	TSmake <- function(i) apply(values(i), 2, mean, na.rm = TRUE)
@@ -49,20 +54,26 @@ plotExtent <- function(extent, limIndex) {
 		axis(2)
 
 		sn_ts = matrix2list(sn_ts)
-		cols  = c('orange','green', 'blue', 'red', 'black')[c(1, limIndex)]
-		mapply(function(y, col) lines(1:12, y, col = col, lwd = 2.5), sn_ts, cols)
+		mapply(function(y, col, lty) lines(1:12, y, col = col, lwd = 2.5, lty = lty), sn_ts, cols, ltys)
 	}
 
 	matrix2list <- function(x) split(x, rep(1:ncol(x), each = nrow(x)))
 
 	sn_ts[, 1] = 1.0
 	sn_ts = sn_ts[, c(1, limIndex)]
-	for (i in 1:ncol(sn_ts)) sn_ts[, 1] = sn_ts[, 1] * (1-sn_ts[,i])
+	for (i in 2:ncol(sn_ts)) sn_ts[, 1] = sn_ts[, 1] * (1-sn_ts[,i])
 	
-	#sn_ts[, 1] = (1-sn_ts[,2]) * (1-sn_ts[,3]) * (1-sn_ts[,4])#sn_ts[, 1] *24#/ max(sn_ts[,1])
+	if (!is.null(limWithout)) {
+		fw = sn_ts[, 1]
+		for (i in limWithout) fw = fw / (1-sn_ts[,i])
+		sn_ts = cbind(sn_ts, fw)
+		limIndex = c(limIndex, max(limIndex) + 1)
+	}
+	
+	cols  = c('orange','green', 'blue', 'red', 'black', 'orange')[c(1, limIndex)]
+	ltys  = c(1       , 1     , 1     , 1    , 1      , 2       )[c(1, limIndex)]
 	sn_ts[, 4] = sn_ts[, 4] / 2
 
-	#sn_ts[, -1] = t(apply(sn_ts[,-1], 1, function(i) i/sum(i)))
 	plotstuff()
 }
 
@@ -74,4 +85,4 @@ plotExtents <- function(fig_fname, extents, ...) {
 	dev.off.gitWatermark()
 }
 
-mapply(plotExtents, fig_fnames, extents, limIndexs)
+mapply(plotExtents, fig_fnames, extents, limIndexs, limWithout)
