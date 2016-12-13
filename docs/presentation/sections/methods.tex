@@ -130,19 +130,19 @@
 \end{frame}
 
 \def \controlsSide#1 {
-    \begin{textblock*}{11cm}(0.5cm,1.5cm)
+    \begin{textblock*}{11cm}(0cm,1.5cm)
         \begin{tikzpicture}
             \node[anchor=south west,inner sep=0] (image) at (0,0) {
-                \includegraphics[width=11.0cm]{images/#1}
+                \includegraphics[width=13.0cm]{images/#1}
             };
-            \visible<-2> {\draw[white, fill = white] (5.5,3.0) -- (12.0,3.0) -- (12.0,5.9) -- (5.5,5.9) -- (5.5,3.0);}
-            \visible<-1> {\draw[white, fill = white] (0.0,0.0) -- ( 5.5,0.0) -- ( 5.5,3.0) -- (0.0,3.0) -- (0.0,0.0);}
-            \visible<-2> {\draw[white, fill = white] (5.5,3.0) -- (12.0,3.0) -- (12.0,0.0) -- (5.5,0.0) -- (5.5,3.0);}
+            \visible<-2> {\draw[white, fill = white] (6.5,3.0) -- (13.0,3.0) -- (13.0,7) -- (6.5,7) -- (6.5,3.0);}
+            \visible<-1> {\draw[white, fill = white] (0.0,0.0) -- ( 6.5,0.0) -- ( 6.5,3.5) -- (0.0,3.5) -- (0.0,0.0);}
+            \visible<-2> {\draw[white, fill = white] (6.0,3.0) -- (13.0,3.0) -- (13.0,0.0) -- (6.0,0.0) -- (6.0,3.0);}
             %\visible<-4> {\draw[white, fill = white] (0.0,0) -- (12.0,0) -- (12.0,1.0) -- (0.0,1.0) -- (0.0,0);}
         \end{tikzpicture}
     \end{textblock*}
-    \begin{textblock*}{11cm}(2.0cm, 6.5cm)
-        \includegraphics[width=6.0cm]{images/#1_legend}
+    \begin{textblock*}{11cm}(2.0cm, 7.5cm)
+        \includegraphics[width=5.0cm]{images/#1_legend}
     \end{textblock*}
 }
 
