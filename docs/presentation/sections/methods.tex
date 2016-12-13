@@ -22,7 +22,7 @@
     \inputMap{8.33cm}{6cm}{#1}{#2}
 }
 
-\begin{frame}<1-5>[label=framework]
+\begin{frame}<2-5>[label=framework]
     \frametitle{Fire limitation framework}
     \framesubtitle{Spatial and Temporal controls on fire frequency}
 
@@ -44,7 +44,7 @@
     
 	     \visible<3>{
 	    	\node (note) at (0,1.5em) {\Huge Fuel Load};
-	    	\node (note) at (0,0) { \large NPP};
+	    	\node (note) at (0,0) {\large Net Primary Production};
 	    }
 	    
 	   % \visible<4->{
@@ -122,7 +122,14 @@
     }
 
     \only<5> {
-        \inputMapA{inputs_mean-fire}{Global Fire Emission Database (GFED)}
+    	\begin{backgroundblock}{4.2cm}{1.33cm}
+    		\begin{tikzpicture}
+		         \node[anchor=south west,inner sep=0] (image) at (0,0) {
+		        	\includegraphics[width=7.0cm]{images/inputs/inputs_mean-fire}
+		        };
+		        \node[align=center, font = {\small}] at (2.95cm, 4.2cm) {Global Fire Emission Database 4s (GFED)};
+	        \end{tikzpicture}
+	    \end{backgroundblock}
         %?% Make bigger
     }
     %?% Stuff to include:
