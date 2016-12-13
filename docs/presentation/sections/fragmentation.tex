@@ -1,12 +1,12 @@
 \section{Fragmentation}
 
 \pgfdeclareimage[width=1.0\paperwidth]{header-image}{header_images/helicopter}
-\againframe<5->{framework}
+%\againframe<5->{framework}
 
 
 \begin{frame}<2>[label=controlMaps]
-    \frametitle{So Humans have no impact of fire frequency?}
-    \framesubtitle{Land use}
+    \frametitle{So Humans have no impact on fire?}
+    \framesubtitle{Suppression}
     \controlsSide{limitation_map}
 \end{frame}
 
@@ -14,13 +14,24 @@
 \begin{frame}
     \frametitle{So Humans have no impact of fire?}
     \framesubtitle{Fragmentation}
-    \begin{textblock*}{11cm}(0.5cm,1.5cm)
+    \begin{textblock*}{11cm}(0cm,1.5cm)
     \visible<1->{
-        \includegraphics[trim={10.3cm 2cm 0cm 8.44cm},clip,width=6cm]{images/igntitions/IgntionInfoSourceAdding}
+    	\begin{tikzpicture}
+    	\node[anchor=north,inner sep=0] (image) at (0,0) {
+    		\includegraphics[trim={5.1cm 2cm 5.1cm 6.2cm},clip,width=6.2cm]{images/igntitions/IgntionInfoSourceAdding}
+	    };
+        \node[anchor=south,align=center] at (0, -0.2) {Human Ignitions};
+        \end{tikzpicture}
     }
-
+	%trim = {l b r t}
     \visible<2->{
-        \includegraphics[trim={0 0 0 8cm},clip,width=6cm]{images/igntitions/IgntionInfoNoHumans}
+    	\begin{tikzpicture}
+    	\node[anchor=north,inner sep=0] (image) at (0,0) {
+    		\includegraphics[trim={0 0 0 8cm},clip,width=6.2cm]{images/igntitions/IgntionInfoNoHumans}
+    	};
+    	\node[anchor=south,align=center] at (0, -0.2) {Overall Human Impact};
+    	\end{tikzpicture}
+        
     }
     \end{textblock*}
     \begin{textblock*}{11cm}(6.4cm,1.3cm)
