@@ -16,6 +16,8 @@ sourceAllLibs('src/libs')
 sourceAllLibs('src/LimFIRE')
 sourceAllLibs('../rasterextrafuns/rasterPlotFunctions/R/')
 
+clearWaterMark = TRUE
+
 years       = 2000:2014
 clim_layers =  115:282
 
