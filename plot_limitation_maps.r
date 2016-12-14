@@ -116,7 +116,7 @@ plot_limtations_and_sensativity_plots <- function(lm_pmod, sn_pmod, labs, alpha)
     plot_pmod <- function(pmod, lab, ...) {
         c(xy, pmod) := plot_4way_standard(pmod, alpha = alpha)
         pcs = calculate_weightedAverage(xy, pmod, ...)
-        mtext(lab, line = -1, adj = 0.05)
+        mtext(lab, line = -1, cex = 1.3)
         return(pcs)
     }
     
@@ -169,8 +169,8 @@ plot_fig <- function(fig_fname, alpha) {
 
     par(mar = c(0,0,0,0), oma = c(0,0,1,0))
 
-    labs = c('a) Annual average controls on fire', 'b) Annual average sensitivity',
-             'c) Controls on fire during the fire season', 'd) Sensitivity during the fire season')
+    labs = c('Annual average controls on fire', 'Annual average sensitivity',
+             'Controls on fire during the fire season', 'Sensitivity during the fire season')
     pc_aa = plot_limtations_and_sensativity_plots(aa_lm_mod, aa_sn_mod, labs[1:2], alpha)
     pc_fs = plot_limtations_and_sensativity_plots(fs_lm_mod, fs_sn_mod, labs[3:4], alpha)
 
