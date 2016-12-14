@@ -69,11 +69,12 @@ plot_impact <- function(mod_filei, xVar, lab, xUnit, noneLand = FALSE,
     ## plot
     points(xVar, fImpact * 100, col =  make.transparent('black', 0.98), pch = 16, ...)
     lines (x, y * 100, lwd = 2, col = 'red')
-    mtext (lab, side = 3, line = -1, cex = 2)
+    mtext (lab, side = 3, line = -1.2, cex = 2)
 }
 
 png(fig_fname, width = 9, height = 12, unit = 'in', res = 300)
-par(mfrow = c(2,1), cex = 1.5)
+layout(2:1)
+par(cex = 1.5, mar = c(3, 4.1, 2, 1))#
 
 mapply(plot_impact, mod_file[-1], xVars, labs, xUnits, c(FALSE, TRUE), c('', 'x'), cex = c(0.67, 0.33))
 
