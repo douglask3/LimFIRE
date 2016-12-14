@@ -35,7 +35,7 @@
         \visible<2>{
             \node (note) at (0, 1.5em) {\Huge Moisture Content};
             \node (note) at (0, 0.0em) {\large Live Fuel};
-            \node (note) at (0,-1.5em) {\large Atomsphere};
+            \node (note) at (0,-1.5em) {\large Atmosphere};
         }
 
         \visible<3->{
@@ -99,14 +99,14 @@
         \visible<7->{
             \begin{tikzpicture}
                 \node[rotate = 25 ] (note) at (3.335, 2.165) {\Huge Human Suppression};
-                    \node[rotate = 25 ] (note) at (3.335, 1.165) {\Large Cropland, Population Density};
+                    \node[rotate = 25 ] (note) at (3.335, 1.165) {\Large Crop land, Population Density};
                 \draw[ultra thick, ->] (0, 0) -- (6.67, 3.33);
             \end{tikzpicture}
         }
     \end{textblock*}
 
 	\only<2> {
-		\inputMapA{inputs_mean-alpha}{STASH $\frac{Actual}{Potenital}$ Evapotranspiration}
+		\inputMapA{inputs_mean-alpha}{STASH $\frac{Actual}{Potential}$ Evapotranspiration}
 		\inputMapB{inputs_mean-emc}{Equilibrium Fuel Moisture Content}
 	}
 
