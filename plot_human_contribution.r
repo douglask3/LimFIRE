@@ -52,7 +52,7 @@ openPlot <- function(fname, width, height, ...) {
 openPlot('burntArea', 6, 4, rbind(1,2), heights = c(1, 0.3))
 openPlot('SourceAdding', 8 , 5, rbind(c(1,1,2,2), c(5,3,3,5), rep(4,4)),
          heights = c(1, 1, 0.3))
-openPlot('NoHumans    ', 5, 6, rbind(1, 2, 3, 4),
+openPlot('NoHumans', 5, 6, rbind(1, 2, 3, 4),
          heights = c(1, 0.3, 1, 0.3))
 openPlot('sourceImportance', 6, 4, rbind(1,2), heights = c(1, 0.3))
 
@@ -114,8 +114,8 @@ dev.set(4 + 1)
                      labelss = c('', '4 x', '3 x', '2 x', '       equal', '', '2 x', '3 x', '4 x'))
 	
 	
-    mtext('Human                   Natural', line = -4, cex = 0.8)
-	mtext('More natural igntions     More human igntions')
+    mtext('Human                                   Natural', line = -4.25, adj = 0.59)
+	mtext('More natural igntions     More human igntions', cex = 1.2, adj = 0.65)
 #################################################################
 ## Plot Differce                                               ##
 #################################################################
@@ -123,7 +123,7 @@ diffPlot <- function(i, j, p, L, Lf, Lc, Ll) {
     dev.set(p + 1)
     i = experiments[[1]] - i
     plot_raster(i, diff_lims2, diff_cols2, quick = TRUE)
-    mtextStandard(j)
+    #mtextStandard(j)
     if (L) {
         Lf(Lc, Ll, dat = experiments[[1]])
         mtext.burntArea('Change in burnt area (%)')
