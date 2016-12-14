@@ -54,7 +54,9 @@ plot_index <- function(pltIndex, fno) {
 	axis(2)
 	index = round(seq(1, length(cells), length.out = 5))
 	axis(1, at = index, labels = rev(coords[2, index]))
-	mtext.cex('longitude', side = 1, line = 2)
+	mtext('longitude', side = 1, line = 2)
+	mtext('limitation', side = 2, line = 2)
+	mtext('limitation', side = 2, line = 2)
 
 	aa_mod[-1] = lapply(aa_mod[-1], scale2zeropnt)
 	aa_mod[[2]][tail(cells, 5)] = 1
