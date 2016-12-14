@@ -85,7 +85,7 @@
     \end{textblock*}
 
     \begin{textblock*}{5cm}(10.1cm,2cm)
-        \visible<8->{
+        \visible<7->{
             \begin{tikzpicture}[scale=0.33]
                 \fill[green] (90:4) -- (210:4) -- (-30:4) -- cycle;
                 \fill[blue,path fading=west] (90:4) -- (210:4) -- (-30:4) -- cycle;
@@ -120,6 +120,11 @@
         \inputMapB{inputs_mean-popdens}{HYDE Popdens}
         \inputMapC{inputs_mean-pas}{HYDE Pasture}
     }
+
+	\only<7> {
+		\inputMap{4.7cm}{1.33cm}{inputs_mean-popdens}{HYDE Popdens}
+		\inputMap{8.33cm}{6cm}{inputs_mean-crop}{HYDE crop}
+	}
 
     \only<5> {
     	\begin{backgroundblock}{4.2cm}{1.33cm}
