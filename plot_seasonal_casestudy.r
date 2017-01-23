@@ -16,6 +16,10 @@ extents    = list(Africa = c(extent( 10, 45, 5, 12),
 			      Asia2  = c(extent(73,85,5, 25),
 			                 extent(146,151, -45, -26)))
 							 
+areaNames  = list(c('North', 'South' ),
+                  c('India', 'SE Aus'),
+				  c('India', 'SE Aus'))
+							  
 limIndexs  =  list(2:4,
                    2:5,
 				   2:5)
@@ -25,7 +29,8 @@ limWithout =  list(NULL, NULL, 5)
 lm_mod = runIfNoFile(mod_files, runLimFIREfromstandardIns)
 
 
-plotExtent <- function(extent, limIndex, limWithout) {
+plotExtent <- function(extent, nms, limIndex, limWithout) {
+	
 	lm_crp = lapply(lm_mod, crop, extent)
 
 	TSmake <- function(i) apply(values(i), 2, mean, na.rm = TRUE)
@@ -75,14 +80,16 @@ plotExtent <- function(extent, limIndex, limWithout) {
 	sn_ts[, 4] = sn_ts[, 4] / 2
 
 	plotstuff()
+	mtext(nms, line = -1.8, adj = 0.65, cex = 1.2)
+	mtext(side = 2, 'limitation / burnt area', line = 2)
 }
 
-plotExtents <- function(fig_fname, extents, ...) {
+plotExtents <- function(fig_fname, extents, areaNames, ...) {
 
-	png(fig_fname, height = 6, width = 4, res = 300, unit = 'in')
-		par(mfrow = c(2,1), mar = c(1, 2, 1, 1), oma = c(1,0,0,0))
-		lapply(extents,plotExtent, ...)
+	png(fig_fname, height = 6, width = 4.5, res = 300, unit = 'in')
+		par(mfrow = c(2,1), mar = c(1, 4, 1, 1), oma = c(1,0,0,0))
+		mapply(plotExtent, extents, areaNames,  MoreArgs= list(...))
 	dev.off.gitWatermark()
 }
 
-mapply(plotExtents, fig_fnames, extents, limIndexs, limWithout)
+mapply(plotExtents, fig_fnames, extents, areaNames, limIndexs, limWithout)

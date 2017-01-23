@@ -24,7 +24,7 @@ cont_cols2 = c("#FFFFFF", "#00EEFF", "#0022AA", "#000033")
 
 experiments =    c('fullModel' , 'HumanIgntionsOnly'     , 'LightningIngitionsOnly'  , 'noHumanss'                )
 remove      = list(NULL        , "Lightn"                , "pas"                     , c("pas", "crop", "popdens"))
-labs1       =    c('Burnt Area', 'Human ignitions only'  , 'Lightning igntions only' , 'No Humans') 
+labs1       =    c('Burnt Area', 'Human ignitions only'  , 'Lightning ignitions only' , 'No Humans') 
 labs2       =    c(              '+ Lightning ignitions' , 'Human ontop of Lightning', 'Human Impact') 
  
 #################################################################
@@ -123,10 +123,10 @@ diffPlot <- function(i, j, p, L, Lf, Lc, Ll) {
     dev.set(p + 1)
     i = experiments[[1]] - i
     plot_raster(i, diff_lims2, diff_cols2, quick = TRUE)
-    #mtextStandard(j)
+    mtextStandard(j)
     if (L) {
         Lf(Lc, Ll, dat = experiments[[1]])
-        mtext.burntArea('Change in burnt area (%)')
+        mtext.burntArea('burnt area (%)')
     }
     return(i)
 }
