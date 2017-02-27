@@ -10,6 +10,7 @@ CGlightn <- function(L) {
     F = 0.0408 * F
     F[F > 1] = 1
     F = L * F
+	F[L == 0] = 0.0
     return(F)
 }
 
