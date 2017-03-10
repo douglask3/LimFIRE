@@ -2,35 +2,41 @@
 
 \pgfdeclareimage[width=1.0\paperwidth]{header-image}{header_images/post_fire}
 
-\begin{frame}
+\begin{frame}<1-4>
     \frametitle{Humans reduce burnt area}
 	\begin{itemize}
 		\large{
-			\item Ignitions generally do not limit fire frequency
-			\item Suppression efforts and land use have much bigger impact on fire
+			\item Ignitions generally do not limit burnt area
+			\item Suppression efforts and land use have much bigger impact
 		}
 	\end{itemize}
 	\visible<2->{
 		\huge{BUT...}
 		\begin{itemize}
 			\large{
-				\item Human fires are a significant source, particularly pasture areas
-				\item This would likely affect other aspects of fire regime (fire size, intensity etc)
+				\item Human fires are a significant ignition source, particularly in pasture areas
+				\item And would likely effect other aspects of fire regime (fire size, intensity etc)
 			}
 		\end{itemize}
 	}
 \end{frame}
 
-%\begin{frame}
-%	\frametitle{Ignitions}
-%	\framesubtitle{Which is more important}
-	%\node[anchor=south west,inner sep=0] (image) at (0,0) {
-%	\includegraphics[width=11.0cm]{images/igntitions/IgntionInfosourceImportance}
+
+\addtocounter{framenumber}{-1}
+\begin{frame}
+	\frametitle{Ignitions}
+	\framesubtitle{Which is more important}
 	
-%\end{frame}
+	\includegraphics[width=11.0cm]{images/igntitions/IgntionInfosourceImportance}
+\end{frame}
 
 
 %\begin{frame}
 %    \frametitle{Acknowledgments}
 %    \framesubtitle{Questions..?}
 %\end{frame}
+\addtocounter{framenumber}{-1}
+\begin{frame}<5>
+    \frametitle{Sensitivity to Controls}
+    \controlsSide{limitation_map}
+\end{frame}
