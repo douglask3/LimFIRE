@@ -43,6 +43,8 @@ outs = lapply(1:(12*nyears), make_emc)
 
 outRaster <- function(nme) {
 	out = layer.apply(outs, function(i) i[[nme]])
+	print(drive_fname[nme])
 	writeRaster.gitInfo(out, drive_fname[nme], overwrite = TRUE)#
 }
 
+lapply(c('emc', 'Hr', 'Tas', 'Wet', 'Prc'), outRaster)
