@@ -36,7 +36,9 @@ make_emc <- function(i) {
     return(list(emc = emc, Hr = Hr, Tas = Tas, Wet = Wet, Prc = Prc))
 }
 
-
+################################################################################
+## run and output                                                             ##
+################################################################################
 outs = lapply(1:(12*nyears), make_emc)
 
 outRaster <- function(nme) {
@@ -44,9 +46,3 @@ outRaster <- function(nme) {
 	writeRaster.gitInfo(out, drive_fname[nme], overwrite = TRUE)#
 }
 
-################################################################################
-## run and output                                                             ##
-################################################################################
-
-
-writeRaster.gitInfo(emc, drive_fname['emc'], overwrite = TRUE)
