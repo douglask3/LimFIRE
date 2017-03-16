@@ -26,6 +26,10 @@ coefficants_file = 'outputs/coefficants'
 
 drive_fname = c(alpha   = 'alpha',
                 emc     = 'emc',
+				Hr      = 'Hr',
+				Tas     = 'Tas',
+				Wet     = 'Wet', 
+				Prc     = 'Prc',
                 npp     = 'NPP',
                 crop    = 'cropland',
                 pas     = 'pasture',
