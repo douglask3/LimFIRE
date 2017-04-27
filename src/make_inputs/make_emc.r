@@ -33,7 +33,7 @@ make_emc <- function(i) {
     
     emc = emc * (1-Wet) + Wet
         
-    return(list(emc = emc, Hr = Hr, Tas = Tas, Wet = Wet, Prc = Prc))
+    return(list(emc = emc, Vap = Vap, Hr = Hr, Tas = Tas, Wet = Wet, Prc = Prc))
 }
 
 ################################################################################
@@ -47,4 +47,4 @@ outRaster <- function(nme) {
 	writeRaster.gitInfo(out, drive_fname[nme], overwrite = TRUE)#
 }
 
-lapply(c('emc', 'Hr', 'Tas', 'Wet', 'Prc'), outRaster)
+lapply(c('emc', 'Vap', 'Hr', 'Tas', 'Wet', 'Prc'), outRaster)
