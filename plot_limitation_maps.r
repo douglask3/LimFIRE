@@ -105,7 +105,7 @@ fs_sn_mod = cal_fire_season_average(sn_mod_files, sn_mod)
 plot_limitations_1by1 <- function(pmod, fname) {
     mask = sum(layer.apply(pmod[-1], is.na)) > 0
     lim = seq(0, 0.9, by = 0.1)
-    col = c('white', 'grey', 'black')
+    col = c('white', 'black')
         
     plot_limitations_1by1 <- function(mod, name) {
         mod[mask] = NaN
