@@ -1,4 +1,4 @@
-f1 <- function(x, x0, k, force_zero = TRUE) {
+f1 <- function(x, x0, k, force_zero = FALSE) {
     f1A <- function(xi) 1/(1 + exp(-k * (xi - x0)))
     
     f1 = f1A(x)
