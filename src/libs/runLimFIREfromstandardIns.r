@@ -13,11 +13,12 @@ runLimFIREfromstandardIns <- function(fireOnly = FALSE, remove = NULL,
                       Obs[["alpha" ]][[i]], Obs[["emc"    ]][[i]], 
                       Obs[["Lightn"]][[i]], Obs[["pas"    ]][[i]],
                       Obs[["crop"  ]][[i]], Obs[["popdens"]][[i]],
+					  param('maxFire'),
                                   param(    'fuel_x0'),  param('fuel_k'    ),  
                       param('cM'), param('moisture_x0'),  -param('moisture_k'),  
                       param('cP'),
                       param('cD1'),
-                                  param(   'ignitions_x0'),  param('ignitions_k'   ),  
+                                  param(   'igntions_x0'),  param('igntions_k'   ),  
                       param('cD2'), param(    'suppression_x0'),  -param('suppression_k'), fireOnly, ...)
                       
         for (i in 2:length(out)) out[[i]] = 1 - out[[i]]
