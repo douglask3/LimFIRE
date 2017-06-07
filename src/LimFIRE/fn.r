@@ -12,12 +12,11 @@ f1 <- function(x, x0, k, force_zero = FALSE) {
 }
 
 
-df1 <- function(x, a, b, d = 0.1) {       
-    df1_fun <- function(i) f1(i - d, a, b) - f1(i + d, a, b)
+df1 <- function(x, x0, k, d = 0.1) {       
+    df1_fun <- function(i) f1(i - d, x0, k) - f1(i + d, x0, k)
     
-    
-    xhalf =  -(1/b) * log(1/a)
-    dhalf = df1_fun(xhalf)
+    #xhalf =  -(1/k) * log(1/x0)
+    dhalf = df1_fun(x0)
     
     dx    = df1_fun(x)
     
