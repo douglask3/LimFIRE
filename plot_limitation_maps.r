@@ -4,7 +4,7 @@
 source('cfg.r')
 graphics.off()
 
-grab_cache = TRUE
+grab_cache = FALSE
 
 fig_fname       = 'figs/limitation_map.png'
 fig_fname_indiv = 'figs/ind_limiataions'
@@ -31,8 +31,8 @@ runLimFIRE <- function(fname, ...){
     return(runIfNoFile(fname, runLimFIREfromstandardIns, test = grab_cache, ...))
 }
 
-lm_mod = runLimFIRE(lm_mod_files)
 sn_mod = runLimFIRE(sn_mod_files, sensitivity = TRUE)
+lm_mod = runLimFIRE(lm_mod_files)
 
 #########################################################################
 ## Annual Average                                                      ##
