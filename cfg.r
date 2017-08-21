@@ -36,8 +36,10 @@ drive_fname = c(alpha   = 'alpha',
                 urban   = 'urban_area',
                 popdens = 'population_density',
                 Lightn  = 'lightning_ignitions',
-				fire    = 'fire'
-                )
+				fire    = 'fire',
+                tree    = 'treecover',
+				grass   = 'nontree',
+				bare    = 'bareground')
 
 
 nms = names(drive_fname)
