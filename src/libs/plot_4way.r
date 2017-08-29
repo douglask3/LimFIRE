@@ -1,5 +1,5 @@
 plot_4way <- function(x, y, A, B, C, D, x_range = c(-180, 180), y_range = c(-90, 
-    90), limits = c(0.25, 0.5, 0.75), cols = c("FF", "CC", "99", 
+    90), limits = c(0.33, 0.5, 0.67), cols = c("FF", "CC", "99", 
     "55", "11"), add_legend = TRUE, smooth_image = FALSE, smooth_factor = 5, 
     add = FALSE, ...) 
 {
@@ -25,12 +25,12 @@ plot_4way <- function(x, y, A, B, C, D, x_range = c(-180, 180), y_range = c(-90,
 
     ncols = length(cols)
 
-    mag = A + B + C
+    mag = A^2 + B^2 + C^2
     
-    A = A/mag
-    B = B/mag
-    C = C/mag
-    D = D/mag
+    A = sqrt(A^2/mag)
+    B = sqrt(B^2/mag)
+    C = sqrt(C^2/mag)
+    D = sqrt(D^2/mag)
     
     A[mag == 0] = 0.33
     B[mag == 0] = 0.33
