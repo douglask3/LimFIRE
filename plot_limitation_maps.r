@@ -31,8 +31,9 @@ runLimFIRE <- function(fname, ...){
     return(runIfNoFile(fname, runLimFIREfromstandardIns, test = grab_cache, ...))
 }
 
+
+lm_mod = runLimFIRE(lm_mod_files, normalise = TRUE)
 sn_mod = runLimFIRE(sn_mod_files, sensitivity = TRUE)
-lm_mod = runLimFIRE(lm_mod_files)
 
 #########################################################################
 ## Annual Average                                                      ##
@@ -130,7 +131,7 @@ plot_limitations_1by1(fs_lm_mod, 'fs')
 calculate_weightedAverage <- function(xy, pmod) {
     pmod = layer.apply(pmod, function(i) rasterFromXYZ(cbind(xy, i)))
     pmod = pmod / sum(pmod)
-    pmod = layer.apply(pmod, function(i) sum.raster(i * area(i), na.rm = TRUE))
+    pmod = layer.apply(pmod, function(i) sum.raster(i * raster::area(i), na.rm = TRUE))
     pmod = unlist(pmod)
     pmod = round(100 * pmod / sum(pmod))
     

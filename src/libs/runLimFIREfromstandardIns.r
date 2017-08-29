@@ -3,17 +3,19 @@ runLimFIREfromstandardIns <- function(fireOnly = FALSE, remove = NULL,
     
     
     Obs = lapply(drive_fname, stack)
+	test = is.na(Obs[['npp']][[1]]) & !is.na(Obs[['alpha']][[1]])
+	Obs[['npp']][test] = 0.0
     if (!is.null(remove)) for (i in remove) Obs[[i]][] = 0
     mnthIndex = 1:12#nlayers(Obs[[1]])
     
     runMonthly <- function(i) {
         cat("simulating fire for month ", i, "\n")
         
-        out = LimFIRE(log(Obs[["npp"   ]][[i]]),
+        out = LimFIRE(Obs[["npp"   ]][[i]],
                       Obs[["alpha" ]][[i]], Obs[["emc"    ]][[i]], 
                       Obs[["Lightn"]][[i]], Obs[["pas"    ]][[i]],
                       Obs[["crop"  ]][[i]], Obs[["popdens"]][[i]],
-					  param('maxFire'),
+					  1.0,
                                   param(    'fuel_x0'),  param('fuel_k'    ),  
                       param('cM'), param('moisture_x0'),  -param('moisture_k'),  
                       param('cP'),
