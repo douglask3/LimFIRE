@@ -1,7 +1,7 @@
 add_e <- function (e, limits_error, cols_e, invert_e = TRUE, polygons = TRUE, 
-    ePatterThick = 4, ePatternRes = 0.7) 
+    ePatternThick = 4, ePatternRes = 0.7) 
 {
-    browser()
+    
     cols_e = make.transparent("grey", 1 - 1/(length(limits_error) + 
         1))
     if (polygons) 
@@ -33,5 +33,5 @@ add_e <- function (e, limits_error, cols_e, invert_e = TRUE, polygons = TRUE,
         9, 11)[i], c(1, 1, 1.3, 1.3, 1.3, 1, 1)[i], c("Circle", 
         "Circle", "forward-diagonal", "backward-diagonal", "horizontal", 
         "vertical")[i], c(0.1, 0.67, 0.5, 0.5, 0.5, 0.5)[i] * 
-        ePatterThick, c(16, 8, 4, 4, 4, 4)[i] * ePatternRes)
+        ePatternThick, c(16, 8, 4, 4, 4, 4)[i] * ePatternRes)
 }
