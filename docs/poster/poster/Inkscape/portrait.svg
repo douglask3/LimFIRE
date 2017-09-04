@@ -29,11 +29,11 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="0.0875"
-     inkscape:cx="2139.3336"
-     inkscape:cy="1639.2919"
+     inkscape:cx="1955.4026"
+     inkscape:cy="826.62901"
      inkscape:document-units="px"
-     inkscape:current-layer="layer5"
-     showgrid="true"
+     inkscape:current-layer="layer2"
+     showgrid="false"
      units="cm"
      inkscape:window-width="1248"
      inkscape:window-height="696"
@@ -149,7 +149,6 @@
   </g>
   <g
      style="display:inline"
-     sodipodi:insensitive="true"
      transform="translate(0,1233.071)"
      inkscape:label="Background"
      id="layer2"
@@ -208,21 +207,7 @@
          style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:118.75px;line-height:1.25;font-family:Arial;-inkscape-font-specification:Arial"
          id="flowPara3378">The impact of human fire</flowPara><flowPara
          id="flowPara60"
-         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:118.75px;line-height:1.25;font-family:Arial;-inkscape-font-specification:Arial">starts and land use on burnt area</flowPara></flowRoot>    <rect
-       y="2770.5146"
-       x="60.631176"
-       height="176.12512"
-       width="2241.0496"
-       id="rect3354-8"
-       style="fill:#a2d88c;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:0.51191384px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
-    <rect
-       y="2785.9209"
-       x="1191.8007"
-       height="149.60771"
-       width="1102.4196"
-       id="rect3425"
-       style="fill:#ffffff" />
-    <flowRoot
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:118.75px;line-height:1.25;font-family:Arial;-inkscape-font-specification:Arial">starts and land use on burnt area</flowPara></flowRoot>    <flowRoot
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:0.01%;font-family:Arial;-inkscape-font-specification:Arial;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        id="flowRoot3427"
        xml:space="preserve"><flowRegion
@@ -259,21 +244,7 @@
            width="1644.5283"
            id="rect3449" /></flowRegion><flowPara
          style="font-size:40px;line-height:1.25"
-         id="flowPara3451"> </flowPara></flowRoot>    <flowRoot
-       transform="translate(1111.8674,0.135087)"
-       style="font-style:normal;font-weight:normal;line-height:0.01%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       id="flowRoot3435-4"
-       xml:space="preserve"><flowRegion
-         id="flowRegion3437-3"><rect
-           y="2798.0938"
-           x="96.974648"
-           height="125.25892"
-           width="1624.3253"
-           id="rect3439-6" /></flowRegion><flowPara
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:50px;line-height:1.25;font-family:Arial;-inkscape-font-specification:Arial"
-         id="flowPara3441-7">BECUASE: ADD YOUR BECAUSE ANSWER</flowPara><flowPara
-         id="flowPara3443-1"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:50px;line-height:1.25;font-family:Arial;-inkscape-font-specification:Arial">REDUCE/ENLOARGE FONT SIZE TO FIT</flowPara></flowRoot>    <image
+         id="flowPara3451"> </flowPara></flowRoot>    <image
        sodipodi:absref="C:\Users\dougl\Documents\work\LimFIRE_pres\docs\poster\poster\Inkscape\.././../images/nerc-logo.jpg"
        xlink:href=".././../images/nerc-logo.jpg"
        y="2799.7014"
@@ -293,6 +264,33 @@
        width="867.31671"
        style="display:inline"
        transform="translate(0,1927.559)" />
+    <image
+       sodipodi:absref="C:\Users\dougl\Documents\work\LimFIRE_pres\docs\presentation\logos\suncorp.png"
+       y="2780.5532"
+       x="1623.137"
+       id="image4111"
+       xlink:href="file:///C:/Users/dougl/Documents/work/LimFIRE_pres/docs/presentation/logos/suncorp.png"
+       preserveAspectRatio="none"
+       height="218.21426"
+       width="262.90875" />
+    <image
+       sodipodi:absref="C:\Users\dougl\Documents\work\LimFIRE_pres\docs\presentation\logos\Met_Office.png"
+       y="2779.3442"
+       x="1298.1113"
+       id="image4122"
+       xlink:href="file:///C:/Users/dougl/Documents/work/LimFIRE_pres/docs/presentation/logos/Met_Office.png"
+       preserveAspectRatio="none"
+       height="212.6786"
+       width="212.6786" />
+    <image
+       sodipodi:absref="C:\Users\dougl\Documents\work\LimFIRE_pres\docs\presentation\logos\VU.png"
+       y="2644.6572"
+       x="1877.1643"
+       id="image4144"
+       xlink:href="file:///C:/Users/dougl/Documents/work/LimFIRE_pres/docs/presentation/logos/VU.png"
+       preserveAspectRatio="none"
+       height="306.60715"
+       width="436.26282" />
   </g>
   <g
      style="display:inline"
