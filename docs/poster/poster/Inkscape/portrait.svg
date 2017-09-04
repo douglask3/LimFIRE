@@ -16,9 +16,11 @@
    id="svg2"
    version="1.1"
    inkscape:version="0.92.1 r15371"
-   sodipodi:docname="portrait.svg">
-  <defs
-     id="defs4" />
+   sodipodi:docname="portrait.svg"
+   enable-background="new"
+   inkscape:export-filename="C:\Users\dougl\Documents\work\LimFIRE_pres\docs\poster\poster\Inkscape\portrait.png"
+   inkscape:export-xdpi="96"
+   inkscape:export-ydpi="96">
   <sodipodi:namedview
      id="base"
      pagecolor="#ffffff"
@@ -26,19 +28,28 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.12374369"
-     inkscape:cx="1438.3447"
-     inkscape:cy="1643.2893"
+     inkscape:zoom="0.0875"
+     inkscape:cx="2139.3336"
+     inkscape:cy="1639.2919"
      inkscape:document-units="px"
-     inkscape:current-layer="layer2"
-     showgrid="false"
+     inkscape:current-layer="layer5"
+     showgrid="true"
      units="cm"
-     inkscape:window-width="923"
+     inkscape:window-width="1248"
      inkscape:window-height="696"
-     inkscape:window-x="441"
+     inkscape:window-x="78"
      inkscape:window-y="0"
      inkscape:window-maximized="0"
-     showguides="false" />
+     showguides="false">
+    <inkscape:grid
+       spacingy="699.92999"
+       spacingx="499.99499"
+       units="pc"
+       id="grid3855"
+       type="xygrid" />
+  </sodipodi:namedview>
+  <defs
+     id="defs4" />
   <metadata
      id="metadata7">
     <rdf:RDF>
@@ -47,203 +58,318 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title />
+        <dc:title></dc:title>
       </cc:Work>
     </rdf:RDF>
   </metadata>
   <g
-     inkscape:groupmode="layer"
-     id="layer2"
-     inkscape:label="Background Colour"
-     transform="translate(0,1233.071)">
-    <rect
-       style="fill:#a2d88c;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:0.83616751px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       id="rect3354"
-       width="2979.0852"
-       height="353.49454"
-       x="0.41808376"
-       y="-1232.653" />
-    <flowRoot
-       xml:space="preserve"
-       id="flowRoot4169"
-       style="font-style:normal;font-weight:normal;line-height:0.01%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       transform="translate(68.857143,-1272.4995)"><flowRegion
-         id="flowRegion4171"><rect
-           id="rect4173"
-           width="754.28571"
-           height="114.28571"
-           x="217.14285"
-           y="271.34976" /></flowRegion><flowPara
-         id="flowPara4175"
-         style="font-size:17.5px;line-height:125%;fill:#ffffff;fill-opacity:1">enquires@ceh.ac.uk</flowPara></flowRoot>    <flowRoot
-       xml:space="preserve"
-       id="flowRoot4177"
-       style="font-style:normal;font-weight:normal;line-height:0.01%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       transform="translate(-32,-1495.0709)"><flowRegion
-         id="flowRegion4179"><rect
-           id="rect4181"
-           width="748.57141"
-           height="105.71429"
-           x="322.85715"
-           y="505.6355" /></flowRegion><flowPara
-         id="flowPara4183"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:50px;line-height:1.25;font-family:Euphemia;-inkscape-font-specification:Euphemia;fill:#ffffff;fill-opacity:1">www.ceh.ac.uk</flowPara></flowRoot>    <flowRoot
-       xml:space="preserve"
-       id="flowRoot4196"
-       style="font-style:normal;font-weight:normal;line-height:0.01%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"><flowRegion
-         id="flowRegion4198"><rect
-           id="rect4200"
-           width="531.42859"
-           height="281.42856"
-           x="177.14285"
-           y="244.20692" /></flowRegion><flowPara
-         id="flowPara4202"
-         style="font-size:40px;line-height:1.25"> </flowPara></flowRoot>    <rect
-       style="fill:#ffffff;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       id="rect3370"
-       width="14.285749"
-       height="245.71428"
-       x="1065.7142"
-       y="-1167.4354" />
-    <flowRoot
-       xml:space="preserve"
-       id="flowRoot3372"
-       style="font-style:normal;font-weight:normal;font-size:90px;line-height:0.01%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       transform="translate(79.625,-1212.1959)"><flowRegion
-         id="flowRegion3374"
-         style="font-size:90px"><rect
-           id="rect3376"
-           width="1899.5032"
-           height="288.27698"
-           x="1006"
-           y="1.6354752"
-           style="font-size:90px" /></flowRegion><flowPara
-         id="flowPara3378"
-         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:118.75px;line-height:1.25;font-family:Arial;-inkscape-font-specification:Arial">The impact of human fire</flowPara><flowPara
-         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:118.75px;line-height:1.25;font-family:Arial;-inkscape-font-specification:Arial"
-         id="flowPara60">starts and land use on burnt area</flowPara></flowRoot>    <rect
-       style="fill:#a2d88c;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:0.51191384px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       id="rect3354-8"
-       width="2241.0496"
-       height="176.12512"
-       x="60.631176"
-       y="2770.5146" />
-    <rect
-       style="fill:#ffffff"
-       id="rect3425"
-       width="1102.4196"
-       height="149.60771"
-       x="1191.8007"
-       y="2785.9209" />
-    <flowRoot
-       xml:space="preserve"
-       id="flowRoot3427"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:0.01%;font-family:Arial;-inkscape-font-specification:Arial;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"><flowRegion
-         id="flowRegion3429"><rect
-           id="rect3431"
-           width="1688.9751"
-           height="137.38075"
-           x="72.73098"
-           y="2794.0532"
-           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:50px;font-family:Arial;-inkscape-font-specification:Arial" /></flowRegion><flowPara
-         id="flowPara3433"
-         style="font-size:50px;line-height:1.25"> </flowPara></flowRoot>    <flowRoot
-       xml:space="preserve"
-       id="flowRoot3435"
-       style="font-style:normal;font-weight:normal;line-height:0.01%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       transform="translate(16)"><flowRegion
-         id="flowRegion3437"><rect
-           id="rect3439"
-           width="1624.3253"
-           height="125.25892"
-           x="96.974648"
-           y="2798.0938" /></flowRegion><flowPara
-         id="flowPara3441"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:50px;line-height:1.25;font-family:Arial;-inkscape-font-specification:Arial">WHY: ADD YOUR WHY QUESTION?</flowPara><flowPara
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:50px;line-height:1.25;font-family:Arial;-inkscape-font-specification:Arial"
-         id="flowPara3443">REDUCE/ENLOARGE FONT SIZE TO FIT</flowPara></flowRoot>    <flowRoot
-       xml:space="preserve"
-       id="flowRoot3445"
-       style="font-style:normal;font-weight:normal;line-height:0.01%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"><flowRegion
-         id="flowRegion3447"><rect
-           id="rect3449"
-           width="1644.5283"
-           height="169.70563"
-           x="1794.0309"
-           y="2781.9314" /></flowRegion><flowPara
-         id="flowPara3451"
-         style="font-size:40px;line-height:1.25"> </flowPara></flowRoot>    <flowRoot
-       xml:space="preserve"
-       id="flowRoot3435-4"
-       style="font-style:normal;font-weight:normal;line-height:0.01%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       transform="translate(1111.8674,0.135087)"><flowRegion
-         id="flowRegion3437-3"><rect
-           id="rect3439-6"
-           width="1624.3253"
-           height="125.25892"
-           x="96.974648"
-           y="2798.0938" /></flowRegion><flowPara
-         id="flowPara3441-7"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:50px;line-height:1.25;font-family:Arial;-inkscape-font-specification:Arial">BECUASE: ADD YOUR BECAUSE ANSWER</flowPara><flowPara
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:50px;line-height:1.25;font-family:Arial;-inkscape-font-specification:Arial"
-         id="flowPara3443-1">REDUCE/ENLOARGE FONT SIZE TO FIT</flowPara></flowRoot>    <image
-       sodipodi:absref="C:\Users\dougl\Documents\work\LimFIRE_pres\docs\poster\poster\Inkscape\.././../images/nerc-logo.jpg"
-       xlink:href=".././../images/nerc-logo.jpg"
-       width="593.13708"
-       height="120.85168"
-       preserveAspectRatio="none"
-       id="image3488"
-       x="2352.2957"
-       y="2799.7014" />
-    <rect
-       style="fill:#f9f9f9;stroke-width:1.49999988"
-       id="rect58"
-       width="3000"
-       height="3000"
-       x="-7.5761442"
-       y="-455.80276" />
-    <rect
-       style="fill:#80ff80;stroke-width:0.74999994"
-       id="rect58-3"
-       width="1500"
-       height="1500"
-       x="-7.5761442"
-       y="-455.80276" />
-    <rect
-       style="fill:#8080ff;stroke-width:0.74999994"
-       id="rect58-3-3"
-       width="1500"
-       height="1500"
-       x="1492.4238"
-       y="-455.80276" />
-    <rect
-       style="fill:#ff8080;stroke-width:0.74999994"
-       id="rect58-3-3-7"
-       width="1500"
-       height="1500"
-       x="-7.5761442"
-       y="1044.1973" />
-    <rect
-       style="fill:#c8b7b7;stroke-width:0.74999994"
-       id="rect58-3-3-7-5"
-       width="1500"
-       height="1500"
-       x="1492.4238"
-       y="1044.1973" />
+     style="opacity:0.763"
+     inkscape:label="Background green"
+     id="layer8"
+     inkscape:groupmode="layer">
+    <path
+       inkscape:connector-curvature="0"
+       id="path60"
+       d="M 1287.8834,346.76251 1499.985,2113.2021 9.4144246,1904.9987 0.41808375,0.4180459 Z"
+       style="fill:#00ff00;stroke:#000000;stroke-width:0.9375px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
   </g>
   <g
-     inkscape:label="Header and Footer"
-     inkscape:groupmode="layer"
-     id="layer1"
-     transform="translate(0,3160.63)">
+     style="display:inline;opacity:0.48699999"
+     inkscape:label="Background blue"
+     id="layer3"
+     inkscape:groupmode="layer">
+    <path
+       sodipodi:nodetypes="cccccc"
+       inkscape:connector-curvature="0"
+       id="path59"
+       d="m 1287.8834,346.7625 4.9687,1477.1539 441.9629,633.1369 1265.1549,-136.7783 V 13.412178 Z"
+       style="fill:#0000ff;stroke:#000000;stroke-width:0.9375px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+  </g>
+  <g
+     style="display:none;opacity:1"
+     inkscape:label="Background 2"
+     id="layer4"
+     inkscape:groupmode="layer">
+    <a
+       id="a4584">
+      <path
+         style="opacity:0.43000004;fill:#55d400;stroke:#000000;stroke-width:0.9375px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         d="M 1287.8834,346.7625 1499.985,2113.2021 9.4144248,1904.9987 0.41808375,353.91256 Z"
+         id="path63"
+         inkscape:connector-curvature="0"
+         sodipodi:nodetypes="ccccc" />
+    </a>
+    <text
+       id="text98"
+       y="659.78064"
+       x="159.09903"
+       style="font-style:normal;font-weight:normal;font-size:37.5px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.9375"
+       xml:space="preserve"><tspan
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:125px;font-family:Rokkitt;-inkscape-font-specification:Rokkitt;fill:#f4eed7;stroke-width:0.9375"
+         y="659.78064"
+         x="159.09903"
+         id="tspan96"
+         sodipodi:role="line">Fuel</tspan></text>
+  </g>
+  <g
+     style="display:inline;opacity:0.542"
+     inkscape:label="Background Red"
+     id="layer5"
+     inkscape:groupmode="layer">
+    <path
+       sodipodi:nodetypes="cccccc"
+       inkscape:connector-curvature="0"
+       id="path67"
+       d="M 1787.8785,4229.871 1734.815,2457.0533 1499.985,2113.2021 1292.8521,1823.9164 9.4144248,1904.9987 0,4212.9922"
+       style="fill:#ff0000;stroke:#000000;stroke-width:0.9375px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+  </g>
+  <g
+     style="display:none"
+     inkscape:label="Background 4"
+     id="layer6"
+     inkscape:groupmode="layer">
+    <path
+       sodipodi:nodetypes="ccccccc"
+       inkscape:connector-curvature="0"
+       id="path73"
+       d="M 1787.8785,4229.871 1666.5991,3326.5833 1499.985,2113.2021 2999.9699,2320.275 v 1192.7871 699.93 z"
+       style="opacity:0.48699999;fill:#ffcc00;stroke:#000000;stroke-width:0.9375px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+  </g>
+  <g
+     style="opacity:0.596"
+     inkscape:label="Back"
+     id="layer7"
+     inkscape:groupmode="layer">
+    <path
+       sodipodi:nodetypes="ccccc"
+       inkscape:connector-curvature="0"
+       id="path3760"
+       d="m 1787.8785,4229.871 -287.8935,-2116.6689 1473.2293,203.3615 26.7556,1896.4285 z"
+       style="fill:#ffcc00;stroke:#000000;stroke-width:0.9375px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+  </g>
+  <g
+     style="display:inline"
+     sodipodi:insensitive="true"
+     transform="translate(0,1233.071)"
+     inkscape:label="Background"
+     id="layer2"
+     inkscape:groupmode="layer">
+    <rect
+       y="-1232.653"
+       x="0.41808376"
+       height="353.49454"
+       width="2979.0852"
+       id="rect3354"
+       style="fill:#a2d88c;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:0.83616751px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+    <flowRoot
+       transform="translate(68.857143,-1272.4995)"
+       style="font-style:normal;font-weight:normal;line-height:0.01%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       id="flowRoot4169"
+       xml:space="preserve"><flowRegion
+         id="flowRegion4171"><rect
+           y="271.34976"
+           x="217.14285"
+           height="114.28571"
+           width="754.28571"
+           id="rect4173" /></flowRegion><flowPara
+         style="font-size:17.5px;line-height:125%;fill:#ffffff;fill-opacity:1"
+         id="flowPara4175">enquires@ceh.ac.uk</flowPara></flowRoot>    <flowRoot
+       transform="translate(-32,-1495.0709)"
+       style="font-style:normal;font-weight:normal;line-height:0.01%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       id="flowRoot4177"
+       xml:space="preserve"><flowRegion
+         id="flowRegion4179"><rect
+           y="505.6355"
+           x="322.85715"
+           height="105.71429"
+           width="748.57141"
+           id="rect4181" /></flowRegion><flowPara
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:50px;line-height:1.25;font-family:Euphemia;-inkscape-font-specification:Euphemia;fill:#ffffff;fill-opacity:1"
+         id="flowPara4183">www.ceh.ac.uk</flowPara></flowRoot>    <rect
+       y="-1167.4354"
+       x="1065.7142"
+       height="245.71428"
+       width="14.285749"
+       id="rect3370"
+       style="fill:#ffffff;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+    <flowRoot
+       transform="translate(79.625,-1212.1959)"
+       style="font-style:normal;font-weight:normal;font-size:90px;line-height:0.01%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       id="flowRoot3372"
+       xml:space="preserve"><flowRegion
+         style="font-size:90px"
+         id="flowRegion3374"><rect
+           style="font-size:90px"
+           y="1.6354752"
+           x="1006"
+           height="288.27698"
+           width="1899.5032"
+           id="rect3376" /></flowRegion><flowPara
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:118.75px;line-height:1.25;font-family:Arial;-inkscape-font-specification:Arial"
+         id="flowPara3378">The impact of human fire</flowPara><flowPara
+         id="flowPara60"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:118.75px;line-height:1.25;font-family:Arial;-inkscape-font-specification:Arial">starts and land use on burnt area</flowPara></flowRoot>    <rect
+       y="2770.5146"
+       x="60.631176"
+       height="176.12512"
+       width="2241.0496"
+       id="rect3354-8"
+       style="fill:#a2d88c;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:0.51191384px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+    <rect
+       y="2785.9209"
+       x="1191.8007"
+       height="149.60771"
+       width="1102.4196"
+       id="rect3425"
+       style="fill:#ffffff" />
+    <flowRoot
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:0.01%;font-family:Arial;-inkscape-font-specification:Arial;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       id="flowRoot3427"
+       xml:space="preserve"><flowRegion
+         id="flowRegion3429"><rect
+           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:50px;font-family:Arial;-inkscape-font-specification:Arial"
+           y="2794.0532"
+           x="72.73098"
+           height="137.38075"
+           width="1688.9751"
+           id="rect3431" /></flowRegion><flowPara
+         style="font-size:50px;line-height:1.25"
+         id="flowPara3433"> </flowPara></flowRoot>    <flowRoot
+       transform="translate(16)"
+       style="font-style:normal;font-weight:normal;line-height:0.01%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       id="flowRoot3435"
+       xml:space="preserve"><flowRegion
+         id="flowRegion3437"><rect
+           y="2798.0938"
+           x="96.974648"
+           height="125.25892"
+           width="1624.3253"
+           id="rect3439" /></flowRegion><flowPara
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:50px;line-height:1.25;font-family:Arial;-inkscape-font-specification:Arial"
+         id="flowPara3441">WHY: ADD YOUR WHY QUESTION?</flowPara><flowPara
+         id="flowPara3443"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:50px;line-height:1.25;font-family:Arial;-inkscape-font-specification:Arial">REDUCE/ENLOARGE FONT SIZE TO FIT</flowPara></flowRoot>    <flowRoot
+       style="font-style:normal;font-weight:normal;line-height:0.01%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       id="flowRoot3445"
+       xml:space="preserve"><flowRegion
+         id="flowRegion3447"><rect
+           y="2781.9314"
+           x="1794.0309"
+           height="169.70563"
+           width="1644.5283"
+           id="rect3449" /></flowRegion><flowPara
+         style="font-size:40px;line-height:1.25"
+         id="flowPara3451"> </flowPara></flowRoot>    <flowRoot
+       transform="translate(1111.8674,0.135087)"
+       style="font-style:normal;font-weight:normal;line-height:0.01%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       id="flowRoot3435-4"
+       xml:space="preserve"><flowRegion
+         id="flowRegion3437-3"><rect
+           y="2798.0938"
+           x="96.974648"
+           height="125.25892"
+           width="1624.3253"
+           id="rect3439-6" /></flowRegion><flowPara
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:50px;line-height:1.25;font-family:Arial;-inkscape-font-specification:Arial"
+         id="flowPara3441-7">BECUASE: ADD YOUR BECAUSE ANSWER</flowPara><flowPara
+         id="flowPara3443-1"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:50px;line-height:1.25;font-family:Arial;-inkscape-font-specification:Arial">REDUCE/ENLOARGE FONT SIZE TO FIT</flowPara></flowRoot>    <image
+       sodipodi:absref="C:\Users\dougl\Documents\work\LimFIRE_pres\docs\poster\poster\Inkscape\.././../images/nerc-logo.jpg"
+       xlink:href=".././../images/nerc-logo.jpg"
+       y="2799.7014"
+       x="2352.2957"
+       id="image3488"
+       preserveAspectRatio="none"
+       height="120.85168"
+       width="593.13708" />
     <image
        sodipodi:absref="C:\Users\dougl\Documents\work\LimFIRE_pres\docs\poster\poster\Inkscape\.././../images/CEH-long-white.png"
        xlink:href=".././../images/CEH-long-white.png"
-       width="867.31671"
-       height="207.64488"
-       preserveAspectRatio="none"
-       id="image3351"
+       y="-3134.707"
        x="61.737"
-       y="-3134.707" />
+       id="image3351"
+       preserveAspectRatio="none"
+       height="207.64488"
+       width="867.31671"
+       style="display:inline"
+       transform="translate(0,1927.559)" />
   </g>
+  <g
+     style="display:inline"
+     transform="translate(0,3160.63)"
+     id="layer1"
+     inkscape:groupmode="layer"
+     inkscape:label="Header and Footer" />
+  <g
+     inkscape:label="Fuel"
+     id="layer9"
+     inkscape:groupmode="layer">
+    <flowRoot
+       transform="scale(0.93749999)"
+       style="font-style:normal;font-weight:normal;font-size:40px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
+       id="flowRoot67"
+       xml:space="preserve"><flowRegion
+         id="flowRegion69"><rect
+           y="482.42975"
+           x="165.71428"
+           height="280"
+           width="794.28571"
+           id="rect71" /></flowRegion><flowPara
+         style="-inkscape-font-specification:Rokkitt;font-family:Rokkitt;font-weight:bold;font-style:normal;font-stretch:normal;font-variant:normal;font-size:133.33333279px;fill:#ffffff"
+         id="flowPara73">Fuel</flowPara></flowRoot>  </g>
+  <g
+     inkscape:groupmode="layer"
+     id="g83"
+     inkscape:label="Moisture">
+    <flowRoot
+       xml:space="preserve"
+       id="flowRoot81"
+       style="font-style:normal;font-weight:normal;font-size:40px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
+       transform="matrix(0.93749999,0,0,0.93749999,1968.75,0)"><flowRegion
+         id="flowRegion77"><rect
+           id="rect75"
+           width="794.28571"
+           height="280"
+           x="165.71428"
+           y="482.42975" /></flowRegion><flowPara
+         id="flowPara79"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:133.33332825px;font-family:Rokkitt;-inkscape-font-specification:Rokkitt;text-align:end;text-anchor:end;fill:#ffffff">Moisture</flowPara></flowRoot>  </g>
+  <g
+     inkscape:label="Ignitions"
+     id="g3747"
+     inkscape:groupmode="layer">
+    <flowRoot
+       transform="matrix(0.93749999,0,0,0.93749999,-1.8750003,3300)"
+       style="font-style:normal;font-weight:normal;font-size:40px;line-height:1.25;font-family:sans-serif;text-align:start;letter-spacing:0px;word-spacing:0px;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none"
+       id="flowRoot3745"
+       xml:space="preserve"><flowRegion
+         style="text-align:start;text-anchor:start"
+         id="flowRegion3741"><rect
+           style="text-align:start;text-anchor:start"
+           y="482.42975"
+           x="165.71428"
+           height="280"
+           width="794.28571"
+           id="rect3739" /></flowRegion><flowPara
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:133.33332825px;font-family:Rokkitt;-inkscape-font-specification:Rokkitt;text-align:start;text-anchor:start;fill:#ffffff"
+         id="flowPara3743">Ignitions</flowPara></flowRoot>  </g>
+  <g
+     inkscape:groupmode="layer"
+     id="g3757"
+     inkscape:label="Suppression">
+    <flowRoot
+       xml:space="preserve"
+       id="flowRoot3755"
+       style="font-style:normal;font-weight:normal;font-size:40px;line-height:1.25;font-family:sans-serif;text-align:end;letter-spacing:0px;word-spacing:0px;text-anchor:end;fill:#000000;fill-opacity:1;stroke:none"
+       transform="matrix(0.93749999,0,0,0.93749999,2060.625,3356.25)"><flowRegion
+         id="flowRegion3751"
+         style="text-align:end;text-anchor:end"><rect
+           id="rect3749"
+           width="794.28571"
+           height="280"
+           x="165.71428"
+           y="482.42975"
+           style="text-align:end;text-anchor:end" /></flowRegion><flowPara
+         id="flowPara3753"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:133.33332825px;font-family:Rokkitt;-inkscape-font-specification:Rokkitt;text-align:end;text-anchor:end;fill:#ffffff">Suppression</flowPara></flowRoot>  </g>
 </svg>
