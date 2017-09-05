@@ -25,13 +25,20 @@ plot_4way <- function(x, y, A, B, C, D, x_range = c(-180, 180), y_range = c(-90,
 
     ncols = length(cols)
 
-    mag = A^2 + B^2 + C^2
+    #mag = A^2 + B^2 + C^2
     
-    A = sqrt(A^2/mag)
-    B = sqrt(B^2/mag)
-    C = sqrt(C^2/mag)
-    D = sqrt(D^2/mag)
+    #A = sqrt(A^2/mag)
+    #B = sqrt(B^2/mag)
+    #C = sqrt(C^2/mag)
+    #D = sqrt(D^2/mag)
     
+	mag = A + B + C
+	
+	A = A/mag
+	B = B/mag
+	C = C/mag
+	D = D/mag
+	
     A[mag == 0] = 0.33
     B[mag == 0] = 0.33
     C[mag == 0] = 0.33
