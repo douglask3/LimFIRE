@@ -1,9 +1,9 @@
 LimFIRE <- function(w, omega_live, omega_dead,
 				    Big = 1.0, Lig, pas, crop,
 					popdens, maxFire = 1.0,
-                    w0, kw, M, omega0, komega, L, P, D, ig0, kig, H, s0, ks, 
+                    w0, kw, M, omega0, komega, L, P, mxDi= NULL, D, ig0, kig, mxDs = NULL, H, s0, ks, 
                     fireOnly = FALSE, sensitivity = FALSE,
-                    just_measures = FALSE, normalise = FALSE) {
+                    just_measures = FALSE, normalise = FALSE, add21 = FALSE) {
     
     if (sensitivity) {
         FUN.fuel       = dLimFIRE.fuel
@@ -16,11 +16,19 @@ LimFIRE <- function(w, omega_live, omega_dead,
         FUN.ignitions  = LimFIRE.ignitions
         FUN.supression = LimFIRE.supression            
     }
+	
+	popdensFun <- function(x, i) x/(x+i)
+	
+	if (!is.null(mxDi)) popdensi = popdensFun(popdens, mxDi)
+		else popdensi = popdens
+	if (!is.null(mxDs)) popdenss = popdensFun(popdens, mxDs)
+		else popdenss = popdens
     
     fuel       = Log0(w)
     moisture   = (omega_live + M * omega_dead) / (1 + M)
-    ignitions  = Big + L * Lig + P * pas + D * popdens
-    supression = (crop + H * popdens)
+    if (L == 0) ignitions  =  Lig + P * pas + D * popdensi
+	else ignitions  = Big + L * Lig + P * pas + D * popdensi
+    supression = (crop + H * popdenss)
     
     if (just_measures) {
         fire = fuel
@@ -38,11 +46,18 @@ LimFIRE <- function(w, omega_live, omega_dead,
     if (fireOnly) return(Fire)
 	
 	if (normalise) {	
-		
 		 #Fuel = Fuel/FUN.fuel      (0      , w0    , -kw    )
-		 Ignitions = Ignitions/FUN.ignitions      (0       , ig0   , -kig   )
+		 #Ignitions = Ignitions/FUN.ignitions      (550       , ig0   , kig   )
 		 Moisture = Moisture/FUN.moisture  (0  , omega0, komega)
 		 Supression = Supression/FUN.supression  (0  , s0    , ks    )
+	}
+	
+	if (add21) {
+		mag = 1.0
+		Fuel = Fuel / mag
+		Moisture = Moisture / mag
+		Ignitions = Ignitions / mag
+		Supression = Supression / mag
 	}
     return(list(Fire, Fuel, Moisture, Ignitions, Supression))
 }

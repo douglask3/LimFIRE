@@ -7,6 +7,7 @@ library(rasterPlot)
 library(plotrix)
 library(mapdata)
 library(mapplots)
+library(ellipse)
 data(worldHiresMapEnv)
 
 
@@ -43,6 +44,11 @@ drive_fname = c(alpha   = 'alpha',
 nms = names(drive_fname)
 drive_fname = paste(outputs_dir, drive_fname, min(years), '-', max(years), '.nc', sep = '')
 names(drive_fname) = nms
+
+hlghtPnts = list("Desert"      = list( 20,  20.0, col = '#00BB00'),
+                 "Rain Forest" = list(-55,  00.0, col = '#0000BB'), 
+				 "Savanna"     = list( 25, -12.5, col = '#BB0000'),
+				 "cropland"    = list( 80,  20.0, col = '#999999'))
 
 #coefficants_file = paste(coefficants_file, gitVersionNumber(), '.csv', sep = '-')
 

@@ -1,10 +1,14 @@
-runLimFIREfromstandardIns <- function(fireOnly = FALSE, remove = NULL, 
-                                      ...) {
-    
-    
-    Obs = lapply(drive_fname, stack)
+openAllObs <- function() {
+	Obs = lapply(drive_fname, stack)
 	test = is.na(Obs[['npp']][[1]]) & !is.na(Obs[['alpha']][[1]])
 	Obs[['npp']][test] = 0.0
+	return(Obs)
+}
+
+runLimFIREfromstandardIns <- function(fireOnly = FALSE, remove = NULL,
+                                      ...) {
+    
+    Obs = openAllObs()
     if (!is.null(remove)) for (i in remove) Obs[[i]][] = 0
     mnthIndex = 1:12#nlayers(Obs[[1]])
     
@@ -21,10 +25,12 @@ runLimFIREfromstandardIns <- function(fireOnly = FALSE, remove = NULL,
                       param('cM'), param('moisture_x0'),  -param('moisture_k'),  
                       param('cL'),
                       param('cP'),
+                      param('cDmax'),
                       param('cD1'),
                                   param(   'igntions_x0'),  param('igntions_k'   ),  
-                      param('cD2'), param(    'suppression_x0'),  -param('suppression_k'), fireOnly, ...)
-                      
+                      param('mxD2'),
+					  param('cD2'), param(    'suppression_x0'),  -param('suppression_k'), fireOnly, ...)
+        
         for (i in 2:length(out)) out[[i]] = 1 - out[[i]]
         return(out)
     }

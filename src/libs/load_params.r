@@ -1,4 +1,6 @@
 param <- function(p, FUN = median) {
+	if (p == 'mxD1') return(NULL)
+	if (p == 'mxD2') return(NULL)
     params = read.csv(coefficants_file)[,-1]
     params_mean = apply(as.matrix(params),2, FUN)
     

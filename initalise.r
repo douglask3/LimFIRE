@@ -9,6 +9,7 @@ install.packages('mapproj')
 install.packages('mapdata')
 install.packages('Rcpp') # Needed for benchmarkmetrics
 install.packages('mapplots')
+install.packages('ellipse')
 
 install_github("rhyswhitley/r_stash/rstash")
 
