@@ -32,7 +32,7 @@ runLimFIRE <- function(fname, ...){
 }
 
 
-lm_mod = runLimFIRE(lm_mod_files, normalise = TRUE)
+lm_mod = runLimFIRE(lm_mod_files, normalise = TRUE, add21 = TRUE)
 sn_mod = runLimFIRE(sn_mod_files, sensitivity = TRUE)
 
 #########################################################################

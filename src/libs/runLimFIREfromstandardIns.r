@@ -1,21 +1,21 @@
 openAllObs <- function() {
 	Obs = lapply(drive_fname, stack)
-	test = is.na(Obs[['npp']][[1]]) & !is.na(Obs[['alpha']][[1]])
-	Obs[['npp']][test] = 0.0
+	#test = is.na(Obs[['npp']][[1]]) & !is.na(Obs[['alpha']][[1]])
+	#Obs[['npp']][test] = 0.0
 	return(Obs)
 }
 
-runLimFIREfromstandardIns <- function(fireOnly = FALSE, remove = NULL,
+runLimFIREfromstandardIns <- function(fireOnly = FALSE, remove = NULL, sensitivity= FALSE, 
                                       ...) {
     
     Obs = openAllObs()
     if (!is.null(remove)) for (i in remove) Obs[[i]][] = 0
-    mnthIndex = 1:12#nlayers(Obs[[1]])
+    mnthIndex = 1:nlayers(Obs[[1]])
     
     runMonthly <- function(i) {
         cat("simulating fire for month ", i, "\n")
         
-        out = LimFIRE(Obs[["npp"   ]][[i]],
+        out = LimFIRE(100 - Obs[["bare"   ]][[i]],
                       Obs[["alpha" ]][[i]], Obs[["emc"    ]][[i]],
 					  1.0,
                       Obs[["Lightn"]][[i]], Obs[["pas"    ]][[i]],
@@ -29,10 +29,15 @@ runLimFIREfromstandardIns <- function(fireOnly = FALSE, remove = NULL,
                       param('cD1'),
                                   param(   'igntions_x0'),  param('igntions_k'   ),  
                       param('mxD2'),
-					  param('cD2'), param(    'suppression_x0'),  -param('suppression_k'), fireOnly, ...)
+					  param('cD2'), param(    'suppression_x0'),  -param('suppression_k'), fireOnly, sensitivity = sensitivity, ...)
         
-        for (i in 2:length(out)) out[[i]] = 1 - out[[i]]
-        return(out)
+		if (sensitivity) {
+			for (i in 2:length(out)) out[[i]] = 1 - out[[i]]
+		} else {
+			mag = sum(layer.apply(out[-1], function(i) i))
+			for (i in 2:length(out)) out[[i]] = out[[i]] / mag
+        }
+		return(out)
     }
     if (fireOnly) return(layer.apply(mnthIndex, runMonthly))
     mod = runMonthly(1)

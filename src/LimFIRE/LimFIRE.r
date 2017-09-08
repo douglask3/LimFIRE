@@ -24,10 +24,11 @@ LimFIRE <- function(w, omega_live, omega_dead,
 	if (!is.null(mxDs)) popdenss = popdensFun(popdens, mxDs)
 		else popdenss = popdens
     
-    fuel       = Log0(w)
+    fuel       = w#Log0(w)
     moisture   = (omega_live + M * omega_dead) / (1 + M)
     if (L == 0) ignitions  =  Lig + P * pas + D * popdensi
 	else ignitions  = Big + L * Lig + P * pas + D * popdensi
+	ignitions = log(ignitions)
     supression = (crop + H * popdenss)
     
     if (just_measures) {
@@ -53,11 +54,15 @@ LimFIRE <- function(w, omega_live, omega_dead,
 	}
 	
 	if (add21) {
-		mag = 1.0
-		Fuel = Fuel / mag
-		Moisture = Moisture / mag
-		Ignitions = Ignitions / mag
-		Supression = Supression / mag
+		test = Fire > 0
+		FuelOut = Moisture * Ignitions * Supression / Fire
+		MoistureOut = Fuel * Ignitions * Supression / Fire
+		IgnitionsOut = Fuel * Moisture * Supression / Fire
+		SupressionOut = Fuel * Moisture * Ignitions / Fire
+		Fuel[test] = FuelOut[test]
+		Moisture[test] = MoistureOut[test]
+		Ignitions[test] = IgnitionsOut[test]
+		Supression[test] = SupressionOut[test]
 	}
     return(list(Fire, Fuel, Moisture, Ignitions, Supression))
 }
