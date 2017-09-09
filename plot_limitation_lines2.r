@@ -111,7 +111,7 @@ plotScatter <- function(name, col, FUN, dFUN, x0, k, ksc, log = '', ...) {
 	
 	lines(Obs[index, name], Sim[index, name], lty = 2)
 	
-	addPoints <- function(i, j, info, ...) {
+	addPoints <- function(i, j, info, plotPnts = TRUE, ...) {
 		col = info[[3]]
 		colt = make.transparent(col, c(0.75, 0.95))
 			
@@ -123,7 +123,7 @@ plotScatter <- function(name, col, FUN, dFUN, x0, k, ksc, log = '', ...) {
 		polygon(x, y, border = colt[1], col = colt[2])
 		
 		
-		x = (x)[3]
+		x = i[2,name]
 		y = FUN(x, param(x0), ksc * param(k))	
 		g = dFUN(x, param(x0), ksc * param(k), normalise= FALSE)
 		
@@ -141,7 +141,8 @@ plotScatter <- function(name, col, FUN, dFUN, x0, k, ksc, log = '', ...) {
 		lines(x,y, lwd = 2, col = col, xpd = NA, ...)
 		
 		x = i[,name]; y = FUN(x, param(x0), ksc * param(k))
-		points(x, y, col = col, pch = c(NA, 16, NA) , cex = c(2,2.5,2), lwd = 4)
+		if (plotPnts)
+			points(x, y, col = col, pch = c(NA, 16, NA) , cex = c(2,2.5,2), lwd = 4)
 		
 		
 		
@@ -166,12 +167,13 @@ plotScatter <- function(name, col, FUN, dFUN, x0, k, ksc, log = '', ...) {
 	}
 	
 	mapply(addPoints, pntObs, pntSim, hlghtPnts)
-	mapply(addPoints, pntObs, pntSim, hlghtPnts, MoreArgs = list(lty = 3))
+	mapply(addPoints, pntObs, pntSim, hlghtPnts, MoreArgs = list(plotPnts = FALSE, lty = 3))
 }
 
+png('figs/limLines.png', width = 7, height = 7 * 1.15, units = 'in', res = 300)
 layout(rbind(1:2,3:4, 5), heights = c(1,1,0.3))
 
-par(mar = c(3,0,1,0.5), oma = c(0,3,1,1))
+par(mar = c(3,0,1,0.5), oma = c(0,3.5,1,1))
 
 plotScatter('fuel', col = 'green', LimFIRE.fuel, dLimFIRE.fuel, 'fuel_x0', 'fuel_k', 1.0)
 axis(2, at = seq(0,1,by = 0.2))
@@ -201,3 +203,4 @@ leg <- function(pch, col, ...)
 leg(15, colt, pt.cex = 5)
 leg(16, cols, pt.cex = 2)
 
+dev.off()
