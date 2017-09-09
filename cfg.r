@@ -49,7 +49,7 @@ names(drive_fname) = nms
 hlghtPnts = list("Desert"      = list( 20,  20.0, col = '#00BB00'),
                  "Rain Forest" = list(-74,  -0.5, col = '#0000BB'), 
 				 "Savanna"     = list( 17, -27.5, col = '#BB0000'),
-				 "cropland"    = list( 80,  20.0, col = '#AAAA00'))
+				 "cropland"    = list( 80,  18.0, col = '#AAAA00'))
 
 #coefficants_file = paste(coefficants_file, gitVersionNumber(), '.csv', sep = '-')
 
