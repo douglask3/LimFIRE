@@ -169,8 +169,10 @@ plotScatter <- function(name, col, FUN, dFUN, x0, k, ksc, log = '', ...) {
 	mapply(addPoints, pntObs, pntSim, hlghtPnts, MoreArgs = list(lty = 3))
 }
 
+layout(rbind(1:2,3:4, 5), heights = c(1,1,0.3))
 
-par(mfrow = c(2,2), mar = c(3,0,1,0.5), oma = c(0,3,1,1))
+par(mar = c(3,0,1,0.5), oma = c(0,3,1,1))
+
 plotScatter('fuel', col = 'green', LimFIRE.fuel, dLimFIRE.fuel, 'fuel_x0', 'fuel_k', 1.0)
 axis(2, at = seq(0,1,by = 0.2))
 mtext('Vegetation Cover (%)', 1, line = 2)
@@ -183,4 +185,19 @@ plotScatter('suppression', col = 'black', LimFIRE.supression, dLimFIRE.supressio
 mtext('Suppression Index', 1, line = 2)
 mtext('Fractional Burnt Area', side = 2, outer = TRUE, line = 2)
 
-					
+plot.new()					
+
+legNames =  names(hlghtPnts)
+cols = listSelectItem(hlghtPnts, 'col')
+colt = make.transparent(cols, 0.75)
+
+
+
+leg <- function(pch, col, ...) 
+	legend('center', legend = legNames,
+		   pch = pch, col = col, lty = 2, lwd = 2, 
+		   cex = 1.33, horiz = TRUE, bty = 'n', seg.len	= 4, ...)
+
+leg(15, colt, pt.cex = 5)
+leg(16, cols, pt.cex = 2)
+
