@@ -28,11 +28,11 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.32"
-     inkscape:cx="655.45982"
-     inkscape:cy="3729.9568"
+     inkscape:zoom="0.1767767"
+     inkscape:cx="2322.6724"
+     inkscape:cy="1224.1711"
      inkscape:document-units="px"
-     inkscape:current-layer="layer2"
+     inkscape:current-layer="layer12"
      showgrid="false"
      units="cm"
      inkscape:window-width="1366"
@@ -40,7 +40,7 @@
      inkscape:window-x="-8"
      inkscape:window-y="-8"
      inkscape:window-maximized="1"
-     showguides="false">
+     showguides="true">
     <inkscape:grid
        spacingy="699.92999"
        spacingx="499.99499"
@@ -49,7 +49,222 @@
        type="xygrid" />
   </sodipodi:namedview>
   <defs
-     id="defs4" />
+     id="defs4">
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath5452">
+      <path
+         style="fill:none;stroke:#000000;stroke-width:0.9375px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         d="m 2194.3359,1155.8633 71.7774,-24.9023 168.457,-32.2266 168.457,48.3399 -4.3945,-269.53129 -275.3906,-5.85937 -273.0481,36.25887 -19.9207,86.78801 118.6524,68.84768 z"
+         id="path5454"
+         inkscape:connector-curvature="0" />
+    </clipPath>
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath5493">
+      <path
+         style="fill:none;stroke:#000000;stroke-width:0.9375px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         d="m 2659.9368,1051.2098 22.2697,-27.4487 97.8833,4.6611 54.3795,5.6969 -17.6086,-97.36528 -179.1936,0.51791 c 0,0 -116.5276,-84.93568 -47.129,13.98335 69.3987,98.91892 43.5037,41.94994 43.5037,41.94994 z"
+         id="path5495"
+         inkscape:connector-curvature="0" />
+    </clipPath>
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath5799">
+      <rect
+         y="1857.1741"
+         x="739.25342"
+         height="175.3477"
+         width="402.50134"
+         id="rect5801"
+         style="opacity:1;fill:#002b00;fill-opacity:1;stroke-width:0.87988007" />
+    </clipPath>
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath5825">
+      <rect
+         style="opacity:1;fill:#002b00;fill-opacity:1;stroke-width:0.87988007"
+         id="rect5827"
+         width="402.50134"
+         height="175.3477"
+         x="739.25342"
+         y="2051.448" />
+    </clipPath>
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath5830">
+      <rect
+         y="1861.4973"
+         x="331.38538"
+         height="168.87773"
+         width="402.50134"
+         id="rect5832"
+         style="opacity:1;fill:#002b00;fill-opacity:1;stroke-width:0.86349463" />
+    </clipPath>
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath5835">
+      <rect
+         style="opacity:1;fill:#002b00;fill-opacity:1;stroke-width:0.8496061"
+         id="rect5837"
+         width="402.50134"
+         height="163.48892"
+         x="331.38547"
+         y="2052.8401" />
+    </clipPath>
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath6165-2-4">
+      <rect
+         style="opacity:1;fill:#000000;fill-opacity:1;stroke-width:0.9375"
+         id="rect6167-2-9"
+         width="339.05286"
+         height="330.95135"
+         x="1095.3221"
+         y="1429.5409" />
+    </clipPath>
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath6307">
+      <rect
+         y="1429.5409"
+         x="1423.4471"
+         height="330.95135"
+         width="339.05286"
+         id="rect6309"
+         style="opacity:1;fill:#000000;fill-opacity:1;stroke-width:0.9375" />
+    </clipPath>
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath6312">
+      <rect
+         y="1748.2909"
+         x="1430.9473"
+         height="330.95135"
+         width="339.05286"
+         id="rect6314"
+         style="opacity:1;fill:#000000;fill-opacity:1;stroke-width:0.9375" />
+    </clipPath>
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath6317">
+      <rect
+         y="1748.2908"
+         x="1095.3221"
+         height="330.95135"
+         width="339.05286"
+         id="rect6319"
+         style="opacity:1;fill:#000000;fill-opacity:1;stroke-width:0.9375" />
+    </clipPath>
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath6443-2">
+      <rect
+         style="opacity:1;fill:#ffffff;fill-opacity:1;stroke-width:0.96734178"
+         id="rect6445-2"
+         width="630.34869"
+         height="617.31433"
+         x="662.50342"
+         y="1247.8521" />
+    </clipPath>
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath6490">
+      <rect
+         y="1247.8521"
+         x="1243.7534"
+         height="617.31433"
+         width="630.34869"
+         id="rect6492"
+         style="opacity:1;fill:#ffffff;fill-opacity:1;stroke-width:0.96734178" />
+    </clipPath>
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath6584">
+      <rect
+         y="1247.8521"
+         x="662.50342"
+         height="617.31433"
+         width="572.01239"
+         id="rect6586"
+         style="opacity:1;fill:#ffffff;fill-opacity:1;stroke-width:0.92149341" />
+    </clipPath>
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath6589">
+      <rect
+         y="1877.8518"
+         x="671.87842"
+         height="617.31433"
+         width="566.70911"
+         id="rect6591"
+         style="opacity:1;fill:#ffffff;fill-opacity:1;stroke-width:0.91721177" />
+    </clipPath>
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath6594">
+      <rect
+         y="1870.1385"
+         x="1243.3992"
+         height="617.31433"
+         width="630.34869"
+         id="rect6596"
+         style="opacity:1;fill:#ffffff;fill-opacity:1;stroke-width:0.96734178" />
+    </clipPath>
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath6716">
+      <rect
+         style="opacity:1;fill:#ffffff;fill-opacity:1;stroke-width:0.9375"
+         id="rect6718"
+         width="615.18286"
+         height="198.87378"
+         x="1588.3386"
+         y="2473.5095" />
+    </clipPath>
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath6722">
+      <rect
+         style="opacity:1;fill:#ffffff;fill-opacity:1;stroke-width:0.9375"
+         id="rect6724"
+         width="1180.587"
+         height="499.36688"
+         x="789.58923"
+         y="1812.392" />
+    </clipPath>
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath6864">
+      <rect
+         style="opacity:1;fill:#ffffff;fill-opacity:1;stroke-width:0.9375"
+         id="rect6866"
+         width="1003.3668"
+         height="134.81174"
+         x="3180.9375"
+         y="943.92963" />
+    </clipPath>
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath6890">
+      <rect
+         y="1093.9296"
+         x="3180.9375"
+         height="134.81174"
+         width="1003.3668"
+         id="rect6892"
+         style="opacity:1;fill:#ffffff;fill-opacity:1;stroke-width:0.9375" />
+    </clipPath>
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath7120">
+      <path
+         style="fill:none;stroke:#000000;stroke-width:0.9375px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         d="m 477.29707,2637.249 21.87612,-17.8987 108.71767,9.2808 76.89786,6.6292 2.65164,-114.684 -72.25747,-7.9549 -117.33553,13.9211 -97.53485,0.7595 -4.55369,45.6444 z"
+         id="path7122"
+         inkscape:connector-curvature="0" />
+    </clipPath>
+  </defs>
   <metadata
      id="metadata7">
     <rdf:RDF>
@@ -71,9 +286,19 @@
        inkscape:connector-curvature="0"
        id="path60"
        d="M 1157.7279,5.2025831 1499.985,2113.2021 9.4144246,1904.9987 0.41808375,0.4180459 Z"
-       style="fill:#00ff00;stroke:#000000;stroke-width:0.9375px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       style="fill:#44aa00;stroke:#000000;stroke-width:0.9375px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        sodipodi:nodetypes="ccccc" />
-  </g>
+    <flowRoot
+       xml:space="preserve"
+       id="flowRoot5914"
+       style="fill:black;fill-opacity:1;stroke:none;font-family:sans-serif;font-style:normal;font-weight:normal;font-size:40px;line-height:1.25;letter-spacing:0px;word-spacing:0px"><flowRegion
+         id="flowRegion5916"><rect
+           id="rect5918"
+           width="1162.5"
+           height="375"
+           x="43.75"
+           y="475.1084" /></flowRegion><flowPara
+         id="flowPara5920"></flowPara></flowRoot>  </g>
   <g
      style="display:inline;opacity:0.48699999"
      inkscape:label="Background blue"
@@ -83,8 +308,8 @@
        sodipodi:nodetypes="cccccc"
        inkscape:connector-curvature="0"
        id="path59"
-       d="M 1157.7279,5.2025831 1292.8521,1823.9164 1734.815,2457.0533 2999.9699,2320.275 2991.8299,12.63939 Z"
-       style="fill:#0000ff;stroke:#000000;stroke-width:0.9375px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+       d="M 1157.7279,8.952583 1292.8521,1827.6664 1734.815,2460.8033 2999.9699,2324.025 2991.8299,16.38939 Z"
+       style="fill:#000080;stroke:#000000;stroke-width:0.9375px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
   </g>
   <g
      style="display:inline;opacity:0.542"
@@ -119,17 +344,17 @@
        sodipodi:nodetypes="ccccc"
        inkscape:connector-curvature="0"
        id="path3760"
-       d="m 1787.8785,4229.871 -287.8935,-2116.6689 1473.2293,203.3615 26.7556,1896.4285 z"
-       style="fill:#ffcc00;stroke:#000000;stroke-width:0.9375px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+       d="m 1787.8785,4231.746 -287.8935,-2116.6689 1473.2293,203.3615 26.7556,1896.4285 z"
+       style="fill:#d4aa00;stroke:#000000;stroke-width:0.9375px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
   </g>
   <g
      inkscape:groupmode="layer"
      id="layer11"
      inkscape:label="Background Orange"
-     style="opacity:0.865">
+     style="opacity:0.439">
     <path
        style="opacity:1;fill:#000000;stroke:#000000;stroke-width:0.9375px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       d="M -14.145782,4028.7816 2991.3932,3878.5495 2999.9699,4212.9921 0,4212.9922 Z"
+       d="M -14.145782,3950.0316 2991.3932,3799.7995 2999.9699,4212.9921 0,4212.9922 Z"
        id="path5324"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="ccccc" />
@@ -146,6 +371,25 @@
      inkscape:label="Background"
      id="layer2"
      inkscape:groupmode="layer">
+    <g
+       inkscape:groupmode="layer"
+       id="layer12"
+       inkscape:label="Suppression 1"
+       style="display:inline;opacity:0.51300001"
+       transform="translate(0,-1233.071)">
+      <path
+         style="fill:#ffffff;stroke:#000000;stroke-width:0.9375px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         d="M -14.145782,3950.0316 2991.3932,3799.7995 3000,3146.1172 -22.5,2973.6172 Z"
+         id="path6265"
+         inkscape:connector-curvature="0"
+         sodipodi:nodetypes="ccccc" />
+      <path
+         style="opacity:1;fill:#ffffff;stroke:#000000;stroke-width:0.9375px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         d="M -14.104369,1213.4399 2991.4346,1063.2078 2983.2532,440.83199 -39.569603,296.32671 Z"
+         id="path6265-6"
+         inkscape:connector-curvature="0"
+         sodipodi:nodetypes="ccccc" />
+    </g>
     <flowRoot
        transform="translate(125.10714,-1253.7495)"
        style="font-style:normal;font-weight:normal;line-height:0.01%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-size:32.49999952px;"
@@ -244,7 +488,7 @@
        style="display:inline" />
     <image
        sodipodi:absref="C:\Users\dougl\Documents\work\LimFIRE_pres\docs\presentation\logos\suncorp.png"
-       y="2780.5532"
+       y="2724.3032"
        x="1623.137"
        id="image4111"
        xlink:href="file:///C:/Users/dougl/Documents/work/LimFIRE_pres/docs/presentation/logos/suncorp.png"
@@ -253,8 +497,8 @@
        width="262.90875" />
     <image
        sodipodi:absref="C:\Users\dougl\Documents\work\LimFIRE_pres\docs\presentation\logos\Met_Office.png"
-       y="2779.3442"
-       x="1298.1113"
+       y="2719.3442"
+       x="1374.9863"
        id="image4122"
        xlink:href="file:///C:/Users/dougl/Documents/work/LimFIRE_pres/docs/presentation/logos/Met_Office.png"
        preserveAspectRatio="none"
@@ -281,7 +525,7 @@
      id="layer9"
      inkscape:groupmode="layer">
     <flowRoot
-       transform="scale(0.93749999)"
+       transform="matrix(0.93749999,0,0,0.93749999,834.375,714.375)"
        style="font-style:normal;font-weight:normal;font-size:40px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
        id="flowRoot67"
        xml:space="preserve"><flowRegion
@@ -291,29 +535,224 @@
            height="280"
            width="794.28571"
            id="rect71" /></flowRegion><flowPara
-         style="-inkscape-font-specification:Rokkitt;font-family:Rokkitt;font-weight:bold;font-style:normal;font-stretch:normal;font-variant:normal;font-size:133.33333279px;fill:#ffffff"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:100px;font-family:Rokkitt;-inkscape-font-specification:Rokkitt;fill:#ffffff"
          id="flowPara73">Fuel</flowPara></flowRoot>    <image
-       sodipodi:absref="C:\Users\dougl\Documents\work\LimFIRE_pres\docs\poster\poster\Inkscape\Images/genericMap-bw.png"
-       xlink:href="Images/genericMap-bw.png"
+       sodipodi:absref="C:\Users\dougl\Documents\work\LimFIRE_pres\docs\poster\poster\Inkscape\Images/inputs_mean-npp.png"
+       xlink:href="Images/inputs_mean-npp.png"
        width="540"
        height="300"
        preserveAspectRatio="none"
-       id="image4166"
-       x="40.740265"
-       y="657.27869" />
+       id="image5401"
+       x="6.4158931"
+       y="1604.8534" />
+    <image
+       sodipodi:absref="C:\Users\dougl\Documents\work\LimFIRE_pres\docs\poster\poster\Inkscape\Images/inputs_mean-Lightn.png"
+       xlink:href="Images/inputs_mean-Lightn.png"
+       width="540"
+       height="300"
+       preserveAspectRatio="none"
+       id="image5646"
+       x="-14.531189"
+       y="2197.6016" />
+    <image
+       sodipodi:absref="C:\Users\dougl\Documents\work\LimFIRE_pres\docs\poster\poster\Inkscape\Images/inputs_fireSeason-Lightn.png"
+       xlink:href="Images/inputs_fireSeason-Lightn.png"
+       transform="translate(-26.25,-129.375)"
+       clip-path="url(#clipPath7120)"
+       width="243.75"
+       height="135.41667"
+       preserveAspectRatio="none"
+       id="image5657"
+       x="400.3125"
+       y="2527.302" />
+    <image
+       sodipodi:absref="C:\Users\dougl\Documents\work\LimFIRE_pres\docs\poster\poster\Inkscape\Images/inputs_mean-popdens.png"
+       xlink:href="Images/inputs_mean-popdens.png"
+       width="540"
+       height="300"
+       preserveAspectRatio="none"
+       id="image5679"
+       x="-14.10437"
+       y="2559.6899" />
+    <image
+       sodipodi:absref="C:\Users\dougl\Documents\work\LimFIRE_pres\docs\poster\poster\Inkscape\Images/inputs_mean-pas.png"
+       xlink:href="Images/inputs_mean-pas.png"
+       width="540"
+       height="300"
+       preserveAspectRatio="none"
+       id="image5690"
+       x="435.9375"
+       y="2613.9688" />
     <flowRoot
        xml:space="preserve"
-       id="flowRoot4315"
+       id="flowRoot5922"
+       style="fill:black;fill-opacity:1;stroke:none;font-family:sans-serif;font-style:normal;font-weight:normal;font-size:40px;line-height:1.25;letter-spacing:0px;word-spacing:0px"><flowRegion
+         id="flowRegion5924"><rect
+           id="rect5926"
+           width="1168.75"
+           height="337.5"
+           x="37.5"
+           y="425.1084" /></flowRegion><flowPara
+         id="flowPara5928"></flowPara></flowRoot>    <flowRoot
+       xml:space="preserve"
+       id="flowRoot5930"
+       style="fill:black;fill-opacity:1;stroke:none;font-family:sans-serif;font-style:normal;font-weight:normal;font-size:40px;line-height:1.25;letter-spacing:0px;word-spacing:0px"><flowRegion
+         id="flowRegion5932"><rect
+           id="rect5934"
+           width="836.65942"
+           height="654.50537"
+           x="2225"
+           y="1551.853" /></flowRegion><flowPara
+         id="flowPara5936"></flowPara></flowRoot>    <flowRoot
+       xml:space="preserve"
+       id="flowRoot5938"
        style="font-style:normal;font-weight:normal;font-size:40px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
-       transform="scale(0.93749999)"><flowRegion
-         id="flowRegion4317"><rect
-           id="rect4319"
-           width="744.0437"
-           height="272.76111"
-           x="43.456284"
-           y="1021.0973" /></flowRegion><flowPara
-         id="flowPara4321"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:66.6666664px;font-family:Rokkitt;-inkscape-font-specification:Rokkitt;fill:#f9f9f9">Inputs: NPP (ref)</flowPara></flowRoot>  </g>
+       transform="matrix(0.93749999,0,0,0.93749999,-90,-46.875)"><flowRegion
+         id="flowRegion5940"><rect
+           id="rect5942"
+           width="1318.7185"
+           height="1076.3547"
+           x="118.75"
+           y="512.6084" /></flowRegion><flowPara
+         id="flowPara5944"
+         style="font-size:48px;line-height:1.5;fill:#000000">Global fire models typially described burnt area as </flowPara><flowPara
+         style="font-size:48px;line-height:1.5;fill:#000000"
+         id="flowPara6346">a consequence of fuel load, moisture, natural &amp; anthropagenic ignition and land use suppression (Rabin et al. 2017). A lack of information on </flowPara><flowPara
+         style="font-size:48px;line-height:1.5;fill:#000000"
+         id="flowPara6352">temporal &amp; spatial distribution of these controls has meant their distribution is largely untested. Here, </flowPara><flowPara
+         style="font-size:48px;line-height:1.5;fill:#000000"
+         id="flowPara6358">we map the limitation and sensitivity of burnt area </flowPara><flowPara
+         style="font-size:48px;line-height:1.5;fill:#000000"
+         id="flowPara6364">to <flowSpan
+   style="font-weight:bold;line-height:1.5;fill:#000000"
+   id="flowSpan5970">Fuel</flowSpan>, <flowSpan
+   style="font-weight:bold;line-height:1.5;fill:#000000"
+   id="flowSpan5972">Moisture</flowSpan>, <flowSpan
+   style="font-weight:bold;line-height:1.5;fill:#000000"
+   id="flowSpan5974">Ignitions</flowSpan> and <flowSpan
+   style="font-weight:bold;line-height:1.5;fill:#000000"
+   id="flowSpan5976">Suppression</flowSpan> controls by opQtimizing a simple fire limitation </flowPara><flowPara
+         style="font-size:48px;line-height:1.5;fill:#000000"
+         id="flowPara6910">model,  with meteorological and remote sensed inputs, against monthly gridded burnt area.</flowPara></flowRoot>    <flowRoot
+       transform="matrix(0.93749999,0,0,0.93749999,-117.62013,-142.70421)"
+       style="font-style:normal;font-weight:normal;font-size:40px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
+       id="flowRoot67-9"
+       xml:space="preserve"><flowRegion
+         id="flowRegion69-7"><rect
+           y="482.42975"
+           x="165.71428"
+           height="280"
+           width="794.28571"
+           id="rect71-7" /></flowRegion><flowPara
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:133.33332825px;font-family:Rokkitt;-inkscape-font-specification:Rokkitt;fill:#000000"
+         id="flowPara73-6">Introduction</flowPara></flowRoot>    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:37.5px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.9375"
+       x="161.58495"
+       y="933.64642"
+       id="text5980"><tspan
+         sodipodi:role="line"
+         id="tspan5978"
+         x="161.58495"
+         y="966.82513"
+         style="stroke-width:0.9375"></tspan></text>
+    <flowRoot
+       transform="matrix(0.93749999,0,0,0.93749999,1131.5047,-82.511609)"
+       style="font-style:normal;font-weight:normal;font-size:40px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
+       id="flowRoot67-9-4"
+       xml:space="preserve"><flowRegion
+         id="flowRegion69-7-2"><rect
+           y="482.42975"
+           x="165.71428"
+           height="342.2254"
+           width="686.80542"
+           id="rect71-7-3" /></flowRegion><flowPara
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:133.33332825px;font-family:Rokkitt;-inkscape-font-specification:Rokkitt;fill:#000000"
+         id="flowPara73-6-4">Framework Overview</flowPara></flowRoot>    <flowRoot
+       xml:space="preserve"
+       id="flowRoot5938-6"
+       style="font-style:normal;font-weight:normal;font-size:40px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
+       transform="matrix(0.93749999,0,0,0.93749999,1807.2469,-68.167049)"><flowRegion
+         id="flowRegion5940-4"><rect
+           id="rect5942-6"
+           width="1114.1825"
+           height="747.89703"
+           x="118.75"
+           y="512.6084" /></flowRegion><flowPara
+         id="flowPara5944-2"
+         style="font-size:48px;line-height:1.5;text-align:end;text-anchor:end;fill:#000000">The Simple Liimitation                               </flowPara><flowPara
+         style="font-size:48px;line-height:1.5;text-align:end;text-anchor:end;fill:#000000"
+         id="flowPara6900">model calculates burnt area (<flowSpan
+   style="font-style:italic;line-height:1.5"
+   id="flowSpan6370">BA</flowSpan>) as a product of the &quot;maximum fire&quot; (<flowSpan
+   style="font-style:italic;line-height:1.5"
+   id="flowSpan6372">F(x)</flowSpan>) for each control:</flowPara><flowPara
+         style="font-size:48px;line-height:1.5;text-align:end;text-anchor:end;fill:#000000"
+         id="flowPara6894" /><flowPara
+         style="font-size:48px;line-height:1.5;text-align:end;text-anchor:end;fill:#000000"
+         id="flowPara6792" /><flowPara
+         style="font-size:48px;line-height:1.5;text-align:end;text-anchor:end;fill:#000000"
+         id="flowPara6794">Each limitation is represented by a logistic</flowPara><flowPara
+         style="font-size:48px;line-height:1.5;text-align:end;text-anchor:end;fill:#000000"
+         id="flowPara6107">function, left, where <flowSpan
+   style="font-style:italic;line-height:1.5"
+   id="flowSpan6376">x</flowSpan> is the control. For fuel, </flowPara><flowPara
+         style="font-size:48px;line-height:1.5;text-align:end;text-anchor:end;fill:#000000"
+         id="flowPara6804">X is represented by one variable. For other controls, X is a linear aggregation of variables </flowPara></flowRoot>    <image
+       sodipodi:absref="C:\Users\dougl\Documents\work\LimFIRE_pres\docs\diagrams\Logistic_fun.png"
+       y="576.18298"
+       x="1211.7517"
+       id="image6082"
+       xlink:href="file:///C:/Users/dougl/Documents/work/LimFIRE_pres/docs/diagrams/Logistic_fun.png"
+       preserveAspectRatio="none"
+       height="544.75037"
+       width="764.63055" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:37.5px;line-height:1.25;font-family:sans-serif;text-align:end;letter-spacing:0px;word-spacing:0px;text-anchor:end;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.9375"
+       x="2563.4766"
+       y="966.8985"
+       id="text6115"><tspan
+         sodipodi:role="line"
+         x="2563.4766"
+         y="1000.0772"
+         style="stroke-width:0.9375"
+         id="tspan6117" /></text>
+    <flowRoot
+       transform="matrix(0.93749999,0,0,0.93749999,-99.45631,2516.1798)"
+       style="font-style:normal;font-weight:normal;font-size:40px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
+       id="flowRoot67-9-47"
+       xml:space="preserve"><flowRegion
+         id="flowRegion69-7-7"><rect
+           y="482.42975"
+           x="165.71428"
+           height="280"
+           width="794.28571"
+           id="rect71-7-31" /></flowRegion><flowPara
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:133.33332825px;font-family:Rokkitt;-inkscape-font-specification:Rokkitt;fill:#000000"
+         id="flowPara73-6-9">Results</flowPara></flowRoot>    <image
+       sodipodi:absref="C:\Users\dougl\Documents\work\LimFIRE_pres\docs\poster\poster\Inkscape\Images/equations.png"
+       xlink:href="Images/equations.png"
+       transform="translate(-1181.25,-384.375)"
+       clip-path="url(#clipPath6864)"
+       width="991.875"
+       height="744.375"
+       preserveAspectRatio="none"
+       id="image6859"
+       x="3180.9375"
+       y="943.92969" />
+    <image
+       sodipodi:absref="C:\Users\dougl\Documents\work\LimFIRE_pres\docs\poster\poster\Inkscape\Images/equations.png"
+       xlink:href="Images/equations.png"
+       y="943.92969"
+       x="3180.9375"
+       id="image6859-9"
+       preserveAspectRatio="none"
+       height="744.375"
+       width="991.875"
+       clip-path="url(#clipPath6890)"
+       transform="translate(-706.47461,-159.53775)" />
+  </g>
   <g
      inkscape:groupmode="layer"
      id="g83"
@@ -322,7 +761,7 @@
        xml:space="preserve"
        id="flowRoot81"
        style="font-style:normal;font-weight:normal;font-size:40px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
-       transform="matrix(0.93749999,0,0,0.93749999,1968.75,0)"><flowRegion
+       transform="matrix(0.93749999,0,0,0.93749999,881.25,695.625)"><flowRegion
          id="flowRegion77"><rect
            id="rect75"
            width="794.28571"
@@ -330,100 +769,24 @@
            x="165.71428"
            y="482.42975" /></flowRegion><flowPara
          id="flowPara79"
-         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:133.33332825px;font-family:Rokkitt;-inkscape-font-specification:Rokkitt;text-align:end;text-anchor:end;fill:#ffffff">Moisture</flowPara></flowRoot>    <image
-       sodipodi:absref="C:\Users\dougl\Documents\work\LimFIRE_pres\docs\poster\poster\Inkscape\Images/genericMap-bw.png"
-       xlink:href="Images/genericMap-bw.png"
-       y="560.84937"
-       x="1479.6714"
-       id="image4166-3"
-       preserveAspectRatio="none"
-       height="300"
-       width="540" />
-    <image
-       sodipodi:absref="C:\Users\dougl\Documents\work\LimFIRE_pres\docs\poster\poster\Inkscape\Images/genericMap-bw.png"
-       xlink:href="Images/genericMap-bw.png"
-       y="860.84937"
-       x="1479.6714"
-       id="image4166-3-9"
-       preserveAspectRatio="none"
-       height="300"
-       width="540" />
-    <image
-       sodipodi:absref="C:\Users\dougl\Documents\work\LimFIRE_pres\docs\poster\poster\Inkscape\Images/genericMap.png"
-       xlink:href="Images/genericMap.png"
-       width="854.88348"
-       height="474.93527"
-       preserveAspectRatio="none"
-       id="image4222"
-       x="994.65332"
-       y="1748.8502" />
-    <image
-       sodipodi:absref="C:\Users\dougl\Documents\work\LimFIRE_pres\docs\poster\poster\Inkscape\Images/genericMap.png"
-       xlink:href="Images/genericMap.png"
-       y="2078.8501"
-       x="994.06812"
-       id="image4222-5"
-       preserveAspectRatio="none"
-       height="474.93527"
-       width="854.88348" />
-    <image
-       sodipodi:absref="C:\Users\dougl\Documents\work\LimFIRE_pres\docs\poster\poster\Inkscape\Images/genericMap-bw.png"
-       xlink:href="Images/genericMap-bw.png"
-       y="3008.3047"
-       x="1440.9375"
-       id="image4166-3-9-5"
-       preserveAspectRatio="none"
-       height="300"
-       width="540" />
-    <image
-       sodipodi:absref="C:\Users\dougl\Documents\work\LimFIRE_pres\docs\poster\poster\Inkscape\Images/genericMap-bw.png"
-       xlink:href="Images/genericMap-bw.png"
-       y="3020.0234"
-       x="2043.2812"
-       id="image4166-3-9-5-9"
-       preserveAspectRatio="none"
-       height="300"
-       width="540" />
-    <image
-       sodipodi:absref="C:\Users\dougl\Documents\work\LimFIRE_pres\docs\poster\poster\Inkscape\Images/genericMap-bw.png"
-       xlink:href="Images/genericMap-bw.png"
-       y="3005.9609"
-       x="887.8125"
-       id="image4166-3-9-5-5"
-       preserveAspectRatio="none"
-       height="300"
-       width="540" />
-    <image
-       sodipodi:absref="C:\Users\dougl\Documents\work\LimFIRE_pres\docs\poster\poster\Inkscape\Images/genericMap-bw.png"
-       xlink:href="Images/genericMap-bw.png"
-       y="3005.9609"
-       x="100.3125"
-       id="image4166-3-9-5-5-3"
-       preserveAspectRatio="none"
-       height="300"
-       width="540" />
-    <flowRoot
-       transform="matrix(0.93749999,0,0,0.93749999,1476.3441,211.95323)"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:100px;font-family:Rokkitt;-inkscape-font-specification:Rokkitt;text-align:end;text-anchor:end;fill:#ffffff">Moisture</flowPara></flowRoot>    <flowRoot
+       transform="matrix(0.93749999,0,0,0.93749999,-19.852766,257.70165)"
        xml:space="preserve"
-       id="flowRoot4315-1"
+       id="flowRoot4315-1-7-3"
        style="font-style:normal;font-weight:normal;font-size:40px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"><flowRegion
-         id="flowRegion4317-4"><rect
-           id="rect4319-2"
-           width="919.0437"
-           height="260.26111"
+         id="flowRegion4317-4-7-8"><rect
+           id="rect4319-2-1-0"
+           width="657.42804"
+           height="390.28723"
            x="43.456284"
            y="1021.0973" /></flowRegion><flowPara
-         id="flowPara4321-8"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:66.66666412px;font-family:Rokkitt;-inkscape-font-specification:Rokkitt;fill:#f9f9f9">Inputs: Soil Moisture (</flowPara><flowPara
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:66.66666412px;font-family:Rokkitt;-inkscape-font-specification:Rokkitt;fill:#f9f9f9"
-         id="flowPara4373">           Atomospheric Dyring Potential</flowPara><flowPara
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:66.66666412px;font-family:Rokkitt;-inkscape-font-specification:Rokkitt;fill:#f9f9f9"
-         id="flowPara4369" /></flowRoot>    <g
-       id="g5201"
-       transform="matrix(0.49651497,0,0,0.48590597,964.10214,394.65361)">
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:40px;line-height:1.5;font-family:sans-serif;-inkscape-font-specification:sans-serif;fill:#f9f9f9"
+         id="flowPara4369-5-1">MODIS fractional vegetation cover (Townshend et al. 2001) is used to assess the impact of fuel dicontinuity on burnt aread Proxies for fuel load (i.e NPP) can also be assessed seperatly.</flowPara></flowRoot>    <g
+       id="g5201-0"
+       transform="matrix(-0.49651497,0,0,0.48590597,2822.0177,940.25524)">
       <path
          inkscape:connector-curvature="0"
-         id="path5186"
+         id="path5186-1"
          d="m 2405.1554,973.70184 -115.47,-54.10323 v 108.20649 z"
          style="fill:#f9f9f9;stroke:#000000;stroke-width:0.08857119px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
       <rect
@@ -431,81 +794,450 @@
          x="2125.9565"
          height="29.031511"
          width="250.97156"
-         id="rect5197"
+         id="rect5197-7"
          style="opacity:1;fill:#ffffff;fill-opacity:1;stroke-width:0.1352721" />
     </g>
-    <rect
-       style="opacity:1;fill:#ffffff;fill-opacity:1;stroke-width:0.9375"
-       id="rect5203"
-       width="694.33594"
-       height="471.67969"
-       x="1848.9517"
-       y="1607.1704" />
-    <rect
-       style="opacity:1;fill:#ffffff;fill-opacity:1;stroke-width:0.9375"
-       id="rect5203-1"
-       width="694.33594"
-       height="471.67972"
-       x="299.73218"
-       y="1397.8735" />
-    <rect
-       style="opacity:1;fill:#ffffff;fill-opacity:1;stroke-width:0.9375"
-       id="rect5203-4"
-       width="694.33594"
-       height="471.67972"
-       x="300.31738"
-       y="2223.7854" />
-    <rect
-       style="opacity:1;fill:#ffffff;fill-opacity:1;stroke-width:0.9375"
-       id="rect5203-4-6"
-       width="694.33594"
-       height="471.67975"
-       x="1849.5369"
-       y="2223.7854" />
     <flowRoot
-       transform="matrix(0.93749999,0,0,0.93749999,987.8357,469.6001)"
+       transform="matrix(0.93749999,0,0,0.93749999,1781.7316,750.84862)"
        xml:space="preserve"
-       id="flowRoot4315-1-7"
-       style="font-style:normal;font-weight:normal;font-size:40px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"><flowRegion
-         id="flowRegion4317-4-7"><rect
-           id="rect4319-2-1"
-           width="919.0437"
-           height="260.26111"
+       id="flowRoot4315-1-7-3-2-2"
+       style="font-style:normal;font-weight:normal;font-size:40px;line-height:1.25;font-family:sans-serif;text-align:end;letter-spacing:0px;word-spacing:0px;text-anchor:end;fill:#000000;fill-opacity:1;stroke:none"><flowRegion
+         id="flowRegion4317-4-7-8-2-7"
+         style="text-align:end;text-anchor:end"><rect
+           id="rect4319-2-1-0-1-4"
+           width="1156.6196"
+           height="289.28571"
            x="43.456284"
-           y="1021.0973" /></flowRegion><flowPara
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:66.66666412px;font-family:Rokkitt;-inkscape-font-specification:Rokkitt;fill:#f9f9f9"
-         id="flowPara4369-5">Baysian Optimization Baysian Optimization Baysian Optimization Baysian Optimization </flowPara></flowRoot>    <flowRoot
-       transform="matrix(0.93749999,0,0,0.93749999,1055.3425,1550.1626)"
+           y="1021.0973"
+           style="text-align:end;text-anchor:end" /></flowRegion><flowPara
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:40px;line-height:1.5;font-family:sans-serif;-inkscape-font-specification:sans-serif;text-align:end;text-anchor:end;fill:#f9f9f9"
+         id="flowPara4369-5-1-2-3">Some variables have                                                    </flowPara><flowPara
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:40px;line-height:1.5;font-family:sans-serif;-inkscape-font-specification:sans-serif;text-align:end;text-anchor:end;fill:#f9f9f9"
+         id="flowPara6969"> a sub annual cycle. Small maps show  values          </flowPara><flowPara
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:40px;line-height:1.5;font-family:sans-serif;-inkscape-font-specification:sans-serif;text-align:end;text-anchor:end;fill:#f9f9f9"
+         id="flowPara7295">during the month of the year with maximum fire</flowPara></flowRoot>    <flowRoot
+       transform="matrix(0.93749999,0,0,0.93749999,1831.4191,129.28612)"
        xml:space="preserve"
-       id="flowRoot4315-1-7-8"
-       style="font-style:normal;font-weight:normal;font-size:40px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"><flowRegion
-         id="flowRegion4317-4-7-4"><rect
-           id="rect4319-2-1-2"
-           width="919.0437"
-           height="260.26111"
+       id="flowRoot4315-1-7-3-2-4"
+       style="font-style:normal;font-weight:normal;font-size:40px;line-height:1.25;font-family:sans-serif;text-align:end;letter-spacing:0px;word-spacing:0px;text-anchor:end;fill:#000000;fill-opacity:1;stroke:none"><flowRegion
+         id="flowRegion4317-4-7-8-2-9"
+         style="text-align:end;text-anchor:end"><rect
+           id="rect4319-2-1-0-1-9"
+           width="1163.9917"
+           height="434.71179"
            x="43.456284"
-           y="1021.0973" /></flowRegion><flowPara
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:66.66666412px;font-family:Rokkitt;-inkscape-font-specification:Rokkitt;fill:#f9f9f9"
-         id="flowPara4369-5-9">Fire COntrols and sensityovityFire COntrols and sensityovityFire COntrols and sensityovity</flowPara></flowRoot>  </g>
+           y="1021.0973"
+           style="text-align:end;text-anchor:end" /></flowRegion><flowPara
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:40px;line-height:1.5;font-family:sans-serif;-inkscape-font-specification:sans-serif;text-align:end;text-anchor:end;fill:#f9f9f9"
+         id="flowPara4369-5-1-2-4">Live fuel </flowPara><flowPara
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:40px;line-height:1.5;font-family:sans-serif;-inkscape-font-specification:sans-serif;text-align:end;text-anchor:end;fill:#f9f9f9"
+         id="flowPara6764">moisture is represented by soil moisture simulated from a simple water balance model (SLASH: Davis et al. 2017), and dead fuel moisture by the &quot;equilbrium moisture content&quot;, loosly related to humidity (Kelley et al. </flowPara><flowPara
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:40px;line-height:1.5;font-family:sans-serif;-inkscape-font-specification:sans-serif;text-align:end;text-anchor:end;fill:#f9f9f9"
+         id="flowPara6834">2014).  </flowPara></flowRoot>    <image
+       sodipodi:absref="C:\Users\dougl\Documents\work\LimFIRE_pres\docs\presentation\images\limitation_legend.png"
+       y="3251.5979"
+       x="1036.1578"
+       id="image5712"
+       xlink:href="file:///C:/Users/dougl/Documents/work/LimFIRE_pres/docs/presentation/images/limitation_legend.png"
+       preserveAspectRatio="none"
+       height="233.63823"
+       width="772.80334" />
+    <image
+       sodipodi:absref="C:\Users\dougl\Documents\work\LimFIRE_pres\docs\poster\poster\Inkscape\Images/limitation_map.png"
+       xlink:href="Images/limitation_map.png"
+       transform="matrix(1.7468886,0,0,1.7468886,132.88953,-172.22792)"
+       clip-path="url(#clipPath5830)"
+       y="1831.3097"
+       x="331.38538"
+       id="image5723-6"
+       preserveAspectRatio="none"
+       height="495"
+       width="810" />
+    <image
+       sodipodi:absref="C:\Users\dougl\Documents\work\LimFIRE_pres\docs\poster\poster\Inkscape\Images/limitation_map.png"
+       xlink:href="Images/limitation_map.png"
+       transform="matrix(0.96894085,0,0,0.96894085,352.84419,1380.2826)"
+       clip-path="url(#clipPath5835)"
+       y="1831.3097"
+       x="331.38538"
+       id="image5723-6-5"
+       preserveAspectRatio="none"
+       height="495"
+       width="810" />
+    <image
+       sodipodi:absref="C:\Users\dougl\Documents\work\LimFIRE_pres\docs\poster\poster\Inkscape\Images/limitation_map.png"
+       xlink:href="Images/limitation_map.png"
+       transform="matrix(1.7468886,0,0,1.7468886,70.99953,-139.51864)"
+       clip-path="url(#clipPath5799)"
+       y="1831.3097"
+       x="331.38538"
+       id="image5723-6-3"
+       preserveAspectRatio="none"
+       height="495"
+       width="810" />
+    <image
+       sodipodi:absref="C:\Users\dougl\Documents\work\LimFIRE_pres\docs\poster\poster\Inkscape\Images/limitation_map.png"
+       xlink:href="Images/limitation_map.png"
+       transform="matrix(0.96983089,0,0,0.96983089,967.4456,1378.2063)"
+       clip-path="url(#clipPath5825)"
+       y="1831.3097"
+       x="331.38538"
+       id="image5723-6-3-8"
+       preserveAspectRatio="none"
+       height="495"
+       width="810" />
+    <image
+       sodipodi:absref="C:\Users\dougl\Documents\work\LimFIRE_pres\docs\poster\poster\Inkscape\Images/inputs_mean-popdens.png"
+       xlink:href="Images/inputs_mean-popdens.png"
+       width="540"
+       height="300"
+       preserveAspectRatio="none"
+       id="image5900"
+       x="2046.8809"
+       y="2339.0698" />
+    <image
+       sodipodi:absref="C:\Users\dougl\Documents\work\LimFIRE_pres\docs\poster\poster\Inkscape\Images/inputs_mean-crop.png"
+       xlink:href="Images/inputs_mean-crop.png"
+       width="540"
+       height="300"
+       preserveAspectRatio="none"
+       id="image5911"
+       x="2510.6106"
+       y="2406.979" />
+    <image
+       sodipodi:absref="C:\Users\dougl\Documents\work\LimFIRE_pres\docs\poster\poster\Inkscape\Images/HumanImpactMap.png"
+       xlink:href="Images/HumanImpactMap.png"
+       width="851.18445"
+       height="401.06659"
+       preserveAspectRatio="none"
+       id="image6143"
+       x="2071.0046"
+       y="3430.9465" />
+    <image
+       sodipodi:absref="C:\Users\dougl\Documents\work\LimFIRE_pres\docs\poster\poster\Inkscape\Images/limLines.png"
+       xlink:href="Images/limLines.png"
+       transform="translate(-28.125,-26.25)"
+       clip-path="url(#clipPath6584)"
+       width="1179.9631"
+       height="1356.6"
+       preserveAspectRatio="none"
+       id="image6438"
+       x="662.50342"
+       y="1247.8521" />
+    <image
+       sodipodi:absref="C:\Users\dougl\Documents\work\LimFIRE_pres\docs\poster\poster\Inkscape\Images/limLines.png"
+       xlink:href="Images/limLines.png"
+       y="1247.8521"
+       x="662.50342"
+       id="image6438-0-1"
+       preserveAspectRatio="none"
+       height="1356.6"
+       width="1179.9631"
+       clip-path="url(#clipPath6589)"
+       transform="translate(309.68408,570.26074)" />
+    <image
+       sodipodi:absref="C:\Users\dougl\Documents\work\LimFIRE_pres\docs\poster\poster\Inkscape\Images/limLines.png"
+       xlink:href="Images/limLines.png"
+       y="1247.8521"
+       x="662.50342"
+       id="image6438-0-1-6"
+       preserveAspectRatio="none"
+       height="1356.6"
+       width="1179.9631"
+       clip-path="url(#clipPath6594)"
+       transform="translate(368.01864,570.31938)" />
+    <image
+       sodipodi:absref="C:\Users\dougl\Documents\work\LimFIRE_pres\docs\poster\poster\Inkscape\Images/inputs_fireDots.png"
+       xlink:href="Images/inputs_fireDots.png"
+       transform="translate(56.25)"
+       clip-path="url(#clipPath6722)"
+       width="1180.8214"
+       height="653.70001"
+       preserveAspectRatio="none"
+       id="image6696"
+       x="789.58923"
+       y="1812.392" />
+    <image
+       sodipodi:absref="C:\Users\dougl\Documents\work\LimFIRE_pres\docs\poster\poster\Inkscape\Images/inputs_fireDots.png"
+       xlink:href="Images/inputs_fireDots.png"
+       transform="translate(-356.57562,-288.70819)"
+       clip-path="url(#clipPath6716)"
+       y="1981.1421"
+       x="1247.0892"
+       id="image6696-1"
+       preserveAspectRatio="none"
+       height="653.70001"
+       width="1180.8214" />
+    <g
+       id="g6967"
+       transform="translate(37.5,-30)">
+      <image
+         sodipodi:absref="C:\Users\dougl\Documents\work\LimFIRE_pres\docs\poster\poster\Inkscape\Images/inputs_mean-emc.png"
+         xlink:href="Images/inputs_mean-emc.png"
+         y="1447.2322"
+         x="1808.4016"
+         id="image5412"
+         preserveAspectRatio="none"
+         height="300"
+         width="540" />
+      <image
+         sodipodi:absref="C:\Users\dougl\Documents\work\LimFIRE_pres\docs\poster\poster\Inkscape\Images/inputs_mean-alpha.png"
+         xlink:href="Images/inputs_mean-alpha.png"
+         y="1497.8572"
+         x="2295.9016"
+         id="image5423"
+         preserveAspectRatio="none"
+         height="300"
+         width="540" />
+      <image
+         sodipodi:absref="C:\Users\dougl\Documents\work\LimFIRE_pres\docs\poster\poster\Inkscape\Images/inputs_fireSeason-alpha.png"
+         xlink:href="Images/inputs_fireSeason-alpha.png"
+         y="907.9425"
+         x="2050.1941"
+         id="image5445"
+         preserveAspectRatio="none"
+         height="300"
+         width="540"
+         clip-path="url(#clipPath5452)"
+         transform="matrix(0.45138888,0,0,0.45138888,1779.7068,1314.2367)" />
+      <image
+         sodipodi:absref="C:\Users\dougl\Documents\work\LimFIRE_pres\docs\poster\poster\Inkscape\Images/inputs_fireSeason-emc.png"
+         xlink:href="Images/inputs_fireSeason-emc.png"
+         y="945.67731"
+         x="2606.4158"
+         id="image5486"
+         preserveAspectRatio="none"
+         height="112.5"
+         width="202.49998"
+         clip-path="url(#clipPath5493)"
+         transform="matrix(1.2037038,0,0,1.2037038,-931.63932,533.40804)" />
+      <flowRoot
+         transform="matrix(0.93749999,0,0,0.93749999,1475.0738,945.16748)"
+         style="font-style:normal;font-weight:normal;font-size:40px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
+         id="flowRoot81-0"
+         xml:space="preserve"><flowRegion
+           id="flowRegion77-9"><rect
+             y="482.42975"
+             x="165.71428"
+             height="280"
+             width="794.28571"
+             id="rect75-2" /></flowRegion><flowPara
+           style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:60px;font-family:Rokkitt;-inkscape-font-specification:Rokkitt;text-align:end;text-anchor:end;fill:#ffffff"
+           id="flowPara79-2">Equilibrium Moisture</flowPara></flowRoot>      <flowRoot
+         transform="matrix(0.93749999,0,0,0.93749999,1792.7499,1001.1608)"
+         style="font-style:normal;font-weight:normal;font-size:40px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
+         id="flowRoot81-0-3"
+         xml:space="preserve"><flowRegion
+           id="flowRegion77-9-7"><rect
+             y="482.42975"
+             x="165.71428"
+             height="280"
+             width="794.28571"
+             id="rect75-2-4" /></flowRegion><flowPara
+           style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:60px;font-family:Rokkitt;-inkscape-font-specification:Rokkitt;text-align:end;text-anchor:end;fill:#ffffff"
+           id="flowPara79-2-5">Soil Moisture</flowPara></flowRoot>    </g>
+    <image
+       sodipodi:absref="C:\Users\dougl\Documents\work\LimFIRE_pres\docs\poster\poster\Inkscape\Images/limLines.png"
+       xlink:href="Images/limLines.png"
+       y="1247.8521"
+       x="662.50342"
+       id="image6438-0"
+       preserveAspectRatio="none"
+       height="1356.6"
+       width="1179.9631"
+       clip-path="url(#clipPath6490)"
+       transform="translate(34.498889,-20.939674)" />
+    <flowRoot
+       transform="matrix(0.93749999,0,0,0.93749999,-406.9569,1104.7548)"
+       style="font-style:normal;font-weight:normal;font-size:40px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
+       id="flowRoot81-0-2"
+       xml:space="preserve"><flowRegion
+         id="flowRegion77-9-79"><rect
+           y="482.42975"
+           x="165.71428"
+           height="280"
+           width="794.28571"
+           id="rect75-2-3" /></flowRegion><flowPara
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:60px;font-family:Rokkitt;-inkscape-font-specification:Rokkitt;text-align:end;text-anchor:end;fill:#ffffff"
+         id="flowPara7007">Vegetative Cover</flowPara></flowRoot>    <flowRoot
+       transform="matrix(0.93749999,0,0,0.93749999,452.82725,1270.6231)"
+       xml:space="preserve"
+       id="flowRoot4315-1-7-3-8"
+       style="font-style:normal;font-weight:normal;font-size:40px;line-height:1.25;font-family:sans-serif;text-align:end;letter-spacing:0px;word-spacing:0px;text-anchor:end;fill:#000000;fill-opacity:1;stroke:none"><flowRegion
+         id="flowRegion4317-4-7-8-7"
+         style="text-align:end;text-anchor:end"><rect
+           id="rect4319-2-1-0-2"
+           width="494.78677"
+           height="395.14886"
+           x="43.456284"
+           y="1021.0973"
+           style="text-align:end;text-anchor:end" /></flowRegion><flowPara
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:40px;line-height:1.5;font-family:sans-serif;-inkscape-font-specification:sans-serif;text-align:end;text-anchor:end;fill:#f9f9f9"
+         id="flowPara7156">Lightning  sources are from rescaled LIS (Kelley et al. 2014) &amp;  </flowPara><flowPara
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:40px;line-height:1.5;font-family:sans-serif;-inkscape-font-specification:sans-serif;text-align:end;text-anchor:end;fill:#f9f9f9"
+         id="flowPara7431">        anthroapgenic </flowPara><flowPara
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:40px;line-height:1.5;font-family:sans-serif;-inkscape-font-specification:sans-serif;text-align:end;text-anchor:end;fill:#f9f9f9"
+         id="flowPara7435">       sources from HYDE (Goldewijk et al. 2010)</flowPara></flowRoot>    <flowRoot
+       transform="matrix(0.93749999,0,0,0.93749999,-456.61497,2029.6847)"
+       style="font-style:normal;font-weight:normal;font-size:40px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
+       id="flowRoot81-0-2-1"
+       xml:space="preserve"><flowRegion
+         id="flowRegion77-9-79-5"><rect
+           y="482.42975"
+           x="165.71428"
+           height="280"
+           width="794.28571"
+           id="rect75-2-3-3" /></flowRegion><flowPara
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:60px;font-family:Rokkitt;-inkscape-font-specification:Rokkitt;text-align:end;text-anchor:end;fill:#ffffff"
+         id="flowPara7007-9">Lightning Strikes</flowPara></flowRoot>    <flowRoot
+       transform="matrix(0.93749999,0,0,0.93749999,-426.22677,2388.5755)"
+       style="font-style:normal;font-weight:normal;font-size:40px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
+       id="flowRoot81-0-2-1-6"
+       xml:space="preserve"><flowRegion
+         id="flowRegion77-9-79-5-6"><rect
+           y="482.42975"
+           x="165.71428"
+           height="280"
+           width="794.28571"
+           id="rect75-2-3-3-3" /></flowRegion><flowPara
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:60px;font-family:Rokkitt;-inkscape-font-specification:Rokkitt;text-align:end;text-anchor:end;fill:#ffffff"
+         id="flowPara7007-9-6">Population Density </flowPara></flowRoot>    <flowRoot
+       transform="matrix(0.93749999,0,0,0.93749999,73.865039,2439.7829)"
+       style="font-style:normal;font-weight:normal;font-size:40px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
+       id="flowRoot81-0-2-1-6-3"
+       xml:space="preserve"><flowRegion
+         id="flowRegion77-9-79-5-6-9"><rect
+           y="482.42975"
+           x="165.71428"
+           height="280"
+           width="794.28571"
+           id="rect75-2-3-3-3-2" /></flowRegion><flowPara
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:60px;font-family:Rokkitt;-inkscape-font-specification:Rokkitt;text-align:end;text-anchor:end;fill:#ffffff"
+         id="flowPara7007-9-6-0">Pasture Cover      </flowPara></flowRoot>    <flowRoot
+       transform="matrix(0.93749999,0,0,0.93749999,2062.1206,1858.1804)"
+       xml:space="preserve"
+       id="flowRoot4315-1-7-3-8-9"
+       style="font-style:normal;font-weight:normal;font-size:40px;line-height:1.25;font-family:sans-serif;text-align:end;letter-spacing:0px;word-spacing:0px;text-anchor:end;fill:#000000;fill-opacity:1;stroke:none"><flowRegion
+         id="flowRegion4317-4-7-8-7-9"
+         style="text-align:end;text-anchor:end"><rect
+           id="rect4319-2-1-0-2-2"
+           width="860.78674"
+           height="457.1488"
+           x="43.456284"
+           y="1021.0973"
+           style="text-align:end;text-anchor:end" /></flowRegion><flowPara
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:40px;line-height:1.5;font-family:sans-serif;-inkscape-font-specification:sans-serif;text-align:end;text-anchor:end;fill:#f9f9f9"
+         id="flowPara7158-1">Population Density is used for both </flowPara><flowPara
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:40px;line-height:1.5;font-family:sans-serif;-inkscape-font-specification:sans-serif;text-align:end;text-anchor:end;fill:#f9f9f9"
+         id="flowPara7369">ignitions and suppression. Suppression also includes agricultural land</flowPara></flowRoot>    <flowRoot
+       transform="matrix(0.93749999,0,0,0.93749999,1721.4427,2165.7909)"
+       style="font-style:normal;font-weight:normal;font-size:40px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
+       id="flowRoot81-0-2-1-0"
+       xml:space="preserve"><flowRegion
+         id="flowRegion77-9-79-5-0"><rect
+           y="482.42975"
+           x="165.71428"
+           height="280"
+           width="794.28571"
+           id="rect75-2-3-3-0" /></flowRegion><flowPara
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:60px;font-family:Rokkitt;-inkscape-font-specification:Rokkitt;text-align:end;text-anchor:end;fill:#ffffff"
+         id="flowPara7007-9-69">Population Density</flowPara></flowRoot>    <flowRoot
+       transform="matrix(0.93749999,0,0,0.93749999,2493.5322,2231.187)"
+       style="font-style:normal;font-weight:normal;font-size:40px;line-height:1.25;font-family:sans-serif;text-align:start;letter-spacing:0px;word-spacing:0px;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none"
+       id="flowRoot81-0-2-1-0-2"
+       xml:space="preserve"><flowRegion
+         id="flowRegion77-9-79-5-0-5"
+         style="text-align:start;text-anchor:start"><rect
+           y="482.42975"
+           x="165.71428"
+           height="280"
+           width="794.28571"
+           id="rect75-2-3-3-0-4"
+           style="text-align:start;text-anchor:start" /></flowRegion><flowPara
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:60px;font-family:Rokkitt;-inkscape-font-specification:Rokkitt;text-align:start;text-anchor:start;fill:#ffffff"
+         id="flowPara7007-9-69-2">Crop Cover</flowPara></flowRoot>  </g>
   <g
      inkscape:label="Ignitions"
      id="g3747"
      inkscape:groupmode="layer">
     <flowRoot
-       transform="matrix(0.93749999,0,0,0.93749999,-1.8750003,2850)"
-       style="font-style:normal;font-weight:normal;font-size:40px;line-height:1.25;font-family:sans-serif;text-align:start;letter-spacing:0px;word-spacing:0px;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none"
+       transform="matrix(0.93749999,0,0,0.93749999,879.375,1863.75)"
+       style="font-style:normal;font-weight:normal;font-size:100px;line-height:1.25;font-family:sans-serif;text-align:start;letter-spacing:0px;word-spacing:0px;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none"
        id="flowRoot3745"
        xml:space="preserve"><flowRegion
-         style="text-align:start;text-anchor:start"
+         style="font-size:100px;text-align:start;text-anchor:start"
          id="flowRegion3741"><rect
-           style="text-align:start;text-anchor:start"
+           style="font-size:100px;text-align:start;text-anchor:start"
            y="482.42975"
            x="165.71428"
            height="280"
            width="794.28571"
            id="rect3739" /></flowRegion><flowPara
-         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:133.33332825px;font-family:Rokkitt;-inkscape-font-specification:Rokkitt;text-align:start;text-anchor:start;fill:#ffffff"
-         id="flowPara3743">Ignitions</flowPara></flowRoot>  </g>
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:100px;font-family:Rokkitt;-inkscape-font-specification:Rokkitt;text-align:start;text-anchor:start;fill:#ffffff"
+         id="flowPara3743">Ignitions</flowPara></flowRoot>    <flowRoot
+       xml:space="preserve"
+       id="flowRoot7160"
+       style="font-style:normal;font-weight:normal;font-size:40px;line-height:1.25;font-family:sans-serif;text-align:end;letter-spacing:0px;word-spacing:0px;text-anchor:end;fill:#000000;fill-opacity:1;stroke:none"
+       transform="matrix(0.93749999,0,0,0.93749999,48.75,24.374999)"><flowRegion
+         id="flowRegion7162"><rect
+           id="rect7164"
+           width="1181.8058"
+           height="297.85974"
+           x="10.042053"
+           y="2031.9987" /></flowRegion><flowPara
+         style="line-height:1.5"
+         id="flowPara7202">All controls and associated                     </flowPara><flowPara
+         style="line-height:1.5"
+         id="flowPara7211">parameters (<flowSpan
+   style="font-style:italic;line-height:1.5"
+   id="flowSpan7172">x</flowSpan><flowSpan
+   style="font-style:italic;font-size:64.99999762%;line-height:1.5;baseline-shift:sub"
+   id="flowSpan7170">0</flowSpan>, <flowSpan
+   style="font-style:italic;line-height:1.5"
+   id="flowSpan7176">k</flowSpan> and <flowSpan
+   style="font-style:italic;line-height:1.5"
+   id="flowSpan7178">c</flowSpan><flowSpan
+   style="font-style:italic;font-size:64.99999762%;line-height:1.5;baseline-shift:sub"
+   id="flowSpan7168">i</flowSpan>) are optimized against                      monthly 0.5 degree burnt area (GFED4s: Giglio et al.         </flowPara><flowPara
+         style="line-height:1.5"
+         id="flowPara7220">  2013) using a Baysian Optimization Framework (see web      </flowPara><flowPara
+         style="line-height:1.5"
+         id="flowPara7222">   address in footer for more info)      </flowPara></flowRoot>    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:37.5px;line-height:1.25;font-family:sans-serif;text-align:end;letter-spacing:0px;word-spacing:0px;text-anchor:end;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.9375"
+       x="426.91571"
+       y="1935.2245"
+       id="text7198"><tspan
+         sodipodi:role="line"
+         id="tspan7196"
+         x="426.91571"
+         y="1968.4032"
+         style="stroke-width:0.9375" /></text>
+    <flowRoot
+       xml:space="preserve"
+       id="flowRoot7160-8"
+       style="font-style:normal;font-weight:normal;font-size:40px;line-height:1.25;font-family:sans-serif;text-align:start;letter-spacing:0px;word-spacing:0px;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none"
+       transform="matrix(0.93749999,0,0,0.93749999,1836.6731,4.1566189)"><flowRegion
+         id="flowRegion7162-8"
+         style="text-align:start;text-anchor:start"><rect
+           id="rect7164-4"
+           width="1181.8059"
+           height="653.85974"
+           x="10.042053"
+           y="2031.9987"
+           style="text-align:start;text-anchor:start" /></flowRegion><flowPara
+         style="line-height:1.5;text-align:end;text-anchor:end"
+         id="flowPara7222-9">            Shaded regions on line plots show average </flowPara><flowPara
+         style="line-height:1.5;text-align:end;text-anchor:end"
+         id="flowPara7303">annual range of limitation imposed by each control for four points: Desert (fuel limited); Rainforest (moisture); </flowPara><flowPara
+         style="line-height:1.5;text-align:end;text-anchor:end"
+         id="flowPara7311">  Savanna (with little limitation) and cropland (agricultural </flowPara><flowPara
+         style="line-height:1.5;text-align:end;text-anchor:end"
+         id="flowPara7449">land used). Dots are annual average limitation, </flowPara><flowPara
+         style="line-height:1.5;text-align:end;text-anchor:end"
+         id="flowPara7313">whereas the sensitivity to change in a control</flowPara><flowPara
+         style="line-height:1.5;text-align:end;text-anchor:end"
+         id="flowPara7447"> can be calculated from the gradient (coloured lines) </flowPara></flowRoot>  </g>
   <g
      inkscape:groupmode="layer"
      id="g3757"
@@ -514,7 +1246,7 @@
        xml:space="preserve"
        id="flowRoot3755"
        style="font-style:normal;font-weight:normal;font-size:40px;line-height:1.25;font-family:sans-serif;text-align:end;letter-spacing:0px;word-spacing:0px;text-anchor:end;fill:#000000;fill-opacity:1;stroke:none"
-       transform="matrix(0.93749999,0,0,0.93749999,2060.625,2786.25)"><flowRegion
+       transform="matrix(0.93749999,0,0,0.93749999,1136.25,1890)"><flowRegion
          id="flowRegion3751"
          style="text-align:end;text-anchor:end"><rect
            id="rect3749"
@@ -524,5 +1256,48 @@
            y="482.42975"
            style="text-align:end;text-anchor:end" /></flowRegion><flowPara
          id="flowPara3753"
-         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:133.33332825px;font-family:Rokkitt;-inkscape-font-specification:Rokkitt;text-align:end;text-anchor:end;fill:#ffffff">Suppression</flowPara></flowRoot>  </g>
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:100px;font-family:Rokkitt;-inkscape-font-specification:Rokkitt;text-align:end;text-anchor:end;fill:#ffffff">Suppression</flowPara></flowRoot>    <flowRoot
+       xml:space="preserve"
+       id="flowRoot6247"
+       style="fill:black;fill-opacity:1;stroke:none;font-family:sans-serif;font-style:normal;font-weight:normal;font-size:40px;line-height:1.25;letter-spacing:0px;word-spacing:0px;text-anchor:end;text-align:end"><flowRegion
+         id="flowRegion6249"><rect
+           id="rect6251"
+           width="128"
+           height="432"
+           x="3760"
+           y="3213.8584" /></flowRegion><flowPara
+         id="flowPara6253"></flowPara></flowRoot>    <image
+       sodipodi:absref="C:\Users\dougl\Documents\work\LimFIRE_pres\docs\poster\poster\Inkscape\Images/QR code.png"
+       xlink:href="Images/QR code.png"
+       width="187.5"
+       height="187.5"
+       preserveAspectRatio="none"
+       id="image6397"
+       x="2785.1433"
+       y="3822.2996" />
+    <flowRoot
+       xml:space="preserve"
+       id="flowRoot6400"
+       style="font-style:normal;font-weight:normal;font-size:40px;line-height:1.25;font-family:sans-serif;text-align:end;letter-spacing:0px;word-spacing:0px;text-anchor:end;fill:#000000;fill-opacity:1;stroke:none"><flowRegion
+         id="flowRegion6402"><rect
+           id="rect6404"
+           width="503.16394"
+           height="140.8761"
+           x="2467.6555"
+           y="4136.2437" /></flowRegion><flowPara
+         id="flowPara6406" /></flowRoot>    <flowRoot
+       xml:space="preserve"
+       id="flowRoot6408"
+       style="font-style:normal;font-weight:normal;font-size:40px;line-height:1.25;font-family:sans-serif;text-align:end;letter-spacing:0px;word-spacing:0px;text-anchor:end;fill:#000000;fill-opacity:1;stroke:none"
+       transform="matrix(0.93749999,0,0,0.93749999,-318.75,639.375)"><flowRegion
+         id="flowRegion6410"><rect
+           id="rect6412"
+           width="778.81958"
+           height="225.26123"
+           x="2496"
+           y="3409.8584" /></flowRegion><flowPara
+         id="flowPara6414">Try out our framework </flowPara><flowPara
+         id="flowPara6428">using our ipthon notebook:</flowPara><flowPara
+         id="flowPara6416">github.com/rhyswhitley/fire_limitation</flowPara><flowPara
+         id="flowPara6418" /></flowRoot>  </g>
 </svg>
