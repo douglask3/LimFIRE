@@ -1,5 +1,5 @@
 plot_4way <- function(x, y, A, B, C, D, x_range = c(-180, 180), y_range = c(-90, 
-    90), limits = c(0.33, 0.5, 0.67), cols = c("FF", "CC", "99", 
+    90), limits = c(0.1, 0.5, 0.9), cols = c("FF", "CC", "99", 
     "55", "11"), add_legend = TRUE, smooth_image = FALSE, smooth_factor = 5, 
     add = FALSE, ...) 
 {
@@ -77,7 +77,7 @@ plot_4way <- function(x, y, A, B, C, D, x_range = c(-180, 180), y_range = c(-90,
         smooth_image = FALSE, smooth_factor = NULL, readyCut = TRUE, 
         add_legend = FALSE, add = add, 
         e = e, limits_error = 0.5 + 1:length(limits),  
-        ePatternRes = 30,  ePatternThick = 0.2, e_polygon = FALSE,
+        ePatternRes = 20,  ePatternThick = 0.2, e_polygon = FALSE,
         ...)
     
     plotFun(add)
