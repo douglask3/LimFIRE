@@ -11,29 +11,30 @@ fignames = paste('figs/',
                 c('inputs_mean','inputs_fireSeason', 
                   'measure_mean', 'measure_fire',
                   'input_correlation'),
-                '.pdf', sep = '')
+                '.png', sep = '')
 
 names_input = names(drive_fname)
 
+
 cols_input = list(alpha   = c('white', '#AA00AA', '#220022'),
                   emc     = c('white', '#00AAAA', '#002222'),
-                  npp     = c('white', '#77DD00', '#004400'),
+                  bare    = c('white', '#77DD00', '#004400'),
                   crop    = c('white', '#AAAA00', '#222200'),
                   pas     = c('white', '#CC8800', '#441100'),
                   urban   = c('white', 'grey'   , 'black'  ),
                   popdens = c('white', 'grey'   , 'black'  ),
                   Lightn  = c('black', '#0000FF', 'yellow'  ),
-                  fire    = c('white', '#EE9900', '#440000'))
+                  fire    = c('white', '#FFAA00', '#996600', '#220000'))
 
 lims_input = list(alpha   = c(0.2, 0.4, 0.6, 0.8, 1.0),
                   emc     = c(5, 10, 20, 40, 60, 80),
-                  npp     = c(0, 1000, 2000, 4000, 10000),
+                  bare    = c(0, 20, 40, 60, 80, 90, 95),
                   crop    = c(0.1, 0.3, 1, 3, 10, 30),
                   pas     = c(1, 2, 5, 10, 20, 50),
                   urban   = c(0.001, 0.1, 1, 5, 10),
                   popdens = c(0.01, 0.1, 1, 10, 100, 1000),
                   Lightn  = c(0.01, 0.1, 0.2, 0.5, 1, 2, 3),
-                  fire    = c(0.001, 0.002, 0.005, 0.010, 0.020, 0.050))
+                  fire    = c(0.1, 1, 3, 10, 30)/100)
 
                   
 cols_msure = list(fuel    = c('white', '#33FF33', '#002200'),
@@ -46,7 +47,8 @@ lims_msure = list(fuel    = c(0, 1000, 2000, 4000, 10000),
                   igntions= c(0.001, 0.1, 0.2, 0.5, 1, 2, 3),
                   supress = c(0.01, 0.1, 1, 10, 100, 1000))
 
-names_msure= names(cols_msure)                  
+names_msure = names(cols_msure)  
+names_input = names(cols_input)                
 #########################################################################
 ## open data                                                           ##
 #########################################################################
@@ -61,9 +63,11 @@ openMean <- function(fname_in, FUN = mean.stack, fname_ext = '-mean.nc', ...){
 
 # open Obs
 Obs = lapply(drive_fname, stack)
+Obs = Obs[names(cols_input)]
 
 # monthly mean                    
 Obs_mean = lapply(drive_fname, openMean)
+Obs_mean = Obs_mean[names(cols_input)]
 
 # monthly mean during fire season height
 Obs_fire = lapply(drive_fname, openMean, fire.stack, '-season.nc', fire_season)
@@ -89,6 +93,7 @@ plot_inputs <- function(Obs, fname, names = names_input,
     
     plot_input <- function(x, lim, col, name) {
         plot_raster(x, lim, col, quick = TRUE, ...)
+		addLocPoints()
         mtext(name, line = -0.67)
         standard_legend(col, lim, x)
     }
@@ -96,7 +101,8 @@ plot_inputs <- function(Obs, fname, names = names_input,
     nplts = length(lims)
     nrows = ceiling(sqrt(length(lims)))
     
-    pdf(fname, height = 2.5 * nrows, width = 4.5 * ceiling(nplts/nrows))
+    png(fname, height = 2.5 * nrows, width = 4.5 * ceiling(nplts/nrows), 
+	    res = 300, units = 'in')
         layout(matrix(1:(2*nplts), nrow = nrows * 2), height = rep(c(1, 0.3), 3))
 
         par(mar = rep(0.5, 4))
@@ -105,6 +111,9 @@ plot_inputs <- function(Obs, fname, names = names_input,
 }
 
 ## Plot Individuals
+Obs_mean[['bare']] = 100 - Obs_mean[['bare']]
+Obs_mean[['bare']][is.na(Obs_mean[['emc']])] = NaN
+Obs_mean[['fire']] = Obs_mean[['fire']] * 12
 plot_inputs(Obs_mean, fignames[1])
 plot_inputs(Obs_fire, fignames[2])
 
