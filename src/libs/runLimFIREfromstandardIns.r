@@ -9,8 +9,17 @@ runLimFIREfromstandardIns <- function(fireOnly = FALSE, remove = NULL, sensitivi
                                       ...) {
     
     Obs = openAllObs()
-    if (!is.null(remove)) for (i in remove) Obs[[i]][] = 0
-    mnthIndex = 1:nlayers(Obs[[1]])
+	Obs['popdensi'] = Obs[['popdens']]
+	Obs['popdenss'] = Obs[['popdens']]
+    if (!is.null(remove)) for (i in remove) {
+		Obs[[i]][] = 0
+		if (i == 'popdens') {
+			Obs['popdensi'] = Obs[['popdens']]
+			Obs['popdenss'] = Obs[['popdens']]
+		}
+	}
+	
+    mnthIndex = 1:12#nlayers(Obs[[1]])
     
     runMonthly <- function(i) {
         cat("simulating fire for month ", i, "\n")
@@ -19,7 +28,7 @@ runLimFIREfromstandardIns <- function(fireOnly = FALSE, remove = NULL, sensitivi
                       Obs[["alpha" ]][[i]], Obs[["emc"    ]][[i]],
 					  1.0,
                       Obs[["Lightn"]][[i]], Obs[["pas"    ]][[i]],
-                      Obs[["crop"  ]][[i]], Obs[["popdens"]][[i]],
+                      Obs[["crop"  ]][[i]], Obs[["popdensi"]][[i]], Obs[["popdenss"]][[i]],
 					  1.0,
                                   param(    'fuel_x0'),  param('fuel_k'    ),  
                       param('cM'), param('moisture_x0'),  -param('moisture_k'),  
@@ -33,7 +42,7 @@ runLimFIREfromstandardIns <- function(fireOnly = FALSE, remove = NULL, sensitivi
         
 		if (sensitivity) {
 			for (i in 2:length(out)) out[[i]] = 1 - out[[i]]
-		} else {
+		} else if (!fireOnly) {
 			mag = sum(layer.apply(out[-1], function(i) i))
 			for (i in 2:length(out)) out[[i]] = out[[i]] / mag
         }
