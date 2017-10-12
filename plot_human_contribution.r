@@ -16,8 +16,8 @@ mod_file = paste(mod_file, c('', 'noHumanIngnitions', 'noHumans'), '.nc', sep ='
 diff_lims1 = c(0, 0.1, 1, 2, 5) 
 diff_cols1 = fire_cols
 
-diff_lims2 = c(-20, -10, -5, -2, -1, -0.1, 0.1, 1, 2, 5) 
-diff_cols2 = c('#000033', '#0022AA',  '#00EEFF', 'white', '#FFEE00', '#AA2200')
+diff_lims2 = c(-30, -10, -3, -1, -0.1, -0.01, 0.01, 0.1, 1, 3, 10, 30) 
+diff_cols2 = c('#000033', '#0022AA',  '#00EEFF', 'white', '#FFEE00', '#AA2200', '#330000')
 
 cont_lims1 = c(0, 2, 5, 10, 20, 40, 60, 80)
 cont_cols1 = fire_cols
@@ -36,9 +36,9 @@ labs = c('a) Full model burnt area', 'b) No human ignitions', 'c) No humans', 'd
 control = runIfNoFile(mod_file[1], runLimFIREfromstandardIns, fireOnly = TRUE,
                                                         test = grab_cache)
 noIgnit = runIfNoFile(mod_file[2], runLimFIREfromstandardIns, fireOnly = TRUE, 
-                  remove = c("pas",         "popdens"), test = grab_cache)
+                  remove = c("popdens"), test = grab_cache)
 noAnyth = runIfNoFile(mod_file[3], runLimFIREfromstandardIns, fireOnly = TRUE, 
-                  remove = c("pas", "crop", "popdens"), test = grab_cache)
+                  remove = c("crop", "pas", "popdens"), test = grab_cache)
 
 #########################################################################
 ## Calc. differences and plot                                          ##
@@ -82,7 +82,7 @@ mtext.burntArea()
 noIgnit  = control - noIgnit
 noAnythi = control - noAnyth  
 
-plot_raster(noIgnit, diff_lims2,diff_cols2)
+plot_raster(noIgnit, c(-20, -10, -5, -2, -1, 1, 2, 5, 10, 20), diff_cols2)
 mtextStandard(labs[4])
 
 plot_raster(noAnythi, diff_lims2, diff_cols2)
