@@ -4,7 +4,7 @@
 source('cfg.r')
 graphics.off()
 
-fracSample    = 1000
+fracSample    = 200
 grabe_cache   = TRUE
 cirlePoints   = FALSE
 obsSampleFile = paste('temp/ObsSample', fracSample, '.Rd', sep = '-')
@@ -62,7 +62,7 @@ findLims <- function(x, addMid = FALSE) {
 	
 	x[,'fuel']     = LimFIRE.fuel(x[,'fuel'], param('fuel_x0'), param('fuel_k'))
 	x[, 'moisture'] = LimFIRE.moisture(x[,'moisture'], param('moisture_x0'),  -param('moisture_k'))
-	x[, 'ignitions'] = LimFIRE.ignitions(log(x[,'ignitions']), param('igntions_x0'), param('igntions_k'))
+	x[, 'ignitions'] = LimFIRE.ignitions((x[,'ignitions']), param('igntions_x0'), param('igntions_k'))
 	x[, 'suppression'] = LimFIRE.ignitions(x[,'suppression'], param('suppression_x0'),  -param('suppression_k'))
 	
 	
@@ -83,7 +83,7 @@ Sim = findLims(Obs)
 pntSim = lapply(pntObs, findLims, addMid = TRUE)
 
 plotScatter <- function(name, col, FUN, dFUN, x0, k, ksc, log = '', ...) {
-	colp = make.transparent('black', 0.9)
+	colp = make.transparent('black', 0.95)
 	
 	if (log == 'x') Obs[, name] = log(Obs[,name])
 	
@@ -108,8 +108,8 @@ plotScatter <- function(name, col, FUN, dFUN, x0, k, ksc, log = '', ...) {
 	axis(2, at = seq(0,1,by = 0.2), labels = rep('', 6), tick = -5)
 	
 	index = sort.int(Obs[,name], index.return= TRUE)[[2]]
-	
-	lines(Obs[index, name], Sim[index, name], lty = 2)
+	x = Obs[index, name]; y = FUN(Obs[index,name],param(x0), ksc * param(k))
+	lines(x, y, lty = 2)
 	
 	addPoints <- function(i, j, info, plotPnts = TRUE, ...) {
 		col = info[[3]]
@@ -132,13 +132,13 @@ plotScatter <- function(name, col, FUN, dFUN, x0, k, ksc, log = '', ...) {
 		
 		dz = sqrt((dx / diff(par("usr")[1:2]))^2) + sqrt((dy / diff(par("usr")[3:4]))^2)
 		
-		dx = dx * 0.15 * c(-1, 1) / dz
-		dy = dy * 0.15 * c(-1, 1) / dz
+		dx = dx * 0.25 * c(-1, 1) / dz
+		dy = dy * 0.25 * c(-1, 1) / dz
 		
 		x = x + dx
 		y = y + dy
 		
-		lines(x,y, lwd = 2, col = col, xpd = NA, ...)
+		lines(x,y, lwd = 3, col = col, xpd = NA, ...)
 		
 		x = i[,name]; y = FUN(x, param(x0), ksc * param(k))
 		if (plotPnts)
@@ -170,24 +170,43 @@ plotScatter <- function(name, col, FUN, dFUN, x0, k, ksc, log = '', ...) {
 	mapply(addPoints, pntObs, pntSim, hlghtPnts, MoreArgs = list(plotPnts = FALSE, lty = 3))
 }
 
-png('figs/limLines.png', width = 7, height = 7 * 1.15, units = 'in', res = 300)
+png('figs/limLines.png', width = 5.5, height = 5.5 * 1.15, units = 'in', res = 300)
 layout(rbind(1:2,3:4, 5), heights = c(1,1,0.3))
 
-par(mar = c(3,0,1,0.5), oma = c(0,3.5,1,1))
+par(mar = c(3,3.5,1,0.5), oma = c(0,0,1,1))
+
+
+leg <- function(pch, col, ...) 
+	legend('right', legend = legNames,
+		   pch = pch, col = col, lty = 2, lwd = 2, 
+		   cex = 1.33, ncol = 1, bty = 'n', seg.len	= 4, ...)
+
+
 
 plotScatter('fuel', col = 'green', LimFIRE.fuel, dLimFIRE.fuel, 'fuel_x0', 'fuel_k', 1.0)
 axis(2, at = seq(0,1,by = 0.2))
-mtext('Vegetation Cover (%)', 1, line = 2)
-plotScatter('moisture', col = 'blue', LimFIRE.moisture, dLimFIRE.moisture, 'moisture_x0', 'moisture_k', -1.0)
-mtext('Fuel Mositure (%)', 1, line = 2)
-plotScatter('ignitions', col = 'red', LimFIRE.ignitions, dLimFIRE.ignitions, 'igntions_x0', 'igntions_k', 1.0, log = 'x')
-mtext('No. Ignitions', 1, line = 2)
-axis(2, at = seq(0,1,by = 0.2))
-plotScatter('suppression', col = 'black', LimFIRE.supression, dLimFIRE.supression, 'suppression_x0', 'suppression_k', -1.0)
-mtext('Suppression Index', 1, line = 2)
-mtext('Fractional Burnt Area', side = 2, outer = TRUE, line = 2)
+mtext('Vegetation Cover (%)', 1, line = 2.3)
+mtext('Fractional Burnt Area', side = 2, line = 2)
 
-plot.new()					
+plotScatter('moisture', col = 'blue', LimFIRE.moisture, dLimFIRE.moisture, 'moisture_x0', 'moisture_k', -1.0)
+mtext('Fuel Mositure (%)', 1, line = 2.3)
+mtext('Fractional Burnt Area', side = 2, line = 2)
+axis(2, at = seq(0,1,by = 0.2))
+
+plotScatter('ignitions', col = 'red', LimFIRE.ignitions, dLimFIRE.ignitions, 'igntions_x0', 'igntions_k', 1.0, log = 'x')
+mtext('No. Ignitions', 1, line = 2.3)
+mtext('Fractional Burnt Area', side = 2, line = 2)
+axis(2, at = seq(0,1,by = 0.2))
+
+plotScatter('suppression', col = 'black', LimFIRE.supression, dLimFIRE.supression, 'suppression_x0', 'suppression_k', -1.0)
+mtext('Suppression Index', 1, line = 2.3)
+mtext('Fractional Burnt Area', side = 2, line = 2)
+axis(2, at = seq(0,1,by = 0.2))
+
+leg(15, colt, pt.cex = 5)
+leg(16, cols, pt.cex = 2)
+
+#plot.new()					
 
 legNames =  names(hlghtPnts)
 cols = listSelectItem(hlghtPnts, 'col')
@@ -195,12 +214,6 @@ colt = make.transparent(cols, 0.75)
 
 
 
-leg <- function(pch, col, ...) 
-	legend('center', legend = legNames,
-		   pch = pch, col = col, lty = 2, lwd = 2, 
-		   cex = 1.33, horiz = TRUE, bty = 'n', seg.len	= 4, ...)
 
-leg(15, colt, pt.cex = 5)
-leg(16, cols, pt.cex = 2)
 
 dev.off()
