@@ -16,7 +16,7 @@
    id="svg2"
    version="1.1"
    inkscape:version="0.92.1 r15371"
-   sodipodi:docname="portrait.svg"
+   sodipodi:docname="portraitF2.svg"
    enable-background="new"
    inkscape:export-filename="C:\Users\dougl\Documents\work\LimFIRE_pres\docs\poster\poster\Inkscape\portrait.png"
    inkscape:export-xdpi="96"
@@ -28,11 +28,11 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.1767767"
-     inkscape:cx="2988.1647"
-     inkscape:cy="4209.4735"
+     inkscape:zoom="0.088388348"
+     inkscape:cx="-811.3687"
+     inkscape:cy="976.3431"
      inkscape:document-units="px"
-     inkscape:current-layer="layer2"
+     inkscape:current-layer="layer12"
      showgrid="false"
      units="cm"
      inkscape:window-width="1366"
@@ -341,7 +341,7 @@
        inkscape:connector-curvature="0"
        id="path60"
        d="M 1157.7279,5.2025831 1499.985,2113.2021 9.4144246,1904.9987 0.41808375,0.4180459 Z"
-       style="fill:#44aa00;stroke:#000000;stroke-width:0.9375px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       style="fill:#44aa00;stroke:none;stroke-width:0.9375px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        sodipodi:nodetypes="ccccc" />
     <flowRoot
        xml:space="preserve"
@@ -376,7 +376,7 @@
        inkscape:connector-curvature="0"
        id="path67"
        d="M 1787.8785,4229.871 1734.815,2457.0533 1499.985,2113.2021 1292.8521,1823.9164 9.4144248,1904.9987 0,4212.9922"
-       style="fill:#ff0000;stroke:#000000;stroke-width:0.9375px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+       style="fill:#ff0000;stroke:none;stroke-width:0.9375px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
   </g>
   <g
      style="display:inline"
@@ -388,7 +388,7 @@
        inkscape:connector-curvature="0"
        id="path73"
        d="M 1787.8785,4229.871 1666.5991,3326.5833 1499.985,2113.2021 2999.9699,2320.275 v 1192.7871 699.93 z"
-       style="opacity:0.48699999;fill:#ffcc00;stroke:#000000;stroke-width:0.9375px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+       style="opacity:0.48699999;fill:#ffcc00;stroke:none;stroke-width:0.9375px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
   </g>
   <g
      style="opacity:0.596"
@@ -399,8 +399,8 @@
        sodipodi:nodetypes="ccccc"
        inkscape:connector-curvature="0"
        id="path3760"
-       d="m 1787.8785,4231.746 -287.8935,-2116.6689 1473.2293,203.3615 26.7556,1896.4285 z"
-       style="fill:#d4aa00;stroke:#000000;stroke-width:0.9375px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+       d="M 1787.8785,4231.746 1499.985,2115.0771 2999.9699,2320.275 v 1894.5921 z"
+       style="fill:#d4aa00;stroke:none;stroke-width:0.9375px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
   </g>
   <g
      inkscape:groupmode="layer"
@@ -433,13 +433,13 @@
        style="display:inline;opacity:0.51300001"
        transform="translate(0,-1233.071)">
       <path
-         style="fill:#ffffff;stroke:#000000;stroke-width:0.9375px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         style="fill:#ffffff;stroke:none;stroke-width:0.9375px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
          d="M -14.145782,3950.0316 2991.3932,3799.7995 3000,3146.1172 -22.5,2973.6172 Z"
          id="path6265"
          inkscape:connector-curvature="0"
          sodipodi:nodetypes="ccccc" />
       <path
-         style="opacity:1;fill:#ffffff;stroke:#000000;stroke-width:0.9375px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         style="opacity:1;fill:#ffffff;stroke:none;stroke-width:0.9375px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
          d="M -14.104369,1213.4399 2991.4346,1063.2078 2983.2532,425.83199 -39.569603,281.32671 Z"
          id="path6265-6"
          inkscape:connector-curvature="0"
@@ -1412,21 +1412,7 @@
          style="line-height:1.5;text-align:start;text-anchor:start"
          id="flowPara7768">  little impact on overall ignitions, and areas of human induced increase in burnt area </flowPara><flowPara
          style="line-height:1.5;text-align:start;text-anchor:start"
-         id="flowPara7770">  are associated with pastoral agriculture.</flowPara></flowRoot>    <rect
-       style="opacity:1;fill:#000000;fill-opacity:0;stroke:#000000;stroke-width:1.20622373;stroke-opacity:1"
-       id="rect7772"
-       width="906.5957"
-       height="4469.9834"
-       x="-872.07019"
-       y="-199.21974" />
-    <rect
-       style="opacity:1;fill:#000000;fill-opacity:0;stroke:#000000;stroke-width:1.20610607;stroke-opacity:1"
-       id="rect7772-0"
-       width="906.59583"
-       height="4469.1113"
-       x="2962.4189"
-       y="-150.80336" />
-    <flowRoot
+         id="flowPara7770">  are associated with pastoral agriculture.</flowPara></flowRoot>    <flowRoot
        xml:space="preserve"
        id="flowRoot7160-8-7-1-7"
        style="font-style:normal;font-weight:normal;font-size:40px;line-height:1.25;font-family:sans-serif;text-align:end;letter-spacing:0px;word-spacing:0px;text-anchor:end;fill:#000000;fill-opacity:1;stroke:none"
@@ -1444,26 +1430,12 @@
          style="line-height:1.5;text-align:end;text-anchor:end"
          id="flowPara7945">more than a simple &quot;masking&quot;, suggesting fragmentation effects </flowPara><flowPara
          style="line-height:1.5;text-align:end;text-anchor:end"
-         id="flowPara7943">beyond cropland extent.</flowPara></flowRoot>    <flowRoot
-       transform="matrix(0.93749999,0,0,0.93749999,1443.8638,1900.0194)"
-       style="font-style:normal;font-weight:normal;font-size:100px;line-height:1.25;font-family:sans-serif;text-align:start;letter-spacing:0px;word-spacing:0px;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none"
-       id="flowRoot3745-6"
-       xml:space="preserve"><flowRegion
-         style="font-size:100px;text-align:start;text-anchor:start"
-         id="flowRegion3741-8"><rect
-           style="font-size:100px;text-align:start;text-anchor:start"
-           y="482.42975"
-           x="165.71428"
-           height="280"
-           width="794.28571"
-           id="rect3739-7" /></flowRegion><flowPara
-         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:100px;font-family:Rokkitt;-inkscape-font-specification:Rokkitt;text-align:start;text-anchor:start;fill:#ffffff"
-         id="flowPara3743-3">Suppression</flowPara></flowRoot>  </g>
+         id="flowPara7943">beyond cropland extent.</flowPara></flowRoot>  </g>
   <g
      inkscape:groupmode="layer"
      id="g3757"
      inkscape:label="Suppression"
-     style="display:none">
+     style="display:inline">
     <flowRoot
        xml:space="preserve"
        id="flowRoot3755"
