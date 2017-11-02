@@ -43,7 +43,7 @@ pntObs =  lapply(pntObs, function(i) apply(i, 2, quantile, c(0.1, 0.5, 0.9)))
 #pntObs[[1]][,'ignitions'] = pntObs[[3]][,'ignitions'] * 2.5
 
 
-plotScatter <- function(name, col, FUN, dFUN, x0, k, ksc, log = '', x2pc = FALSE, ...) {
+plotScatter <- function(name, col, FUN, dFUN, x0, k, ksc, log = '', x2pc = FALSE,...) {
 	colp = make.transparent('black', 0.95)
 	
 	if (log == 'x') Obs[, name] = log(Obs[,name])
@@ -68,7 +68,7 @@ plotScatter <- function(name, col, FUN, dFUN, x0, k, ksc, log = '', x2pc = FALSE
 	} else axis(1)
 	
 	
-	axis(2, at = seq(0,1,by = 0.2), labels = rep('', 6), tick = -5)
+	#if (yaxis) axis(2, at = seq(0,1,by = 0.2), labels = rep('', 6), tick = -5)
 	
 	index = sort.int(Obs[,name], index.return= TRUE)[[2]]
 	
@@ -138,7 +138,7 @@ plotScatter <- function(name, col, FUN, dFUN, x0, k, ksc, log = '', x2pc = FALSE
 png('figs/limLines.png', width = 5.5, height = 5.5 * 1.15, units = 'in', res = 300)
 layout(rbind(1:2,3:4, 5), heights = c(1,1,0.3))
 
-par(mar = c(3,3.5,1,0.5), oma = c(0,0,1,1))
+par(mar = c(3,0.5,1,0), oma = c(0,3.5,1,0.5))
 
 
 leg <- function(pch, col, ...) 
@@ -151,22 +151,16 @@ leg <- function(pch, col, ...)
 plotScatter('fuel', col = 'green', LimFIRE.fuel, dLimFIRE.fuel, 'fuel_x0', 'fuel_k', 1.0)
 axis(2, at = seq(0,1,by = 0.2))
 mtext('Vegetation Cover (%)', 1, line = 2.3)
-mtext('Fractional Burnt Area', side = 2, line = 2)
 
 plotScatter('moisture', col = 'blue', LimFIRE.moisture, dLimFIRE.moisture, 'moisture_x0', 'moisture_k', -1.0, x2pc = TRUE)
 mtext('Fuel Mositure (%)', 1, line = 2.3)
-mtext('Fractional Burnt Area', side = 2, line = 2)
-axis(2, at = seq(0,1,by = 0.2))
 
 plotScatter('ignitions', col = 'red', LimFIRE.ignitions, dLimFIRE.ignitions, 'igntions_x0', 'igntions_k', 1.0)
 mtext('No. Ignitions', 1, line = 2.3)
-mtext('Fractional Burnt Area', side = 2, line = 2)
 axis(2, at = seq(0,1,by = 0.2))
 
 plotScatter('suppression', col = 'black', LimFIRE.supression, dLimFIRE.supression, 'suppression_x0', 'suppression_k', -1.0)
 mtext('Suppression Index', 1, line = 2.3)
-mtext('Fractional Burnt Area', side = 2, line = 2)
-axis(2, at = seq(0,1,by = 0.2))
 				
 
 legNames =  names(hlghtPnts)
@@ -176,4 +170,5 @@ colt = make.transparent(cols, 0.75)
 leg(15, colt, pt.cex = 5)
 leg(16, cols, pt.cex = 2)
 
+mtext('Fractional Burnt Area', side = 2, line = 2, outer = TRUE)
 dev.off()
