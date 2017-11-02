@@ -5,7 +5,7 @@ source('cfg.r')
 graphics.off()
 
 fracSample    = 200
-grabe_cache   = TRUE
+grabe_cache   = FALSE
 cirlePoints   = FALSE
 obsSampleFile = paste('temp/ObsSample', fracSample, '.Rd', sep = '-')
 obsLimsFile   = 'temp/ObsLimsEGs.Rd'
@@ -14,10 +14,12 @@ if (file.exists(obsSampleFile) & grabe_cache) load(obsSampleFile) else {
 		Obs        = openAllObs()
 		fuel       = 100 - Obs[['bare']]
 		#fuel[fuel < 10] = 10
+		
 		moisture   = (Obs[['alpha']] + param('cM') * Obs[['emc']]) / (1 + param('cM'))
-		ignitions  = 1 + param('cL') * Obs[['Lightn']] + param('cP') * Obs[['pas']] + 
+		
+		ignitions  = Obs[['Lightn']] + param('cP') * Obs[['pas']] + 
 					 param('cD1') * Obs[['popdens']]
-		ignitions[ignitions < 1] = 1
+		#ignitions[ignitions < 1] = 1
 		supression = Obs[['crop']] + param('cD2') * Obs[['popdens']]
 
 		Obs  = c(fuel, moisture, ignitions, supression, Obs[['fire']])
@@ -51,7 +53,7 @@ findLims <- function(x, addMid = FALSE) {
 		moistureLimm   =  1-LimFIRE.moisture(moistureMean, param('moisture_x0'), param('moisture_k'))
 		moistureGrad   = dLimFIRE.moisture(moistureMean, param('moisture_x0'), -param('moisture_k'))
 		
-		ignitionsMean  =  mean(x[, 'moisture'])
+		ignitionsMean  =  mean(x[, 'ignitions'])
 		ignitionsLimm  =  1-LimFIRE.ignitions(ignitionsMean, param('igntions_x0'), param('igntions_k'))
 		ignitionsGrad  = dLimFIRE.ignitions(ignitionsMean, param('igntions_x0'), param('igntions_k'))
 		
@@ -193,7 +195,7 @@ mtext('Fuel Mositure (%)', 1, line = 2.3)
 mtext('Fractional Burnt Area', side = 2, line = 2)
 axis(2, at = seq(0,1,by = 0.2))
 
-plotScatter('ignitions', col = 'red', LimFIRE.ignitions, dLimFIRE.ignitions, 'igntions_x0', 'igntions_k', 1.0, log = 'x')
+plotScatter('ignitions', col = 'red', LimFIRE.ignitions, dLimFIRE.ignitions, 'igntions_x0', 'igntions_k', 1.0)
 mtext('No. Ignitions', 1, line = 2.3)
 mtext('Fractional Burnt Area', side = 2, line = 2)
 axis(2, at = seq(0,1,by = 0.2))
@@ -202,18 +204,13 @@ plotScatter('suppression', col = 'black', LimFIRE.supression, dLimFIRE.supressio
 mtext('Suppression Index', 1, line = 2.3)
 mtext('Fractional Burnt Area', side = 2, line = 2)
 axis(2, at = seq(0,1,by = 0.2))
-
-leg(15, colt, pt.cex = 5)
-leg(16, cols, pt.cex = 2)
-
-#plot.new()					
+				
 
 legNames =  names(hlghtPnts)
 cols = listSelectItem(hlghtPnts, 'col')
 colt = make.transparent(cols, 0.75)
 
-
-
-
+leg(15, colt, pt.cex = 5)
+leg(16, cols, pt.cex = 2)
 
 dev.off()

@@ -9,35 +9,20 @@ runLimFIREfromstandardIns <- function(fireOnly = FALSE, remove = NULL, sensitivi
                                       ...) {
     
     Obs = openAllObs()
-	Obs['popdensi'] = Obs[['popdens']]
-	Obs['popdenss'] = Obs[['popdens']]
-    if (!is.null(remove)) for (i in remove) {
-		Obs[[i]][] = 0
-		if (i == 'popdens') {
-			Obs['popdensi'] = Obs[['popdens']]
-			Obs['popdenss'] = Obs[['popdens']]
-		}
-	}
 	
     mnthIndex = 1:12#nlayers(Obs[[1]])
     
     runMonthly <- function(i) {
         cat("simulating fire for month ", i, "\n")
-        
         out = LimFIRE(100 - Obs[["bare"   ]][[i]],
                       Obs[["alpha" ]][[i]], Obs[["emc"    ]][[i]],
-					  1.0,
                       Obs[["Lightn"]][[i]], Obs[["pas"    ]][[i]],
-                      Obs[["crop"  ]][[i]], Obs[["popdensi"]][[i]], Obs[["popdenss"]][[i]],
-					  1.0,
-                                  param(    'fuel_x0'),  param('fuel_k'    ),  
+                      Obs[["crop"  ]][[i]], Obs[["popdens"]][[i]],
+					               param(    'fuel_x0'),  param('fuel_k'    ),  
                       param('cM'), param('moisture_x0'),  -param('moisture_k'),  
-                      param('cL'),
                       param('cP'),
-                      param('cDmax'),
                       param('cD1'),
                                   param(   'igntions_x0'),  param('igntions_k'   ),  
-                      param('mxD2'),
 					  param('cD2'), param(    'suppression_x0'),  -param('suppression_k'), fireOnly, sensitivity = sensitivity, ...)
         
 		if (sensitivity) {
