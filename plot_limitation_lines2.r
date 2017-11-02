@@ -43,7 +43,7 @@ pntObs =  lapply(pntObs, function(i) apply(i, 2, quantile, c(0.1, 0.5, 0.9)))
 #pntObs[[1]][,'ignitions'] = pntObs[[3]][,'ignitions'] * 2.5
 
 
-plotScatter <- function(name, col, FUN, dFUN, x0, k, ksc, log = '', ...) {
+plotScatter <- function(name, col, FUN, dFUN, x0, k, ksc, log = '', x2pc = FALSE, ...) {
 	colp = make.transparent('black', 0.95)
 	
 	if (log == 'x') Obs[, name] = log(Obs[,name])
@@ -62,9 +62,11 @@ plotScatter <- function(name, col, FUN, dFUN, x0, k, ksc, log = '', ...) {
 		}
 		
 		axis(1, at = log(xi), labels = xlabi)
-	} else {
-		axis(1)
-	}
+	} else if (x2pc) {
+		at = seq(0, 1, by = 0.2)
+		axis(1, at = at , labels = at * 100)
+	} else axis(1)
+	
 	
 	axis(2, at = seq(0,1,by = 0.2), labels = rep('', 6), tick = -5)
 	
@@ -151,7 +153,7 @@ axis(2, at = seq(0,1,by = 0.2))
 mtext('Vegetation Cover (%)', 1, line = 2.3)
 mtext('Fractional Burnt Area', side = 2, line = 2)
 
-plotScatter('moisture', col = 'blue', LimFIRE.moisture, dLimFIRE.moisture, 'moisture_x0', 'moisture_k', -1.0)
+plotScatter('moisture', col = 'blue', LimFIRE.moisture, dLimFIRE.moisture, 'moisture_x0', 'moisture_k', -1.0, x2pc = TRUE)
 mtext('Fuel Mositure (%)', 1, line = 2.3)
 mtext('Fractional Burnt Area', side = 2, line = 2)
 axis(2, at = seq(0,1,by = 0.2))
