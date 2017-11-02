@@ -5,7 +5,7 @@ source('cfg.r')
 graphics.off()
 
 fracSample    = 200
-grabe_cache   = FALSE
+grabe_cache   = TRUE
 cirlePoints   = FALSE
 obsSampleFile = paste('temp/ObsSample', fracSample, '.Rd', sep = '-')
 obsLimsFile   = 'temp/ObsLimsEGs.Rd'
@@ -42,47 +42,55 @@ pntObs =  lapply(pntObs, function(i) apply(i, 2, quantile, c(0.1, 0.5, 0.9)))
 pntObs[[3]][,'ignitions'] = pntObs[[3]][,'ignitions'] * 0.5
 pntObs[[1]][,'ignitions'] = pntObs[[3]][,'ignitions'] * 2.5
 
-findLims <- function(x, addMid = FALSE) {
+
+pointState <- function(x) {
+	fuelMean       =  mean(x[,'fuel'])
+	fuelLimm       =  1-LimFIRE.fuel(fuelMean, param('fuel_x0'), param('fuel_k'))
+	fuelGrad       = dLimFIRE.fuel(fuelMean, param('fuel_x0'), param('fuel_k'))
 	
-	if (addMid) {
-		fuelMean       =  mean(x[,'fuel'])
-		fuelLimm       =  1-LimFIRE.fuel(fuelMean, param('fuel_x0'), param('fuel_k'))
-		fuelGrad       = dLimFIRE.fuel(fuelMean, param('fuel_x0'), param('fuel_k'))
-		
-		moistureMean   = mean(x[, 'moisture'])
-		moistureLimm   =  1-LimFIRE.moisture(moistureMean, param('moisture_x0'), param('moisture_k'))
-		moistureGrad   = dLimFIRE.moisture(moistureMean, param('moisture_x0'), -param('moisture_k'))
-		
-		ignitionsMean  =  mean(x[, 'ignitions'])
-		ignitionsLimm  =  1-LimFIRE.ignitions(ignitionsMean, param('igntions_x0'), param('igntions_k'))
-		ignitionsGrad  = dLimFIRE.ignitions(ignitionsMean, param('igntions_x0'), param('igntions_k'))
-		
-		suppresionMean =  mean(x[, 'suppression'])
-		suppresionLimm =  1-LimFIRE.supression(suppresionMean, param('suppression_x0'), param('suppression_k'))
-		suppresionGrad = dLimFIRE.supression(suppresionMean, param('suppression_x0'), -param('suppression_k'))
-	}
+	moistureMean   = mean(x[, 'moisture'])
+	moistureLimm   =  1-LimFIRE.moisture(moistureMean, param('moisture_x0'), param('moisture_k'))
+	moistureGrad   = dLimFIRE.moisture(moistureMean, param('moisture_x0'), -param('moisture_k'))
 	
-	x[,'fuel']     = LimFIRE.fuel(x[,'fuel'], param('fuel_x0'), param('fuel_k'))
-	x[, 'moisture'] = LimFIRE.moisture(x[,'moisture'], param('moisture_x0'),  -param('moisture_k'))
-	x[, 'ignitions'] = LimFIRE.ignitions((x[,'ignitions']), param('igntions_x0'), param('igntions_k'))
-	x[, 'suppression'] = LimFIRE.ignitions(x[,'suppression'], param('suppression_x0'),  -param('suppression_k'))
+	ignitionsMean  =  mean(x[, 'ignitions'])
+	ignitionsLimm  =  1-LimFIRE.ignitions(ignitionsMean, param('igntions_x0'), param('igntions_k'))
+	ignitionsGrad  = dLimFIRE.ignitions(ignitionsMean, param('igntions_x0'), param('igntions_k'))
 	
+	suppresionMean =  mean(x[, 'suppression'])
+	suppresionLimm =  1-LimFIRE.supression(suppresionMean, param('suppression_x0'), param('suppression_k'))
+	suppresionGrad = dLimFIRE.supression(suppresionMean, param('suppression_x0'), -param('suppression_k'))
 	
-	x[, 'fire'] = x[,'fuel'] * x[,'moisture'] * x[,'ignitions'] * x[,'suppression']
-	
-	if (addMid) {
-		x = rbind(x,
-				  c(fuelMean, moistureMean, ignitionsMean, suppresionMean, 0),
+	return(list(c(fuelMean, moistureMean, ignitionsMean, suppresionMean, 0),
 				  c(fuelLimm, moistureLimm, ignitionsLimm, suppresionLimm, 0),
-				  c(fuelGrad, moistureGrad, ignitionsGrad, suppresionGrad, 0))		
-	}
-	
-	return(x)
+				  c(fuelGrad, moistureGrad, ignitionsGrad, suppresionGrad, 0)))
 }
 
-Sim = findLims(Obs)
+findLims <- function(x) {
+	
+	runMulti <- function(FUN, xname, x0, k) {
+		x0  = paramSample(x0)
+		k   = paramSample(k )
+		
+		out = mapply(function(X0, K) FUN(x[,xname], X0, K), x0, k)
+		return(out)
+	}
+	fuel        = runMulti(LimFIRE.fuel      , 'fuel'       , 'fuel_x0'       , 'fuel_k'       )
+	moisture    = runMulti(LimFIRE.moisture  , 'moisture'   , 'moisture_x0'   , 'moisture_k'   )
+	ignitions   = runMulti(LimFIRE.ignitions , 'ignitions'  , 'igntions_x0'   , 'igntions_k'   )
+	suppression = runMulti(LimFIRE.supression, 'suppression', 'suppression_x0', 'suppression_k')
+	
+	
+	fire = fuel * moisture * ignitions * suppression
+	
+	
+	return(list(fire, fuel, moisture, ignitions, suppression))
+}
 
-pntSim = lapply(pntObs, findLims, addMid = TRUE)
+
+
+pntRng = lapply(pntObs, findLims)
+pntMn  = lapply(pntObs, pointState)
+Sim = findLims(Obs)
 
 plotScatter <- function(name, col, FUN, dFUN, x0, k, ksc, log = '', ...) {
 	colp = make.transparent('black', 0.95)
@@ -95,7 +103,7 @@ plotScatter <- function(name, col, FUN, dFUN, x0, k, ksc, log = '', ...) {
 		mxX = exp(max(Obs[,name]))
 		xi = x = c(1:10) * 10^find.ndig(mnX)
 		xlabi = xlab = c(1, rep(NA, 9))
-		 while (max(x) < mxX) {
+		while (max(x) < mxX) {
 			x = x * 10
 			xlab = xlab * 10
 			xi = c(xi, x)
@@ -110,20 +118,21 @@ plotScatter <- function(name, col, FUN, dFUN, x0, k, ksc, log = '', ...) {
 	axis(2, at = seq(0,1,by = 0.2), labels = rep('', 6), tick = -5)
 	
 	index = sort.int(Obs[,name], index.return= TRUE)[[2]]
-	x = Obs[index, name]; y = FUN(Obs[index,name],param(x0), ksc * param(k))
-	lines(x, y, lty = 2)
+	
+	x = Obs[index, name]
+	y = mapply(FUN, paramSample(x0), ksc * paramSample(k), MoreArgs=list(x = Obs[index, name]))
+	y = apply(y, 1, quantile, c(0,0.5, 1))
+	#apply(y, 2, lines, x = x, lty = 1, lwd = 2,  col = make.transparent('black', 0.98))
+	apply(y, 1, lines, x = x, lty = 2)
+	lines(x, y[2,])
 	
 	addPoints <- function(i, j, info, plotPnts = TRUE, ...) {
 		col = info[[3]]
 		colt = make.transparent(col, c(0.75, 0.95))
-			
 		
-		x = seq(min(i[,name]), max(i[, name]), length.out = 1000)
-		y = FUN(x, param(x0), ksc * param(k))
-		#lines(x, y, col = col, lwd = 3, ...)		
+		x = seq(min(i[,name]), max(i[, name]), length.out = 1000)	
 		y = c(rep(2, length(x)), rep(-2, length(x))); x = c(x, rev(x))
 		polygon(x, y, border = colt[1], col = colt[2])
-		
 		
 		x = i[2,name]
 		y = FUN(x, param(x0), ksc * param(k))	
@@ -170,6 +179,7 @@ plotScatter <- function(name, col, FUN, dFUN, x0, k, ksc, log = '', ...) {
 	
 	mapply(addPoints, pntObs, pntSim, hlghtPnts)
 	mapply(addPoints, pntObs, pntSim, hlghtPnts, MoreArgs = list(plotPnts = FALSE, lty = 3))
+	
 }
 
 png('figs/limLines.png', width = 5.5, height = 5.5 * 1.15, units = 'in', res = 300)

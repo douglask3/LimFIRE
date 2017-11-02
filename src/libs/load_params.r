@@ -1,8 +1,8 @@
-param <- function(p, FUN = median) {
+param <- function(p, FUN = median, ...) {
 	if (p == 'mxD1') return(NULL)
 	if (p == 'mxD2') return(NULL)
     params = read.csv(coefficants_file)[,-1]
-    params_mean = apply(as.matrix(params),2, FUN)
+    params_mean = apply(as.matrix(params),2, FUN, ...)
     
     if (class(params_mean) == "numeric")
         params_mean = t(params_mean)
@@ -24,3 +24,5 @@ param <- function(p, FUN = median) {
 }
 
 return_all <- function(x) return(x)
+
+paramSample <- function(p, n = 100, ...) param(p, sample, n, FALSE)
