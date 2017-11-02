@@ -43,55 +43,6 @@ pntObs[[3]][,'ignitions'] = pntObs[[3]][,'ignitions'] * 0.5
 pntObs[[1]][,'ignitions'] = pntObs[[3]][,'ignitions'] * 2.5
 
 
-pointState <- function(x) {
-	fuelMean       =  mean(x[,'fuel'])
-	fuelLimm       =  1-LimFIRE.fuel(fuelMean, param('fuel_x0'), param('fuel_k'))
-	fuelGrad       = dLimFIRE.fuel(fuelMean, param('fuel_x0'), param('fuel_k'))
-	
-	moistureMean   = mean(x[, 'moisture'])
-	moistureLimm   =  1-LimFIRE.moisture(moistureMean, param('moisture_x0'), param('moisture_k'))
-	moistureGrad   = dLimFIRE.moisture(moistureMean, param('moisture_x0'), -param('moisture_k'))
-	
-	ignitionsMean  =  mean(x[, 'ignitions'])
-	ignitionsLimm  =  1-LimFIRE.ignitions(ignitionsMean, param('igntions_x0'), param('igntions_k'))
-	ignitionsGrad  = dLimFIRE.ignitions(ignitionsMean, param('igntions_x0'), param('igntions_k'))
-	
-	suppresionMean =  mean(x[, 'suppression'])
-	suppresionLimm =  1-LimFIRE.supression(suppresionMean, param('suppression_x0'), param('suppression_k'))
-	suppresionGrad = dLimFIRE.supression(suppresionMean, param('suppression_x0'), -param('suppression_k'))
-	
-	return(list(c(fuelMean, moistureMean, ignitionsMean, suppresionMean, 0),
-				  c(fuelLimm, moistureLimm, ignitionsLimm, suppresionLimm, 0),
-				  c(fuelGrad, moistureGrad, ignitionsGrad, suppresionGrad, 0)))
-}
-
-findLims <- function(x) {
-	
-	runMulti <- function(FUN, xname, x0, k) {
-		x0  = paramSample(x0)
-		k   = paramSample(k )
-		
-		out = mapply(function(X0, K) FUN(x[,xname], X0, K), x0, k)
-		return(out)
-	}
-	fuel        = runMulti(LimFIRE.fuel      , 'fuel'       , 'fuel_x0'       , 'fuel_k'       )
-	moisture    = runMulti(LimFIRE.moisture  , 'moisture'   , 'moisture_x0'   , 'moisture_k'   )
-	ignitions   = runMulti(LimFIRE.ignitions , 'ignitions'  , 'igntions_x0'   , 'igntions_k'   )
-	suppression = runMulti(LimFIRE.supression, 'suppression', 'suppression_x0', 'suppression_k')
-	
-	
-	fire = fuel * moisture * ignitions * suppression
-	
-	
-	return(list(fire, fuel, moisture, ignitions, suppression))
-}
-
-
-
-pntRng = lapply(pntObs, findLims)
-pntMn  = lapply(pntObs, pointState)
-Sim = findLims(Obs)
-
 plotScatter <- function(name, col, FUN, dFUN, x0, k, ksc, log = '', ...) {
 	colp = make.transparent('black', 0.95)
 	
@@ -126,7 +77,7 @@ plotScatter <- function(name, col, FUN, dFUN, x0, k, ksc, log = '', ...) {
 	apply(y, 1, lines, x = x, lty = 2)
 	lines(x, y[2,])
 	
-	addPoints <- function(i, j, info, plotPnts = TRUE, ...) {
+	addPoints <- function(i, info, plotPnts = TRUE, ...) {
 		col = info[[3]]
 		colt = make.transparent(col, c(0.75, 0.95))
 		
@@ -177,8 +128,8 @@ plotScatter <- function(name, col, FUN, dFUN, x0, k, ksc, log = '', ...) {
 		
 	}
 	
-	mapply(addPoints, pntObs, pntSim, hlghtPnts)
-	mapply(addPoints, pntObs, pntSim, hlghtPnts, MoreArgs = list(plotPnts = FALSE, lty = 3))
+	mapply(addPoints, pntObs, hlghtPnts)
+	mapply(addPoints, pntObs, hlghtPnts, MoreArgs = list(plotPnts = FALSE, lty = 3))
 	
 }
 
