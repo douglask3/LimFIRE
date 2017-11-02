@@ -39,8 +39,8 @@ if (file.exists(obsSampleFile) & grabe_cache) load(obsSampleFile) else {
 	save(Obs, pntObs, file = obsSampleFile)
 }
 pntObs =  lapply(pntObs, function(i) apply(i, 2, quantile, c(0.1, 0.5, 0.9)))
-pntObs[[3]][,'ignitions'] = pntObs[[3]][,'ignitions'] * 0.5
-pntObs[[1]][,'ignitions'] = pntObs[[3]][,'ignitions'] * 2.5
+#pntObs[[3]][,'ignitions'] = pntObs[[3]][,'ignitions'] * 0.5
+#pntObs[[1]][,'ignitions'] = pntObs[[3]][,'ignitions'] * 2.5
 
 
 plotScatter <- function(name, col, FUN, dFUN, x0, k, ksc, log = '', ...) {
