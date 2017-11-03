@@ -6,11 +6,11 @@ openAllObs <- function() {
 }
 
 runLimFIREfromstandardIns <- function(fireOnly = FALSE, remove = NULL, sensitivity= FALSE, 
-                                      ...) {
+                                      mnthIndex = 1:nlayers(Obs[[1]]),...) {
     
     Obs = openAllObs()
 	
-    mnthIndex = 1:12#nlayers(Obs[[1]])
+    #mnthIndex = 1:12#
     
     runMonthly <- function(i) {
         cat("simulating fire for month ", i, "\n")
