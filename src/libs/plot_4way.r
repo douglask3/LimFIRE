@@ -1,7 +1,7 @@
 plot_4way <- function(x, y, A, B, C, D, x_range = c(-180, 180), y_range = c(-90, 
     90), limits = c(0.1, 0.5, 0.9), cols = c("FF", "CC", "99", 
     "55", "11"), add_legend = TRUE, smooth_image = FALSE, smooth_factor = 5, 
-    add = FALSE, ...) 
+    add = FALSE, normalise = TRUE, ePatternRes = 20, ePatternThick = 0.2, ...) 
 {
 
     remove_nans <- function (x, y, A, B, C, D) {
@@ -32,19 +32,29 @@ plot_4way <- function(x, y, A, B, C, D, x_range = c(-180, 180), y_range = c(-90,
     #C = sqrt(C^2/mag)
     #D = sqrt(D^2/mag)
     
-	mag = A + B + C
+	if (normalise) {
+		mag = A + B + C
 	
-	A = A/mag
-	B = B/mag
-	C = C/mag
-	D = D/mag
+		A = A/mag
+		B = B/mag
+		C = C/mag
+		D = D/mag
 	
-    A[mag == 0] = 0.33
-    B[mag == 0] = 0.33
-    C[mag == 0] = 0.33
-    D[mag == 0] = 0.33
-    
-    out = rasterFromXYZ(cbind(x, y, A))
+		A[mag == 0] = 0.33
+		B[mag == 0] = 0.33
+		C[mag == 0] = 0.33
+		D[mag == 0] = 0.33
+    } else {
+		Ai = (B + C)/2
+		Bi = (A + C)/2
+		Ci = (A + B)/2
+		A = Ai
+		B = Bi
+		C = Ci
+	}
+	
+    out = rasterFromXYZ(cbind(x, y, D))
+	
     out = addLayer(out, rasterFromXYZ(cbind(x, y, B)),
                         rasterFromXYZ(cbind(x, y, C)),
                         rasterFromXYZ(cbind(x, y, D)))
@@ -58,7 +68,7 @@ plot_4way <- function(x, y, A, B, C, D, x_range = c(-180, 180), y_range = c(-90,
     Bz = cut_results(B, limits)
     Cz = cut_results(C, limits)
     Dz = cut_results(D, limits)
-    
+	
     z = 1:length(Az)
     zcols = paste("#", cols[Az], cols[Bz], cols[Cz], sep = "")
     
@@ -71,13 +81,12 @@ plot_4way <- function(x, y, A, B, C, D, x_range = c(-180, 180), y_range = c(-90,
     
     lims = (min.raster(z, na.rm = TRUE):max.raster(z, na.rm = TRUE) -  0.5)[-1]
     
-    
     plotFun <- function(add) plot_raster_from_raster(z, cols = zcols[sort(unique(z))], 
         limits = lims, x_range = x_range, y_range = y_range, 
         smooth_image = FALSE, smooth_factor = NULL, readyCut = TRUE, 
         add_legend = FALSE, add = add, 
         e = e, limits_error = 0.5 + 1:length(limits),  
-        ePatternRes = 20,  ePatternThick = 0.2, e_polygon = FALSE,
+        ePatternRes = ePatternRes,  ePatternThick = ePatternThick, e_polygon = FALSE,
         ...)
     
     plotFun(add)

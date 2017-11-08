@@ -50,5 +50,6 @@ runLimFIREfromstandardIns <- function(fireOnly = FALSE, remove = NULL, sensitivi
         Ignitions = addLayer(Ignitions, mod[[4]])
         Supression = addLayer(Supression, mod[[5]])
     }
+	
     return(list(Fire, Fuel, Moisture, Ignitions, Supression))
 }
