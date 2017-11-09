@@ -19,9 +19,11 @@ lightn = brick(lightn_file)
 lightn = convert_pacific_centric_2_regular(lightn, TRUE)
 
 make_lightn <- function(i) {
-    m = monthOfYear(i)    
+    m = monthOfYear(i)
+    Pwet = dat[['wetday']][[i]] / ml[m]
+    
     L = lightn[[m]]
-    L = lightningIgnitions(L)    
+    L = lightningIgnitions(L, Pwet)#
     
     return(L)
 }

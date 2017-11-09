@@ -9,9 +9,7 @@ sourceAllLibs('src/weather/')
 dir   = 'data/cru_ts3.23/'
 varns = c(wetday = 'wet',
           vap    = 'vap',
-          temp   = 'tmp',
-		  precip = 'pre',
-          cloud  = 'cld')
+          temp   = 'tmp')
 
 ################################################################################
 ## load data                                                                  ##
@@ -25,28 +23,22 @@ c(dat, nyears) := loadClimDat(dir, varns, clim_layers)
 make_emc <- function(i) {
     m = monthOfYear(i)
     Wet = dat[['wetday']][[i]] / ml[m]
-    Vap = dat[['vap']][[i]]
-	Tas = dat[['temp']][[i]]
-	Prc = dat[["precip"]][[i]]
-	Cld = dat[["cloud"]][[i]]
-	
+    Vap = dat[[1]][[i]]
+	Tas = dat[[2]][[i]]
 	Hr = realtive_humidity(Vap, Tas)
 	emc = fuel_moisture_equilibrium(0, Hr, Tas)
-    
-    emc = emc * (1-Wet) + Wet
         
-    return(list(emc = emc, Vap = Vap, Hr = Hr, Tas = Tas, Wet = Wet, Prc = Prc, Cld = Cld))
+    emc = emc * (1-Wet) + 100 * Wet
+        
+    return(emc)
 }
+
+
+emc = layer.apply(1:(12*nyears), make_emc)
 
 ################################################################################
 ## run and output                                                             ##
 ################################################################################
-outs = lapply(1:(12*nyears), make_emc)
 
-outRaster <- function(nme) {
-	out = layer.apply(outs, function(i) i[[nme]])
-	print(drive_fname[nme])
-	writeRaster.gitInfo(out, drive_fname[nme], overwrite = TRUE)#
-}
 
-lapply(c('emc', 'Vap', 'Hr', 'Tas', 'Wet', 'Prc', 'Cld'), outRaster)
+writeRaster.gitInfo(emc, drive_fname['emc'], overwrite = TRUE)
