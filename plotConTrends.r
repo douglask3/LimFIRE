@@ -4,7 +4,7 @@
 source('cfg.r')
 graphics.off()
 
-grab_cache = TRUE
+grab_cache = FALSE
 
 fig_fname = 'figs/Trends.png'
 
@@ -18,7 +18,7 @@ tempFile <- function(fnames, extraName = '') {
 	fnames = paste(fnames, c('fire', 'fuel', 'moisture', 'igntions', 'suppression'), '.nc', sep = '-')
 }
 
-dfire_lims = c(-5, -2, -1, -0.5, -0.2, -0.1, 0, 0, 0.1, 0.2, 0.5, 1, 2, 5)
+dfire_lims = c(-5, -2, -1, -0.5, -0.2, -0.1, 0, 0, 0.1, 0.2, 0.5, 1, 2, 5)/100
 dfire_cols = c('#000033', '#0099DD', 'white', '#DD9900', '#330000')
 prob_lims = c(0.001, 0.01, 0.05)
 
@@ -35,32 +35,12 @@ lims = lims[-1]
 findTrend <- function(lno, smoothFun = running12) {
 	lim = lims[[lno]]
 	lims = lims[-lno]
-	lim = smoothFun(lim, lims)
-	mask = !is.na(lim[[1]])
-	vlim = lim[mask]
-
-	lmFUN <- function(y) {
-		fit = lm(as.vector(y) ~ c(1:length(y)))
-		p = summary(fit)[[4]][,4][2]
-		dy = coefficients(lm(as.vector(y) ~ c(1:length(y))))[2]
-		return(c(gradient = dy, p = p))
-	}
-
-	res = apply(vlim, 1, lmFUN)
-	trend = lim[[1:2]]
-
-	trend[[1]][mask] = res[1,]
-	trend[[2]][mask] = res[2,]
-	
-	return(trend)	
+	return(Trend(lim, smoothFun, lims)
 }
 
 findTrends <- function(lims, ...) lapply(1:length(lims), findTrend, ...)
 findTrendNoFile <- function(FUN, ...)
 	runIfNoFile(tempFile(...)[-1], findTrends, lims, FUN, test = grab_cache)
-
-running12 <- function(x, ...) 
-	layer.apply(12:nlayers(x), function(i) mean(x[[(i-11):i]]))
 	
 running12fire <- function(x, ys, ...) {
 	ys = layer.apply(1:nlayers(ys[[1]]), function(i) ys[[1]][[i]] + ys[[2]][[i]] + ys[[3]][[i]])
@@ -81,7 +61,7 @@ findFireMonth <- function(yr) {
 nyrs = (nlayers(fire)/12)
 fireMonths = layer.apply(1:nyrs, findFireMonth)
 
-fireSeasonLim <- function(x) {
+fireSeasonLim <- function(x, ...) {
 
 	mask = !is.na(x[[1]])
 	vx = x[mask]
@@ -99,24 +79,12 @@ fireSeasonLim <- function(x) {
 trendFS = findTrendNoFile(fireSeasonLim, tempF2, 'season')
 
 plotHotspots <- function(trends, figName, limits = dfire_lims) {
-	plot_Trend <- function(trend, title, cols = dfire_cols) {
-		#trend[[1]][trend[[2]] > tail(prob_lims,1)] = NaN
-		trend[[1]] = trend[[1]] * 12 * 10 * 100
-		plot_raster_from_raster(trend[[1]], y_range = c(-60, 90), cols = cols,
-								limits = limits,
-								e = trend[[2]], limits_error = prob_lims[1:2], 
-								ePatternRes = 30, ePatternThick = 0.2,
-								quick = TRUE, add_legend = FALSE)
-		mtext(title, side = 3, line = -1, adj = 0.05)
-		#trend[[1]][trend[[2]] > tail(prob_lims,1)] = 0.0
-		
-		return(trend[[1]])
-	}
+	
 	png(figName, height = 7, width = 8.5, units = 'in', res = 300)
 		layout(rbind(1:2, 3:4, 5, 6), heights = c(1,1,0.3, 1.3))
 		par(mar = rep(0,4))
 
-		hotspots = mapply(plot_Trend, trends, limitTitles)
+		hotspots = mapply(plot_Trend, trends, limitTitles, MoreArgs = list(cols = dfire_cols, limits = limits))
 		
 		add_raster_legend2(cols = dfire_cols, limits = limits, ylabposScling = 2,
 								   transpose = FALSE, plot_loc =  c(0.2, 0.9, 0.85, 0.99), 

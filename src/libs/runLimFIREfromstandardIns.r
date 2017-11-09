@@ -18,6 +18,7 @@ runLimFIREfromstandardIns <- function(fireOnly = FALSE, remove = NULL, sensitivi
                       Obs[["alpha" ]][[i]], Obs[["emc"    ]][[i]],
                       Obs[["Lightn"]][[i]], Obs[["pas"    ]][[i]],
                       Obs[["crop"  ]][[i]], Obs[["popdens"]][[i]],
+					  param("max_f"),
 					               param(    'fuel_x0'),  param('fuel_k'    ),  
                       param('cM'), param('moisture_x0'),  -param('moisture_k'),  
                       param('cP'),

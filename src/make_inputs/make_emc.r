@@ -10,7 +10,8 @@ dir   = 'data/cru_ts3.23/'
 varns = c(wetday = 'wet',
           vap    = 'vap',
           temp   = 'tmp',
-		  precip = 'pre')
+		  precip = 'pre',
+          cloud  = 'cld')
 
 ################################################################################
 ## load data                                                                  ##
@@ -27,13 +28,14 @@ make_emc <- function(i) {
     Vap = dat[['vap']][[i]]
 	Tas = dat[['temp']][[i]]
 	Prc = dat[["precip"]][[i]]
+	Cld = dat[["cloud"]][[i]]
 	
 	Hr = realtive_humidity(Vap, Tas)
 	emc = fuel_moisture_equilibrium(0, Hr, Tas)
     
     emc = emc * (1-Wet) + Wet
         
-    return(list(emc = emc, Vap = Vap, Hr = Hr, Tas = Tas, Wet = Wet, Prc = Prc))
+    return(list(emc = emc, Vap = Vap, Hr = Hr, Tas = Tas, Wet = Wet, Prc = Prc, Cld = Cld))
 }
 
 ################################################################################
@@ -47,4 +49,4 @@ outRaster <- function(nme) {
 	writeRaster.gitInfo(out, drive_fname[nme], overwrite = TRUE)#
 }
 
-lapply(c('emc', 'Vap', 'Hr', 'Tas', 'Wet', 'Prc'), outRaster)
+lapply(c('emc', 'Vap', 'Hr', 'Tas', 'Wet', 'Prc', 'Cld'), outRaster)
