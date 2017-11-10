@@ -1,6 +1,6 @@
 LimFIRE <- function(w, omega_live, omega_dead,
-				    Lig, pas, crop,
-					popdens, w0, kw, M, omega0, komega, P, D, ig0, kig, H, s0, ks, 
+				    Lig, pas, crop, popdens, 
+					maxF, w0, kw, M, omega0, komega, P, D, ig0, kig, H, s0, ks, 
                     fireOnly = FALSE, sensitivity = FALSE,
                     just_measures = FALSE, normalise = FALSE, add21 = FALSE) {
     
@@ -32,7 +32,7 @@ LimFIRE <- function(w, omega_live, omega_dead,
     Ignitions  = FUN.ignitions (ignitions , ig0   , kig   )
     Supression = FUN.supression(supression, s0    , ks    )
     #if (sensitivity)  browser()
-    Fire = Fuel * Moisture * Ignitions * Supression
+    Fire = maxF * Fuel * Moisture * Ignitions * Supression
     
     if (fireOnly) return(Fire)
 	
