@@ -4,7 +4,7 @@
 source('cfg.r')
 graphics.off()
 
-grab_cache = FALSE
+grab_cache = TRUE
 
 fig_fname = 'figs/Trends.png'
 
@@ -35,7 +35,7 @@ lims = lims[-1]
 findTrend <- function(lno, smoothFun = running12) {
 	lim = lims[[lno]]
 	lims = lims[-lno]
-	return(Trend(lim, smoothFun, lims)
+	return(Trend(lim, smoothFun, lims))
 }
 
 findTrends <- function(lims, ...) lapply(1:length(lims), findTrend, ...)
@@ -44,14 +44,14 @@ findTrendNoFile <- function(FUN, ...)
 	
 running12fire <- function(x, ys, ...) {
 	ys = layer.apply(1:nlayers(ys[[1]]), function(i) ys[[1]][[i]] + ys[[2]][[i]] + ys[[3]][[i]])
-	x = x / ys
+	x = x * ys
 	return(running12(x, ...))
 }
 trend12  = findTrendNoFile(running12, tempF2)
 trend12F = findTrendNoFile(running12fire, tempF2, 'fireWeighted')
 
-#]sfire = sum(fire)
-#trend12F = lapply(trend12F, function(i) i / sfire)
+sfire = mean(fire)*12
+trend12FF = lapply(trend12F, function(i) i / sfire)
  
 findFireMonth <- function(yr) {
 	mn = (1 + (yr -1) * 12):(yr*12)
@@ -100,6 +100,7 @@ plotHotspots <- function(trends, figName, limits = dfire_lims) {
 	dev.off.gitWatermark()
 }
 
-plotHotspots(trend12 , 'figs/trend12.png' )
-plotHotspots(trend12F, 'figs/trend12F.png')#, limits = dfire_lims/20)
-plotHotspots(trendFS , 'figs/trendFS.png' , limits = dfire_lims * 100)
+plotHotspots(trend12  , 'figs/trend12.png'  , limits = dfire_lims)# * 100)
+plotHotspots(trend12F , 'figs/trend12F.png' , limits = dfire_lims)# * 100, limits = dfire_lims/20)
+plotHotspots(trend12FF, 'figs/trend12FF.png', limits = dfire_lims * 100)#, limits = dfire_lims/20)
+plotHotspots(trendFS  , 'figs/trendFS.png'  , limits = dfire_lims * 100)
