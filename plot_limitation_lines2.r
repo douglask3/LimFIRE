@@ -8,11 +8,11 @@ fracSample    = 200
 grabe_cache   = TRUE
 cirlePoints   = FALSE
 obsSampleFile = paste('temp/ObsSample', fracSample, '.Rd', sep = '-')
-obsLimsFile   = 'temp/ObsLimsEGs.Rd'
+obsLimsFile   = 'temp/ObsLimsEGs2.Rd'
 if (file.exists(obsSampleFile) & grabe_cache) load(obsSampleFile) else {
 	if (file.exists(obsLimsFile)) load(obsLimsFile) else {
 		Obs        = openAllObs()
-		fuel       = 100 - Obs[['bare']]
+		fuel       = ((100 - Obs[['bare']])/100) ^ param('fuel_pw')
 		#fuel[fuel < 10] = 10
 		
 		moisture   = (Obs[['alpha']] + param('cM') * Obs[['emc']]) / (1 + param('cM'))
@@ -155,11 +155,11 @@ mtext('Vegetation Cover (%)', 1, line = 2.3)
 plotScatter('moisture', col = 'blue', LimFIRE.moisture, dLimFIRE.moisture, 'moisture_x0', 'moisture_k', -1.0, x2pc = TRUE)
 mtext('Fuel Mositure (%)', 1, line = 2.3)
 
-plotScatter('ignitions', col = 'red', LimFIRE.ignitions, dLimFIRE.ignitions, 'igntions_x0', 'igntions_k', 1.0)
+plotScatter('ignitions', col = 'red', LimFIRE.ignitions, dLimFIRE.ignitions, 'igntions_x0', 'igntions_k', 1.0, xlim = c(0, 10))
 mtext('No. Ignitions', 1, line = 2.3)
 axis(2, at = seq(0,1,by = 0.2))
 
-plotScatter('suppression', col = 'black', LimFIRE.supression, dLimFIRE.supression, 'suppression_x0', 'suppression_k', -1.0)
+plotScatter('suppression', col = 'black', LimFIRE.supression, dLimFIRE.supression, 'suppression_x0', 'suppression_k', -1.0, xlim = c(0,100))
 mtext('Suppression Index', 1, line = 2.3)
 				
 
