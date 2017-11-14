@@ -14,12 +14,13 @@ runLimFIREfromstandardIns <- function(fireOnly = FALSE, remove = NULL, sensitivi
     
     runMonthly <- function(i) {
         cat("simulating fire for month ", i, "\n")
-        out = LimFIRE(100 - Obs[["bare"   ]][[i]],
+        out = LimFIRE((100 - Obs[["bare"   ]][[i]])/100,
                       Obs[["alpha" ]][[i]], Obs[["emc"    ]][[i]],
                       Obs[["Lightn"]][[i]], Obs[["pas"    ]][[i]],
                       Obs[["crop"  ]][[i]], Obs[["popdens"]][[i]],
 					  param("max_f"),
-					               param(    'fuel_x0'),  param('fuel_k'    ),  
+					  param("fuel_pw"),
+								   param(    'fuel_x0'),  param('fuel_k'    ),  
                       param('cM'), param('moisture_x0'),  -param('moisture_k'),  
                       param('cP'),
                       param('cD1'),
