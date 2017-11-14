@@ -10,7 +10,7 @@ library(mapplots)
 library(ellipse)
 data(worldHiresMapEnv)
 
-
+sourceAllLibs('../rasterextrafuns/rasterPlotFunctions/R/')
 setupProjectStructure(dirn = c("outputs", "data", "temp", "figs"))
 sourceAllLibs('src/libs')
 sourceAllLibs('src/LimFIRE')
@@ -31,8 +31,12 @@ drive_fname = c(alpha   = 'alpha',
 				Tas     = 'Tas',
 				Wet     = 'Wet', 
 				Prc     = 'Prc',
+				Cld     = 'cld',
+				Vap     = 'vap',
                 npp     = 'NPP',
 				bare    = 'bareground',
+				grass   = 'nontree',
+				tree    = 'treecover',
                 crop    = 'cropland',
                 pas     = 'pasture',
                 urban   = 'urban_area',
