@@ -26,8 +26,10 @@ make_variable <- function(var, fname_out, frac) {
 	}
     ## Output
     comment[4] = var
-    writeRaster.gitInfo(dat, fname_out,
+    dat = writeRaster.gitInfo(dat, fname_out,
                         comment = comment, overwrite = TRUE)
+						
+	return(dat)
 }
 
-mapply(make_variable, variables, drive_fname[names(variables)])
+dats = mapply(make_variable, variables, drive_fname[names(variables)])
