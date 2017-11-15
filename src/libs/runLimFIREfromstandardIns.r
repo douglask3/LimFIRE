@@ -6,7 +6,7 @@ openAllObs <- function() {
 }
 
 runLimFIREfromstandardIns <- function(fireOnly = FALSE, remove = NULL, sensitivity= FALSE, 
-                                      mnthIndex = 1:nlayers(Obs[[1]]),...) {
+                                      mnthIndex = 1:nlayers(Obs[[1]]), raw = FALSE, ...) {
     
     Obs = openAllObs()
 	
@@ -29,7 +29,7 @@ runLimFIREfromstandardIns <- function(fireOnly = FALSE, remove = NULL, sensitivi
         
 		if (sensitivity) {
 			for (i in 2:length(out)) out[[i]] = 1 - out[[i]]
-		} else if (!fireOnly) {
+		} else if (!fireOnly & !raw) {
 			mag = sum(layer.apply(out[-1], function(i) i))
 			for (i in 2:length(out)) out[[i]] = out[[i]] / mag
         }
@@ -37,7 +37,7 @@ runLimFIREfromstandardIns <- function(fireOnly = FALSE, remove = NULL, sensitivi
     }
     if (fireOnly) return(layer.apply(mnthIndex, runMonthly))
     mod = runMonthly(1)
-    
+   
     Fire = mod[[1]]
     Fuel = mod[[2]]
     Moisture = mod[[3]]
