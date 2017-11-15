@@ -28,7 +28,7 @@ limit_cols = list(c('magenta', 'white', 'green'), c('yellow', 'white', 'blue'), 
 ## Run model                                                           ##
 #########################################################################
 tempF1 = tempFile(tempF1)
-lims  = runIfNoFile(tempF1, runLimFIREfromstandardIns, test = TRUE, raw = TRUE)
+lims  = runIfNoFile(tempF1, runLimFIREfromstandardIns, raw = TRUE, test = grab_cache)
 lims[[2]] = lims[[2]] -  LimFIRE.fuel(0, param('fuel_x0'), param('fuel_k'))
 fire = lims[[1]]
 
