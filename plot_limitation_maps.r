@@ -4,7 +4,7 @@
 source('cfg.r')
 graphics.off()
 
-grab_cache = FALSE
+grab_cache = TRUE
 
 fig_fname       = 'figs/limitation_map.png'
 fig_fname_indiv = 'figs/ind_limiataions'
@@ -22,8 +22,10 @@ mod_files = paste(outputs_dir, '/LimFIRE_',
 ## Run model                                                           ##
 #########################################################################
 
+rw_mod_files = paste(mod_files,    '-rw', sep = '')
 lm_mod_files = paste(mod_files,    '-lm', sep = '')
-sn_mod_files = paste(mod_files,    '-sn', sep = '')
+sn_mod_files0 = paste(mod_files,    '-sn', sep = '')
+sn_mod_files = paste(mod_files,    '-sn-ws', sep = '')
                   
 
 runLimFIRE <- function(fname, ...){
@@ -31,9 +33,25 @@ runLimFIRE <- function(fname, ...){
     return(runIfNoFile(fname, runLimFIREfromstandardIns, test = grab_cache, ...))
 }
 
-
+rw_mod = runLimFIRE(rw_mod_files, raw = TRUE)[-1]
+sn_mod = runLimFIRE(sn_mod_files0, sensitivity = TRUE)
 lm_mod = runLimFIRE(lm_mod_files, normalise = TRUE, add21 = TRUE)
-sn_mod = runLimFIRE(sn_mod_files, sensitivity = TRUE)
+
+
+weightedSensitivity <- function() {
+	ws <- function(sn, i) {
+		lms = rw_mod[-i]
+		out = layer.apply(1:nlayers(sn), function(i) sn[[i]] * lms[[1]][[i]] * lms[[2]][[i]] * lms[[3]][[i]])
+		return(out)
+	}
+	sn_mod[2:5] = mapply(ws, sn_mod[2:5], 1:4)
+	return(sn_mod)
+}
+
+sn_mod = runIfNoFile(sn_mod_files, weightedSensitivity, test = grab_cache)
+
+
+#sn_mod[[i]][[mn]] = sn_mod[[i]][[mn]] * product(lim[-i][[mn[[)
 
 #########################################################################
 ## Annual Average                                                      ##
