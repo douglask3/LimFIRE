@@ -36,8 +36,9 @@ LimFIRE <- function(w, omega_live, omega_dead,
     
     if (fireOnly) return(Fire)
 	
-	if (normalise) {	
-		 #Fuel = Fuel/FUN.fuel      (0      , w0    , -kw    )
+	if (normalise) {
+		 Fuel0 = FUN.fuel      (0      , w0    , kw    )
+		 Fuel = (Fuel - Fuel0)/(1-Fuel0)
 		 #Ignitions = Ignitions/FUN.ignitions      (550       , ig0   , kig   )
 		 Moisture = Moisture/FUN.moisture  (0  , omega0, komega)
 		 Supression = Supression/FUN.supression  (0  , s0    , ks    )
