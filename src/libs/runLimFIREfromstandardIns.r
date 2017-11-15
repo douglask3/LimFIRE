@@ -5,11 +5,12 @@ openAllObs <- function() {
 	return(Obs)
 }
 
-runLimFIREfromstandardIns <- function(fireOnly = FALSE, remove = NULL, sensitivity= FALSE, 
+runLimFIREfromstandardIns <- function(fireOnly = FALSE, remove = NULL, sensitivity = FALSE, 
                                       mnthIndex = 1:nlayers(Obs[[1]]), raw = FALSE, ...) {
     
     Obs = openAllObs()
-	
+	if (!is.null(remove)) for (i in remove) Obs[[i]][] = 0
+
     #mnthIndex = 1:12#
     
     runMonthly <- function(i) {
