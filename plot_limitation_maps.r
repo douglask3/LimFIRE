@@ -4,7 +4,7 @@
 source('cfg.r')
 graphics.off()
 
-grab_cache = TRUE
+grab_cache = FALSE
 
 fig_fname       = 'figs/limitation_map.png'
 fig_fname_indiv = 'figs/ind_limiataions'
@@ -33,7 +33,7 @@ runLimFIRE <- function(fname, ...){
     return(runIfNoFile(fname, runLimFIREfromstandardIns, test = grab_cache, ...))
 }
 
-rw_mod = runLimFIRE(rw_mod_files, raw = TRUE)[-1]
+rw_mod = runLimFIRE(rw_mod_files, raw = TRUE, normalise = TRUE)[-1]
 sn_mod = runLimFIRE(sn_mod_files0, sensitivity = TRUE)
 lm_mod = runLimFIRE(lm_mod_files, normalise = TRUE, add21 = TRUE)
 
@@ -49,9 +49,6 @@ weightedSensitivity <- function() {
 }
 
 sn_mod = runIfNoFile(sn_mod_files, weightedSensitivity, test = grab_cache)
-
-
-#sn_mod[[i]][[mn]] = sn_mod[[i]][[mn]] * product(lim[-i][[mn[[)
 
 #########################################################################
 ## Annual Average                                                      ##
