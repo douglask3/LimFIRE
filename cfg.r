@@ -8,6 +8,7 @@ library(plotrix)
 library(mapdata)
 library(mapplots)
 library(ellipse)
+library(vegan)
 data(worldHiresMapEnv)
 
 sourceAllLibs('../rasterextrafuns/rasterPlotFunctions/R/')
@@ -51,7 +52,7 @@ drive_fname = paste(outputs_dir, drive_fname, min(years), '-', max(years), '.nc'
 names(drive_fname) = nms
 
 hlghtPnts = list("Desert"      = list( 20,  20.0, col = '#00BB00'),
-                 "Rainforest" = list(-74,  -0.5, col = '#0000BB'), 
+                 "Rainforest"  = list(-74,  -0.5, col = '#0000BB'), 
 				 "Savanna"     = list( 22, -23.5, col = '#BB0000'),
 				 "Cropland"    = list( 80,  18.0, col = '#AAAA00'))
 

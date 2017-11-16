@@ -10,6 +10,7 @@ install.packages('mapdata')
 install.packages('Rcpp') # Needed for benchmarkmetrics
 install.packages('mapplots')
 install.packages('ellipse')
+install.packages('vagan')
 
 install_github("rhyswhitley/r_stash/rstash")
 

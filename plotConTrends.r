@@ -89,14 +89,13 @@ fireSeasonLim <- function(x, ...) {
 
 trendFS = findTrendNoFile(fireSeasonLim, Trend, tempF2, 'season')
 
-
 #########################################################################
 ## Plot trends                                                         ##
 ######################################################################### 
 plotHotspots <- function(trends, figName, limits = dfire_lims, lims4way = NULL, ...) {
 	
-	png(figName, height = 7, width = 8.5, units = 'in', res = 300)
-		layout(rbind(2:3, 4:5, 6, c(1,7)), heights = c(1,1,0.3, 1))
+	png(figName, height = 10, width = 8.5, units = 'in', res = 300)
+		layout(rbind(2:3, 4:5, 6, c(1,7), 8), heights = c(1,1,0.3, 1, 1.3))
 		par(mar = rep(0,4))
 
 		hotspots = mapply(plot_Trend, trends, limitTitles, MoreArgs = list(cols = dfire_cols, limits = limits, ...))[-1]
@@ -112,10 +111,64 @@ plotHotspots <- function(trends, figName, limits = dfire_lims, lims4way = NULL, 
 		plot_4wayLimit(hotspots, '', FALSE, cols =c("FF","BB","88","44"),
 					   limits = lims4way, normalise = FALSE, ePatternRes = 30, ePatternThick = 0.35)	
 		mtext('f) Hotspots')
+		
+		clusters = layer.apply(trends[-1], function(i) i[[1]])
+		
+		
+		mask = !any(is.na(clusters))
+		cv = clusters[mask]
+
+		fit = cascadeKM(cv, 1, 10)
+		nclusters = which.max(fit$results[2,])
+		vclusters = cascadeKM(cv, nclusters, nclusters)[[1]]
+		
+		cols = sapply(1:as.numeric(nclusters), function(cl) apply(cv[vclusters == cl,], 2, mean))
+		cols = cbind(cols, list(c(Productive = '#00FF00', Arid = '#FF00FF'),
+								c(Dry = '#FFFF00', Wet = '#0000FF'),
+								c("More Ignitions" = '#FF0000',"Less Ignitions" = '#00FFFF'),
+								c(Wild = "#000000", Supressed = "#FFFFFF")))
+		
+		findCol <- function(x, cols = NULL) {
+			if (is.null(cols)) {
+				cols = tail(x, 1)[[1]]
+				x =  unlist(head(x, -1))
+			}
+			nms = names(cols)
+			if (!is.numeric(cols[1])) cols =  make_col_vector(cols, ncol = 3, whiteAt0 = FALSE)
+			
+			y = rep(cols[2], length(x))
+			z = rep('', length(x))
+			y[which.max(x)] = cols[1]
+			y[which.min(x)] = cols[3]
+			z[which.max(x)] =  nms[1]
+			z[which.min(x)] =  nms[2]
+			return(c(y,z))
+		}		
+		
+		cols = apply(cols, 1, findCol) 
+		labs = tail(cols, nclusters)
+		labs = apply(labs, 1, paste.miss.blanks, collapse = " & ")
+		labs[labs == ''] = 'No Change'
+		cols = head(cols, nclusters)
+		
+		## mean cols		
+		cols = apply(cols, 1, function(i) apply(col2rgb(i), 1, mean)) /255
+		cols = hex(colorspace::RGB(cols[1,], cols[2,], cols[3,]))
+		
+		cols = saturate(cols, 0.2)
+		clusters = clusters[[1]]
+		clusters[mask] = vclusters
+		
+		plot_raster_from_raster(clusters, y_range = c(-60, 90), cols = cols,
+							   limits = seq(1.5, nclusters - 0.5), add_legend = FALSE, quick = TRUE)
+							   
+		legend("left", labs, pch = 19, col = cols)
 	dev.off.gitWatermark()
 }
 
-plotHotspots(trend12  , 'figs/trend12.png'  , limits = dfire_lims)
-plotHotspots(trend12F , 'figs/trend12F.png' , limits = dfire_lims, scaling = 1)
+#plotHotspots(trend12  , 'figs/trend12.png'  , limits = dfire_lims)
+#plotHotspots(trend12F , 'figs/trend12F.png' , limits = dfire_lims, scaling = 1)
 plotHotspots(trend12FF, 'figs/trend12FF.png', limits = dfire_lims*2000, lims4way = c(1, 10, 100), scaling = 100)
-plotHotspots(trendFS  , 'figs/trendFS.png'  , limits = dfire_lims * 100)
+#plotHotspots(trendFS  , 'figs/trendFS.png'  , limits = dfire_lims * 100)
+
+
