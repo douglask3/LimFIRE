@@ -48,7 +48,7 @@ weightedSensitivity <- function() {
 	return(sn_mod)
 }
 
-sn_mod = runIfNoFile(sn_mod_files, weightedSensitivity, test = grab_cache)
+sn_mod = runIfNoFile(paste(sn_mod_files, '.nc', sep = ''), weightedSensitivity, test = grab_cache)
 
 #########################################################################
 ## Annual Average                                                      ##
