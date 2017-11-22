@@ -118,6 +118,55 @@ plotHotspots <- function(trends, figName, limits = dfire_lims, lims4way = NULL, 
 		clusters[] = 0.0
 		clusters[trends > thresh] = 1
 		clusters[trends < -thresh] = -1
+		clusters = sum(layer.apply(1:4,
+			function(i) 10^(i-1) * clusters[[i]]))
+		cols = list(c(Productive = '#00FF00', Arid = '#FF00FF'),
+								c(Dry = '#FFFF00', Wet = '#0000FF'),
+								c("More Ignitions" = '#FF0000',"Less Ignitions" = '#00FFFF'),
+								c(Wild = 0, Supressed = 2))
+		
+		
+		labs = sapply(cols, function(i) c(names(i[1]), '', names(i[2])))
+		
+		lab = c()
+		score = c()
+		for (statei in 1:3) {
+			labi =  labs[statei, 1]
+			#lab = c(lab, labi)
+			scorei = 1 * c(-1,0,1)[statei]
+			#score = c(score, scorei)
+			for (j in 2) for (statej in 1:3){
+				labj = paste(labi, labs[statej, j], sep = '--')
+				#lab = c(lab, labj)
+				scorej = scorei + 10 * c(-1,0,1)[statej]
+				#score = c(score, scorej)
+				for (k in 3) for (statek in 1:3) {
+					labk = paste(labj, labs[statek, k], sep = '--')
+					#lab = c(lab, labk)
+					scorek = scorej + 100 * c(-1,0,1)[statek]
+					#score = c(score, scorek)
+					for (l in 4) for (statel in 1:3) {
+						labl = paste(labk, labs[statel, l], sep = '--')
+						lab = c(lab, labl)					
+						scorel = scorek + 1000 * c(-1,0,1)[statel]
+						score = c(score, scorel)
+					}
+				}
+			}
+		}		
+			
+		key = unique(clusters)
+		area = sapply(key, function(i) sum((area(clusters) * (clusters == i))[]))
+		cut = tail(sort(area), 10)[1]
+		key = key[area > cut]
+		
+		lab = lab[sapply(key, function(i) which(score == i))]
+		hotspot = clusters
+		hotspot[] = 0
+		for (i in 1:length(key)) hotspot[clusters == key[i]] = i
+
+		browser()
+				
 		
 		mask = !any(is.na(trends[[1]]))
 		cv = clusters[mask]
@@ -127,10 +176,7 @@ plotHotspots <- function(trends, figName, limits = dfire_lims, lims4way = NULL, 
 		vclusters = cascadeKM(cv, nclusters, nclusters)[[1]]
 		
 		cols = sapply(1:as.numeric(nclusters), function(cl) apply(cv[vclusters == cl,], 2, mean))
-		cols = cbind(cols, list(c(Productive = '#00FF00', Arid = '#FF00FF'),
-								c(Dry = '#FFFF00', Wet = '#0000FF'),
-								c("More Ignitions" = '#FF0000',"Less Ignitions" = '#00FFFF'),
-								c(Wild = 0, Supressed = 2)))
+		
 		
 		findCol <- function(x, cols = NULL) {
 			if (is.null(cols)) {
