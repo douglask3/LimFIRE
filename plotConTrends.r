@@ -92,8 +92,11 @@ trendFS = findTrendNoFile(fireSeasonLim, Trend, tempF2, 'season')
 #########################################################################
 ## Plot trends                                                         ##
 ######################################################################### 
-plotHotspots <- function(trends, figName, limits = dfire_lims, lims4way = NULL, ...) {
+plotHotspots <- function(trends, figName, limits = dfire_lims, lims4way = NULL, normFtrend = FALSE, ...) {
 	
+	trends[[1]] = trend12[[1]]
+	if (normFtrend) trends[[1]][[1]] = trends[[1]][[1]]  * 100 * 100/sfire
+	#browser()
 	png(figName, height = 10, width = 8.5, units = 'in', res = 300)
 		layout(rbind(2:3, 4:5, 6, c(1,7), 8), heights = c(1,1,0.3, 1, 1.3))
 		par(mar = rep(0,4))
@@ -122,28 +125,36 @@ plotHotspots <- function(trends, figName, limits = dfire_lims, lims4way = NULL, 
 		nclusters = which.max(fit$results[2,])
 		vclusters = cascadeKM(cv, nclusters, nclusters)[[1]]
 		
-		cols = sapply(1:as.numeric(nclusters), function(cl) apply(cv[vclusters == cl,], 2, mean))
-		cols = cbind(cols, list(c(Productive = '#00FF00', Arid = '#FF00FF'),
+		cols = sapply(1:as.numeric(nclusters), function(cl) apply(cv[vclusters == cl,], 2, function(i) list(range(i))))
+		
+		cols = cbind(cols	, list(c(Productive = '#00FF00', Arid = '#FF00FF'),
 								c(Dry = '#FFFF00', Wet = '#0000FF'),
 								c("More Ignitions" = '#FF0000',"Less Ignitions" = '#00FFFF'),
-								c(Wild = "#000000", Supressed = "#FFFFFF")))
+								c(Wild = 0, Supressed = 2)))
 		
 		findCol <- function(x, cols = NULL) {
+			
 			if (is.null(cols)) {
 				cols = tail(x, 1)[[1]]
 				x =  unlist(head(x, -1))
+				x = matrix(x, 2)
 			}
 			nms = names(cols)
-			if (!is.numeric(cols[1])) cols =  make_col_vector(cols, ncol = 3, whiteAt0 = FALSE)
+			if (is.numeric(cols[1])) cols = seq(cols[1], cols[2], length.out = 3)
+				else cols =  make_col_vector(cols, ncol = 3, whiteAt0 = FALSE)
 			
+			wmax = apply(x >= 0, 2, all)
+			wmin = apply(x <= 0, 2, all)
 			y = rep(cols[2], length(x))
 			z = rep('', length(x))
-			y[which.max(x)] = cols[1]
-			y[which.min(x)] = cols[3]
-			z[which.max(x)] =  nms[1]
-			z[which.min(x)] =  nms[2]
+			y[wmax] = cols[1]
+			y[wmin] = cols[3]
+			z[wmax] =  nms[1]
+			z[wmin] =  nms[2]
 			return(c(y,z))
 		}		
+
+
 		
 		cols = apply(cols, 1, findCol) 
 		labs = tail(cols, nclusters)
@@ -152,23 +163,47 @@ plotHotspots <- function(trends, figName, limits = dfire_lims, lims4way = NULL, 
 		cols = head(cols, nclusters)
 		
 		## mean cols		
-		cols = apply(cols, 1, function(i) apply(col2rgb(i), 1, mean)) /255
+		elim = cols[,4]
+        cols = apply(cols[,1:3], 1, function(i) apply(col2rgb(i), 1, mean)) /255
 		cols = hex(colorspace::RGB(cols[1,], cols[2,], cols[3,]))
+		
 		
 		cols = saturate(cols, 0.2)
 		clusters = clusters[[1]]
 		clusters[mask] = vclusters
 		
-		plot_raster_from_raster(clusters, y_range = c(-60, 90), cols = cols,
-							   limits = seq(1.5, nclusters - 0.5), add_legend = FALSE, quick = TRUE)
-							   
-		legend("left", labs, pch = 19, col = cols)
+		er = clusters
+        for (i in 1:nclusters) er[clusters == i] = as.numeric(elim[i])
+		
+		plot_raster_from_raster(clusters, y_range = c(-60, 90),
+							    cols = cols,
+								limits = seq(1.5, nclusters - 0.5),
+							    e = er + 1, limits_error = 1:3,
+                                ePatternRes = 30, ePatternThick = 0.2,
+								ePointPattern = c(25, 0, 24), eThick = c(1.5, 0, 1.5), preLeveled = TRUE,
+								aggregateFun = max, 
+								add_legend = FALSE, quick = TRUE)
+			
+		
+		legend(-180, 15, labs, pch = 15, col = cols, pt.cex = 3, bty = "n")
+		col = make.transparent("black", 0.5)
+		for (e in 1:3) {
+			pch = c(25, 0, 24)[e]
+			cex = rep(0, length(labs))
+			cex[elim == (e-1)] = c(0.42, 0, 0.42)[e]
+			 print(cex)
+			for (i in c(-183, -180, -177)) for (j in c(12, 15, 18))
+				legend(i, j, rep('', length(labs)), pch = 24,
+					   col = col, pt.bg = col, pt.cex = cex, bty = "n")
+		}
+		
 	dev.off.gitWatermark()
 }
 
-#plotHotspots(trend12  , 'figs/trend12.png'  , limits = dfire_lims)
-#plotHotspots(trend12F , 'figs/trend12F.png' , limits = dfire_lims, scaling = 1)
-plotHotspots(trend12FF, 'figs/trend12FF.png', limits = dfire_lims*2000, lims4way = c(1, 10, 100), scaling = 100)
-#plotHotspots(trendFS  , 'figs/trendFS.png'  , limits = dfire_lims * 100)
+plotHotspots(trend12  , 'figs/trend12.png'  , limits = dfire_lims)
+plotHotspots(trend12F , 'figs/trend12F.png' , limits = dfire_lims, scaling = 1)
+plotHotspots(trend12FF, 'figs/trend12FF.png', limits = dfire_lims*2000, lims4way = c(1, 10, 100), scaling = 100, normFtrend = TRUE)
+plotHotspots(trendFS  , 'figs/trendFS.png'  , limits = dfire_lims * 100)
 
 
+	
