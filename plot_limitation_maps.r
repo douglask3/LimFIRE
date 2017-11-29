@@ -33,10 +33,9 @@ runLimFIRE <- function(fname, ...){
     return(runIfNoFile(fname, runLimFIREfromstandardIns, test = grab_cache, ...))
 }
 
+lm_mod = runLimFIRE(lm_mod_files, normalise = TRUE, add21 = TRUE)
 rw_mod = runLimFIRE(rw_mod_files, raw = TRUE, normalise = TRUE)[-1]
 sn_mod = runLimFIRE(sn_mod_files0, sensitivity = TRUE)
-lm_mod = runLimFIRE(lm_mod_files, normalise = TRUE, add21 = TRUE)
-
 
 weightedSensitivity <- function() {
 	ws <- function(sn, i) {
