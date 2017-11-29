@@ -16,13 +16,14 @@ runLimFIREfromstandardIns <- function(fireOnly = FALSE, remove = NULL, sensitivi
     runMonthly <- function(i) {
         cat("simulating fire for month ", i, "\n")
         out = LimFIRE((100 - Obs[["bare"   ]][[i]])/100,
-                      Obs[["alpha" ]][[i]], Obs[["emc"    ]][[i]],
+                      Obs[["alpha" ]][[i]], Obs[["emc"    ]][[i]], Obs[["tree"]][[i]] / 100,
                       Obs[["Lightn"]][[i]], Obs[["pas"    ]][[i]],
                       Obs[["crop"  ]][[i]], Obs[["popdens"]][[i]],
 					  param("max_f"),
 					  param("fuel_pw"),
 								   param(    'fuel_x0'),  param('fuel_k'    ),  
-                      param('cM'), param('moisture_x0'),  -param('moisture_k'),  
+                      param('cM'), param('cMT'),
+								   param('moisture_x0'),  -param('moisture_k'),  
                       param('cP'),
                       param('cD1'),
                                   param(   'igntions_x0'),  param('igntions_k'   ),  
@@ -44,7 +45,6 @@ runLimFIREfromstandardIns <- function(fireOnly = FALSE, remove = NULL, sensitivi
     Moisture = mod[[3]]
     Ignitions = mod[[4]]
     Supression = mod[[5]]
-    
     for (i in mnthIndex[-1]) {
         mod = runMonthly(i)
         Fire = addLayer(Fire, mod[[1]])
