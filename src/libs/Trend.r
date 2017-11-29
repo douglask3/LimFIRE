@@ -1,26 +1,31 @@
 findRasterTrend <- function(r, seasonal = FALSE) {
 	mask = !is.na(r[[1]])
-	findSubsetTrend <- function(ri) {
-		vr = ri[mask]
-
+	
+	findSubsetTrend <- function(vr) {
+				
 		lmFUN <- function(y) {
 			fit = lm(as.vector(y) ~ c(1:length(y)))
-			p = summary(fit)[[4]][,4][2]
-			dy = coefficients(lm(as.vector(y) ~ c(1:length(y))))[2]
-			return(c(gradient = dy, p = p))
+			return(coefficients(fit)[2])
 		}
-
+		
 		res = apply(vr, 1, lmFUN)
-		trend = r[[1:2]]
-
-		trend[[1]][mask] = res[1,]
-		trend[[2]][mask] = res[2,]
-		return(trend)
+		return(res)
 	}
-	if (seasonal) 
-		trends = lapply(1:12, function(mn) findSubsetTrend(r[[seq(mn, nlayers(r), 12)]]))
-	else trends = findSubsetTrend(r)
-	
+	vr = r[mask]
+	trends = r[[1:2]]
+	if (seasonal)  {
+		start.time = Sys.time()
+		vrs = lapply(1:12, function(mn) vr[, seq(mn, dim(vr)[2], 12)])
+		cl = makeCluster(c("localhost","localhost","localhost","localhost"),  type = 'SOCK')
+			vtrend = clusterApply(cl, vrs, findSubsetTrend)
+		stopCluster(cl)
+		
+		pvs = lapply(1:12, function(mn) vtrend[[mn]]/apply(vrs[[mn]], 1, sd))
+		
+		trends = layer.apply(vtrend, function(i) {trends[mask] = i; return(trends)})
+		print(Sys.time() - start.time)
+	} else trends[mask] = findSubsetTrend(r)
+	browser()
 	return(trends)	
 }
 
