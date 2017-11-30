@@ -10,8 +10,8 @@ fig_fname = 'figs/Trends.png'
 
 limitTitles = c('e) Fire', 'a) Fuel', 'b) Moisture', 'c) Ignitions', 'd) Suppression')
 
-tempF1 = 'temp/limitations4trends'
-tempF2 = 'temp/trendsFromLimitations'
+tempF1 = 'temp/limitations4trends-nTree'
+tempF2 = 'temp/trendsFromLimitations-nTree'
 
 tempFile <- function(fnames, extraName = '') {
 	fnames = paste(fnames, extraName, sep = '')
@@ -36,8 +36,11 @@ fire = lims[[1]]
 #########################################################################
 ## Find  Trends                                                        ##
 #########################################################################
-findTrend <- function(lno, smoothFun = running12, trendFUN = Trend) {
-	lim = lims[[lno]]
+findTrend <- function(lno, smoothFun = running12, 
+				      trendFUN = Trend, removeFire = FALSE) {
+	
+	lims = lims[-1]
+	lim  = lims[[lno]]
 	lims = lims[-lno]
 	return(trendFUN(lim, smoothFun, lims))
 }
@@ -47,8 +50,8 @@ findTrendNoFile <- function(FUN, trendFUN = Trend, ..., trend1 = NULL) {
 	if (is.null(trend1))
 		trends = runIfNoFile(tempFile(...), findTrends, lims, FUN, trendFUN, test = grab_cache)
 	else {
-		trends = runIfNoFile(tempFile(...)[-1], findTrends, lims[-1], FUN, trendFUN, test = grab_cache)
-		trends = c(trend1, trends)
+		trends = runIfNoFile(tempFile(...)[-1], findTrends, lims[-1], FUN, trendFUN, removeFire = TRUE, test = grab_cache)
+		trends = c(trend1 * 100, trends)
 	}	
 	return(trends)
 }
@@ -95,7 +98,7 @@ fireSeasonLim <- function(x, ...) {
 	return(xout)
 }
 
-trendFS = findTrendNoFile(fireSeasonLim, Trend, tempF2,  trend1 = trend12[[1]], 'season')
+#trendFS = findTrendNoFile(fireSeasonLim, Trend, tempF2,  trend1 = trend12[[1]], 'season')
 
 #########################################################################
 ## Plot trends                                                         ##
@@ -103,7 +106,7 @@ trendFS = findTrendNoFile(fireSeasonLim, Trend, tempF2,  trend1 = trend12[[1]], 
 plotHotspots <- function(trends, figName, limits = dfire_lims, fire_limits = limits, 
 						 lims4way = NULL, ...) {
 	
-	trends[[1]] = trend12[[1]] * 100
+	#trends[[1]] = trend12[[1]] * 100
 	#if (normFtrend) trends[[1]][[1]] = trends[[1]][[1]]  /sfire
 	#browser()
 	png(figName, height = 10, width = 8.5, units = 'in', res = 300)
