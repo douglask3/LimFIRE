@@ -1,6 +1,8 @@
-findRasterTrend <- function(r, seasonal = FALSE) {
-	mask = !is.na(r[[1]])
+findRasterTrend <- function(r, seasonal = FALSE, mask = NULL, factor = 1) {
 	
+	if (factor > 1) r = aggregate(r, factor)
+	if (is.null(mask)) mask = !is.na(r[[1]])
+
 	findSubsetTrend <- function(vr) {
 				
 		lmFUN <- function(y) {
@@ -20,12 +22,18 @@ findRasterTrend <- function(r, seasonal = FALSE) {
 			vtrend = clusterApply(cl, vrs, findSubsetTrend)
 		stopCluster(cl)
 		
-		pvs = lapply(1:12, function(mn) vtrend[[mn]]/apply(vrs[[mn]], 1, sd))
 		
-		trends = layer.apply(vtrend, function(i) {trends[mask] = i; return(trends)})
+		makeTrends <- function(pv, vr) {			
+			sdvs = apply(vr, 1, sd)
+			trends[[1]][mask] = pv
+			trends[[2]][mask] = sdvs/pv
+			return(trends)
+		}
+		
+		trends = mapply(makeTrends, vtrend, vrs)
+		
 		print(Sys.time() - start.time)
-	} else trends[mask] = findSubsetTrend(r)
-	browser()
+	} else trends[mask] = findSubsetTrend(r[mask])
 	return(trends)	
 }
 
@@ -36,12 +44,12 @@ Trend <- function(r, smoothFun = running12, ...) {
 
 
 removeTrend <- function(r, smoothFun = running12, rs, ...) {
-	fireUnControl = rs[[2]] * rs[[3]] * rs[[4]]
+	fireUnControl = rs[[1]] * rs[[2]] * rs[[3]]
 	fireControl = r * fireUnControl
 	r0 = r
-	trends = findRasterTrend(r, seasonal = TRUE)
-	
-	
+	mask = !is.na(fireControl[[1]])
+	trends = findRasterTrend(r, seasonal = TRUE, mask = mask,...)
+		
 	removeTrend <- function(i) {
 		mn = 12*(i/12-floor(i/12))
 		yr = ceiling(i/12)
