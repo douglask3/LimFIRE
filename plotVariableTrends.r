@@ -6,7 +6,7 @@ graphics.off()
 
 grab_cache = TRUE
 
-fig_fnames = paste('figs/', c('Variables','Trends'), '.png', sep = '')
+fig_fnames = paste('figs/', c('Variables','Trends', 'normTrends'), '.png', sep = '')
 
 tempFileTrend = 'temp/variableTrend'
 tempFileVarMn = 'temp/variableMean'
@@ -84,6 +84,7 @@ findsFun <- function(...) mapply(findFun, obs, names(varnames), MoreArgs = list(
 
 trends = findsFun(tempFileTrend, Trend)
 varMns = findsFun(tempFileVarMn,  mean)
+normTd = mapply('/', trends, varMns)
 
 trends[['fire']][[1]] = trends[['fire']][[1]] * 100
 trends[['bare']][[1]] = trends[['bare']][[1]] * (-1)
@@ -98,7 +99,7 @@ plotVars <- function(xs, fig_fname, cols, limits, ...) {
 					 c(2, 3, 0 , 14, 14),
 					 c(4, 5, 0 , 14, 14),
 					 c(6, 7, 0 , 0 , 0)),
-					 widths = c(1,1,0.3, 0.7, 1), heights = c(1, 1, 0.3, 0.7, 1, 1))
+					 widths = c(1,1,0.3, 0.7, 1), heights = c(1, 1, 0.7, 0.3, 1, 1))
 		
 		
 		#layout(rbind(c(1, 2, 8, 9),
@@ -122,6 +123,7 @@ plotVars <- function(xs, fig_fname, cols, limits, ...) {
 
 #cols = mapply(make_col_vector, r = cols, limits = limits)
 plotVars(trends, fig_fnames[2], cols, limits)
+plotVars(normTd, fig_fnames[3], cols, limits)
 
 #index  = lapply(limits, function(i)    which(i>0))
 #cols   = mapply(function(v, i) v[i], cols, index)
