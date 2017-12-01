@@ -31,6 +31,7 @@ fire_lims = c(0, 0.1, 1, 2, 5, 10, 20, 50)
 coefficants_file = 'data/params.csv'
 
 drive_fname = c(alpha   = 'alpha',
+				alphaMax= 'alpha_12monthMax',
                 emc     = 'emc',
                 emcMax  = 'emc_12monthMax',
 				Hr      = 'Hr',
