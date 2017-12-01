@@ -15,6 +15,7 @@ library(snow)
 data(worldHiresMapEnv)
 
 sourceAllLibs('../rasterextrafuns/rasterPlotFunctions/R/')
+sourceAllLibs('../rasterextrafuns/rasterExtras/R/')
 setupProjectStructure(dirn = c("outputs", "data", "temp", "figs"))
 sourceAllLibs('src/libs')
 sourceAllLibs('src/LimFIRE')
