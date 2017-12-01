@@ -36,7 +36,6 @@ make_emc <- function(i) {
 
 emc = layer.apply(1:(12*nyears), make_emc)
 emcMax = seaCy12(emc, function(...) max(...))
-
 emc = emc[[-c(1:12)]]
 ################################################################################
 ## run and output                                                             ##
