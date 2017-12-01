@@ -84,21 +84,10 @@ findFun <- function(r, name, tempFile, FUN) {
 }
 findsFun <- function(...) mapply(findFun, obs, names(varnames), MoreArgs = list(...))
 
-seaCy <- function(r, ...) {
-	climConvert <- function(mn) {
-		index = seq(mn, nlayers(r), 12)
-		return(mean(r[[index]]))
-	}
-	r = layer.apply(1:12, climConvert)
-	rClim = range(r)
-	rClim = (rClim[[2]] - rClim[[1]]) / mean(r)
-	return(rClim)
-}
-
-trends = findsFun(tempFileTrend, Trend)
-varMns = findsFun(tempFileVarMn,  mean)
-varSds = findsFun(tempFileVarSd,  sd12)
-varScy = findsFun(tempFileVarSC, seaCy)
+trends = findsFun(tempFileTrend, Trend    )
+varMns = findsFun(tempFileVarMn,  mean    )
+varSds = findsFun(tempFileVarSd,  sd12    )
+varScy = findsFun(tempFileVarSC, seaCyClim)
 normTd = mapply('/', trends, varMns)
 
 trends[['fire']][[1]] = trends[['fire']][[1]] * 100

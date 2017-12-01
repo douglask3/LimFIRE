@@ -14,6 +14,7 @@ varns = c(wetday = 'wet',
 ################################################################################
 ## load data                                                                  ##
 ################################################################################
+clim_layers= (min(clim_layers-12):max(clim_layers))
 c(dat, nyears) := loadClimDat(dir, varns, clim_layers)
 
 ################################################################################
@@ -33,12 +34,14 @@ make_emc <- function(i) {
     return(emc)
 }
 
-
 emc = layer.apply(1:(12*nyears), make_emc)
+emcMax = seaCy12(emc, function(...) max(...))
 
+emc = emc[[-c(1:12)]]
 ################################################################################
 ## run and output                                                             ##
 ################################################################################
 
 
 writeRaster.gitInfo(emc, drive_fname['emc'], overwrite = TRUE)
+writeRaster.gitInfo(emcMax, drive_fname['emcMax'], overwrite = TRUE)

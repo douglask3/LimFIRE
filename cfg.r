@@ -32,6 +32,7 @@ coefficants_file = 'data/params.csv'
 
 drive_fname = c(alpha   = 'alpha',
                 emc     = 'emc',
+                emcMax  = 'emc_12monthMax',
 				Hr      = 'Hr',
 				Tas     = 'Tas',
 				Wet     = 'Wet', 
