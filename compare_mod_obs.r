@@ -2,7 +2,8 @@ source('cfg.r')
 mod_file = 'outputs/LimFIRE_fire.nc'
 fig_file = 'figs/gfedComparison.png'
  
-mod = runIfNoFile(mod_file, runLimFIREfromstandardIns, fireOnly = TRUE, grab = FALSE)
+mod = runIfNoFile(mod_file, runLimFIREfromstandardIns, fireOnly = TRUE, test = TRUE)
+
 obs = lapply(drive_fname, stack)[["fire"]]
 
 cols = fire_cols; lims = fire_lims

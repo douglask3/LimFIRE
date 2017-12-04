@@ -15,6 +15,7 @@ library(snow)
 data(worldHiresMapEnv)
 
 sourceAllLibs('../rasterextrafuns/rasterPlotFunctions/R/')
+sourceAllLibs('../rasterextrafuns/rasterExtras/R/')
 setupProjectStructure(dirn = c("outputs", "data", "temp", "figs"))
 sourceAllLibs('src/libs')
 sourceAllLibs('src/LimFIRE')
@@ -25,12 +26,14 @@ clim_layers =  115:282
 ml = c(31,28,31,30,31,30,31,31,30,31,30,31)
 
 fire_cols = c("#FFFFFF", "#FFEE00", "#AA2200", "#330000")
-fire_lims = c(0, 1, 2, 5, 10, 20, 50)
+fire_lims = c(0, 0.1, 1, 2, 5, 10, 20, 50)
 
 coefficants_file = 'data/params.csv'
 
 drive_fname = c(alpha   = 'alpha',
+				alphaMax= 'alpha_12monthMax',
                 emc     = 'emc',
+                emcMax  = 'emc_12monthMax',
 				Hr      = 'Hr',
 				Tas     = 'Tas',
 				Wet     = 'Wet', 

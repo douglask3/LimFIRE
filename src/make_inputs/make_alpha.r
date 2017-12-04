@@ -15,7 +15,7 @@ varns = c(temp   = 'tmp',
 ## load data                                                                  ##
 ################################################################################
 files = list.files(dir, full.names = TRUE)
-
+clim_layers= (min(clim_layers-12):max(clim_layers))
 loadDat <- function(varn) {
     files = files[grepl(varn, files)]
     return(layer.apply(files, stack)[[clim_layers]])
@@ -70,8 +70,13 @@ year.stash <- function(y, spinup = FALSE) {
 
 lapply(rep(1, 40), year.stash)
 alpha = layer.apply(1:nyears, year.stash)
+alphaMax = seaCy12(alpha, function(...) max(...))
+alpha = alpha[[-c(1:12)]]
 
 comment = list('made using rstash' = citation.text('rstash'))
 
 writeRaster.gitInfo(alpha, drive_fname['alpha'],
+                    comment = comment, overwrite = TRUE)
+
+writeRaster.gitInfo(alphaMax, drive_fname['alphaMax'],
                     comment = comment, overwrite = TRUE)

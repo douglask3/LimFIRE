@@ -1,6 +1,5 @@
 plot_Trend <- function(trend, title, cols, limits, 
 					   prob_lims = c(0.001, 0.01, 0.05), y_range = c(-60, 90), scaling = 12 * 10, remove_probLim = c(FALSE, FALSE)) {
-	
 	if (nlayers(trend) > 1) {
 		if (remove_probLim[1]) trend[[1]][trend[[2]] > tail(prob_lims,1)] = NaN
 		trend[[1]] = trend[[1]] * scaling
