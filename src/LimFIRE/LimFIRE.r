@@ -16,7 +16,7 @@ LimFIRE <- function(w, wSeason, omega_live, omega_dead, Tree,
         FUN.supression = LimFIRE.supression            
     }
     
-    fuel       = ((w + S * (1 - wSeason)) / (1 + S))^fp
+    fuel       = ((w^fp + S * (1 - wSeason)) / (1 + S))
     moisture   = (omega_live + M * omega_dead + Mt * Tree) / (1 + M + Mt)
     ignitions  =  Lig + P * pas + D * popdens
     supression = (crop + H * popdens)
@@ -33,7 +33,7 @@ LimFIRE <- function(w, wSeason, omega_live, omega_dead, Tree,
     Supression = FUN.supression(supression, s0    , ks    )
     #if (sensitivity)  browser()
     Fire = maxF * Fuel * Moisture * Ignitions * Supression
-    browser()
+    
     if (fireOnly) return(Fire)
 	
 	if (normalise) {
