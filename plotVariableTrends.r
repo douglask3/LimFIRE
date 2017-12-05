@@ -6,15 +6,17 @@ graphics.off()
 
 grab_cache = TRUE
 
-fig_fnames = paste('figs/', c('Variables', 'VariableSDs', 'VariableSeasonRange', 'Trends', 'normTrends'), '.png', sep = '')
+fig_fnames = paste('figs/', c('Variables', 'VariableSDs', 'VariableSeasonRange', 'VariableWhMx',
+			                  'Trends', 'normTrends'), '.png', sep = '')
 
 tempFileTrend = 'temp/variableTrend'
 tempFileVarMn = 'temp/variableMean'
 tempFileVarSd = 'temp/variableSd12'
 tempFileVarSC = 'temp/variableScyc'
+tempFileVarWM = 'temp/variableWhMx'
 
-varnames = c("~alpha~ (= ~AET/PET~)", "EMC", "Cload Cover", "Relative Humidity", "Temperature", "Wet days", "Precipitation", "Veg Cover", "Tree Cover", "Cropland", "Pasture", "Population Density", "Lightning", "Burnt Area")
-names(varnames) = c("alpha", "emc", "Cld", "Hr", "Tas", "Wet", "Prc", "bare", "tree", "crop", "pas", "popdens",  "Lightn", "fire") 
+varnames = c("~alpha~ (= ~AET/PET~)", "EMC", "Cload Cover", "Relative Humidity", "Temperature", "Wet days", "Precipitation", "Veg Cover", "Tree Cover", "Cropland", "Pasture", "Population Density", "Lightning", "~alpha~ max anomolie", "Burnt Area")
+names(varnames) = c("alpha", "emc", "Cld", "Hr", "Tas", "Wet", "Prc", "bare", "tree", "crop", "pas", "popdens",  "Lightn", "alphaMax", "fire") 
 
 limits     = list(alpha   = c(-0.1,-0.05, -0.01, -0.005, 0.005, 0.01, 0.05, 0.1),
 				  emc     = c(-0.02, -0.01, -0.005, -0.002, 0.002, 0.005, 0.01, 0.02),
@@ -29,6 +31,7 @@ limits     = list(alpha   = c(-0.1,-0.05, -0.01, -0.005, 0.005, 0.01, 0.05, 0.1)
 				  pas     = c(-1, -0.1, -0.01, -0.001, 0.001, 0.01, 0.1, 1),
 				  popdens = c(-5, -1, -0.1, -0.01, 0.01, 0.1, 1, 5),
 				  Lightn  = c(-5, -1, -0.1, -0.01, 0.01, 0.1, 1, 5),
+                  alphaMax= c(-0.1,-0.05, -0.01, -0.005, 0.005, 0.01, 0.05, 0.1),
 				  fire    = c(-0.01, -0.005, -0.001, -0.0005, -0.0001, 0.0001, 0.0005, 0.001, 0.005, 0.01) * 100)
 			  
 limits_vs  = list(alpha   = c(0.1, 0.2, .3, .4, .5, .6, .7, .8, .9),
@@ -44,6 +47,7 @@ limits_vs  = list(alpha   = c(0.1, 0.2, .3, .4, .5, .6, .7, .8, .9),
 				  pas     = c(1, 2, 5, 10, 20, 40, 60, 80),
 				  popdens = c(0.01, 0.1, 1, 10, 100, 1000),
 				  Lightn  = c(0.1, 0.2, 0.5, 1, 1.5, 2, 3),
+				  alphaMax= c(1, 1.2, 1.4, 1.6, 1.8, 2, 2.2),
 				  fire    = c(0, 1, 2, 5, 10, 20, 50))
 			  
 cols       = list(alpha   = c("#222200", '#AAAA00', 'white', '#00AAAA', '#000044'),
@@ -59,6 +63,7 @@ cols       = list(alpha   = c("#222200", '#AAAA00', 'white', '#00AAAA', '#000044
                   pas     = c('#001144', '#0088CC', 'white', '#CC8800', '#441100'),
                   popdens = c('#004400', '#00FF00', 'white', '#999999'   , 'black'  ),
                   Lightn  = c('#004400', '#00FF00', 'white', '#999999'   , 'black'  ),
+				  alphaMax= c("#222200", '#AAAA00', 'white', '#00AAAA', '#000044'),
                   fire    = c('#000022', '#006699', '#00AAFF', 'white', '#FFAA00', '#996600', '#220000'))
 
 units 	       = c(alpha   = '', 
@@ -74,9 +79,29 @@ units 	       = c(alpha   = '',
 				   pas     = '%', 
 				   popdens ='pop~/km2~', 
 				   Lightn  = 'Strikes',
+				   alphaMax= '',
 				   fire    = '%')
 	
 obs = openAllObs()[names(varnames)]
+whichMax = which.max(obs[['fire']])
+whichMax[max(obs[['fire']]) == 0] = NaN
+
+selectMax <- function(r, ...) {
+	out = r[[1]]
+	rv = values(r)
+	selectLevel <- function(i) {
+		index = whichMax[i]
+		return(rv[i, index])
+	}
+	indexes = 1:length(whichMax)
+	indexes = indexes[!is.na(values(whichMax))]
+	
+	outv = sapply(indexes, selectLevel)
+	out[] = NaN
+	out[indexes] = outv
+	return(out)
+}
+
 
 findFun <- function(r, name, tempFile, FUN) {
 	tfname = paste(tempFile, name, '.nc', sep = '-')
@@ -88,6 +113,7 @@ trends = findsFun(tempFileTrend, Trend    )
 varMns = findsFun(tempFileVarMn,  mean    )
 varSds = findsFun(tempFileVarSd,  sd12    )
 varScy = findsFun(tempFileVarSC, seaCyClim)
+varWmx = findsFun(tempFileVarWM, selectMax)
 normTd = mapply('/', trends, varMns)
 
 trends[['fire']][[1]] = trends[['fire']][[1]] * 100
@@ -99,16 +125,17 @@ varMns[['bare']][mask] = NaN
 varSds[['bare']][mask] = NaN
 varScy[['bare']][mask] = NaN
 varMns[['fire']]      = varMns[['fire']]      * 12 * 100
+varWmx[['fire']]      = varWmx[['fire']]      * 12 * 100
 
 plotVars <- function(xs, fig_fname, cols, limits, ...) {
 	print(fig_fname)
 	png(fig_fname, height = 7.3 * 5 / 3, width = 17, units = 'in', res = 300)
-		layout(rbind(c(8, 9, 13, 13, 10),
-				     c(0, 1, 11, 11, 12),
-					 c(2, 3, 0 , 0 , 0 ),
-					 c(2, 3, 0 , 14, 14),
-					 c(4, 5, 0 , 14, 14),
-					 c(6, 7, 0 , 0 , 0)),
+		layout(rbind(c( 8, 9, 13, 13, 10),
+				     c(14, 1, 11, 11, 12),
+					 c( 2, 3, 0 , 0 , 0 ),
+					 c( 2, 3, 0 , 15, 15),
+					 c( 4, 5, 0 , 15, 15),
+					 c( 6, 7, 0 , 0 , 0)),
 					 widths = c(1,1,0.3, 0.7, 1), heights = c(1, 1, 0.7, 0.3, 1, 1))
 				 
 		par( mar = rep(0, 4), oma = c(3,0,1.3,0))
@@ -127,14 +154,15 @@ plotVars <- function(xs, fig_fname, cols, limits, ...) {
 }
 
 #cols = mapply(make_col_vector, r = cols, limits = limits)
-plotVars(trends, fig_fnames[4], cols, limits)
-plotVars(normTd, fig_fnames[5], cols, limits)
+plotVars(trends, fig_fnames[5], cols, limits)
+plotVars(normTd, fig_fnames[6], cols, limits)
 
 #index  = lapply(limits, function(i)    which(i>0))
 #cols   = mapply(function(v, i) v[i], cols, index)
 cols = lapply(cols, function(i) i[ceiling(length(i)/2):length(i)])
 
 plotVars(varMns, fig_fnames[1], cols, limits_vs, scaling = 1)
+plotVars(varWmx, fig_fnames[4], cols, limits_vs, scaling = 1)
 
 sdlims = rep(list(c(0, 0.01, 0.1, 0.2, 0.5, 1, 2, 5)), length(limits))
 units[] = ''
