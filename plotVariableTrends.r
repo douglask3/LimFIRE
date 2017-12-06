@@ -19,7 +19,7 @@ varnames = c("~alpha~ (= ~AET/PET~)", "EMC", "Cload Cover", "Relative Humidity",
 names(varnames) = c("alpha", "emc", "Cld", "Hr", "Tas", "Wet", "Prc", "bare", "tree", "crop", "pas", "popdens",  "Lightn", "alphaMax", "fire") 
 
 limits     = list(alpha   = c(-0.1,-0.05, -0.01, -0.005, 0.005, 0.01, 0.05, 0.1),
-				  emc     = c(-0.02, -0.01, -0.005, -0.002, 0.002, 0.005, 0.01, 0.02),
+				  emc     = c(-0.02, -0.01, -0.005, -0.002, 0.002, 0.005, 0.01, 0.02) * 100,
 				  Cld     = c(-10, -5, -1, -0.5, -0.1, 0.1, 0.5, 1, 5, 10),
 				  Hr      = c(-10, -5, -1, -0.5, -0.1, 0.1, 0.5, 1, 5, 10),
 				  Tas     = c(-1, -0.5, -0.2, -0.1, 0.1, 0.2, 0.5, 1),
@@ -35,7 +35,7 @@ limits     = list(alpha   = c(-0.1,-0.05, -0.01, -0.005, 0.005, 0.01, 0.05, 0.1)
 				  fire    = c(-0.01, -0.005, -0.001, -0.0005, -0.0001, 0.0001, 0.0005, 0.001, 0.005, 0.01) * 100)
 			  
 limits_vs  = list(alpha   = c(0.1, 0.2, .3, .4, .5, .6, .7, .8, .9),
-				  emc     = c(0, 0.1, 0.2, .3, .4, .5, .6, .7, .8, .9),
+				  emc     = c(0, 0.1, 0.2, .3, .4, .5, .6, .7, .8, .9) * 100,
 				  Cld     = c(10, 20, 30, 40, 50, 60, 70, 80),
 				  Hr      = c(10, 20, 30, 40, 50, 60, 80),
 				  Tas     = c(-20, -10, -5, 5, 10, 15, 20, 25, 30),
@@ -119,13 +119,14 @@ normTd = mapply('/', trends, varMns)
 trends[['fire']][[1]] = trends[['fire']][[1]] * 100
 trends[['bare']][[1]] = trends[['bare']][[1]] * (-1)
 varMns[['bare']]      = 100 - varMns[['bare']] 
+varWmx[['bare']]      = 100 - varWmx[['bare']] 
     
 mask = is.na(obs[['alpha']][[1]])
 varMns[['bare']][mask] = NaN
 varSds[['bare']][mask] = NaN
 varScy[['bare']][mask] = NaN
 varMns[['fire']]      = varMns[['fire']]      * 12 * 100
-varWmx[['fire']]      = varWmx[['fire']]      * 12 * 100
+varWmx[['fire']]      = varWmx[['fire']]      * 100
 
 plotVars <- function(xs, fig_fname, cols, limits, ...) {
 	print(fig_fname)
