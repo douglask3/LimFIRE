@@ -5,7 +5,7 @@ seaCyClim <- function(r, normalise = TRUE, ...) {
 	}
 	r = layer.apply(1:12, climConvert)
 	rClim = range(r)
-	if (normaise) rClim = (rClim[[2]] - rClim[[1]]) / mean(r)
+	if (normalise) rClim = (rClim[[2]] - rClim[[1]]) / mean(r)
 	return(rClim)
 }
 
