@@ -10,7 +10,7 @@ runIfNoFile <- function(file, FUN, ..., test = TRUE) {
     if (is.raster(r)) r = writeRaster(r, file, overwrite = TRUE)
     else if (class(r) == 'list')
         r = mapply(writeRaster, r, file, MoreArgs = list(overwrite = TRUE))
-    else if (is.data.frame(r) || is.matrix(r)) 
+    else if (is.data.frame(r) || is.matrix(r) || is.numeric(r)) 
         write.csv(r, file)
     else stop('unknown variable class')
     
