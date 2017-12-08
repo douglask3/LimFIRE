@@ -4,7 +4,7 @@
 source('cfg.r')
 graphics.off()
 
-grab_cache = TRUE
+grab_cache = FALSE
 
 fig_fname       = 'figs/limitation_map.png'
 fig_fname_indiv = 'figs/ind_limiataions'
@@ -43,7 +43,9 @@ run4regions <- function(coords, name) {
 	rw_mod_files = c(paste(outputs_dir, 'GFED_fire'), rw_mod_files)
 	rw_mod_files = paste(rw_mod_files, paste(coords, collapse = '_'), '.csv', sep = '-')
 
-	vars = mapply(runIfNoFile, rw_mod_files, vars, MoreArgs = list(FUN = convert2Lines, coords = coords), SIMPLIFY = FALSE)
+	vars = mapply(runIfNoFile, rw_mod_files, vars,
+				  MoreArgs = list(FUN = convert2Lines, coords = coords, test = grab_cache), 
+				  SIMPLIFY = FALSE)
 	vars[[1]] = vars[[1]] * 100
 	vars[[2]] = vars[[2]] * 100
 
@@ -85,7 +87,8 @@ run4regions <- function(coords, name) {
 
 	polySeasonRange <- function(var, col, density, ...) {
 		col = make.transparent(col, 0.67)
-		polygon(c(0:12, 12:0), c(var[1,], rev(var[2,])), col = col, border = NA, density = density, ...)
+		polygon(c(0:12, 12:0), c(var[1,], rev(var[2,])),
+				col = col, border = col, density = density, ...)
 	}
 	density = lapply(ltys, function(i) if (i == 2) return(33) else return(NULL))
 	mapply(polySeasonRange, varSn, cols, density)
