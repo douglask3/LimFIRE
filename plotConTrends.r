@@ -10,8 +10,8 @@ fig_fname = 'figs/Trends.png'
 
 limitTitles = c('e) Fire', 'a) Fuel', 'b) Moisture', 'c) Ignitions', 'd) Suppression')
 
-tempF1 = 'temp/limitations4trends-nTree'
-tempF2 = 'temp/trendsFromLimitations-nTree'
+tempF1 = 'temp/limitations4trends-Tree-alphaMax'
+tempF2 = 'temp/trendsFromLimitations-Tree-alphaMax'
 
 tempFile <- function(fnames, extraName = '') {
 	fnames = paste(fnames, extraName, sep = '')
@@ -39,7 +39,7 @@ fire = lims[[1]]
 findTrend <- function(lno, smoothFun = running12, 
 				      trendFUN = Trend, removeFire = FALSE) {
 	
-	lims = lims[-1]
+	if (removeFire) lims = lims[-1]
 	lim  = lims[[lno]]
 	lims = lims[-lno]
 	return(trendFUN(lim, smoothFun, lims))
@@ -70,7 +70,7 @@ trend12F = findTrendNoFile(running12, removeTrend, tempF2, trend1 = trend12[[1]]
 ## weigted by fire
 sfire = sum(fire)
 trend12FF = lapply(trend12F, function(i) i / sfire)
-
+trend12FF[[1]] = trend12FF[[1]] #* 12
 
 #########################################################################
 ## During fire season                                                  ##
