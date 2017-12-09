@@ -30,9 +30,10 @@ plot_Trend <- function(trend, title, cols, limits,
 	}
 		
 	if (!is.null(p)) {
-		plot_raster_from_raster(p, y_range = y_range,
-							cols = c("white", "black"), limits = prob_lims,
-							quick = TRUE, add_legend = FALSE)		
+		plot.new()
+		#plot_raster_from_raster(p, y_range = y_range,
+		#					cols = c("white", "black"), limits = prob_lims,
+		#					quick = TRUE, add_legend = FALSE)		
 	} else plot.new()
 	if (remove_probLim[2]) trend[[1]][trend[[2]] > head(prob_lims,1)] = 0.0
 	

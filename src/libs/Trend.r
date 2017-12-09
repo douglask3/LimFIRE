@@ -22,17 +22,7 @@ findRasterTrend <- function(r, seasonal = FALSE, mask = NULL, factor = 1) {
 		cl = makeCluster(c("localhost","localhost","localhost","localhost"),  type = 'SOCK')
 			vtrend = clusterApply(cl, vrs, findSubsetTrend)
 		stopCluster(cl)
-		browser()
-		
-		makeTrends <- function(pv, vr) {			
-			#sdvs = apply(vr, 1, sd)
-			trends[mask] = pv
-			trends[[2]][mask] = sdvs/pv
-			return(trends)
-		}
-		
-		trends = mapply(makeTrends, vtrend, vrs)
-		
+		trends = lapply(vtrend, function(i) {trends[mask] = t(i); return(trends)})	
 		print(Sys.time() - start.time)
 	} else trends[mask] = t(findSubsetTrend(vr))
 	
@@ -49,6 +39,7 @@ removeTrend <- function(r, smoothFun = running12, rs, ...) {
 	fireUnControl = rs[[1]] * rs[[2]] * rs[[3]]
 	fireControl = r * fireUnControl
 	r0 = r
+	
 	mask = !is.na(fireControl[[1]])
 	trends = findRasterTrend(r, seasonal = TRUE, mask = mask,...)
 		

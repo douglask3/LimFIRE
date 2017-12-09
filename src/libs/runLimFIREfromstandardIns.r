@@ -6,11 +6,12 @@ openAllObs <- function() {
 }
 
 runLimFIREfromstandardIns <- function(fireOnly = FALSE, remove = NULL, sensitivity = FALSE, 
-                                      mnthIndex = 1:nlayers(Obs[[1]]), raw = FALSE, ...) {
+                                      mnthIndex = 1:nlayers(Obs[[1]]), raw = FALSE, pline = NULL, ...) {
     
     Obs = openAllObs()
 	if (!is.null(remove)) for (i in remove) Obs[[i]][] = 0
 
+	paramFun <- function(...) param(..., pline = pline)
     #mnthIndex = 1:12#
     
     runMonthly <- function(i) {
@@ -19,14 +20,14 @@ runLimFIREfromstandardIns <- function(fireOnly = FALSE, remove = NULL, sensitivi
                       Obs[["alpha" ]][[i]], Obs[["emc"    ]][[i]],
                       Obs[["Lightn"]][[i]], Obs[["pas"    ]][[i]],
                       Obs[["crop"  ]][[i]], Obs[["popdens"]][[i]],
-					  param("max_f"),
-					  param("fuel_pw"),
-								   param(    'fuel_x0'),  param('fuel_k'    ),  
-                      param('cM'), param('moisture_x0'),  -param('moisture_k'),  
-                      param('cP'),
-                      param('cD1'),
-                                  param(   'igntions_x0'),  param('igntions_k'   ),  
-					  param('cD2'), param(    'suppression_x0'),  -param('suppression_k'), fireOnly, sensitivity = sensitivity, ...)
+					  paramFun("max_f"),
+					  paramFun("fuel_pw"),
+								   paramFun(    'fuel_x0'),  paramFun('fuel_k'    ),  
+                      paramFun('cM'), paramFun('moisture_x0'),  -paramFun('moisture_k'),  
+                      paramFun('cP'),
+                      paramFun('cD1'),
+                                  paramFun(   'igntions_x0'),  paramFun('igntions_k'   ),  
+					  paramFun('cD2'), paramFun(    'suppression_x0'),  -paramFun('suppression_k'), fireOnly, sensitivity = sensitivity, ...)
         
 		if (sensitivity) {
 			for (i in 2:length(out)) out[[i]] = 1 - out[[i]]
