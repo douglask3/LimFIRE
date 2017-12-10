@@ -131,7 +131,7 @@ varWmx[['fire']]      = varWmx[['fire']]      * 100
 plotVars <- function(xs, fig_fname, cols, limits, ...) {
 	print(fig_fname)
 	png(fig_fname, height = 7.3 * 5 / 3, width = 17, units = 'in', res = 300)
-		layout(rbind(c( 8, 9, 13, 13, 10),
+		layout.submap(rbind(c( 8, 9, 13, 13, 10),
 				     c(14, 1, 11, 11, 12),
 					 c( 2, 3, 0 , 0 , 0 ),
 					 c( 2, 3, 0 , 15, 15),
@@ -142,19 +142,15 @@ plotVars <- function(xs, fig_fname, cols, limits, ...) {
 		par( mar = rep(0, 4), oma = c(3,0,1.3,0))
 
 		plot_vTrend <- function(x, varname, col, limit, unit) {
-			
-			plot_Trend(x, varname, col, limit, y_range = c(-65, 90), ...)
-			add_raster_legend2(col, limit, dat = x,
-							   transpose = FALSE, 
-							   plot_loc = c(0.1, 0.8, 0.0, 0.04),  ylabposScling=2.5)
-			mtext.units(side = 1, unit, line = -3.5, cex = 0.8)
-
+			plot_Trend(x, varname, col, limit, y_range = c(-65, 90), 
+					   add_legend = TRUE, unit = unit, ...)
 		}
 		mapply(plot_vTrend, xs, varnames, cols, limits, units)
 	dev.off.gitWatermark()
 }
 
 #cols = mapply(make_col_vector, r = cols, limits = limits)
+dev.new()
 plotVars(trends, fig_fnames[5], cols, limits)
 plotVars(normTd, fig_fnames[6], cols, limits)
 

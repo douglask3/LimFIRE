@@ -10,8 +10,8 @@ fig_fname = 'figs/Trends.png'
 
 limitTitles = c('e) Fire', 'a) Fuel', 'b) Moisture', 'c) Ignitions', 'd) Suppression')
 
-tempF1 = 'temp/limitations4trends-Tree-alphaMax'
-tempF2 = 'temp/trendsFromLimitations-Tree-alphaMax'
+tempF1 = 'temp/limitations4trends-Tree-alphaMax2'
+tempF2 = 'temp/trendsFromLimitations-Tree-alphaMax2'
 
 tempFile <- function(fnames, extraName = '') {
 	fnames = paste(fnames, extraName, sep = '')
@@ -24,82 +24,116 @@ prob_lims = c(0.001, 0.01, 0.05)
 
 limit_cols = list(c('magenta', 'white', 'green'), c('yellow', 'white', 'blue'), c('cyan', 'white', 'red'), c('white', '#111111'))
 
+niterations = 41
+factor = 1
+
 #########################################################################
 ## Run model                                                           ##
 #########################################################################
-tempF1 = tempFile(tempF1)
-lims  = runIfNoFile(tempF1, runLimFIREfromstandardIns, raw = TRUE, test = grab_cache)
-lims[[2]] = lims[[2]] -  LimFIRE.fuel(0, param('fuel_x0'), param('fuel_k'))
-fire = lims[[1]]
+findParameterTrends <- function(line, factor, 
+							    simpleTrend = FALSE, seasonTrend = FALSE) {
 
-
-#########################################################################
-## Find  Trends                                                        ##
-#########################################################################
-findTrend <- function(lno, smoothFun = running12, 
-				      trendFUN = Trend, removeFire = FALSE) {
+	fnameLine = paste('paramLine', line, sep = "")
+	tempF1A = tempFile(tempF1, fnameLine)
+	lims  = runIfNoFile(tempF1A, runLimFIREfromstandardIns, raw = TRUE, pline = line, 
+					    test = grab_cache)
+		
+	if (factor != 1) {
+		fnameLine = paste(fnameLine, '-factor', factor, sep = '')
+		tempF1B = tempFile(tempF1, fnameLine)
+		aggregateFUN <- function()  lapply(lims, raster::aggregate, factor = factor)
+		lims = runIfNoFile(tempF1B, aggregateFUN, test = grab_cache)
+	}
 	
-	if (removeFire) lims = lims[-1]
-	lim  = lims[[lno]]
-	lims = lims[-lno]
-	return(trendFUN(lim, smoothFun, lims))
-}
+	lims[[2]] = lims[[2]] -  LimFIRE.fuel(0, param('fuel_x0'), param('fuel_k'))
+	fire = lims[[1]]
 
-findTrends <- function(lims, ...) lapply(1:length(lims), findTrend, ...)
-findTrendNoFile <- function(FUN, trendFUN = Trend, ..., trend1 = NULL) {
-	if (is.null(trend1))
-		trends = runIfNoFile(tempFile(...), findTrends, lims, FUN, trendFUN, test = grab_cache)
-	else {
-		trends = runIfNoFile(tempFile(...)[-1], findTrends, lims[-1], FUN, trendFUN, removeFire = TRUE, test = grab_cache)
-		trends = c(trend1 * 100, trends)
-	}	
-	return(trends)
-}
 
-#########################################################################
-## Simple Trends                                                       ##
-#########################################################################	
-trend12  = findTrendNoFile(running12, Trend, tempF2)
 
-#########################################################################
-## Trend removal                                                       ##
-#########################################################################
+	#########################################################################
+	## Find  Trends                                                        ##
+	#########################################################################
+	findTrend <- function(lno, smoothFun = running12, 
+						  trendFUN = Trend, removeFire = FALSE) {
+		
+		if (removeFire) lims = lims[-1]
+		lim  = lims[[lno]]
+		lims = lims[-lno]
+		return(trendFUN(lim, smoothFun, lims))
+	}
 
-trend12F = findTrendNoFile(running12, removeTrend, tempF2, trend1 = trend12[[1]], 'removeTrend')
 
-## weigted by fire
-sfire = sum(fire)
-trend12FF = lapply(trend12F, function(i) i / sfire)
-trend12FF[[1]] = trend12FF[[1]] #* 12
+	findTrends <- function(lims, ...) lapply(1:length(lims), findTrend, ...)
+	findTrendNoFile <- function(FUN, trendFUN = Trend, ..., fireOnly = FALSE, trend1 = NULL) {
+		if (is.null(trend1)) {
+			tfiles = tempFile(...)
+			if (fireOnly) {
+				tfiles = tfiles[1]
+				lims = lims[1]
+			} 
+			trends = list(runIfNoFile(tfiles, findTrends, lims[1], FUN, trendFUN, test = grab_cache))
+		} else {
+			trends = runIfNoFile(tempFile(...)[-1], findTrends, lims[-1], FUN, trendFUN, removeFire = TRUE, test = grab_cache)
+			trends = c(trend1, trends)
+		}	
+		return(trends)
+	}
 
-#########################################################################
-## During fire season                                                  ##
-######################################################################### 
-findFireMonth <- function(yr) {
-	mn = (1 + (yr -1) * 12):(yr*12)
-	fmax = fire[[mn]]
-	return(which.max(fmax))
-}
-nyrs = (nlayers(fire)/12)
-fireMonths = layer.apply(1:nyrs, findFireMonth)
+	#########################################################################
+	## Simple Trends                                                       ##
+	#########################################################################	
+	trend12 = findTrendNoFile(running12, Trend, tempF2, fnameLine, fireOnly = !simpleTrend)
+	trend12[[1]][[1]] = trend12[[1]][[1]] * 100 * 14 * 12
+	#########################################################################
+	## Trend removal                                                       ##
+	#########################################################################
 
-fireSeasonLim <- function(x, ...) {
 
-	mask = !is.na(x[[1]])
-	vx = x[mask]
-	fireMonths = fireMonths[mask]
+	trend12F = findTrendNoFile(running12, removeTrend, tempF2,
+							   paste('removeTrend', fnameLine, sep = '-'), trend1 = trend12[[1]])
 	
-	xoutv = vx[,1:nyrs]
 	
-	for (i in 1:(dim(xoutv)[1])) for (j in 1:nyrs)  xoutv[i,j] = vx[i,fireMonths[i,j]]
+	## weigted by fire
+	trend12FFname = tempFile(tempF2, paste('removeTrendAndNormalise', fnameLine, sep = '-'))
+	sfire = runIfNoFile(tempFile(tempF2, '-sfire')[1], function() sum(fire), test = TRUE)
+	trend12FF = runIfNoFile(trend12FFname,
+							function() lapply(trend12F, function(i) {i = i / sfire; return(i)}), test = TRUE)
 	
-	xout = x[[1:nyrs]]
-	xout[mask] = xoutv
-	return(xout)
+	#########################################################################
+	## During fire season                                                  ##
+	######################################################################### 
+	findFireMonth <- function(yr) {
+		mn = (1 + (yr -1) * 12):(yr*12)
+		fmax = fire[[mn]]
+		return(which.max(fmax))
+	}
+
+	fireSeasonLim <- function(x, ...) {
+
+		mask = !is.na(x[[1]])
+		vx = x[mask]
+		fireMonths = fireMonths[mask]
+		
+		xoutv = vx[,1:nyrs]
+		
+		for (i in 1:(dim(xoutv)[1])) for (j in 1:nyrs)  xoutv[i,j] = vx[i,fireMonths[i,j]]
+		
+		xout = x[[1:nyrs]]
+		xout[mask] = xoutv
+		return(xout)
+	}
+	if (seasonTrend) {
+		nyrs = (nlayers(fire)/12)
+		fireMonths = layer.apply(1:nyrs, findFireMonth)
+		trendFS = findTrendNoFile(fireSeasonLim, Trend, tempF2,  trend1 = trend12[[1]], 'season')
+	} else trendFS = NULL
+	
+	
+	return(list(trend12, trend12F, trend12FF, trendFS))
 }
-
-#trendFS = findTrendNoFile(fireSeasonLim, Trend, tempF2,  trend1 = trend12[[1]], 'season')
-
+c(trend12, trend12F, trend12FF, trendFS) := findParameterTrends(NULL, factor)
+ensamble = lapply(seq(0, 1, length.out = niterations), findParameterTrends, factor)
+browser()
 #########################################################################
 ## Plot trends                                                         ##
 ######################################################################### 
@@ -110,7 +144,8 @@ plotHotspots <- function(trends, figName, limits = dfire_lims, fire_limits = lim
 	#if (normFtrend) trends[[1]][[1]] = trends[[1]][[1]]  /sfire
 	#browser()
 	png(figName, height = 10, width = 8.5, units = 'in', res = 300)
-		layout(rbind(2:3, 4:5, 6, c(1,8), c(7,9), 10), heights = c(1,1,0.3, 1, 0.3, 1.3))
+		layout.submap(rbind(2:3, 4:5, 6, c(1,8), c(7,9), 10, 10), heights = c(1,1,0.3, 1, 0.3, 0.65, 0.65), 
+					  skip = c(6, 7, 9))
 		par(mar = rep(0,4))
 		
 		limits = c(list(fire_limits), rep(list(limits), 4))
@@ -134,6 +169,7 @@ plotHotspots <- function(trends, figName, limits = dfire_lims, fire_limits = lim
 					   limits = lims4way, normalise = FALSE, ePatternRes = 30, ePatternThick = 0.35)	
 		mtext.units('f) Hotspots', side = 3, line = -2.25, adj = 0.05)
 		plot.new()
+		plot.new()
 		clusters = layer.apply(trends[-1], function(i) i[[1]])
 		
 		
@@ -149,13 +185,20 @@ plotHotspots <- function(trends, figName, limits = dfire_lims, fire_limits = lim
 		vclusters = matrix(NaN, dim(cv)[1])
 		vclusters[mskV] = cascadeKM(cv[mskV,], nclusters, nclusters)[[1]]
 		
-		cols = sapply(1:as.numeric(nclusters),
-					  function(cl) apply(cv[vclusters == cl,], 2,
-										 function(i) list(mean(i) + c(-1,1)*sd(i))))
 		
-		cols = sapply(1:as.numeric(nclusters),
-					  function(cl) apply(cv[vclusters == cl,], 2,
-										 function(i) list(quantile(i, c(0.1, 0.9)))))
+		findClustRange <- function(cl) {
+			FUN <- function(i) list(mean(i) + c(-1,1)*sd(i))
+			index = vclusters == cl
+			if (sum(index) == 1) val = list(cv[index, ], cv[index, ])
+				else val = apply(cv[index, ], 2, FUN)
+			return(val)
+				
+		}
+		cols = sapply(1:as.numeric(nclusters), findClustRange)
+		
+		#cols = sapply(1:as.numeric(nclusters),
+		#			  function(cl) apply(cv[vclusters == cl,], 2,
+		#							 function(i) list(quantile(i, c(0.1, 0.9)))))
 		
 		cols = cbind(cols	, list(c(Productive = '#00FF00', Arid = '#FF00FF'),
 								c(Drier = '#FFFF00', Wetter = '#0000FF'),
@@ -198,6 +241,7 @@ plotHotspots <- function(trends, figName, limits = dfire_lims, fire_limits = lim
 		cols = saturate(cols, 0.2)
 		clusters = clusters[[1]]
 		clusters[mask] = vclusters
+		clusters[!mask] = NaN
 		
 		er = clusters
         for (i in 1:nclusters) er[clusters == i] = as.numeric(elim[i])
@@ -229,11 +273,11 @@ plotHotspots <- function(trends, figName, limits = dfire_lims, fire_limits = lim
 }
 
 #plotHotspots(trend12  , 'figs/trend12.png'  , limits = c(-1, -0.5, -0.1, -0.05, -0.01, 0.01, 0.05, 0.1, 0.5, 1))
-plotHotspots(trend12F , 'figs/trend12F.png', 
-			 limits = dfire_lims * 1000,
-			 fire_limits = c(-1, -0.5, -0.1, -0.05, -0.01, 0.01, 0.05, 0.1, 0.5, 1), 
-			 scaling = 120)
-plotHotspots(trend12FF, 'figs/trend12FF.png', limits = dfire_lims*1000,
+#plotHotspots(trend12F , 'figs/trend12F.png', #
+#			 limits = dfire_lims * 1000,
+#			 fire_limits = c(-1, -0.5, -0.1, -0.05, -0.01, 0.01, 0.05, 0.1, 0.5, 1), 
+#			 scaling = 120)
+plotHotspots(trend12FF, 'figs/trend12FFTest.png', limits = dfire_lims*1000,
 		     fire_limits = c(-1, -0.5, -0.1, -0.05, -0.01, 0.01, 0.05, 0.1, 0.5, 1), 
 			 lims4way = c(1, 10, 100), scaling = 120)
 #plotHotspots(trendFS  , 'figs/trendFS.png'  , limits = dfire_lims * 100)

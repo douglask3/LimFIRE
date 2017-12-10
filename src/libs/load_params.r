@@ -1,10 +1,16 @@
-param <- function(p, FUN = median, ...) {
+param <- function(p, FUN = median, pline = NULL, ...) {
 	if (p == 'mxD1') return(NULL)
 	if (p == 'mxD2') return(NULL)
 	
     params = read.csv(coefficants_file)[,-1]
-    params_mean = apply(as.matrix(params),2, FUN, ...)
-    
+    if (is.null(pline))  { 
+		params_mean = apply(as.matrix(params),2, FUN, ...)
+	} else {
+		nline = round(dim(params)[1] * pline)
+		if (nline < 1 ) nline = 1
+		params_mean =  params[nline,]
+	}
+	
     if (class(params_mean) == "numeric")
         params_mean = t(params_mean)
  
