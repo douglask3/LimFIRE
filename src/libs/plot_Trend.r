@@ -1,6 +1,7 @@
 plot_Trend <- function(trend, title, cols, limits, 
-					   prob_lims = c(0.001, 0.01, 0.05), y_range = c(-60, 90), 
-					   scaling = 12 * 10, remove_probLim = c(FALSE, FALSE),
+					   prob_lims = c(0.001, 0.01, 0.1), limits_error = prob_lims, y_range = c(-60, 90), 
+					   scaling = 12 * 10, remove_probLim = c(FALSE, FALSE), 
+					   prob_cols = c('blue', 'green', 'yellow', 'red'), prob_cols_rev = FALSE,
 					   add_legend = FALSE, unit = '') {
 	if (nlayers(trend) > 1) {
 		if (remove_probLim[1]) trend[[1]][trend[[2]] > tail(prob_lims,1)] = NaN
@@ -13,10 +14,10 @@ plot_Trend <- function(trend, title, cols, limits,
 		p = NULL
 		e = NULL
 	}
-	
+	if (prob_cols_rev) prob_cols = rev(prob_cols)
 	plot_raster_from_raster(x, y_range = y_range,
 							cols = cols, limits = limits,
-							e = e, limits_error = prob_lims[1:2], 
+							e = e, limits_error = limits_error, 
 							ePatternRes = 30, ePatternThick = 0.2,
 							quick = TRUE, add_legend = FALSE)
 	
@@ -30,10 +31,13 @@ plot_Trend <- function(trend, title, cols, limits,
 	}
 		
 	if (!is.null(p)) {
-		plot.new()
-		#plot_raster_from_raster(p, y_range = y_range,
-		#					cols = c("white", "black"), limits = prob_lims,
-		#					quick = TRUE, add_legend = FALSE)		
+		#plot.new()
+		#mar0 = par("mar")
+		#par(mar = c(0, 0, 3, 3))
+		plot_raster_from_raster(p, y_range = y_range,
+							cols = prob_cols, limits = prob_lims,
+							quick = TRUE, add_legend = FALSE, interior = FALSE)
+		#par(mar = mar0)
 	} else plot.new()
 	if (remove_probLim[2]) trend[[1]][trend[[2]] > head(prob_lims,1)] = 0.0
 	
