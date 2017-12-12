@@ -1,4 +1,4 @@
-param <- function(p, FUN = median, pline = NULL, ...) {
+param <- function(p, FUN = median, ..., pline = NULL) {
 	if (p == 'mxD1') return(NULL)
 	if (p == 'mxD2') return(NULL)
 	

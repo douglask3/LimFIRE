@@ -12,6 +12,7 @@ limitTitles = c('e) Fire', 'a) Fuel', 'b) Moisture', 'c) Ignitions', 'd) Suppres
 
 tempF1 = 'temp/limitations4trends-Tree-alphaMax2'
 tempF2 = 'temp/trendsFromLimitations-Tree-alphaMax2'
+esnambleTemp <- 'temp/ensamble'
 
 tempFile <- function(fnames, extraName = '') {
 	fnames = paste(fnames, extraName, sep = '')
@@ -24,7 +25,7 @@ prob_lims = c(0.001, 0.01, 0.05)
 
 limit_cols = list(c('magenta', 'white', 'green'), c('yellow', 'white', 'blue'), c('cyan', 'white', 'red'), c('white', '#111111'))
 
-niterations = 41
+niterations = 21
 factor = 1
 
 #########################################################################
@@ -97,7 +98,7 @@ findParameterTrends <- function(line, factor,
 	trend12FFname = tempFile(tempF2, paste('removeTrendAndNormalise', fnameLine, sep = '-'))
 	sfire = runIfNoFile(tempFile(tempF2, '-sfire')[1], function() sum(fire), test = TRUE)
 	trend12FF = runIfNoFile(trend12FFname,
-							function() lapply(trend12F, function(i) {i = i / sfire; return(i)}), test = TRUE)
+							function() lapply(trend12F, function(i) {i[[1]] = i[[1]] / sfire; return(i)}), test = TRUE)
 	
 	#########################################################################
 	## During fire season                                                  ##
@@ -132,15 +133,41 @@ findParameterTrends <- function(line, factor,
 	return(list(trend12, trend12F, trend12FF, trendFS))
 }
 c(trend12, trend12F, trend12FF, trendFS) := findParameterTrends(NULL, factor)
-ensamble = lapply(seq(0, 1, length.out = niterations), findParameterTrends, factor)
-browser()
+
+esnambleTemp = paste(esnambleTemp, niterations, sep = '-')
+if (file.exists(esnambleTemp)) {
+	load (esnambleTemp)
+} else {
+	ensamble = lapply(seq(0, 1, length.out = niterations), findParameterTrends, factor)
+	save(ensamble, file = esnambleTemp)
+}
+extractEnsamble <- function(id, FUN)  apply(sapply(ensamble, function(i) i[[id]]), 1, FUN)
+
+summary.ens <- function(ens) {
+	grabField <- function(i) layer.apply(ens, function(r) r[[i]])
+	mn = mean(grabField(1))
+	rg = sd.raster(grabField(1))
+	
+	#rg[[1]] < 0 & rg[[2]] > 0
+	#rg = 1 - rg
+	
+	fisher = -2 * sum(log(1 - grabField(2)))
+	return( addLayer(mn, fisher, rg))
+}
+
+trend12F  = extractEnsamble(2, summary.ens)
+trend12FF = extractEnsamble(3, summary.ens)
+prob_lims = qchisq(c(0.9, 0.95, 0.99, .999), niterations)
+#niterations = 101
+#ensamble = lapply(seq(0, 1, length.out = niterations), findParameterTrends, factor)
+
 #########################################################################
 ## Plot trends                                                         ##
 ######################################################################### 
 plotHotspots <- function(trends, figName, limits = dfire_lims, fire_limits = limits, 
 						 lims4way = NULL, ...) {
 	
-	#trends[[1]] = trend12[[1]] * 100
+	trends[[1]] = trends[[1]] / 100
 	#if (normFtrend) trends[[1]][[1]] = trends[[1]][[1]]  /sfire
 	#browser()
 	png(figName, height = 10, width = 8.5, units = 'in', res = 300)
@@ -151,7 +178,8 @@ plotHotspots <- function(trends, figName, limits = dfire_lims, fire_limits = lim
 		limits = c(list(fire_limits), rep(list(limits), 4))
 		
 		hotspots = mapply(plot_Trend, trends, limitTitles, limits = limits,
-						  MoreArgs = list(cols = dfire_cols, ...))[-1]
+						  MoreArgs = list(cols = dfire_cols, prob_lims = prob_lims,
+										  limits_error = c(0.1, 0.5, 1), ...))[-1]
 		
 		add_raster_legend2(cols = dfire_cols, limits = limits[[2]], ylabposScling = 2,
 								   transpose = FALSE, plot_loc =  c(0.2, 0.9, 0.85, 0.99), 
@@ -178,16 +206,17 @@ plotHotspots <- function(trends, figName, limits = dfire_lims, fire_limits = lim
 		
 		mskV = apply(cv, 1, mean)
 		mskV = !is.na(mskV) & !is.infinite(mskV)
-		fit  = cascadeKM(cv[mskV, ], 1, 10)$results[2,]
+		fit  = cascadeKM(cv[mskV, ], 4, 10)$results[2,]
 		minFit = which(diff(fit) > 0)[1] + 1
-		nclusters = which.max(fit[minFit:10]) + minFit - 1
-		
+		nclusters = which.max(fit[minFit:10]) + minFit - 1 + 3
+		print(nclusters)
 		vclusters = matrix(NaN, dim(cv)[1])
 		vclusters[mskV] = cascadeKM(cv[mskV,], nclusters, nclusters)[[1]]
 		
 		
 		findClustRange <- function(cl) {
-			FUN <- function(i) list(mean(i) + c(-1,1)*sd(i))
+			#FUN <- function(i) list(mean(i) + c(-1,1)*sd(i))
+			FUN <- function(i) list(quantile(i, c(0.33, 0.67)))
 			index = vclusters == cl
 			if (sum(index) == 1) val = list(cv[index, ], cv[index, ])
 				else val = apply(cv[index, ], 2, FUN)
@@ -246,6 +275,9 @@ plotHotspots <- function(trends, figName, limits = dfire_lims, fire_limits = lim
 		er = clusters
         for (i in 1:nclusters) er[clusters == i] = as.numeric(elim[i])
 		
+		cols[labs == "Wetter & Less Ignitions"] = "#006FDF"
+		cols[labs == "Productive & Wetter"] = "#36E868"
+		cols[labs == "Arid & Drier"] = "orange"
 		plot_raster_from_raster(clusters, y_range = c(-60, 90),
 							    cols = cols,
 								limits = seq(1.5, nclusters - 0.5),
@@ -273,10 +305,10 @@ plotHotspots <- function(trends, figName, limits = dfire_lims, fire_limits = lim
 }
 
 #plotHotspots(trend12  , 'figs/trend12.png'  , limits = c(-1, -0.5, -0.1, -0.05, -0.01, 0.01, 0.05, 0.1, 0.5, 1))
-#plotHotspots(trend12F , 'figs/trend12F.png', #
-#			 limits = dfire_lims * 1000,
-#			 fire_limits = c(-1, -0.5, -0.1, -0.05, -0.01, 0.01, 0.05, 0.1, 0.5, 1), 
-#			 scaling = 120)
+plotHotspots(trend12F , 'figs/trend12F.png', #
+			 limits = dfire_lims * 1000,
+			 fire_limits = c(-1, -0.5, -0.1, -0.05, -0.01, 0.01, 0.05, 0.1, 0.5, 1), 
+			 scaling = 120)
 plotHotspots(trend12FF, 'figs/trend12FFTest.png', limits = dfire_lims*1000,
 		     fire_limits = c(-1, -0.5, -0.1, -0.05, -0.01, 0.01, 0.05, 0.1, 0.5, 1), 
 			 lims4way = c(1, 10, 100), scaling = 120)
