@@ -5,17 +5,19 @@ source('cfg.r')
 graphics.off()
 
 fracSample    = 200
-grabe_cache   = TRUE
+grabe_cache   = FALSE
 cirlePoints   = FALSE
 obsSampleFile = paste('temp/ObsSample', fracSample, '.Rd', sep = '-')
-obsLimsFile   = 'temp/ObsLimsEGs2.Rd'
+obsLimsFile   = 'temp/ObsLimsEGs-Tree-alphasMax5.Rd'
 if (file.exists(obsSampleFile) & grabe_cache) load(obsSampleFile) else {
 	if (file.exists(obsLimsFile)) load(obsLimsFile) else {
 		Obs        = openAllObs()
-		fuel       = ((100 - Obs[['bare']])/100) ^ param('fuel_pw')
-		#fuel[fuel < 10] = 10
 		
-		moisture   = (Obs[['alpha']] + param('cM') * Obs[['emc']]) / (1 + param('cM'))
+		fuel       = ((100 - Obs[['bare']])/100) ^ param('fuel_pw') * 
+					  (param('fuel_pg') * (Obs[['alphaMax']] - 1) + 1) / (1 + param('fuel_pg'))
+		
+		moisture   = (Obs[['alpha']] + param('cM') * Obs[['emc']] * 0.01 + 
+					  param('cMT') * Obs[['tree']] / 100) / (1 + param('cM') + param('cMT'))
 		
 		ignitions  = Obs[['Lightn']] + param('cP') * Obs[['pas']] + 
 					 param('cD1') * Obs[['popdens']]
@@ -73,6 +75,7 @@ plotScatter <- function(name, col, FUN, dFUN, x0, k, ksc, log = '', x2pc = FALSE
 	index = sort.int(Obs[,name], index.return= TRUE)[[2]]
 	
 	x = Obs[index, name]
+	#y0 = y
 	y = mapply(FUN, paramSample(x0), ksc * paramSample(k), MoreArgs=list(x = Obs[index, name]))
 	y = apply(y, 1, quantile, c(0,0.5, 1))
 	#apply(y, 2, lines, x = x, lty = 1, lwd = 2,  col = make.transparent('black', 0.98))
