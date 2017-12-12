@@ -131,13 +131,12 @@ varWmx[['fire']]      = varWmx[['fire']]      * 100
 plotVars <- function(xs, fig_fname, cols, limits, ...) {
 	print(fig_fname)
 	png(fig_fname, height = 7.3 * 5 / 3, width = 17, units = 'in', res = 300)
-		layout.submap(rbind(c( 8, 9, 13, 13, 10),
-				     c(14, 1, 11, 11, 12),
-					 c( 2, 3, 0 , 0 , 0 ),
-					 c( 2, 3, 0 , 15, 15),
-					 c( 4, 5, 0 , 15, 15),
-					 c( 6, 7, 0 , 0 , 0)),
-					 widths = c(1,1,0.3, 0.7, 1), heights = c(1, 1, 0.7, 0.3, 1, 1))
+		layout.submap(rbind(c( 8, 9, 13, 10),
+				            c(14, 1, 11, 12),
+					        c( 2, 3, 15, 15),
+					        c( 4, 5, 15, 15),
+					        c( 6, 7, 0 , 0 )))
+					 #widths = c(1,1,0.3, 0.7, 1), heights = c(1, 1, 0.7, 0.3, 1, 1))
 				 
 		par( mar = rep(0, 4), oma = c(3,0,1.3,0))
 

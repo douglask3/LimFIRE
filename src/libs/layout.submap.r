@@ -1,5 +1,5 @@
 layout.submap <- function(mat, widths = rep.int(1, ncol(mat)),
-       heights = rep.int(1, nrow(mat)), csize = 3, skip = c(), ...) {
+       heights = rep.int(1, nrow(mat)), csize = 4, skip = c(), ...) {
 	mat  =  mat * 2 - 1
 	skip = skip * 2 - 1
 	
@@ -10,16 +10,15 @@ layout.submap <- function(mat, widths = rep.int(1, ncol(mat)),
 	mat  = t(mat)
 	
 	addSubmap <- function(i) {
-		if (i == 0 || any(skip == i)) return(mat)
-		
-		index = which(mat == i)
-		
+		if (i == 0 || any(skip == i)) return(mat)		
+		index = which(mat == i)		
 		if (length(index) == 0) return(mat)
-		ncol = (length(index))^(1/2)
-
+		ncol = sum(apply(mat, 2, function(j) any(j == i)))
+		nrow = sum(apply(mat, 1, function(j) any(j == i)))
+		#if (length(index) == 32) browser()
 		index = matrix(index, ncol = ncol)
 		
-		index = index[-(1:(ncol * (csize - 1)/csize)), 1:(ncol/csize)]
+		index = index[-c((1:(nrow/2)), (nrow - ((nrow/csize) - 1)):nrow), 1:(ncol/csize)]
 		mat[as.vector(index)] = i + 1
 		return(mat)
 	}
@@ -30,8 +29,10 @@ layout.submap <- function(mat, widths = rep.int(1, ncol(mat)),
 	mati = mat
 	ids =  sort(unique(as.vector(mat)))
 	for (i in 1:length(ids)) mat[mati == ids[i]] = i
+	if (any(mati == 0)) mat = mat - 1
 	
 	heights = rep(heights, each = csize)
 	widths  = rep(widths , each = csize)
+	
 	layout(mat, widths = widths, heights = heights, ...)
 }
