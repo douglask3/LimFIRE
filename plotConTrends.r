@@ -288,7 +288,7 @@ plotHotspots <- function(trends, figName, limits = dfire_lims, fire_limits = lim
 								aggregateFun = max, 
 								add_legend = FALSE, quick = TRUE)
 			
-		
+		addLocPoints()
 		legend(-180, 15, labs, pch = 15, col = cols, pt.cex = 3, bty = "n")
 		col = make.transparent("black", 0.5)
 		for (e in 1:3) {
@@ -305,10 +305,10 @@ plotHotspots <- function(trends, figName, limits = dfire_lims, fire_limits = lim
 }
 
 #plotHotspots(trend12  , 'figs/trend12.png'  , limits = c(-1, -0.5, -0.1, -0.05, -0.01, 0.01, 0.05, 0.1, 0.5, 1))
-plotHotspots(trend12F , 'figs/trend12F.png', #
-			 limits = dfire_lims * 1000,
-			 fire_limits = c(-1, -0.5, -0.1, -0.05, -0.01, 0.01, 0.05, 0.1, 0.5, 1), 
-			 scaling = 120)
+#plotHotspots(trend12F , 'figs/trend12F.png', #
+#			 limits = dfire_lims * 1000,
+#			 fire_limits = c(-1, -0.5, -0.1, -0.05, -0.01, 0.01, 0.05, 0.1, 0.5, 1), 
+#			 scaling = 120)
 plotHotspots(trend12FF, 'figs/trend12FFTest.png', limits = dfire_lims*1000,
 		     fire_limits = c(-1, -0.5, -0.1, -0.05, -0.01, 0.01, 0.05, 0.1, 0.5, 1), 
 			 lims4way = c(1, 10, 100), scaling = 120)
