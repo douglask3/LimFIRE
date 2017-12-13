@@ -114,9 +114,10 @@ varMns = findsFun(tempFileVarMn,  mean    )
 varSds = findsFun(tempFileVarSd,  sd12    )
 varScy = findsFun(tempFileVarSC, seaCyClim)
 varWmx = findsFun(tempFileVarWM, selectMax)
-normTd = mapply('/', trends, varMns)
+normTd = mapply(function(i, j) {i[[1]] = i[[1]]/j; i}, trends, varMns)
 
 trends[['fire']][[1]] = trends[['fire']][[1]] * 100
+normTd[['fire']][[1]] = normTd[['fire']][[1]]
 trends[['bare']][[1]] = trends[['bare']][[1]] * (-1)
 varMns[['bare']]      = 100 - varMns[['bare']] 
 varWmx[['bare']]      = 100 - varWmx[['bare']] 
