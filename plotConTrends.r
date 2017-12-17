@@ -12,7 +12,7 @@ limitTitles = c('e) Fire', 'a) Fuel', 'b) Moisture', 'c) Ignitions', 'd) Suppres
 
 tempF1 = 'temp/limitations4trends-Tree-alphaMax2'
 tempF2 = 'temp/trendsFromLimitations-Tree-alphaMax2'
-esnambleTemp <- 'temp/ensamble'
+esnambleTemp <- 'temp/ensamble4'
 
 tempFile <- function(fnames, extraName = '') {
 	fnames = paste(fnames, extraName, sep = '')
@@ -33,7 +33,7 @@ factor = 1
 #########################################################################
 findParameterTrends <- function(line, factor, 
 							    simpleTrend = FALSE, seasonTrend = FALSE) {
-
+	print(line)
 	fnameLine = paste('paramLine', line, sep = "")
 	tempF1A = tempFile(tempF1, fnameLine)
 	lims  = runIfNoFile(tempF1A, runLimFIREfromstandardIns, raw = TRUE, pline = line, 
@@ -48,7 +48,7 @@ findParameterTrends <- function(line, factor,
 	
 	lims[[2]] = lims[[2]] -  LimFIRE.fuel(0, param('fuel_x0'), param('fuel_k'))
 	fire = lims[[1]]
-
+	print(line)
 
 
 	#########################################################################
@@ -130,9 +130,9 @@ findParameterTrends <- function(line, factor,
 	} else trendFS = NULL
 	
 	
-	return(list(trend12, trend12F, trend12FF, trendFS))
+	return(list(trend12, trend12F, trend12FF, trendFS, lapply(lims, mean)))
 }
-c(trend12, trend12F, trend12FF, trendFS) := findParameterTrends(NULL, factor)
+#c(trend12, trend12F, trend12FF, trendFS, lims) := findParameterTrends(NULL, factor)
 
 esnambleTemp = paste(esnambleTemp, niterations, sep = '-')
 if (file.exists(esnambleTemp)) {
@@ -141,23 +141,12 @@ if (file.exists(esnambleTemp)) {
 	ensamble = lapply(seq(0, 1, length.out = niterations), findParameterTrends, factor)
 	save(ensamble, file = esnambleTemp)
 }
-extractEnsamble <- function(id, FUN)  apply(sapply(ensamble, function(i) i[[id]]), 1, FUN)
 
-summary.ens <- function(ens) {
-	grabField <- function(i) layer.apply(ens, function(r) r[[i]])
-	mn = mean(grabField(1))
-	rg = sd.raster(grabField(1))
-	
-	#rg[[1]] < 0 & rg[[2]] > 0
-	#rg = 1 - rg
-	
-	fisher = -2 * sum(log(1 - grabField(2)))
-	return( addLayer(mn, fisher, rg))
-}
-
-trend12F  = extractEnsamble(2, summary.ens)
-trend12FF = extractEnsamble(3, summary.ens)
+lims      = extractEnsamble(ensamble, 5, )
+trend12F  = extractEnsamble(ensamble, 2, summary.ens)
+trend12FF = extractEnsamble(ensamble, 3, summary.ens)
 prob_lims = qchisq(c(0.9, 0.95, 0.99, .999), niterations)
+
 #niterations = 101
 #ensamble = lapply(seq(0, 1, length.out = niterations), findParameterTrends, factor)
 
@@ -304,15 +293,17 @@ plotHotspots <- function(trends, figName, limits = dfire_lims, fire_limits = lim
 	dev.off.gitWatermark()
 }
 
-#plotHotspots(trend12  , 'figs/trend12.png'  , limits = c(-1, -0.5, -0.1, -0.05, -0.01, 0.01, 0.05, 0.1, 0.5, 1))
-#plotHotspots(trend12F , 'figs/trend12F.png', #
-#			 limits = dfire_lims * 1000,
-#			 fire_limits = c(-1, -0.5, -0.1, -0.05, -0.01, 0.01, 0.05, 0.1, 0.5, 1), 
-#			 scaling = 120)
-plotHotspots(trend12FF, 'figs/trend12FFTest.png', limits = dfire_lims*1000,
-		     fire_limits = c(-1, -0.5, -0.1, -0.05, -0.01, 0.01, 0.05, 0.1, 0.5, 1), 
-			 lims4way = c(1, 10, 100), scaling = 120)
-#plotHotspots(trendFS  , 'figs/trendFS.png'  , limits = dfire_lims * 100)
-
+if (!is.True(dontPlot)) {
+	#plotHotspots(trend12  , 'figs/trend12.png'  , limits = c(-1, -0.5, -0.1, -0.05, -0.01, 0.01, 0.05, 0.1, 0.5, 1))
+	plotHotspots(trend12F , 'figs/trend12F.png', #
+				 limits = dfire_lims * 1000,
+				 fire_limits = c(-1, -0.5, -0.1, -0.05, -0.01, 0.01, 0.05, 0.1, 0.5, 1), 
+				 scaling = 120)
+	
+	plotHotspots(trend12FF, 'figs/trend12FFTest.png', limits = dfire_lims*1000,
+				 fire_limits = c(-1, -0.5, -0.1, -0.05, -0.01, 0.01, 0.05, 0.1, 0.5, 1), 
+				 lims4way = c(1, 10, 100), scaling = 120)
+	#plotHotspots(trendFS  , 'figs/trendFS.png'  , limits = dfire_lims * 100)
+}
 
 	
