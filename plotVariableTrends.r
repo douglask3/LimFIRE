@@ -150,18 +150,19 @@ plotVars <- function(xs, fig_fname, cols, limits, ...) {
 }
 
 #cols = mapply(make_col_vector, r = cols, limits = limits)
-dev.new()
-plotVars(trends, fig_fnames[5], cols, limits)
-plotVars(normTd, fig_fnames[6], cols, limits)
+if (!is.True(dontPlot)) {
+	plotVars(trends, fig_fnames[5], cols, limits)
+	plotVars(normTd, fig_fnames[6], cols, limits)
 
-#index  = lapply(limits, function(i)    which(i>0))
-#cols   = mapply(function(v, i) v[i], cols, index)
-cols = lapply(cols, function(i) i[ceiling(length(i)/2):length(i)])
+	#index  = lapply(limits, function(i)    which(i>0))
+	#cols   = mapply(function(v, i) v[i], cols, index)
+	cols = lapply(cols, function(i) i[ceiling(length(i)/2):length(i)])
 
-plotVars(varMns, fig_fnames[1], cols, limits_vs, scaling = 1)
-plotVars(varWmx, fig_fnames[4], cols, limits_vs, scaling = 1)
+	plotVars(varMns, fig_fnames[1], cols, limits_vs, scaling = 1)
+	plotVars(varWmx, fig_fnames[4], cols, limits_vs, scaling = 1)
 
-sdlims = rep(list(c(0, 0.01, 0.1, 0.2, 0.5, 1, 2, 5)), length(limits))
-units[] = ''
-plotVars(varSds, fig_fnames[2], cols, sdlims, scaling = 1)
-plotVars(varScy, fig_fnames[3], cols, sdlims, scaling = 1)
+	sdlims = rep(list(c(0, 0.01, 0.1, 0.2, 0.5, 1, 2, 5)), length(limits))
+	units[] = ''
+	plotVars(varSds, fig_fnames[2], cols, sdlims, scaling = 1)
+	plotVars(varScy, fig_fnames[3], cols, sdlims, scaling = 1)
+}
