@@ -3,7 +3,7 @@ plot_4way <- function(x, y, A, B, C, D, x_range = c(-180, 180), y_range = c(-90,
     "55", "11"), add_legend = TRUE, smooth_image = FALSE, smooth_factor = 5, 
     add = FALSE, normalise = TRUE, ePatternRes = 20, ePatternThick = 0.2, ...) 
 {
-
+	
     remove_nans <- function (x, y, A, B, C, D) {
         test = is.na(A + B + C + D) == FALSE
         A = A[test]
