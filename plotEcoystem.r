@@ -68,16 +68,8 @@ convert2StartEnd <- function(mn, tr, x, biomeN = NULL) {
 		lines(xis, quants, lwd = 3)
 		points(xis, quants, pch = 16)
 		
-		out = r
-		#out[] = 0.0
-		#out[!lmask] = NaN
-		
-		#for (qu in quants) out[r < qu] = out[r < qu] + 1
-		return(list(out, quants))
 	}
 	xi = x + 0.25 * c(-1, 1)
-	#c(start, qustart) := plotBound(start, xi[1])
-	#c(  end, quend  ) := plotBound(  end, xi[2])
 	plotBound(start, xi[1])
 	plotBound(  end, xi[2])
 	
@@ -95,30 +87,6 @@ convert2StartEnd <- function(mn, tr, x, biomeN = NULL) {
 	
 	mapply(function(st, ed, col) lines(xi, c(st, ed), col = col), 
 			startV, endV, cols)
-	#index = sample(
-	
-	return()
-	browser()
-	
-	count = sapply(1:raster.max(start), function(i) sapply(1:raster.max(end),
-				   function(j,i) raster.sum(start == i & end == j), i))
-	
-	nqus = dim(count)
-	
-	midQus <- function(qus, i) {
-		if (length(qus) == nqus[i]) qustart = c(qus, 0)
-		out = qus[1:(length(qus)-1)] + diff(qus)/2
-		return(out)
-	}
-	
-	qustart = midQus(qustart, 1)
-	quend   = midQus(quend  , 2)
-	cols = c('red', 'orange', 'green', 'blue')[1:nqus[1]]
-	plotLine <- function(i, j, ...) lines(xi, c(qustart[i], quend[j]), lwd = 4 * (count[i,j]/sum(count))^0.1, ...) 
-	#plotLine <- function(i, j) browser()
-	lapply(1:nqus[2], function(j) mapply(plotLine, 1:nqus[1], col = cols, MoreArgs = list(j = j)))
-	
-	
 }
 
  raster.max <- function(r, na.rm = TRUE, ...) max(values(r), na.rm =  na.rm, ...)
