@@ -66,3 +66,6 @@ hlghtPnts = list("Desert"     = list( 17, -22.5, col = '#00BB00'),
 
 try(memSafeFile.remove(), silent = TRUE)
 memSafeFile.initialise('temp/tempGenerated')
+
+tempFile4Eco = 'temp/files4EcosystemPlot2.Rd'
+ecoFile = "data/official_teow/official"

@@ -129,7 +129,6 @@ findParameterTrends <- function(line, factor,
 		trendFS = findTrendNoFile(fireSeasonLim, Trend, tempF2,  trend1 = trend12[[1]], 'season')
 	} else trendFS = NULL
 	
-	
 	return(list(trend12, trend12F, trend12FF, trendFS, lapply(lims, mean)))
 }
 #c(trend12, trend12F, trend12FF, trendFS, lims) := findParameterTrends(NULL, factor)
@@ -142,7 +141,7 @@ if (file.exists(esnambleTemp)) {
 	save(ensamble, file = esnambleTemp)
 }
 
-lims      = extractEnsamble(ensamble, 5, )
+lims      = extractEnsamble(ensamble, 5,   brick.ens)
 trend12F  = extractEnsamble(ensamble, 2, summary.ens)
 trend12FF = extractEnsamble(ensamble, 3, summary.ens)
 prob_lims = qchisq(c(0.9, 0.95, 0.99, .999), niterations)
