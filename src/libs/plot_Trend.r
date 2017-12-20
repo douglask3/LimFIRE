@@ -21,7 +21,7 @@ plot_Trend <- function(trend, title, cols, limits,
 							ePatternRes = 30, ePatternThick = 0.2,
 							quick = TRUE, add_legend = FALSE)
 	
-	mtext.units(title, side = 3, line = -2.25, adj = 0.05)
+	mtext.units(title, side = 3, line = -1, adj = 0.05)
 	
 	if (add_legend) {
 		add_raster_legend2(cols, limits, dat = x,
