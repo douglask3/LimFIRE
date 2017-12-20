@@ -155,7 +155,8 @@ prob_lims = qchisq(c(0.9, 0.95, 0.99, .999), niterations)
 plotHotspots <- function(trends, figName, limits = dfire_lims, fire_limits = limits, 
 						 lims4way = NULL, ...) {
 	
-	trends[[1]] = trends[[1]] / 100
+	trends[[1]] = trends[[1]] /10
+	trends[[1]][[3]] = trends[[1]][[3]] * 20
 	#if (normFtrend) trends[[1]][[1]] = trends[[1]][[1]]  /sfire
 	#browser()
 	png(figName, height = 10, width = 8.5, units = 'in', res = 300)
@@ -165,9 +166,13 @@ plotHotspots <- function(trends, figName, limits = dfire_lims, fire_limits = lim
 		
 		limits = c(list(fire_limits), rep(list(limits), 4))
 		
-		hotspots = mapply(plot_Trend, trends, limitTitles, limits = limits,
-						  MoreArgs = list(cols = dfire_cols, prob_lims = prob_lims,
-										  limits_error = c(0.1, 0.5, 1), ...))[-1]
+		plot_Trends.local <- function(index = 1:length(trends), labs = limitTitles, plims = prob_lims) {
+			mapply(plot_Trend, trends[index], labs[index], limits = limits[index],
+						  MoreArgs = list(cols = dfire_cols, prob_lims = plims,
+										  limits_error = c(0.1, 0.5, 1), ...))
+		}
+		
+		hotspots = plot_Trends.local()[-1]
 		
 		add_raster_legend2(cols = dfire_cols, limits = limits[[2]], ylabposScling = 2,
 								   transpose = FALSE, plot_loc =  c(0.2, 0.9, 0.85, 0.99), 
@@ -266,42 +271,69 @@ plotHotspots <- function(trends, figName, limits = dfire_lims, fire_limits = lim
 		cols[labs == "Wetter & Less Ignitions"] = "#006FDF"
 		cols[labs == "Productive & Wetter"] = "#36E868"
 		cols[labs == "Arid & Drier"] = "orange"
-		plot_raster_from_raster(clusters, y_range = c(-60, 90),
-							    cols = cols,
-								limits = seq(1.5, nclusters - 0.5),
-							    e = er + 1, limits_error = 1:3,
-                                ePatternRes = 30, ePatternThick = 0.2,
-								ePointPattern = c(25, 0, 24), eThick = c(1.5, 0, 1.5),
-								preLeveled = TRUE,
-								aggregateFun = max, 
-								add_legend = FALSE, quick = TRUE)
-			
-		addLocPoints()
-		legend(-180, 15, labs, pch = 15, col = cols, pt.cex = 3, bty = "n")
-		col = make.transparent("black", 0.5)
-		for (e in 1:3) {
-			pch = c(25, 0, 24)[e]
-			cex = rep(0, length(labs))
-			cex[elim == (e-1)] = c(0.42, 0, 0.42)[e]
-			 print(cex)
-			for (i in c(-183, -180, -177)) for (j in c(12, 15, 18))
-				legend(i, j, rep('', length(labs)), pch = 24,
-					   col = col, pt.bg = col, pt.cex = cex, bty = "n")
+		plotClusters <- function() {
+			plot_raster_from_raster(clusters, y_range = c(-60, 90),
+									cols = cols,
+									limits = seq(1.5, nclusters - 0.5),
+									e = er + 1, limits_error = 1:3,
+									ePatternRes = 30, ePatternThick = 0.2,
+									ePointPattern = c(25, 0, 24), eThick = c(1.5, 0, 1.5),
+									preLeveled = TRUE,
+									aggregateFun = max, 
+									add_legend = FALSE, quick = TRUE)
+				
+			addLocPoints()
+			legend(-180, 15, labs, pch = 15, col = cols, pt.cex = 3, bty = "n")
+			col = make.transparent("black", 0.5)
+			for (e in 1:3) {
+				pch = c(25, 0, 24)[e]
+				cex = rep(0, length(labs))
+				cex[elim == (e-1)] = c(0.42, 0, 0.42)[e]
+				 print(cex)
+				for (i in c(-183, -180, -177)) for (j in c(12, 15, 18))
+					legend(i, j, rep('', length(labs)), pch = 24,
+						   col = col, pt.bg = col, pt.cex = cex, bty = "n")
+			}
 		}
 		
+	plotClusters()
 	dev.off.gitWatermark()
+	
+	trendIndex = (prod(layer.apply(trends[2:5], function(i) 1 + abs(i[[1]])/10)) - 1) * 100
+	trendIndex = addLayer(trendIndex, mean(layer.apply(trends[-1], function(i) i[[2]])), mean(layer.apply(trends[-1], function(i) i[[3]])))
+	
+	png('figs/TrendMap.png', height = 7, width = 4, res = 300, units = 'in')
+	layout.submap(rbind(c(1,1), 1, 2, 3, 3, 4, 5, 5), heights = c(1, 1, 0.67, 1, 1, 0.67, 1, 1))
+	par(mar = rep(0,4))
+	plot_Trends.local(1, labs = 'Normalised Trend in Burnt Area', plims = c(0.001, 0.01, 0.05, 0.1))
+	
+	add_raster_legend2(cols = dfire_cols, limits = limits[[1]], ylabposScling = 2,
+								   transpose = FALSE, plot_loc =  c(0.2, 0.9, 0.85, 0.99), 
+								   add = FALSE, nx  = 1.75)
+	plot.new()				   
+	plot_Trend(trendIndex, 'Trend Hotspot index', 
+			   limits = c(0.5, 1, 2, 5, 10, 20),  prob_lims = prob_lims, 
+			   cols = fire_cols, limits_error = c(0.1, 0.5, 1), scaling = 1)
+			   
+	add_raster_legend2(cols = fire_cols, limits = c(0.5, 1, 2, 5, 10, 20), ylabposScling = 2,
+								   transpose = FALSE, plot_loc =  c(0.2, 0.9, 0.85, 0.99), 
+								   add = FALSE, nx  = 1.75)
+	plot.new()
+	plotClusters()
+	dev.off()
+	browser()
 }
 
 if (!is.True(dontPlot)) {
 	#plotHotspots(trend12  , 'figs/trend12.png'  , limits = c(-1, -0.5, -0.1, -0.05, -0.01, 0.01, 0.05, 0.1, 0.5, 1))
-	plotHotspots(trend12F , 'figs/trend12F.png', #
-				 limits = dfire_lims * 1000,
-				 fire_limits = c(-1, -0.5, -0.1, -0.05, -0.01, 0.01, 0.05, 0.1, 0.5, 1), 
-				 scaling = 120)
+	#plotHotspots(trend12F , 'figs/trend12F.png', #
+	#			 limits = dfire_lims * 1000,
+	#			 fire_limits = c(-1, -0.5, -0.1, -0.05, -0.01, 0.01, 0.05, 0.1, 0.5, 1), 
+	#			 scaling = 120)
 	
-	plotHotspots(trend12FF, 'figs/trend12FFTest.png', limits = dfire_lims*1000,
+	plotHotspots(trend12FF, 'figs/trend12FFTest.png', limits = dfire_lims*100,
 				 fire_limits = c(-1, -0.5, -0.1, -0.05, -0.01, 0.01, 0.05, 0.1, 0.5, 1), 
-				 lims4way = c(1, 10, 100), scaling = 120)
+				 lims4way = c(1, 10, 100), scaling = 10)
 	#plotHotspots(trendFS  , 'figs/trendFS.png'  , limits = dfire_lims * 100)
 }
 
