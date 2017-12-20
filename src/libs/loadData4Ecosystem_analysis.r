@@ -20,7 +20,18 @@ loadData4Ecosystem_analysis <- function() {
 
 		## Rasterize the shapefile
 		biome = rasterize(teow, r, 'BIOME')
+		biomeAssigned = biome
+		biomeAssigned[] = NaN
 		
+		for (i in 2:length(biomes)) biomeAssigned[any(layer.apply(biomes[[i]], function(j) biome == j))] = i
+		
+		png('figs/biome.png', height = 5, width = 10, units = 'in', res = 300)
+			#layout(rbind(1, 1:2, 2), heights = c(1, 0.7, 0.0001))
+			par(mar = rep(0,4))
+			plot_raster_from_raster(biomeAssigned, limits = 1.5:7.5, cols = biomesCols, quick = TRUE, add_legend = FALSE, y_range = c(-60, 90))	
+			#plot.new()
+			legend('bottomleft', legend = names(biomes)[-1], col = biomesCols[-1], pch = 15, bty = 'n', ncol = 2, cex = 1.0, pt.cex = 2) 
+		dev.off() 	
 		save(lims, trend12F,  trend12FF, fireTrend, fireMean, biome, varMns, trends,
 			 file = tempFile4Eco)
 	} else load(tempFile4Eco, envir = .GlobalEnv)
