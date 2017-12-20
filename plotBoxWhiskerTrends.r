@@ -1,7 +1,7 @@
 source("cfg.r")
 
 
-figName = 'figs/boxyWhistery.png'
+figName = 'figs/boxyWhistery'
 limFnames = c('Burnt_Area', 'Fuel', 'Moisture', 'Igntions', 'Suppression')
 
 nsamples = 100
@@ -12,8 +12,11 @@ legLabs = c('Burnt Area',       'Fuel' , 'Moisture', 'Ignitions', 'Suppression',
 loadData4Ecosystem_analysis()
 mask = !is.na(trend12FF[[1]][[1]])
 
+maskX = trend12F[[1]][[1]] > 1.3286
+trend12F[[1]][[1]][maskX] = 0.0
+trend12FF[[1]][[1]][maskX] = 0.0
 dat = c(trend12F[[1]][[1]] * 10, lapply(trend12FF, function(i) i[[1]] * 10))
-dat[[7]] = abs(dat[[3]]) + abs(dat[[4]]) + abs(dat[[5]])
+dat[[7]] = (prod(layer.apply(dat[3:6], function(i) 1 + abs(i)/100)) - 1)* 100#abs(dat[[3]]) + abs(dat[[4]]) + abs(dat[[5]])
 
 
 addboxPlot <- function(x, y, col, mask) {
@@ -31,25 +34,32 @@ addAllDatPlot <- function(x, biomeN) {
 	x = 5 * (x + seq(-0.33, 0.33, length.out = 7))
 	mapply(addboxPlot, x, dat, barCols, MoreArgs = list(mask))
 }
-png(figName, height = 6, width = 8.5, res = 300, unit = 'in')
-	layout(1:2, heights = c(1, 0.2))
-	par(mar = c(0, 4, 0, 1))
-	plot(c(4, 8 * 5 + 1), (0.5^exp(-1)) * c(-1,1), type = 'n', axes = FALSE, xlab = '', ylab = '% change in burnt area/limitation')
-	
-	labels = c(0.01, 0.05, 0.1, 0.5)
-	at = labels^ exp(-1)
-	at = c(-rev(at), 0, at)
-	labels = c(-rev(labels), 0, labels) * 100
 
-	axis(2, at = at, labels = labels)
-	for (y in at) lines(c(-9E9, 9E9), c(y, y), lty = 2, col = "#CCCCCC")
+plotAllTheBoxesAndWhiskers <- function(fname = '', plotMin = -1, ytextPos = -(0.7^exp(-1))) {
+	figName = paste(figName, fname, '.png', sep ='-')
+	png(figName, height = 6, width = 8.5, res = 300, unit = 'in')
+		layout(1:2, heights = c(1, 0.2))
+		par(mar = c(0, 4, 0, 1))
+		plot(c(4, 8 * 5 + 1), (0.5^exp(-1)) * c(plotMin, 1), type = 'n', axes = FALSE, xlab = '', ylab = '% change in burnt area/limitation')
+		
+		labels = c(0.01, 0.05, 0.1, 0.5)
+		at = labels^ exp(-1)
+		at = c(-rev(at), 0, at)
+		labels = c(-rev(labels), 0, labels) * 100
 
-	text(x = 5 * (1:8), y = -0.7^exp(-1), adj = 0.0, labels = names(biomes), srt = 90, xpd = NA)
+		axis(2, at = at, labels = labels)
+		for (y in at) lines(c(-9E9, 9E9), c(y, y), lty = 2, col = "#CCCCCC")
 
-	mapply(addAllDatPlot, 1:8, biomes)
-	par(mar = c(0, 0, 0, 0))
-	plot.new()
-	legend('center', legend = legLabs, pch = 19, col =  barCols, horiz = TRUE)
-dev.off()
+		text(x = 5 * (1:8), y = ytextPos, adj = 0.0, labels = names(biomes), srt = 90, xpd = NA)
+
+		mapply(addAllDatPlot, 1:8, biomes)
+		par(mar = c(0, 0, 0, 0))
+		plot.new()
+		legend('center', legend = legLabs, pch = 19, col =  barCols[-1], horiz = TRUE)
+	dev.off()
+}
 
 
+plotAllTheBoxesAndWhiskers()
+dat = lapply(dat, abs)
+plotAllTheBoxesAndWhiskers('absolute', -0.1, 0.005)
