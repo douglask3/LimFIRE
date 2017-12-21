@@ -10,8 +10,8 @@ fig_fname       = 'figs/limitation_map'
 fig_fname_indiv = 'figs/ind_limiataions'
 
 
-labs = c('a) raw AA', 'b) Annual average controls on fire', 'c) Annual average sensitivity',
-         'd) raw fire season', 'e) Controls on fire during the fire season', 'f) Sensitivity during the fire season')
+labs = c('a) Raw limitation', 'b) Potential limitation', 'c) Control sensitivity',
+         '', '', '')
 
 ens_tfile = 'temp/limitation_maps_ens2'
 mod_files = paste(temp_dir, '/LimFIRE_',
@@ -209,15 +209,16 @@ plot_pmod <- function(i, index = NULL, normalise = FALSE, ...) {
 plotAddLimTypes <- function(fname, ...) {
 ## Set up plotting window
 	figName = paste(fig_fname, fname, '.png')	
-	png(figName, width = 9, height = 6 * 2.75/3, unit = 'in', res = 300)
-	layout(rbind(1:3,4:6, 7, 7), heights = c(4, 4, 1))
+	png(figName, width = 9 * 3/2, height = 6 * 2.75/3, unit = 'in', res = 300)
+	layout(rbind(1:3,4:6, 7, 7), heights = c(4.5, 4.5, 1))
 
 	par(mar = c(0,0,0,0), oma = c(0,0,1,0))
 
 	
 	## Plot and put pcs in table
 	pc_out = sapply(1:6, plot_pmod, ...)
-
+	mtext('Annual Average', side = 2, outer = TRUE, adj = 0.775)
+	mtext('Fire season'   , side = 2, outer = TRUE, adj = 0.325)
 
 	colnames(pc_out) = c('annual average raw', 'annual average lim', 'annual average sensitivity', 
 			            'fire season raw',    'fire season lim',    'fire season sensitivity')
@@ -238,7 +239,7 @@ plotAddLimTypes <- function(fname, ...) {
 #maxLim <- function(i) i[[1]] + i[[2]]
 #minLim <- function(i) i[[1]] - i[[2]]
 
-plotAddLimTypes('', c(function(i) i[[1]]))
+plotAddLimTypes('', NULL)
 
 plotAddLimTypes('maxFuel', c(3, rep(2, 3)))
 plotAddLimTypes('minFuel', c(2, rep(3, 3)))
