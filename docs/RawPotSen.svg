@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="210mm"
+   height="76mm"
+   viewBox="0 0 210 76"
+   version="1.1"
+   id="svg8"
+   inkscape:version="0.92.1 r15371"
+   sodipodi:docname="RawPotSen.svg">
+  <defs
+     id="defs2">
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath4515">
+      <rect
+         style="opacity:1;fill:#f9f9f9;fill-opacity:0;stroke:none;stroke-width:0.26458332;stroke-opacity:1"
+         id="rect4517"
+         width="235.85713"
+         height="78.241074"
+         x="-12.095239"
+         y="-8.4047623" />
+    </clipPath>
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath4519">
+      <rect
+         style="opacity:1;fill:#f9f9f9;fill-opacity:0;stroke:none;stroke-width:0.26458332;stroke-opacity:1"
+         id="rect4521"
+         width="235.85713"
+         height="78.241074"
+         x="-12.095239"
+         y="-8.4047623" />
+    </clipPath>
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="0.98994949"
+     inkscape:cx="604.28623"
+     inkscape:cy="46.187818"
+     inkscape:document-units="mm"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     inkscape:window-width="1366"
+     inkscape:window-height="705"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1" />
+  <metadata
+     id="metadata5">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(0,-221)">
+    <image
+       sodipodi:absref="C:\Users\dougl\Documents\work\LimFIRE\figs\limitation_map  .png"
+       y="1.1831883"
+       x="0.80995893"
+       id="image4504"
+       xlink:href="file:///C:/Users/dougl/Documents/work/LimFIRE/figs/limitation_map%20%20.png"
+       preserveAspectRatio="none"
+       height="84.642471"
+       width="207.7588"
+       clip-path="url(#clipPath4519)"
+       transform="translate(0,220.6626)" />
+    <rect
+       style="opacity:1;fill:#f9f9f9;fill-opacity:0;stroke:none;stroke-width:0.26458332;stroke-opacity:1"
+       id="rect4507"
+       width="207.75879"
+       height="84.642464"
+       x="0.80995893"
+       y="1.1831883"
+       clip-path="url(#clipPath4515)"
+       transform="translate(0,220.6626)" />
+    <image
+       sodipodi:absref="C:\Users\dougl\Documents\work\LimFIRE\docs\limitation_legend.png"
+       xlink:href="limitation_legend.png"
+       width="65.531998"
+       height="19.811998"
+       preserveAspectRatio="none"
+       id="image4493"
+       x="69.795242"
+       y="277.70209" />
+  </g>
+</svg>
