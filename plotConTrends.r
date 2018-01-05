@@ -155,7 +155,7 @@ prob_lims = qchisq(c(0.9, 0.95, 0.99, .999), niterations)
 plotHotspots <- function(trends, figName, limits = dfire_lims, fire_limits = limits, 
 						 lims4way = NULL, ...) {
 	
-	trends[[1]] = trends[[1]] /10
+	trends[[1]] = trends[[1]]
 	trends[[1]][[3]] = trends[[1]][[3]] * 20
 	#if (normFtrend) trends[[1]][[1]] = trends[[1]][[1]]  /sfire
 	#browser()
@@ -301,6 +301,7 @@ plotHotspots <- function(trends, figName, limits = dfire_lims, fire_limits = lim
 	
 	trendIndex = (prod(layer.apply(trends[2:5], function(i) 1 + abs(i[[1]])/10)) - 1) * 100
 	trendIndex = addLayer(trendIndex, mean(layer.apply(trends[-1], function(i) i[[2]])), mean(layer.apply(trends[-1], function(i) i[[3]])))
+	writeRaster.gitInfo(trendIndex, 'outputs/TrendIndex.nc')
 	
 	png('figs/TrendMap.png', height = 7, width = 4, res = 300, units = 'in')
 	layout.submap(rbind(c(1,1), 1, 2, 3, 3, 4, 5, 5), heights = c(1, 1, 0.67, 1, 1, 0.67, 1, 1))
@@ -332,7 +333,8 @@ if (!is.True(dontPlot)) {
 	#			 scaling = 120)
 	
 	plotHotspots(trend12FF, 'figs/trend12FFTest.png', limits = dfire_lims*100,
-				 fire_limits = c(-1, -0.5, -0.1, -0.05, -0.01, 0.01, 0.05, 0.1, 0.5, 1), 
+				 #fire_limits = c(-1, -0.5, -0.1, -0.05, -0.01, 0.01, 0.05, 0.1, 0.5, 1), 
+				 fire_limits = c(-20, -10, -5, -2, -1, 0.5, 0.5, 1, 2, 5, 10, 20), 
 				 lims4way = c(1, 10, 100), scaling = 10)
 	#plotHotspots(trendFS  , 'figs/trendFS.png'  , limits = dfire_lims * 100)
 }
