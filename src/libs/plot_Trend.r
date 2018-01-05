@@ -20,7 +20,7 @@ plot_Trend <- function(trend, title, cols, limits,
 							e = e, limits_error = limits_error, 
 							ePatternRes = 30, ePatternThick = 0.2,
 							quick = TRUE, add_legend = FALSE)
-	
+	add_icemask()
 	mtext.units(title, side = 3, line = -1, adj = 0.05)
 	
 	if (add_legend) {
