@@ -217,8 +217,8 @@ plotAddLimTypes <- function(fname, ...) {
 	
 	## Plot and put pcs in table
 	pc_out = sapply(1:6, plot_pmod, ...)
-	mtext('Annual Average', side = 2, outer = TRUE, adj = 0.775)
-	mtext('Fire season'   , side = 2, outer = TRUE, adj = 0.325)
+	mtext('Annual average', side = 2, outer = TRUE, adj = 0.775, line = -2)
+	mtext('Fire season'   , side = 2, outer = TRUE, adj = 0.325, line = -2)
 
 	colnames(pc_out) = c('annual average raw', 'annual average lim', 'annual average sensitivity', 
 			            'fire season raw',    'fire season lim',    'fire season sensitivity')
@@ -233,7 +233,7 @@ plotAddLimTypes <- function(fname, ...) {
 	## add footer
 	par(fig = c(0, 1, 0, 1), mar = rep(0, 4))
 	points(0.5, 0.5, col = 'white', cex = 0.05)
-	dev.off.gitWatermark()
+	dev.off()
 }
 
 #maxLim <- function(i) i[[1]] + i[[2]]
