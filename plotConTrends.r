@@ -303,9 +303,9 @@ plotHotspots <- function(trends, figName, limits = dfire_lims, fire_limits = lim
 	trendIndex = addLayer(trendIndex, mean(layer.apply(trends[-1], function(i) i[[2]])), mean(layer.apply(trends[-1], function(i) i[[3]])))
 	writeRaster.gitInfo(trendIndex, 'outputs/TrendIndex.nc')
 	
-	png('figs/TrendMap.png', height = 7, width = 4, res = 300, units = 'in')
+	png('figs/TrendMap.png', height = 6.5, width = 4, res = 300, units = 'in')
 	layout.submap(rbind(c(1,1), 1, 2, 3, 3, 4, 5, 5), heights = c(1, 1, 0.67, 1, 1, 0.67, 1, 1))
-	par(mar = rep(0,4))
+	par(mar = rep(0,4), oma = c(0, 0, 0.5, 0))
 	plot_Trends.local(1, labs = 'Normalised Trend in Burnt Area', plims = c(0.001, 0.01, 0.05, 0.1))
 	
 	add_raster_legend2(cols = dfire_cols, limits = limits[[1]], ylabposScling = 2,
