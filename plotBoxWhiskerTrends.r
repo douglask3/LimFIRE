@@ -55,7 +55,9 @@ plotAllTheBoxesAndWhiskers <- function(fname = '', plotMin = -1, ytextPos = -(0.
 		mapply(addAllDatPlot, 1:8, biomes)
 		par(mar = c(0, 0, 0, 0))
 		plot.new()
-		legend('center', legend = legLabs, pch = 19, col =  barCols[-1], horiz = TRUE)
+		legend('center', legend = legLabs, pch = 15, pt.cex = 1.2, col =  'black', horiz = TRUE, bty = 'n')
+		legend('center', legend = legLabs, pch = 15, col =  barCols[-1], horiz = TRUE, bty = 'n')
+		#legend('center', legend = legLabs, lty = 1, col =  'black', horiz = TRUE, bty = 'n')
 	dev.off()
 }
 
