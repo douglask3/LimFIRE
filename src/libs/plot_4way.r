@@ -95,5 +95,7 @@ plot_4way <- function(x, y, A, B, C, D, x_range = c(-180, 180), y_range = c(-90,
         add_raster_4way_legend(cols, limits, ...)            
         plotFun(TRUE)
     }
+	icemask = raster('data/icemask.nc')
+	plot_raster_from_raster(mask, add = TRUE, cols = c('#FFFFFFFF', 'grey'), limits = c(-0.5, 0.5), add_legend = FALSE)
     return(out)
 }
