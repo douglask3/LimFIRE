@@ -301,7 +301,7 @@ plotHotspots <- function(trends, figName, limits = dfire_lims, fire_limits = lim
 	
 	trendIndex = (prod(layer.apply(trends[2:5], function(i) 1 + abs(i[[1]])/10)) - 1) * 100
 	trendIndex = addLayer(trendIndex, mean(layer.apply(trends[-1], function(i) i[[2]])), mean(layer.apply(trends[-1], function(i) i[[3]])))
-	writeRaster.gitInfo(trendIndex, 'outputs/TrendIndex.nc')
+	writeRaster.gitInfo(trendIndex, 'outputs/TrendIndex.nc', overwrite = TRUE)
 	
 	png('figs/TrendMap.png', height = 6.5, width = 4, res = 300, units = 'in')
 	layout.submap(rbind(c(1,1), 1, 2, 3, 3, 4, 5, 5), heights = c(1, 1, 0.67, 1, 1, 0.67, 1, 1))
@@ -313,10 +313,10 @@ plotHotspots <- function(trends, figName, limits = dfire_lims, fire_limits = lim
 								   add = FALSE, nx  = 1.75)
 	plot.new()				   
 	plot_Trend(trendIndex, 'Trend Hotspot index', 
-			   limits = c(0.5, 1, 2, 5, 10, 20),  prob_lims = prob_lims, 
+			   limits = c(1, 2, 5, 10, 20),  prob_lims = prob_lims, 
 			   cols = fire_cols, limits_error = c(0.1, 0.5, 1), scaling = 1)
 			   
-	add_raster_legend2(cols = fire_cols, limits = c(0.5, 1, 2, 5, 10, 20), ylabposScling = 2,
+	add_raster_legend2(cols = fire_cols, limits = c(1, 2, 5, 10, 20), ylabposScling = 2,
 								   transpose = FALSE, plot_loc =  c(0.2, 0.9, 0.85, 0.99), 
 								   add = FALSE, nx  = 1.75)
 	plot.new()
@@ -334,7 +334,7 @@ if (!is.True(dontPlot)) {
 	
 	plotHotspots(trend12FF, 'figs/trend12FFTest.png', limits = dfire_lims*100,
 				 #fire_limits = c(-1, -0.5, -0.1, -0.05, -0.01, 0.01, 0.05, 0.1, 0.5, 1), 
-				 fire_limits = c(-20, -10, -5, -2, -1, 0.5, 0.5, 1, 2, 5, 10, 20), 
+				 fire_limits = c(-20, -10, -5, -2, -1,  1, 2, 5, 10, 20), 
 				 lims4way = c(1, 10, 100), scaling = 10)
 	#plotHotspots(trendFS  , 'figs/trendFS.png'  , limits = dfire_lims * 100)
 }
