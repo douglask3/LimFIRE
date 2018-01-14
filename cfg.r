@@ -57,10 +57,10 @@ nms = names(drive_fname)
 drive_fname = paste(outputs_dir, drive_fname, min(years), '-', max(years), '.nc', sep = '')
 names(drive_fname) = nms
 
-hlghtPnts = list("Desert"     = list( 17, -22.5, col = '#00BB00'),
+hlghtPnts = list("Desert"      = list( 14, 27.5, col = '#00BB00'),
                  "Rainforest"  = list(-61,   -3, col = '#0000BB'), 
-				 "Savanna"     = list( 9,   8.5, col = '#BB0000'),
-				 "Cropland"    = list( 83,  23.5, col = '#AAAA00'))
+				 "Savanna"     = list( 24,   10.5, col = '#BB0000'),
+				 "Cropland"    = list( 83, 23.5, col = '#AAAA00'))
 
 #coefficants_file = paste(coefficants_file, gitVersionNumber(), '.csv', sep = '-')
 
