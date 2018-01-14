@@ -44,7 +44,8 @@ pntObs =  lapply(pntObs, function(i) apply(i, 2, quantile, c(0.1, 0.5, 0.9)))
 #pntObs[[1]][,'ignitions'] = pntObs[[3]][,'ignitions'] * 2.5
 
 
-plotScatter <- function(name, col, yg = NULL, FUN, dFUN, x0, k, ksc, log = '', x2pc = FALSE,...) {
+plotScatter <- function(name, col, yg = NULL, FUN, dFUN, x0, k, ksc, log = '', 
+						x2pc = FALSE, plot = c(T, T, T, T),...) {
 	colp = make.transparent('black', 0.95)
 	
 	if (log == 'x') Obs[, name] = log(Obs[,name])
@@ -81,13 +82,15 @@ plotScatter <- function(name, col, yg = NULL, FUN, dFUN, x0, k, ksc, log = '', x
 	apply(y, 1, lines, x = x, lty = 2)
 	lines(x, y[2,])
 	
-	addPoints <- function(i, info, index, plotPnts = TRUE, ...) {
+	addPoints <- function(i, info, index, plot = TRUE, plotPnts = TRUE, ...) {
+		
 		col = info[[3]]
 		colt = make.transparent(col, c(0.75, 0.95))
 		
 		x = seq(min(i[,name]), max(i[, name]), length.out = 1000)	
 		y = c(rep(2, length(x)), rep(-2, length(x))); x = c(x, rev(x))
-		polygon(x, y, border = colt[1], col = colt[2])
+		if (plot) 
+			polygon(x, y, border = colt[1], col = colt[2])
 		
 		x = i[2,name]
 		if (is.null(yg)) {
@@ -110,20 +113,23 @@ plotScatter <- function(name, col, yg = NULL, FUN, dFUN, x0, k, ksc, log = '', x
 		xl = x + dx
 		yl = y + dy
 		
-		lines(xl, yl, lwd = 3, col = col, xpd = NA, ...)
+		if (plot)
+			lines(xl, yl, lwd = 3, col = col, xpd = NA, ...)
 		
-		if (plotPnts)
+		if (plot && plotPnts)
 			points(x, y, col = col, pch = 16 , cex = 2.5 , lwd = 4)
 		
 		return(c(lim = y, sen = g))
 	} 
 	
-	ygout = mapply(addPoints, pntObs, hlghtPnts, 1:4)	
-	mapply(addPoints, pntObs, hlghtPnts, 1:4, MoreArgs = list(plotPnts = FALSE, lty = 3))
+	ygout = mapply(addPoints, pntObs, hlghtPnts, 1:4, plot)	
+	mapply(addPoints, pntObs, hlghtPnts, 1:4, plot, MoreArgs = list(plotPnts = FALSE, lty = 3))
 	return(ygout)
 }
 
-plotAll <- function(fname = NULL, fuel = NULL, moisture = NULL, ignitions = NULL, suppression = NULL, yticks = seq(0,1,by = 0.2)) {
+plotAll <- function(fname = NULL, fuel = NULL, moisture = NULL, 
+				    ignitions = NULL, suppression = NULL, 
+					yticks = seq(0,1,by = 0.2), ...) {
 	if (is.null(fname)) fname = 'figs/limLines.png'
 		else fname = paste('figs/limLines', fname, '.png', sep = '-')
 		
@@ -141,19 +147,22 @@ plotAll <- function(fname = NULL, fuel = NULL, moisture = NULL, ignitions = NULL
 
 	fuel = plotScatter('fuel', col = 'green', fuel,
 					   LimFIRE.fuel, dLimFIRE.fuel, 
-					   'fuel_x0', 'fuel_k', 1.0,  xlim = c(0, 1))
+					   'fuel_x0', 'fuel_k', 1.0,  
+					   xlim = c(0, 1), ...)
 	axis(2, at = yticks)
 	mtext('Vegetation Cover (%)', 1, line = 2.3)
 
 	moisture = plotScatter('moisture', col = 'blue', moisture,
 						   LimFIRE.moisture, dLimFIRE.moisture, 
-						   'moisture_x0', 'moisture_k', -1.0, x2pc = TRUE)
+						   'moisture_x0', 'moisture_k', -1.0, 
+						   x2pc = TRUE, ...)
 	mtext('Fuel Mositure (%)', 1, line = 2.3)
 	if (axis4) axis(side = 4, at = yticks, labels = rev(yticks))
 	
 	ignitions = plotScatter('ignitions', col = 'red', ignitions, 
 							LimFIRE.ignitions, dLimFIRE.ignitions, 
-							'igntions_x0', 'igntions_k', 1.0, xlim = c(0, 8))
+							'igntions_x0', 'igntions_k', 1.0, 
+							xlim = c(0, 8), ...)
 	mtext('No. Ignitions', 1, line = 2.3)
 	axis(2, at = yticks)
 
@@ -167,7 +176,7 @@ plotAll <- function(fname = NULL, fuel = NULL, moisture = NULL, ignitions = NULL
 	suppression = plotScatter('suppression', col = 'black', suppression,
 							  LimFIRE.supression, dLimFIRE.supression, 
 							  'suppression_x0', 'suppression_k', -1.0, 
-							  xlim = c(0,100))
+							  xlim = c(0,100), ...)
 	mtext('Suppression Index', 1, line = 2.3)
 	if (axis4) axis(side = 4, at = yticks, labels = rev(yticks))
 
@@ -178,34 +187,38 @@ plotAll <- function(fname = NULL, fuel = NULL, moisture = NULL, ignitions = NULL
 	return(list(fuel, moisture, ignitions, suppression))
 }
 
-c(fuel, moisture, ignitions, suppression) := plotAll()
+allThePlottingPlease <- function(fname, ...) {
+	c(fuel, moisture, ignitions, suppression) := plotAll(fname, ...)
 
-suppCon = 1 - LimFIRE.supression(0, param('suppression_x0'), param('suppression_k'))
+	suppCon = 1 - LimFIRE.supression(0, param('suppression_x0'), param('suppression_k'))
 
-#suppression[1,] = suppression[1,] / suppCon
+	#suppression[1,] = suppression[1,] / suppCon
 
-lim = rbind(fuel[1,], moisture[1,], ignitions[1,], suppression[1,])
-fni <- function(index) apply(lim[-index,], 2, prod)
-fgni <- function(x, index) {
-	#browser()
-	#x[1, ] = 1 - fni(index) / (1 - LimFIRE.supression(0, param('suppression_x0'), param('suppression_k')))
-	sc = apply(lim, 2, min)
-	x[1, ] = 1 - sc/x[1,]
-	
-	
-	x[2, ] =  x[2, ] * fni(index) / suppCon
-	test = x[2,] > 0
-	x[2, test] = sqrt(x[2,])
-	x[2, !test] = - sqrt(-x[2,])
-	
-	return(x)
+	lim = rbind(fuel[1,], moisture[1,], ignitions[1,], suppression[1,])
+	fni <- function(index) apply(lim[-index,], 2, prod)
+	fgni <- function(x, index) {
+		#browser()
+		#x[1, ] = 1 - fni(index) / (1 - LimFIRE.supression(0, param('suppression_x0'), param('suppression_k')))
+		sc = apply(lim, 2, min)
+		x[1, ] = 1 - sc/x[1,]
+		
+		
+		x[2, ] =  x[2, ] * fni(index) / suppCon
+		test = x[2,] > 0
+		x[2, test] = sqrt(x[2,])
+		x[2, !test] = - sqrt(-x[2,])
+		
+		return(x)
+	}
+
+	fuel = fgni(fuel, 1)
+	moisture = fgni(moisture, 2)
+	ignitions = fgni(ignitions, 3)
+
+	suppression = fgni(suppression, 4)
+
+	fname = paste(fname, 'shifted', sep ='-')
+	plotAll(fname, fuel, moisture, ignitions, suppression, ...)
 }
-
-fuel = fgni(fuel, 1)
-moisture = fgni(moisture, 2)
-ignitions = fgni(ignitions, 3)
-
-suppression = fgni(suppression, 4)
-
-
-plotAll('shifted', fuel, moisture, ignitions, suppression)
+allThePlottingPlease('')
+allThePlottingPlease('Desert', plot = c(T, F, F, F))
