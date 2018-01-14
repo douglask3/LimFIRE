@@ -199,7 +199,7 @@ plot_pmod <- function(i, index = NULL, normalise = FALSE, ...) {
               cols = cols, limits = limits, 
               coast.lwd=par("lwd"),
               add_legend=FALSE, smooth_image=FALSE,smooth_factor=5, normalise = normalise, ...)
-              
+    addLocPoints()    
     pcs = calculate_weightedAverage(xy, pmod)
     mtext(lab, line = -1, adj = 0.05)
     return(pcs)
@@ -241,14 +241,14 @@ plotAddLimTypes <- function(fname, ...) {
 
 plotAddLimTypes('', NULL)
 
-plotAddLimTypes('maxFuel', c(3, rep(2, 3)))
-plotAddLimTypes('minFuel', c(2, rep(3, 3)))
+#plotAddLimTypes('maxFuel', c(3, rep(2, 3)))
+#plotAddLimTypes('minFuel', c(2, rep(3, 3)))
 
-plotAddLimTypes('maxMist', c(2, 3, 2, 2))
-plotAddLimTypes('minMist', c(3, 2, 3, 3))
+#plotAddLimTypes('maxMist', c(2, 3, 2, 2))
+#plotAddLimTypes('minMist', c(3, 2, 3, 3))
 
-plotAddLimTypes('maxIgni', c(2, 2, 3, 2))
-plotAddLimTypes('minIgni', c(3, 3, 2, 3))
+#plotAddLimTypes('maxIgni', c(2, 2, 3, 2))
+#plotAddLimTypes('minIgni', c(3, 3, 2, 3))
 
-plotAddLimTypes('maxSupp', c(2, 2, 2, 3))
-plotAddLimTypes('minSupp', c(3, 3, 3, 2))
+#plotAddLimTypes('maxSupp', c(2, 2, 2, 3))
+#plotAddLimTypes('minSupp', c(3, 3, 3, 2))
