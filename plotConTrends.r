@@ -199,9 +199,10 @@ plotHotspots <- function(trends, figName, limits = dfire_lims, fire_limits = lim
 		
 		mskV = apply(cv, 1, mean)
 		mskV = !is.na(mskV) & !is.infinite(mskV)
-		fit  = cascadeKM(cv[mskV, ], 4, 10)$results[2,]
-		minFit = which(diff(fit) > 0)[1] + 1
-		nclusters = which.max(fit[minFit:10]) + minFit - 1 + 3
+		#fit  = cascadeKM(cv[mskV, ], 4, 10)$results[2,]
+		#minFit = which(diff(fit) > 0)[1] + 1
+		#nclusters = which.max(fit[minFit:10]) + minFit - 1 + 3
+		nclusters = 6
 		print(nclusters)
 		vclusters = matrix(NaN, dim(cv)[1])
 		vclusters[mskV] = cascadeKM(cv[mskV,], nclusters, nclusters)[[1]]
@@ -240,16 +241,30 @@ plotHotspots <- function(trends, figName, limits = dfire_lims, fire_limits = lim
 			
 			wmax = apply(x >= 0, 2, all)
 			wmin = apply(x <= 0, 2, all)
-			y = rep(cols[2], length(x))
-			z = rep('', length(x))
+			y = rep(cols[2], length(x[1,]))
+			z = rep('', length(x[1,]))
+			ud= rep(1, length(x[1,]))
 			y[wmax] = cols[1]
 			y[wmin] = cols[3]
 			z[wmax] =  nms[1]
 			z[wmin] =  nms[2]
-			return(c(y,z))
+			ud[wmin] = 0
+			ud[wmax] = 2
+			return(c(y,z, ud))
 		}
 		
 		cols = apply(cols, 1, findCol) 
+	
+		fireChange <- function(clst) {
+			if (all(clst == 1)) return(0)
+			if (any(clst == 2) && any(clst == 0)) return(1)
+			if (any(clst == 2)) return(2)
+			if (any(clst == 0)) return(3)
+		}
+	
+		direction = tail(cols, nclusters)
+		direction = apply(direction, 1, fireChange)
+		cols = head(cols, - nclusters)
 		labs = tail(cols, nclusters)
 		labs = apply(labs, 1, paste.miss.blanks, collapse = " & ")
 		labs[labs == ''] = 'No Change'
@@ -281,19 +296,32 @@ plotHotspots <- function(trends, figName, limits = dfire_lims, fire_limits = lim
 									preLeveled = TRUE,
 									aggregateFun = max, 
 									add_legend = FALSE, quick = TRUE)
-				
-			addLocPoints()
-			legend(-180, 15, labs, pch = 15, col = cols, pt.cex = 3, bty = "n")
-			col = make.transparent("black", 0.5)
-			for (e in 1:3) {
-				pch = c(25, 0, 24)[e]
-				cex = rep(0, length(labs))
-				cex[elim == (e-1)] = c(0.42, 0, 0.42)[e]
-				 print(cex)
-				for (i in c(-183, -180, -177)) for (j in c(12, 15, 18))
-					legend(i, j, rep('', length(labs)), pch = 24,
-						   col = col, pt.bg = col, pt.cex = cex, bty = "n")
+			mtext.units('Fire drivers', side = 3, line = -0.8, adj = 0.05)	
+			#addLocPoints()	
+			labs = c(labs, 'Suppressing')
+			elim = c(elim, 0)
+			cols = c(cols, "#DFDFDF")
+			direction = c(direction, 3)
+			addLegend <- function(index, txt, top = 15, left = -180) {
+				text(txt, y = top + 1, x = left, adj = 0.0, font = 2)
+				legend(left, top, labs[index], pch = 15, col = cols[index], pt.cex = 3, bty = "n")			
+				col = make.transparent("black", 0.5)
+				for (e in 1:3) {
+					pch = c(25, 0, 24)[e]
+					cex = rep(0, sum(index))
+					cex[elim[index] == (e-1)] = c(0.42, 0, 0.42)[e]
+					
+					print(cex)
+					for (i in left + c(-3, 0, 3)) for (j in  top + c(-3, 0, 3))
+						legend(i, j, rep('', sum(index)), pch = 24,
+							   col = col, pt.bg = col, pt.cex = cex, bty = "n")
+				}
 			}
+			par(cex = 0.5)
+			addLegend(direction == 1, 'Counteracting drivers', top = -32, -163)
+			addLegend(direction == 2, 'Increasing burnt area', top = -32,  -45)
+			addLegend(direction == 3, 'Decreasing burnt area', top = -32 ,  44)
+			par(cex = 1.0)
 		}
 		
 	plotClusters()
@@ -303,7 +331,7 @@ plotHotspots <- function(trends, figName, limits = dfire_lims, fire_limits = lim
 	trendIndex = addLayer(trendIndex, mean(layer.apply(trends[-1], function(i) i[[2]])), mean(layer.apply(trends[-1], function(i) i[[3]])))
 	writeRaster.gitInfo(trendIndex, 'outputs/TrendIndex.nc', overwrite = TRUE)
 	
-	png('figs/TrendMap.png', height = 6.5, width = 4, res = 300, units = 'in')
+	png('figs/TrendMap.png', height = 6.5 * 1.3, width = 4 * 1.3, res = 300, units = 'in')
 	layout.submap(rbind(c(1,1), 1, 2, 3, 3, 4, 5, 5), heights = c(1, 1, 0.67, 1, 1, 0.67, 1, 1))
 	par(mar = rep(0,4), oma = c(0, 0, 0.5, 0))
 	plot_Trends.local(1, labs = 'Normalised Trend in Burnt Area', plims = c(0.001, 0.01, 0.05, 0.1))
@@ -315,7 +343,7 @@ plotHotspots <- function(trends, figName, limits = dfire_lims, fire_limits = lim
 	plot_Trend(trendIndex, 'Trend Hotspot index', 
 			   limits = c(1, 2, 5, 10, 20),  prob_lims = prob_lims, 
 			   cols = fire_cols, limits_error = c(0.1, 0.5, 1), scaling = 1)
-			   
+		   
 	add_raster_legend2(cols = fire_cols, limits = c(1, 2, 5, 10, 20), ylabposScling = 2,
 								   transpose = FALSE, plot_loc =  c(0.2, 0.9, 0.85, 0.99), 
 								   add = FALSE, nx  = 1.75)
