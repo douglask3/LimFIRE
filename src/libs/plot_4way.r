@@ -1,7 +1,7 @@
 plot_4way <- function(x, y, A, B, C, D, x_range = c(-180, 180), y_range = c(-90, 
     90), limits = c(0.1, 0.5, 0.9), cols = c("FF", "CC", "99", 
     "55", "11"), add_legend = TRUE, smooth_image = FALSE, smooth_factor = 5, 
-    add = FALSE, normalise = TRUE, ePatternRes = 20, ePatternThick = 0.2, ...) 
+    add = FALSE, normalise = TRUE, ePatternRes = 30, ePatternThick = 0.2, ...) 
 {
 	
     remove_nans <- function (x, y, A, B, C, D) {
@@ -71,10 +71,12 @@ plot_4way <- function(x, y, A, B, C, D, x_range = c(-180, 180), y_range = c(-90,
 	
     z = 1:length(Az)
     zcols = paste("#", cols[Az], cols[Bz], cols[Cz], sep = "")
-    
+    #zcols = darken(zcols)
+	#zcols = saturate(zcols, 0.1)
     #zcols = mapply(lighten, zcols    )
     #zcols = mapply( darken, zcols, Dz)
     
+	
     
     z = rasterFromXYZ(cbind(x, y,  z))
     e = rasterFromXYZ(cbind(x, y, length(limits) + 2 - Dz))
@@ -83,12 +85,17 @@ plot_4way <- function(x, y, A, B, C, D, x_range = c(-180, 180), y_range = c(-90,
     
     plotFun <- function(add) plot_raster_from_raster(z, cols = zcols[sort(unique(z))], 
         limits = lims, x_range = x_range, y_range = y_range, 
-        smooth_image = FALSE, smooth_factor = NULL, readyCut = TRUE, 
+        quick = TRUE, readyCut = TRUE, 
         add_legend = FALSE, add = add, 
         e = e, limits_error = 0.5 + 1:length(limits),  
         ePatternRes = ePatternRes,  ePatternThick = ePatternThick, e_polygon = FALSE,
         ...)
-    
+    #plot_raster_from_raster(x, y_range = y_range,
+	#						cols = cols, limits = limits,
+	#						e = e, limits_error = limits_error, 
+	#						ePatternRes = 30, ePatternThick = 0.2,
+	#						quick = TRUE, add_legend = FALSE)
+	
     plotFun(add)
     
     if (add_legend) {
