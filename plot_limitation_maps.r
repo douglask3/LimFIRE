@@ -10,7 +10,7 @@ fig_fname       = 'figs/limitation_map'
 fig_fname_indiv = 'figs/ind_limiataions'
 
 
-labs = c('a) Raw limitation', 'b) Potential limitation', 'c) Control sensitivity',
+labs = c('Raw limitation', 'Potential limitation', 'Control sensitivity',
          '', '', '')
 
 ens_tfile = 'temp/limitation_maps_ens2'
@@ -196,12 +196,15 @@ plot_pmod <- function(i, index = NULL, normalise = FALSE, ...) {
 
     plot_4way(xy[,1], xy[,2], pmod[[3]], pmod[[1]], pmod[[2]], pmod[[4]],
               x_range = c(-180, 180), y_range = c(-60, 90),
-              cols = cols, limits = limits, 
+              cols = 	cols, limits = limits, 
               coast.lwd=par("lwd"),
               add_legend=FALSE, smooth_image=FALSE,smooth_factor=5, normalise = normalise, ...)
     addLocPoints()    
     pcs = calculate_weightedAverage(xy, pmod)
-    mtext(lab, line = -1, adj = 0.05)
+	
+	polygon(c(-180, -140, -140, -180), c(-60, -60, 30, 30), col = 'white', border = NA)
+    #text(lab, x = -160, y = 0, cex = 1.5, srt = 90)
+    mtext(lab, line = -2, adj = 0.05, side = 2)
     return(pcs)
 }
 
@@ -209,16 +212,16 @@ plot_pmod <- function(i, index = NULL, normalise = FALSE, ...) {
 plotAddLimTypes <- function(fname, ...) {
 ## Set up plotting window
 	figName = paste(fig_fname, fname, '.png')	
-	png(figName, width = 9 * 3/2, height = 6 * 2.75/3, unit = 'in', res = 300)
-	layout(rbind(1:3,4:6, 7, 7), heights = c(4.5, 4.5, 1))
+	png(figName, width = 9 * 2/2, height = 6 * 4/3, unit = 'in', res = 600)
+	layout(rbind(cbind(1:3,4:6),7))#, heights = c(4.5, 4.5, 1))
 
-	par(mar = c(0,0,0,0), oma = c(0,0,1,0))
+	par(mar = c(0,0,0,0), oma = c(0,0,1.5,0))
 
 	
 	## Plot and put pcs in table
 	pc_out = sapply(1:6, plot_pmod, ...)
-	mtext('Annual average', side = 2, outer = TRUE, adj = 0.775, line = -2)
-	mtext('Fire season'   , side = 2, outer = TRUE, adj = 0.325, line = -2)
+	mtext('Annual average', side = 3, outer = TRUE, adj = 0.325, line = -0.5, bg = 'white')
+	mtext('Fire season'   , side = 3, outer = TRUE, adj = 0.775, line = -0.5, bg = 'white')
 
 	colnames(pc_out) = c('annual average raw', 'annual average lim', 'annual average sensitivity', 
 			            'fire season raw',    'fire season lim',    'fire season sensitivity')
