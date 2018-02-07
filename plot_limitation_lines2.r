@@ -45,7 +45,7 @@ pntObs =  lapply(pntObs, function(i) apply(i, 2, quantile, c(0.1, 0.5, 0.9)))
 
 
 plotScatter <- function(name, col, yg = NULL, FUN, dFUN, x0, k, ksc, log = '', 
-						x2pc = FALSE, plot = c(T, T, T, T),...) {
+						x2pc = FALSE, plot = c(T, T, T, T),plotGrad = TRUE, ...) {
 	colp = make.transparent('black', 0.95)
 	
 	if (log == 'x') Obs[, name] = log(Obs[,name])
@@ -114,7 +114,7 @@ plotScatter <- function(name, col, yg = NULL, FUN, dFUN, x0, k, ksc, log = '',
 		yl = y + dy
 		
 		if (plot)
-			lines(xl, yl, lwd = 3, col = col, xpd = NA, ...)
+			if (plotGrad) lines(xl, yl, lwd = 3, col = col, xpd = NA, ...)
 		
 		if (plot && plotPnts)
 			points(x, y, col = col, pch = 16 , cex = 2.5 , lwd = 4)
@@ -220,5 +220,16 @@ allThePlottingPlease <- function(fname, ...) {
 	fname = paste(fname, 'shifted', sep ='-')
 	plotAll(fname, fuel, moisture, ignitions, suppression, ...)
 }
+
+
+allThePlottingPlease('noGrad', plotGrad = FALSE)
+allThePlottingPlease('empty', plot = c(F, F, F, F), plotGrad = FALSE)
+allThePlottingPlease('noGrad-Desert', plot = c(T, F, F, F), plotGrad = FALSE)
+allThePlottingPlease('noGrad-Rainforest', plot = c(T, T, F, F), plotGrad = FALSE)
+allThePlottingPlease('noGrad-Savanna', plot = c(T, T, T, F), plotGrad = FALSE)
+
+
 allThePlottingPlease('')
 allThePlottingPlease('Desert', plot = c(T, F, F, F))
+allThePlottingPlease('Rainforest', plot = c(T, T, F, F))
+allThePlottingPlease('Savanna', plot = c(T, T, T, F))
