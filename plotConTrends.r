@@ -129,9 +129,9 @@ findParameterTrends <- function(line, factor,
 		trendFS = findTrendNoFile(fireSeasonLim, Trend, tempF2,  trend1 = trend12[[1]], 'season')
 	} else trendFS = NULL
 	
+	
 	return(list(trend12, trend12F, trend12FF, trendFS, lapply(lims, mean)))
 }
-#c(trend12, trend12F, trend12FF, trendFS, lims) := findParameterTrends(NULL, factor)
 
 esnambleTemp = paste(esnambleTemp, niterations, sep = '-')
 if (file.exists(esnambleTemp)) {
@@ -141,13 +141,24 @@ if (file.exists(esnambleTemp)) {
 	save(ensamble, file = esnambleTemp)
 }
 
-lims      = extractEnsamble(ensamble, 5,   brick.ens)
-trend12F  = extractEnsamble(ensamble, 2, summary.ens)
-trend12FF = extractEnsamble(ensamble, 3, summary.ens)
-prob_lims = qchisq(c(0.9, 0.95, 0.99, .999), niterations)
+findIndex <- function(member, id = 3) {
+	member = member[[id]][-1]
+	trendIndex = 100 * (prod(layer.apply(member, function(i) 1 + abs(i[[1]])/10)) - 1)
+	pvals = mean(layer.apply(member, function(i) i[[2]]))
+	return(addLayer(trendIndex, pvals))
+}
 
-#niterations = 101
-#ensamble = lapply(seq(0, 1, length.out = niterations), findParameterTrends, factor)
+#lims      = extractEnsamble(ensamble, 5,   brick.ens)
+#trend12F  = extractEnsamble(ensamble, 2, summary.ens)
+trend12FF = extractEnsamble(ensamble, 3, summary.ens)
+trendIndex = lapply(ensamble, findIndex)
+trendVals = layer.apply(trendIndex, function(i) i[[1]])
+trendIndex = addLayer(mean(trendVals),
+					  fisherPval(grabCommonField(trendIndex, 2)),
+					  sd.raster(trendVals))
+trendIndex[[2]][is.na(trendIndex[[2]]) & !is.na(trendIndex[[1]])] = 0.0      
+prob_lims = qchisq(c(0.9, 0.95, 0.99, .999), niterations)[2]
+
 
 #########################################################################
 ## Plot trends                                                         ##
@@ -156,7 +167,7 @@ plotHotspots <- function(trends, figName, limits = dfire_lims, fire_limits = lim
 						 lims4way = NULL, ...) {
 	
 	trends[[1]] = trends[[1]]
-	trends[[1]][[3]] = trends[[1]][[3]] * 20
+	trends[[1]][[3]] = trends[[1]][[3]] #* 20
 	#if (normFtrend) trends[[1]][[1]] = trends[[1]][[1]]  /sfire
 	#browser()
 	png(figName, height = 10, width = 8.5, units = 'in', res = 300)
@@ -226,7 +237,7 @@ plotHotspots <- function(trends, figName, limits = dfire_lims, fire_limits = lim
 		cols = cbind(cols	, list(c(Productive = '#00FF00', Arid = '#FF00FF'),
 								c(Drier = '#FFFF00', Wetter = '#0000FF'),
 								c("More Ignitions" = '#FF0000',"Less Ignitions" = '#00FFFF'),
-								c(Wilding = 0, Supressing = 2)))
+								c(Wilding = 0, Suppressing = 2)))
 		
 		findCol <- function(x, cols = NULL) {
 			
@@ -256,6 +267,7 @@ plotHotspots <- function(trends, figName, limits = dfire_lims, fire_limits = lim
 		cols = apply(cols, 1, findCol) 
 	
 		fireChange <- function(clst) {
+			clst = clst[1:3]
 			if (all(clst == 1)) return(0)
 			if (any(clst == 2) && any(clst == 0)) return(1)
 			if (any(clst == 2)) return(2)
@@ -291,66 +303,113 @@ plotHotspots <- function(trends, figName, limits = dfire_lims, fire_limits = lim
 									cols = cols,
 									limits = seq(1.5, nclusters - 0.5),
 									e = er + 1, limits_error = 1:3,
-									ePatternRes = 30, ePatternThick = 0.2,
-									ePointPattern = c(25, 0, 24), eThick = c(1.5, 0, 1.5),
+									ePatternRes = 40, ePatternThick = 0.2,
+									ePointPattern = c(24, 0, 25), eThick = c(1.5, 0, 1.5),
 									preLeveled = TRUE,
 									aggregateFun = max, 
 									add_legend = FALSE, quick = TRUE)
 			mtext.units('Fire drivers', side = 3, line = -0.8, adj = 0.05)	
 			#addLocPoints()	
-			labs = c(labs, 'Suppressing')
-			elim = c(elim, 0)
-			cols = c(cols, "#DFDFDF")
-			direction = c(direction, 3)
+			
+			findReplaceSupp <- function(elimi, name, directioni) {
+				if (any(elim == elimi)) {
+					labs  =  unlist(strsplit(labs, paste("&", name)))
+					elim[elim == elimi] = 1
+					elim = c(elim, elimi)
+					labs = c(labs, name)
+					cols = c(cols, "#DFDFDF")
+					direction = c(direction, directioni)
+				}
+				return(list(labs, elim, cols, direction))
+			}
+			
+			c(labs, elim, cols, direction) := findReplaceSupp(2, "Suppressing", 3)
+			c(labs, elim, cols, direction) := findReplaceSupp(0, "Wilding", 2)
+			
+				
 			addLegend <- function(index, txt, top = 15, left = -180) {
 				text(txt, y = top + 1, x = left, adj = 0.0, font = 2)
 				legend(left, top, labs[index], pch = 15, col = cols[index], pt.cex = 3, bty = "n")			
 				col = make.transparent("black", 0.5)
 				for (e in 1:3) {
-					pch = c(25, 0, 24)[e]
+					pch = c(24, 0, 25)[e]
 					cex = rep(0, sum(index))
 					cex[elim[index] == (e-1)] = c(0.42, 0, 0.42)[e]
 					
 					print(cex)
 					for (i in left + c(-3, 0, 3)) for (j in  top + c(-3, 0, 3))
-						legend(i, j, rep('', sum(index)), pch = 24,
+						legend(i, j, rep('', sum(index)), pch = pch,
 							   col = col, pt.bg = col, pt.cex = cex, bty = "n")
 				}
 			}
 			par(cex = 0.5)
-			addLegend(direction == 1, 'Counteracting drivers', top = -32, -163)
-			addLegend(direction == 2, 'Increasing burnt area', top = -32,  -45)
-			addLegend(direction == 3, 'Decreasing burnt area', top = -32 ,  44)
+			addLegend(direction == 1, 'Counteracting drivers', top = -40,   40)
+			addLegend(direction == 2, 'Increasing burnt area', top = -40, -156)
+			addLegend(direction == 3, 'Decreasing burnt area', top = -40,  -56)
 			par(cex = 1.0)
 		}
 		
 	plotClusters()
 	dev.off.gitWatermark()
 	
-	trendIndex = (prod(layer.apply(trends[2:5], function(i) 1 + abs(i[[1]])/10)) - 1) * 100
-	trendIndex = addLayer(trendIndex, mean(layer.apply(trends[-1], function(i) i[[2]])), mean(layer.apply(trends[-1], function(i) i[[3]])))
+	#trendIndex = (prod(layer.apply(trends[2:5], function(i) 1 + abs(i[[1]])/10)) - 1) * 100
+	#browser()
+	#trendIndex = addLayer(trendIndex, mean(layer.apply(trends[-1], function(i) i[[2]])), mean(layer.apply(trends[-1], function(i) i[[3]])))
+	#browser()
 	writeRaster.gitInfo(trendIndex, 'outputs/TrendIndex.nc', overwrite = TRUE)
 	
-	png('figs/TrendMap.png', height = 6.5 * 1.3, width = 4 * 1.3, res = 300, units = 'in')
-	layout.submap(rbind(c(1,1), 1, 2, 3, 3, 4, 5, 5), heights = c(1, 1, 0.67, 1, 1, 0.67, 1, 1))
+	png('figs/TrendMap.png', height = 7.2, width = 4.5, res = 300, units = 'in')
+	layout.submap(rbind(c(1,1), 1, 2, 3, 3, 4, 5, 5), heights = c(1, 1, 0.6, 1, 1, 0.6, 1, 1))
 	par(mar = rep(0,4), oma = c(0, 0, 0.5, 0))
-	plot_Trends.local(1, labs = 'Normalised Trend in Burnt Area', plims = c(0.001, 0.01, 0.05, 0.1))
+	plot_Trends.local(1, labs = 'Normalised Trend in Burnt Area', plims = c(0.05))
 	
-	add_raster_legend2(cols = dfire_cols, limits = limits[[1]], ylabposScling = 2,
-								   transpose = FALSE, plot_loc =  c(0.2, 0.9, 0.85, 0.99), 
-								   add = FALSE, nx  = 1.75)
-	plot.new()				   
+	add_raster_legend2(cols = dfire_cols, limits = limits[[1]], ylabposScling = 1,
+								   transpose = FALSE, plot_loc =  c(0.2, 0.9, 0.7, 0.85), 
+								   add = FALSE, nx  = 1.25)
+	plot.new()				  
+	
 	plot_Trend(trendIndex, 'Trend Hotspot index', 
 			   limits = c(1, 2, 5, 10, 20),  prob_lims = prob_lims, 
 			   cols = fire_cols, limits_error = c(0.1, 0.5, 1), scaling = 1)
 		   
-	add_raster_legend2(cols = fire_cols, limits = c(1, 2, 5, 10, 20), ylabposScling = 2,
-								   transpose = FALSE, plot_loc =  c(0.2, 0.9, 0.85, 0.99), 
+	add_raster_legend2(cols = fire_cols, limits = c(1, 2, 5, 10, 20), ylabposScling = 1,
+								   transpose = FALSE, plot_loc =  c(0.2, 0.9, 0.7, 0.85), 
 								   add = FALSE, nx  = 1.75)
 	plot.new()
 	plotClusters()
 	dev.off()
 	browser()
+}
+
+plot_raster_from_col_int <- function (rcol, rint, cols, col_limits, int_limits, ...) {
+	
+	zcol = cut_results(rcol * 10, col_limits )
+	zint = cut_results(rint, int_limits)
+	
+	z = zcol + 1000 * zint
+	
+	limits = unique(z)
+	colInt = matrix(NaN, ncol = 2, nrow = length(limits))
+	for (i in 1:length(limits)) {
+		index = z == limits[i]
+		z[index] = i
+		colInt[i, 1] = zcol[index][1]
+		colInt[i, 2] = (zint[index][1] - 1)
+	}
+	
+	col =  make_col_vector(cols, limits = col_limits)
+	col = col[colInt[, 1]]	
+	col = col2rgb(col)
+	col = rgb2hsv(col)
+	int = ( 1 - min(rgb2hsv(col2rgb(cols))[3,])) * colInt[,2] / max(colInt[,2])
+	#int = colInt[,2] / max(colInt[,2])* 0.8
+	col[3,] = 1-int 
+	#col[2,] = (col[2,] + 1 - int) / 2
+	col = hsv(col[1,], col[2,], col[3,])	
+	plot_raster_from_raster(z, cols = col, 
+        limits = (1:(length(limits)-1))  + 0.5, readyCut = TRUE, quick = TRUE)
+        #...)
+
 }
 
 if (!is.True(dontPlot)) {
