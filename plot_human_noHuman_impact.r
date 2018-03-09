@@ -13,7 +13,7 @@ xVars      = list('crop', 'popdens', 'pas')
 labs       = c('a) Cropland', 'b) Population Density', 'c) Pasture')
 xUnits     = c('% cover', 'no. people / km2', '% cover')
 
-grab_cache = TRUE
+grab_cache = FALSE
 
 #########################################################################
 ## Run Model                                                           ##
