@@ -6,8 +6,8 @@ limFnames = c('Burnt_Area', 'Fuel', 'Moisture', 'Igntions', 'Suppression')
 
 nsamples = 100
 
-barCols = c("orange", "orange", "green", "blue"    , "red"      , "grey"       , "white")
-legLabs = c('Burnt Area',       'Fuel' , 'Moisture', 'Ignitions', 'Suppression', 'Overall Trend')
+barCols = c("#CC8800", "#CC8800", "#6eff6e", "#0000CC" , "#480000"  , "grey"       , "white")
+legLabs = c('Burnt Area'        , 'Fuel'   , 'Moisture', 'Ignitions', 'Suppression', 'Overall Trend')
 
 loadData4Ecosystem_analysis()
 mask = !is.na(trend12FF[[1]][[1]])
