@@ -4,6 +4,8 @@
 source('cfg.r')
 graphics.off()
 
+polygonsNotPoints = TRUE
+ylog = TRUE
 fracSample    = 200
 grabe_cache   = FALSE
 obsSampleFile = paste('temp/ObsSample', fracSample, '.Rd', sep = '-')
@@ -45,13 +47,26 @@ pntObs =  lapply(pntObs, function(i) apply(i, 2, quantile, c(0.1, 0.5, 0.9)))
 
 
 plotScatter <- function(name, col, yg = NULL, FUN, dFUN, x0, k, ksc, log = '', 
-						x2pc = FALSE, plot = c(T, T, T, T),plotGrad = TRUE, ...) {
+						x2pc = FALSE, plot = c(T, T, T, T),plotGrad = TRUE, xlim = c(0, 100), ...) {
 	colp = make.transparent('black', 0.95)
 	
 	if (log == 'x') Obs[, name] = log(Obs[,name])
 	if (x0 == 'suppression_x0') sc = 1 - FUN(0, param(x0), param(k)) else sc = 1
 	print(sc)
-	plot(Obs[, name], Obs[, 'fire'], pch = 19, col = colp, ylim = c(0.0, 1.0), xaxt = 'n', xlab = '', ylab = '', yaxt = 'n', ...)
+	
+	if (polygonsNotPoints) type = 'n' else type = 'p'
+	if (ylog) {
+		log = 'y'
+		ymin = 0.001
+	} else {
+		log = ''
+		ymin = 0.0
+	}
+	
+	plot(Obs[, name], Obs[, 'fire'], pch = 19, col = colp, ylim = c(ymin, 1.0),  xlim = xlim,
+	  	 xaxt = 'n', xlab = '', ylab = '', yaxt = 'n', type = type, log = c('','y')[ylog + 1], ...)
+		
+	if (polygonsNotPoints) quantileDesnityPoly(Obs[, name], Obs[, 'fire'], xlim = xlim)	
 	
 	if (log == 'x') {
 		mnX = exp(min(Obs[,name]))
@@ -68,7 +83,7 @@ plotScatter <- function(name, col, yg = NULL, FUN, dFUN, x0, k, ksc, log = '',
 		axis(1, at = log(xi), labels = xlabi)
 	} else if (x2pc) {
 		at = seq(0, 1, by = 0.2)
-		axis(1, at = at , labels = at * 100)
+-       axis(1, at = at , labels = at * 100)
 	} else axis(1)
 	
 	index = sort.int(Obs[,name], index.return= TRUE)[[2]]
@@ -88,7 +103,7 @@ plotScatter <- function(name, col, yg = NULL, FUN, dFUN, x0, k, ksc, log = '',
 		colt = make.transparent(col, c(0.75, 0.95))
 		
 		x = seq(min(i[,name]), max(i[, name]), length.out = 1000)	
-		y = c(rep(2, length(x)), rep(-2, length(x))); x = c(x, rev(x))
+		y = c(rep(2, length(x)), rep(c(-2, 0.00001)[ylog+1], length(x))); x = c(x, rev(x))
 		if (plot) 
 			polygon(x, y, border = colt[1], col = colt[2])
 		
@@ -129,9 +144,14 @@ plotScatter <- function(name, col, yg = NULL, FUN, dFUN, x0, k, ksc, log = '',
 
 plotAll <- function(fname = NULL, fuel = NULL, moisture = NULL, 
 				    ignitions = NULL, suppression = NULL, 
-					yticks = seq(0,1,by = 0.2), ...) {
-	if (is.null(fname)) fname = 'figs/limLines.png'
-		else fname = paste('figs/limLines', fname, '.png', sep = '-')
+					yticks = NULL, ...) {
+	if (is.null(yticks)) {
+		if (ylog) yticks = 10^((-5):1)
+			else yticks = seq(0,1,by = 0.2)
+	}
+	
+	
+	fname = paste('figs/limLines', fname, ylog, polygonsNotPoints, '.png', sep = '-')
 		
 	axis4 = !is.null(fuel)	
 		
@@ -149,22 +169,23 @@ plotAll <- function(fname = NULL, fuel = NULL, moisture = NULL,
 					   LimFIRE.fuel, dLimFIRE.fuel, 
 					   'fuel_x0', 'fuel_k', 1.0,  
 					   xlim = c(0, 1), ...)
-	axis(2, at = yticks)
+					   
+	axis(2, at = yticks, labels = yticks * 100)
 	mtext('Vegetation Cover (%)', 1, line = 2.3)
 
 	moisture = plotScatter('moisture', col = 'blue', moisture,
 						   LimFIRE.moisture, dLimFIRE.moisture, 
 						   'moisture_x0', 'moisture_k', -1.0, 
-						   x2pc = TRUE, ...)
-	mtext('Fuel Mositure (%)', 1, line = 2.3)
-	if (axis4) axis(side = 4, at = yticks, labels = rev(yticks))
+						   x2pc = TRUE, xlim = c(0, 1), ...)
+	mtext('Fuel Moisture (%)', 1, line = 2.3)
+	if (axis4) axis(side = 4, at = yticks, labels = 100 - yticks * 100)
 	
 	ignitions = plotScatter('ignitions', col = 'red', ignitions, 
 							LimFIRE.ignitions, dLimFIRE.ignitions, 
 							'igntions_x0', 'igntions_k', 1.0, 
 							xlim = c(0, 8), ...)
 	mtext('No. Ignitions', 1, line = 2.3)
-	axis(2, at = yticks)
+	axis(2, at = yticks, labels = yticks * 100)
 
 	legNames =  names(hlghtPnts)
 	cols = listSelectItem(hlghtPnts, 'col')
@@ -172,15 +193,15 @@ plotAll <- function(fname = NULL, fuel = NULL, moisture = NULL,
 
 	leg(15, colt, pt.cex = 5)
 	leg(16, cols, pt.cex = 2)
-	
+	if (ylog) xlim = c(0, 90) else xlim = c(0, 100)
 	suppression = plotScatter('suppression', col = 'black', suppression,
 							  LimFIRE.supression, dLimFIRE.supression, 
 							  'suppression_x0', 'suppression_k', -1.0, 
-							  xlim = c(0,100), ...)
+							  xlim = xlim, ...)
 	mtext('Suppression Index', 1, line = 2.3)
-	if (axis4) axis(side = 4, at = yticks, labels = rev(yticks))
+	if (axis4) axis(side = 4, at = yticks, labels = 100 - yticks * 100)
 
-	mtext('Fractional Burnt Area', side = 2, line = 2, outer = TRUE)
+	mtext('Burnt Area(%)', side = 2, line = 2, outer = TRUE)
 	if (axis4) 
 		mtext('Limitation on Burnt Area', side = 4, line = 2, outer = TRUE)
 	dev.off()
