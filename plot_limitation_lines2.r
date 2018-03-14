@@ -57,7 +57,7 @@ plotScatter <- function(name, col, yg = NULL, FUN, dFUN, x0, k, ksc, log = '',
 	if (polygonsNotPoints) type = 'n' else type = 'p'
 	if (ylog) {
 		log = 'y'
-		ymin = 0.001
+		if (polygonsNotPoints) ymin = 0.001 else ymin = 0.001
 	} else {
 		log = ''
 		ymin = 0.0
@@ -142,7 +142,7 @@ plotScatter <- function(name, col, yg = NULL, FUN, dFUN, x0, k, ksc, log = '',
 	return(ygout)
 }
 
-plotAll <- function(fname = NULL, fuel = NULL, moisture = NULL, 
+plotAll <- function(fname0 = NULL, fuel = NULL, moisture = NULL, 
 				    ignitions = NULL, suppression = NULL, 
 					yticks = NULL, ...) {
 	if (is.null(yticks)) {
@@ -151,7 +151,7 @@ plotAll <- function(fname = NULL, fuel = NULL, moisture = NULL,
 	}
 	
 	
-	fname = paste('figs/limLines', fname, ylog, polygonsNotPoints, '.png', sep = '-')
+	fname = paste('figs/limLines', fname0, ylog, polygonsNotPoints, '.png', sep = '-')
 		
 	axis4 = !is.null(fuel)	
 		
@@ -167,7 +167,7 @@ plotAll <- function(fname = NULL, fuel = NULL, moisture = NULL,
 
 	fuel = plotScatter('fuel', col = 'green', fuel,
 					   LimFIRE.fuel, dLimFIRE.fuel, 
-					   'fuel_x0', 'fuel_k', 1.0,  
+					   'fuel_x0', 'fuel_k', 1.0,   x2pc = TRUE,
 					   xlim = c(0, 1), ...)
 					   
 	axis(2, at = yticks, labels = yticks * 100)
@@ -187,12 +187,14 @@ plotAll <- function(fname = NULL, fuel = NULL, moisture = NULL,
 	mtext('No. Ignitions', 1, line = 2.3)
 	axis(2, at = yticks, labels = yticks * 100)
 
-	legNames =  names(hlghtPnts)
-	cols = listSelectItem(hlghtPnts, 'col')
-	colt = make.transparent(cols, 0.75)
+	if (fname0 != "empty") {
+		legNames =  names(hlghtPnts)
+		cols = listSelectItem(hlghtPnts, 'col')
+		colt = make.transparent(cols, 0.75)
 
-	leg(15, colt, pt.cex = 5)
-	leg(16, cols, pt.cex = 2)
+		leg(15, colt, pt.cex = 5)
+		leg(16, cols, pt.cex = 2)		
+	}
 	if (ylog) xlim = c(0, 90) else xlim = c(0, 100)
 	suppression = plotScatter('suppression', col = 'black', suppression,
 							  LimFIRE.supression, dLimFIRE.supression, 
@@ -238,8 +240,10 @@ allThePlottingPlease <- function(fname, ...) {
 
 	suppression = fgni(suppression, 4)
 
-	fname = paste(fname, 'shifted', sep ='-')
-	plotAll(fname, fuel, moisture, ignitions, suppression, ...)
+	if (fname != "empty") {
+		fname = paste(fname, 'shifted', sep ='-')
+		plotAll(fname, fuel, moisture, ignitions, suppression, ...)
+	}
 }
 
 
