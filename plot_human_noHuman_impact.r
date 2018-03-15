@@ -13,7 +13,7 @@ xVars      = c('crop', 'popdens')
 labs       = c('a) Cropland', 'b) Population Density')
 xUnits     = c('% cover', 'no. people / km2')
 
-grab_cache = FALSE
+grab_cache = TRUE
 
 #########################################################################
 ## Run Model                                                           ##
@@ -22,7 +22,7 @@ control = runIfNoFile(mod_file[1], runLimFIREfromstandardIns, fireOnly = TRUE,
                                        test = grab_cache)
 control = mean(control)
 
-plot_impact <- function(mod_filei, xVar, lab, xUnit, noneLand = FALSE) {
+plot_impact <- function(mod_filei, xVar, lab, xUnit, normByControl = FALSE, noneLand = FALSE) {
 
     noVar  = runIfNoFile(mod_filei, runLimFIREfromstandardIns, fireOnly = TRUE, 
                          remove = xVar, test = grab_cache)
@@ -30,7 +30,9 @@ plot_impact <- function(mod_filei, xVar, lab, xUnit, noneLand = FALSE) {
 #########################################################################
 ## Calculate Impact                                                    ##
 #########################################################################  
-    impact = (control - noVar) / noVar
+    if (normByControl) impact = (control - noVar) #/ control
+        else  impact = (control - noVar) / noVar
+
     xVar   = mean(stack(drive_fname[xVar]))
 
     mask   = !(is.na(impact) | is.na(xVar))
@@ -38,9 +40,9 @@ plot_impact <- function(mod_filei, xVar, lab, xUnit, noneLand = FALSE) {
     xVar   = xVar  [mask] 
 
     if (!noneLand) {
-        sp        = smooth.spline(xVar, impact)
-        f1        = predict(sp, 100)$y
-        fImpact   = (impact - f1 * xVar * 0.01) / (1 - xVar * 0.01)
+        sp         = smooth.spline(xVar, impact)
+        f1         = predict(sp, 100)$y
+        fImpact    = (impact - f1 * xVar * 0.01) / (1 - xVar * 0.01)
     } else fImpact = impact
     
 #########################################################################
@@ -64,7 +66,7 @@ plot_impact <- function(mod_filei, xVar, lab, xUnit, noneLand = FALSE) {
 png(fig_fname, width = 9, height = 12, unit = 'in', res = 300)
 par(mfrow = c(2,1))
 
-mapply(plot_impact, mod_file[-1], xVars, labs, xUnits, c(FALSE, TRUE))
+mapply(plot_impact, mod_file[-1], xVars, labs, xUnits, c(FALSE, TRUE), c(FALSE, TRUE))
 
 ## footer
 dev.off.gitWatermark()
