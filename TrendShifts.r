@@ -26,6 +26,8 @@ plotTrendHist <- function(trend, bmask, breaks,...) {
 		areas = raster::area(trend, na.rm = TRUE)												
 		return(sum.raster(areas, na.rm = TRUE))
 	}
+	breaks = c(min.raster(trend, na.rm = TRUE), breaks, max.raster(trend, na.rm = TRUE))
+	
 	y = mapply(find_area,  head(breaks, -1), breaks[-1])
 	y = 100 * y / sum(y)
 	return(y)
@@ -44,14 +46,15 @@ plotBiomeHist <- function(biomeN, name,  breaks0, mirror_breaks = TRUE,
 	
 	ys = mapply(plotTrendHist, trends, MoreArgs = list(bmask = bmask, breaks = breaks))
 	
-	at = 0:(length(breaks)-1) + 0.125
-	test =  abs(breaks) <= 0.001
-	density = rep(0, length(breaks) -1)
+	at = 0:(length(breaks) + 1) + 0.125
+	test =  c(1, abs(breaks), 1) <= 0.001
+	density = rep(0, length(breaks) + 1)
 	density[which(test)[1]] = 30
 	
-	if (length(trends) == 1) 
-		bFUN <- function(...) barplot(ys, beside = TRUE, width = 0.85, space = 0.15, ...)
-	else {
+	if (length(trends) == 1) {
+		bFUN <- function(...) barplot(ys, beside = TRUE, width = 0.85, space = 0.175, xlim = c(1.5, length(ys)),xpd = FALSE, ...)
+		ys[1] = NaN
+	} else {
 		bFUN <- function(...)  barplot(t(ys), beside = TRUE, width = 0.85 / length(trends), ...)
 		density = rep(density, each = length(trends))
 	}
@@ -64,10 +67,15 @@ plotBiomeHist <- function(biomeN, name,  breaks0, mirror_breaks = TRUE,
 	
 	point0 = mean(at[test])
 	at = sort(c(at[!test], point0))
-	breaks = sort(c(breaks[!test], 0))
 	
-	axis(1, at = at, labels = breaks, tick = FALSE)
-	#mtext('{', 1, srt = 180, las = 2, cex = 3, line = 0.25, adj = point0/length(breaks))
+	breaks = sort(c(breaks[!(abs(breaks) <= 0.001)], 0))
+	
+	labels = c(paste('<', breaks[1]), paste('>', tail(breaks, 1)))
+	labels = c(labels[1], breaks, labels[2])
+	at[1] = at[1] + 0.5
+	at[length(at)] = at[length(at)] - 0.5
+	axis(1, at = at, labels = labels, tick = FALSE)
+	
 	ylim = par("usr")[3:4]
 	text(x = point0, y = ylim[1] - diff(ylim)/50, '{', srt = 90, cex = 2.5, xpd = TRUE)
 }
@@ -78,9 +86,9 @@ plotPlot <- function(...) {
 }
 
 graphics.off()
-plotPlot(breaks = seq(0.2, 2, 0.2))
+plotPlot(breaks = seq(0.5, 2, 0.5))
 
 ## plot trend index only for biomes
 dev.new()
-plotPlot(breaks = seq(1, 10), mirror_breaks = FALSE,
+plotPlot(breaks = c(0.1, seq(1, 10)), mirror_breaks = FALSE,
 		 trends = list(trendIndex), cols = tail(barCols, 1))
