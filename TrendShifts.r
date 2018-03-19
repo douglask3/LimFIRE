@@ -1,6 +1,8 @@
 source("cfg.r")
 
-breaks = c(-4, -3, -2, -1, -1E-3, 1E-3, 1, 2, 3, 4)
+breaks = c(-7, -6, -5, -4, -3, -2, -1, -1E-3, 1E-3, 1, 2, 3, 4, 5, 6, 7)
+breaks = seq(1, 10, 1)
+breaks = c(-rev(breaks), -1E-3, 1E-3, breaks)
 
 limFnames = c('Burnt_Area', 'Fuel', 'Moisture', 'Igntions', 'Suppression')
 
@@ -36,19 +38,21 @@ plotTrendHist <- function(trend, bmask,...) {
 	
 	#y[y < 0.001] = 0.001
 	#barplot(y, width = 0.8, space = 0.25, ylim = c(0.001, 100), log = 'y',...)
-	barplot(y, width = 0.8, space = 0.25, ylim = c(0.00, 70), axes = FALSE,...)
+	#barplot(y, width = 0.8, space = 0.25, ylim = c(0.00, 70), axes = FALSE,...)
+	return(y)
 	
 }
-par(mfcol = c(6, 8), mar =  c(1, 1, 0, 3), oma = c(3, 3, 0, 0))
-plotBiomeHist <- function(biomeN) {
+par(mfcol = c(4, 2), mar =  c(1, 1, 0, 3), oma = c(3, 3, 0, 0))
+plotBiomeHist <- function(biomeN, name) {
 	if (biomeN > 1)
 		bmask = (biomeAssigned != biomeN | ocean_mask)
 	else
 		bmask = ocean_mask
 
-	mapply(plotTrendHist, c(trend12FF,trendIndex), col =  barCols, MoreArgs = list(bmask = bmask))
-
-	at = 0:length(y) + 0.125
+	ys = mapply(plotTrendHist, c(trend12FF,trendIndex), col =  barCols, MoreArgs = list(bmask = bmask))
+	barplot(t(ys), beside = TRUE, col = barCols, width = 0.85 / 6)
+	mtext(name, 3, adj = 0.1, line = -2)
+	at = 0:(length(breaks)-1) + 0.125
 	axis(1, at = at, labels = rep('', length(at)))
 
 	test =  abs(breaks) <= 0.001
@@ -60,4 +64,7 @@ plotBiomeHist <- function(biomeN) {
 	axis(1, at = at, labels = breaks, tick = FALSE)
 	mtext('{', 1, srt = 180, las = 2, cex = 3, line = 0.25)
 }
-lapply(1:8, plotBiomeHist)
+mapply(plotBiomeHist, 1:8, names(biomes))
+
+
+## plot trend index only for biomes
