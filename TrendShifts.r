@@ -29,7 +29,7 @@ plotTrendHist <- function(trend, bmask, breaks,...) {
 	breaks = c(min.raster(trend, na.rm = TRUE), breaks, max.raster(trend, na.rm = TRUE))
 	
 	y = mapply(find_area,  head(breaks, -1), breaks[-1])
-	y = 100 * y / sum(y)
+	y = 100 * y / (sum(y))
 	return(y)
 }
 
@@ -52,7 +52,7 @@ plotBiomeHist <- function(biomeN, name, breaks, density,
 	bFUN(col = cols)
 	bFUN(density = density, add = TRUE)
 	mtext(name, 3, adj = 0.95, line = -1, padj = 1)
-	
+	return(ys)
 }
 
 plotPlot <- function(newPlot = TRUE, breaks0, mirror_breaks = TRUE,...) {
@@ -82,15 +82,19 @@ plotPlot <- function(newPlot = TRUE, breaks0, mirror_breaks = TRUE,...) {
 		
 		ylim = par("usr")[3:4]
 		text(x = point0, y = ylim[1] - diff(ylim)/50, '{', srt = 90, cex = 2.5, xpd = TRUE)
+		return(breaks)
 	}
 	
 	plotFun <- function(index)
-		mapply(plotBiomeHist, index, names(biomes)[index], MoreArgs = list(breaks, density,...))
+		mapply(plotBiomeHist, index, names(biomes)[index],
+			   MoreArgs = list(breaks, density,...), SIMPLIFY = FALSE)
 	
-	plotFun(1:4)
+	
+	ys = plotFun(1:4)
 	addXaxis()
-	plotFun(5:8)
-	addXaxis()
+	ys = c(ys, plotFun(5:8))
+	breaks = addXaxis()
+	return(list(breaks, ys))
 }
 
 graphics.off()
@@ -99,6 +103,19 @@ plotPlot(breaks = seq(0.5, 2, 0.5))
 
 ## plot trend index only for biomes
 #dev.new()
-plotPlot(FALSE, breaks = seq(1, 10), mirror_breaks = FALSE,
-		 trends = list(trendIndex), cols = tail(barCols, 1))
-dev.off()
+c(x, ys) := plotPlot(FALSE, breaks = seq(1, 10), mirror_breaks = FALSE,
+						  trends = list(trendIndex), cols = tail(barCols, 1))
+						  
+c(x, ys) := plotPlot(FALSE, breaks = seq(0.2, 20, 0.2), mirror_breaks = FALSE,
+						  trends = list(trendIndex), cols = tail(barCols, 1))
+			  
+dev.off.gitWatermark()
+
+ys = lapply(ys, tail, -1)
+ys = lapply(ys, head, -1)
+maxY = max(unlist(ys))
+
+plot(range(x), c(0.0, maxY), type = 'n')
+
+mapply(lines, ys, col = biomesCols, MoreArgs = list(x = x))
+#mapply(lines, ys, col = biomesCols, MoreArgs = list(x = x, lwd = 3))
