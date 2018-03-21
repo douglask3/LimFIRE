@@ -39,10 +39,8 @@ plotBiomeHist <- function(biomeN, name,  breaks0, mirror_breaks = TRUE,
 	breaks = c(-1E-3, 1E-3, breaks0)
 	if (mirror_breaks) breaks = c(-rev(breaks0), breaks)
 	
-	if (biomeN > 1)
-		bmask = (biomeAssigned != biomeN | ocean_mask)
-	else
-		bmask = ocean_mask
+	if (biomeN > 1) bmask = (biomeAssigned != biomeN | ocean_mask)
+		else bmask = ocean_mask
 	
 	ys = mapply(plotTrendHist, trends, MoreArgs = list(bmask = bmask, breaks = breaks))
 	
@@ -61,7 +59,8 @@ plotBiomeHist <- function(biomeN, name,  breaks0, mirror_breaks = TRUE,
 	
 	bFUN(col = cols)
 	bFUN(density = density, add = TRUE)
-	mtext(name, 3, adj = 0.1, line = -2)
+	mtext(name, 3, adj = 0.95, line = -1, padj = 1)
+	
 	
 	axis(1, at = at, labels = rep('', length(at)))
 	
@@ -78,17 +77,20 @@ plotBiomeHist <- function(biomeN, name,  breaks0, mirror_breaks = TRUE,
 	
 	ylim = par("usr")[3:4]
 	text(x = point0, y = ylim[1] - diff(ylim)/50, '{', srt = 90, cex = 2.5, xpd = TRUE)
+	
 }
 
-plotPlot <- function(...) {
-	par(mfcol = c(4, 2), mar =  c(1, 1, 0, 3), oma = c(3, 3, 0, 0))
+plotPlot <- function(plot = TRUE, ...) {
+	if (plot) par(mfcol = c(4, 2), mar =  c(1, 1, 0, 3), oma = c(3, 3, 0, 0))
 	mapply(plotBiomeHist, 1:8, names(biomes), MoreArgs = list(...))
 }
 
 graphics.off()
+pdf('figs/TrendsShift.pdf', width = 10, height = 8)
 plotPlot(breaks = seq(0.5, 2, 0.5))
 
 ## plot trend index only for biomes
-dev.new()
-plotPlot(breaks = c(0.1, seq(1, 10)), mirror_breaks = FALSE,
+#dev.new()
+plotPlot(FALSE, breaks = seq(1, 10), mirror_breaks = FALSE,
 		 trends = list(trendIndex), cols = tail(barCols, 1))
+dev.off()
