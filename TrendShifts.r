@@ -33,21 +33,13 @@ plotTrendHist <- function(trend, bmask, breaks,...) {
 	return(y)
 }
 
-plotBiomeHist <- function(biomeN, name,  breaks0, mirror_breaks = TRUE,
+plotBiomeHist <- function(biomeN, name, breaks, density,
 					      trends = trend12FF, cols = head(barCols, -1)) {
-	
-	breaks = c(-1E-3, 1E-3, breaks0)
-	if (mirror_breaks) breaks = c(-rev(breaks0), breaks)
 	
 	if (biomeN > 1) bmask = (biomeAssigned != biomeN | ocean_mask)
 		else bmask = ocean_mask
 	
 	ys = mapply(plotTrendHist, trends, MoreArgs = list(bmask = bmask, breaks = breaks))
-	
-	at = 0:(length(breaks) + 1) + 0.125
-	test =  c(1, abs(breaks), 1) <= 0.001
-	density = rep(0, length(breaks) + 1)
-	density[which(test)[1]] = 30
 	
 	if (length(trends) == 1) {
 		bFUN <- function(...) barplot(ys, beside = TRUE, width = 0.85, space = 0.175, xlim = c(1.5, length(ys)),xpd = FALSE, ...)
@@ -61,28 +53,44 @@ plotBiomeHist <- function(biomeN, name,  breaks0, mirror_breaks = TRUE,
 	bFUN(density = density, add = TRUE)
 	mtext(name, 3, adj = 0.95, line = -1, padj = 1)
 	
-	
-	axis(1, at = at, labels = rep('', length(at)))
-	
-	point0 = mean(at[test])
-	at = sort(c(at[!test], point0))
-	
-	breaks = sort(c(breaks[!(abs(breaks) <= 0.001)], 0))
-	
-	labels = c(paste('<', breaks[1]), paste('>', tail(breaks, 1)))
-	labels = c(labels[1], breaks, labels[2])
-	at[1] = at[1] + 0.5
-	at[length(at)] = at[length(at)] - 0.5
-	axis(1, at = at, labels = labels, tick = FALSE)
-	
-	ylim = par("usr")[3:4]
-	text(x = point0, y = ylim[1] - diff(ylim)/50, '{', srt = 90, cex = 2.5, xpd = TRUE)
-	
 }
 
-plotPlot <- function(plot = TRUE, ...) {
-	if (plot) par(mfcol = c(4, 2), mar =  c(1, 1, 0, 3), oma = c(3, 3, 0, 0))
-	mapply(plotBiomeHist, 1:8, names(biomes), MoreArgs = list(...))
+plotPlot <- function(newPlot = TRUE, breaks0, mirror_breaks = TRUE,...) {
+	if (newPlot) par(mfcol = c(4, 2), mar =  c(1, 1, 0, 3), oma = c(3, 3, 0, 0))
+	
+	breaks = c(-1E-3, 1E-3, breaks0)
+	if (mirror_breaks) breaks = c(-rev(breaks0), breaks)
+	
+	at = 0:(length(breaks) + 1) + 0.125
+	test =  c(1, abs(breaks), 1) <= 0.001
+	density = rep(0, length(breaks) + 1)
+	density[which(test)[1]] = 30
+	
+	addXaxis <- function() {
+		axis(1, at = at, labels = rep('', length(at)))
+		
+		point0 = mean(at[test])
+		at = sort(c(at[!test], point0))
+		
+		breaks = sort(c(breaks[!(abs(breaks) <= 0.001)], 0))
+		
+		labels = c(paste('<', breaks[1]), paste('>', tail(breaks, 1)))
+		labels = c(labels[1], breaks, labels[2])
+		at[1] = at[1] + 0.5
+		at[length(at)] = at[length(at)] - 0.5
+		axis(1, at = at, labels = labels, tick = FALSE)
+		
+		ylim = par("usr")[3:4]
+		text(x = point0, y = ylim[1] - diff(ylim)/50, '{', srt = 90, cex = 2.5, xpd = TRUE)
+	}
+	
+	plotFun <- function(index)
+		mapply(plotBiomeHist, index, names(biomes)[index], MoreArgs = list(breaks, density,...))
+	
+	plotFun(1:4)
+	addXaxis()
+	plotFun(5:8)
+	addXaxis()
 }
 
 graphics.off()
