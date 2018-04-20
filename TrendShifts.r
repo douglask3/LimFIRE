@@ -29,7 +29,12 @@ plotTrendHist <- function(trend, bmask, breaks,...) {
 	breaks = c(min.raster(trend, na.rm = TRUE), breaks, max.raster(trend, na.rm = TRUE))
 	
 	y = mapply(find_area,  head(breaks, -1), breaks[-1])
-	y = 100 * y / (sum(y))
+	y = y / (sum(y))
+	y = c(quantile(trend, probs = c(0.05, 0.1, 0.25, 0.5, 0.75, 0.9, 0.95)),
+		  sum.raster(abs(trend) * area(trend), na.rm = TRUE) / 
+		  sum.raster(area(trend, na.rm = TRUE), na.rm = TRUE),
+		  y)
+	
 	return(y)
 }
 
@@ -40,6 +45,9 @@ plotBiomeHist <- function(biomeN, name, breaks, density,
 		else bmask = ocean_mask
 	
 	ys = mapply(plotTrendHist, trends, MoreArgs = list(bmask = bmask, breaks = breaks))
+	quantiles =  ys[1:7,]
+	pc_change = ys[8,]
+	ys = ys[-(1:8),]	
 	
 	if (length(trends) == 1) {
 		bFUN <- function(...) barplot(ys, beside = TRUE, width = 0.85, space = 0.175, xlim = c(1.5, length(ys)),xpd = FALSE, ...)
@@ -51,6 +59,16 @@ plotBiomeHist <- function(biomeN, name, breaks, density,
 	
 	bFUN(col = cols)
 	bFUN(density = density, add = TRUE)
+	mtext(paste(round(pc_change, 2), collapse = '\n'), adj = 0.75, line = -7)
+	
+	quantiles0 = quantiles
+	quantiles = round(quantiles, 2)
+	if (!is.null(dim(quantiles))) {
+		quantiles = apply(quantiles, 2, paste, collapse = '  ')
+		quantiles = paste(quantiles, collapse = '\n')
+	} else 
+		quantiles = paste(quantiles, collapse = '   ')
+	 mtext(quantiles, line = -6, adj = 0.05)
 	mtext(name, 3, adj = 0.95, line = -1, padj = 1)
 	return(ys)
 }
@@ -115,7 +133,7 @@ ys = lapply(ys, tail, -1)
 ys = lapply(ys, head, -1)
 maxY = max(unlist(ys))
 
-plot(range(x), c(0.0, maxY), type = 'n')
+plot(range(x), c(0.0, 10), type = 'n')
 
 mapply(lines, ys, col = biomesCols, MoreArgs = list(x = x))
 #mapply(lines, ys, col = biomesCols, MoreArgs = list(x = x, lwd = 3))
