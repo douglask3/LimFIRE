@@ -3,6 +3,8 @@
 #########################################################################
 source('cfg.r')
 
+grab_cache = FALSE
+
 ## output filename
 mod_file = 'outputs/LimFIRE_fire'
 fig_file = 'figs/HumanImpactMap.png'
@@ -14,8 +16,8 @@ mod_file = paste(mod_file, c('', 'noHumanIngnitions', 'noHumans'), '.nc', sep ='
 diff_lims1 = c(0, 0.1, 1, 2, 5) 
 diff_cols1 = fire_cols
 
-diff_lims2 = c(-20, -10, -5, -2, -1, -0.1, 0.1, 1, 2, 5) 
-diff_cols2 = c('#000033', '#0022AA',  '#00EEFF', 'white', '#FFEE00', '#AA2200')
+diff_lims2 = c(-30, -10, -3, -1, -0.1, -0.01, 0.01, 0.1, 1, 3, 10, 30) 
+diff_cols2 = c('#000033', '#0022AA',  '#00EEFF', 'white', '#FFEE00', '#AA2200', '#330000')
 
 cont_lims1 = c(0, 2, 5, 10, 20, 40, 60, 80)
 cont_cols1 = fire_cols
@@ -31,11 +33,12 @@ labs = c('a) Full model burnt area', 'b) No human ignitions', 'c) No humans', 'd
 #########################################################################
 ## Run experimets                                                      ##
 #########################################################################
-control = runIfNoFile(mod_file[1], runLimFIREfromstandardIns, fireOnly = TRUE)
+control = runIfNoFile(mod_file[1], runLimFIREfromstandardIns, fireOnly = TRUE,
+                                                        test = grab_cache)
 noIgnit = runIfNoFile(mod_file[2], runLimFIREfromstandardIns, fireOnly = TRUE, 
-                  remove = "pas")
+                  remove = c("popdens"), test = grab_cache)
 noAnyth = runIfNoFile(mod_file[3], runLimFIREfromstandardIns, fireOnly = TRUE, 
-                  remove = c("pas", "crop", "popdens"))
+                  remove = c("crop", "pas", "popdens"), test = grab_cache)
 
 #########################################################################
 ## Calc. differences and plot                                          ##
@@ -56,15 +59,7 @@ layout(rbind(c(1,  2,  3),
 
 
 
-mtextStandard <- function(...) mtext(..., line = -2)
-
-standard_legend <- function(cols = fire_cols, lims = fire_lims, dat,
-                            plot_loc = c(0.35,0.75,0.65,0.78)) {
-    add_raster_legend2(cols, lims, add = FALSE,
-               plot_loc = plot_loc, dat = dat,
-               transpose = FALSE,
-               srt = 0)
-} 
+mtextStandard <- function(...) mtext(..., line = -2) 
 
 standard_legend2 <- function(...)
         standard_legend(plot_loc = c(0.2, 0.9, 0.65, 0.78), ...)
@@ -87,7 +82,7 @@ mtext.burntArea()
 noIgnit  = control - noIgnit
 noAnythi = control - noAnyth  
 
-plot_raster(noIgnit, diff_lims2,diff_cols2)
+plot_raster(noIgnit, c(-20, -10, -5, -2, -1, 1, 2, 5, 10, 20), diff_cols2)
 mtextStandard(labs[4])
 
 plot_raster(noAnythi, diff_lims2, diff_cols2)

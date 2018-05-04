@@ -4,9 +4,10 @@
 source('cfg.r')
 graphics.off()
 
-grab_cache = TRUE
+grab_cache = FALSE
 
-fig_fname = 'figs/limitation_map.png'
+fig_fname       = 'figs/limitation_map.png'
+fig_fname_indiv = 'figs/ind_limiataions'
 
 
 labs = c('a) Annual average controls on fire', 'b) Annual average sensitivity',
@@ -17,37 +18,56 @@ mod_files = paste(outputs_dir, '/LimFIRE_',
                  c('fire', 'fuel','moisture','ignitions','supression'),
                   sep = '')
 
+#########################################################################
+## Run model                                                           ##
+#########################################################################
 
-   lm_mod_files = paste(mod_files,    '-lm', sep = '')
-   sn_mod_files = paste(mod_files,    '-sn', sep = '')
+rw_mod_files = paste(mod_files,    '-rw', sep = '')
+lm_mod_files = paste(mod_files,    '-lm', sep = '')
+sn_mod_files0 = paste(mod_files,    '-sn', sep = '')
+sn_mod_files = paste(mod_files,    '-sn-ws', sep = '')
                   
-aa_lm_mod_files = paste(lm_mod_files, '-aa.nc', sep = '')
-aa_sn_mod_files = paste(sn_mod_files, '-aa.nc', sep = '')
-fs_lm_mod_files = paste(lm_mod_files, '-fs.nc', sep = '')
-fs_sn_mod_files = paste(sn_mod_files, '-fs.nc', sep = '')
 
-   lm_mod_files = paste(lm_mod_files,    '.nc', sep = '')
-   sn_mod_files = paste(sn_mod_files,    '.nc', sep = '')
+runLimFIRE <- function(fname, ...){
+    fname = paste(fname,    '.nc', sep = '')
+    return(runIfNoFile(fname, runLimFIREfromstandardIns, test = grab_cache, ...))
+}
 
-lm_mod = runIfNoFile(lm_mod_files, runLimFIREfromstandardIns,                     test = grab_cache)
-sn_mod = runIfNoFile(sn_mod_files, runLimFIREfromstandardIns, sensitivity = TRUE, test = grab_cache)
+rw_mod = runLimFIRE(rw_mod_files, raw = TRUE, normalise = TRUE)[-1]
+sn_mod = runLimFIRE(sn_mod_files0, sensitivity = TRUE)
+lm_mod = runLimFIRE(lm_mod_files, normalise = TRUE, add21 = TRUE)
+
+
+weightedSensitivity <- function() {
+	ws <- function(sn, i) {
+		lms = rw_mod[-i]
+		out = layer.apply(1:nlayers(sn), function(i) sn[[i]] * lms[[1]][[i]] * lms[[2]][[i]] * lms[[3]][[i]])
+		return(out)
+	}
+	sn_mod[2:5] = mapply(ws, sn_mod[2:5], 1:4)
+	return(sn_mod)
+}
+
+sn_mod = runIfNoFile(paste(sn_mod_files, '.nc', sep = ''), weightedSensitivity, test = grab_cache)
 
 #########################################################################
 ## Annual Average                                                      ##
 #########################################################################
+cal_annual_average <- function(fname, xx_mod) {
+    fname = paste(fname, '-aa.nc', sep = '')
+    xx_mod = runIfNoFile(fname, function(x) lapply(x, mean), xx_mod, test = grab_cache)
+    xx_mod[[2]][is.na(xx_mod[[2]])] = 100
+    return(xx_mod)
+}
 
-aa_lm_mod = runIfNoFile(aa_lm_mod_files, function(x) lapply(x, mean), lm_mod, test = grab_cache)
-aa_sn_mod = runIfNoFile(aa_sn_mod_files, function(x) lapply(x, mean), sn_mod, test = grab_cache)
-aa_lm_mod[[2]][is.na(aa_lm_mod[[2]])] = 100
-aa_sn_mod[[2]][is.na(aa_sn_mod[[2]])] = 100
-
+aa_lm_mod = cal_annual_average(lm_mod_files, lm_mod)
+aa_sn_mod = cal_annual_average(sn_mod_files, sn_mod)
 
 #########################################################################
 ## Fire Season                                                         ##
 #########################################################################
 
-which.maxMonth <- function(x) {
-    
+which.maxMonth <- function(x) {    
     nyears = nlayers(x) / 12
     
     forYear <- function(yr) {
@@ -85,20 +105,48 @@ maxFireLimiation <- function(x) {
     return(out)
 }
 
-fs_lm_mod = runIfNoFile(fs_lm_mod_files, function(x) lapply(x, maxFireLimiation), lm_mod, test = grab_cache)
-fs_sn_mod = runIfNoFile(fs_sn_mod_files, function(x) lapply(x, maxFireLimiation), sn_mod, test = grab_cache)
-fs_lm_mod[[2]][is.na(fs_lm_mod[[2]])] = 1
+cal_fire_season_average <- function(fname, xx_mod) {
+    fname = paste(fname, '-fs.nc', sep = '')
+    xx_mod = runIfNoFile(fname, function(x) lapply(x, maxFireLimiation), xx_mod, test = grab_cache)
+    xx_mod[[2]][is.na(xx_mod[[2]])] = 100
+    return(xx_mod)
+}
 
+fs_lm_mod = cal_fire_season_average(lm_mod_files, lm_mod)
+fs_sn_mod = cal_fire_season_average(sn_mod_files, sn_mod)
 
 #########################################################################
 ## Plotting and tableing                                               ##
 #########################################################################
+plot_limitations_1by1 <- function(pmod, fname) {
+    mask = sum(layer.apply(pmod[-1], is.na)) > 0
+    lim = seq(0, 0.9, by = 0.1)
+    col = c('white', 'black')
+        
+    plot_limitations_1by1 <- function(mod, name) {
+        mod[mask] = NaN
+        plot_raster(mod, lim, col, quick = TRUE)
+        mtext(name, line = -1.5)
+    }
+    fname = paste(fig_fname_indiv, fname, '.pdf', sep = '')
+    pdf(fname, height = 5.25, width = 9)
+        mat = rbind(c(1, 2), c(3, 4), c(5, 5))
+        layout(mat, height = c(1, 1, 0.33333))
+        par(mar = rep(0, 4))
+        mapply(plot_limitations_1by1, pmod[-1], c('fuel', 'moisture', 'igntions', 'suppression'))
+        standard_legend(col, lim, pmod[[2]], plot_loc = c(0.2,0.8,0.65,0.78))
+    dev.off.gitWatermark()
+}
+
+plot_limitations_1by1(aa_lm_mod, 'aa')
+plot_limitations_1by1(fs_lm_mod, 'fs')
+
 
 ## function for calculating pcs for table
 calculate_weightedAverage <- function(xy, pmod) {
     pmod = layer.apply(pmod, function(i) rasterFromXYZ(cbind(xy, i)))
     pmod = pmod / sum(pmod)
-    pmod = layer.apply(pmod, function(i) sum.raster(i * area(i), na.rm = TRUE))
+    pmod = layer.apply(pmod, function(i) sum.raster(i * raster::area(i), na.rm = TRUE))
     pmod = unlist(pmod)
     pmod = round(100 * pmod / sum(pmod))
     

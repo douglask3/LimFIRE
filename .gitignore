@@ -2,3 +2,9 @@ data/*
 outputs/*
 
 *.swp
+docs/*.sty
+
+*.pdf
+*.aux
+*.log
+*.synctex.gz

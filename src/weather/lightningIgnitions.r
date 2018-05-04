@@ -1,7 +1,8 @@
-lightningIgnitions <- function(L, Pwet) {
+lightningIgnitions <- function(L, Pwet = NULL) {
     CG     = CGlightn(L)
-    lightn = dryLightn(CG, Pwet)
-    return(lightn)
+    
+    if (!is.null(Pwet)) CG = dryLightn(CG, Pwet)
+    return(CG)
 }
 
 CGlightn <- function(L) {
@@ -9,6 +10,7 @@ CGlightn <- function(L) {
     F = 0.0408 * F
     F[F > 1] = 1
     F = L * F
+	F[L == 0] = 0.0
     return(F)
 }
 
