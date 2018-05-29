@@ -1,14 +1,19 @@
 extractEnsamble <- function(ensamble, id, FUN)  apply(sapply(ensamble, function(i) i[[id]]), 1, FUN)
 
+fisherPval <- function(pvals)
+	-2 * sum(log(1 - pvals))
+	
+grabCommonField <- function(rs, i)  layer.apply(rs, function(r) r[[i]])
+
 summary.ens <- function(ens) {
-	grabField <- function(i) layer.apply(ens, function(r) r[[i]])
+	grabField <- function(i) grabCommonField(ens, i)
 	mn = mean(grabField(1))
 	rg = sd.raster(grabField(1))
 	
 	#rg[[1]] < 0 & rg[[2]] > 0
 	#rg = 1 - rg
 	
-	fisher = -2 * sum(log(1 - grabField(2)))
+	fisher = fisherPval(grabField(2))
 	return( addLayer(mn, fisher, rg))
 }
 
