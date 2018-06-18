@@ -4,12 +4,12 @@
 source('cfg.r')
 graphics.off()
 
-polygonsNotPoints = TRUE
-ylog = TRUE
-fracSample    = 200
-grabe_cache   = FALSE
+#polygonsNotPoints set at bootom
+#ylog set at bottom
+fracSample    = 50
+grabe_cache   = TRUE
 obsSampleFile = paste('temp/ObsSample', fracSample, '.Rd', sep = '-')
-obsLimsFile   = 'temp/ObsLimsEGs-Tree-alphasMax5.Rd'
+obsLimsFile   = 'temp/ObsLimsEGs-Tree-alphasMax7.Rd'
 if (file.exists(obsSampleFile) & grabe_cache) load(obsSampleFile) else {
 	if (file.exists(obsLimsFile)) load(obsLimsFile) else {
 		Obs        = openAllObs()
@@ -46,15 +46,19 @@ pntObs =  lapply(pntObs, function(i) apply(i, 2, quantile, c(0.1, 0.5, 0.9)))
 #pntObs[[1]][,'ignitions'] = pntObs[[3]][,'ignitions'] * 2.5
 
 
-plotScatter <- function(name, col, yg = NULL, FUN, dFUN, x0, k, ksc, log = '', 
+plotScatter <- function(name, col, yg = NULL, FUNi, dFUNi, x0, k, ksc, log = '', 
 						x2pc = FALSE, plot = c(T, T, T, T),plotGrad = TRUE, xlim = c(0, 100), ...) {
-	colp = make.transparent('black', 0.95)
+		
+	if (ksc < 0) {
+		FUN  <- function(x, ...)  FUNi(x,...) / FUNi(0, ...)
+		dFUN <- function(x, normalise = FALSE,...) dFUNi(x, normalise = normalise, ...) / FUNi(0, ...)
+	} else {
+		 FUN <- function(...)  FUNi(...)
+		dFUN <- function(...) dFUNi(...)
+	}
 	
 	if (log == 'x') Obs[, name] = log(Obs[,name])
-	if (x0 == 'suppression_x0') sc = 1 - FUN(0, param(x0), param(k)) else sc = 1
-	print(sc)
 	
-	if (polygonsNotPoints) type = 'n' else type = 'p'
 	if (ylog) {
 		log = 'y'
 		if (polygonsNotPoints) ymin = 0.001 else ymin = 0.001
@@ -63,10 +67,18 @@ plotScatter <- function(name, col, yg = NULL, FUN, dFUN, x0, k, ksc, log = '',
 		ymin = 0.0
 	}
 	
-	plot(Obs[, name], Obs[, 'fire'], pch = 19, col = colp, ylim = c(ymin, 1.0),  xlim = xlim,
-	  	 xaxt = 'n', xlab = '', ylab = '', yaxt = 'n', type = type, log = c('','y')[ylog + 1], ...)
+	plot(Obs[, name], Obs[, 'fire'], ylim = c(ymin, 1.0),  xlim = xlim,
+	  	 xaxt = 'n', xlab = '', ylab = '', yaxt = 'n', type = 'n', log = c('','y')[ylog + 1], ...)
 		
-	if (polygonsNotPoints) quantileDesnityPoly(Obs[, name], Obs[, 'fire'], xlim = xlim)	
+	if (polygonsNotPoints) {
+		quantileDesnityPoly(Obs[, name], Obs[, 'fire'], xlim = xlim)	
+	} else {
+		obsPoints <- function(cex, alpha, col) {
+			colp = make.transparent(col, alpha)	
+			points(Obs[, name], Obs[, 'fire'], pch = 19, cex = cex, col = colp)
+		}
+		mapply(obsPoints, seq(1.0, 0.1, -0.1), 1-(1:10)/255,  make_col_vector(c("white", "black"), ncols = 10))
+	}
 	
 	if (log == 'x') {
 		mnX = exp(min(Obs[,name]))
@@ -90,9 +102,11 @@ plotScatter <- function(name, col, yg = NULL, FUN, dFUN, x0, k, ksc, log = '',
 	
 	x = Obs[index, name]
 	#y0 = y
+	
 	y = mapply(FUN, paramSample(x0), ksc * paramSample(k), MoreArgs=list(x = Obs[index, name]))
 	y = apply(y, 1, quantile, c(0,0.5, 1)) 
-	y = y / sc
+	
+	
 	#apply(y, 2, lines, x = x, lty = 1, lwd = 2,  col = make.transparent('black', 0.98))
 	apply(y, 1, lines, x = x, lty = 2)
 	lines(x, y[2,])
@@ -109,8 +123,8 @@ plotScatter <- function(name, col, yg = NULL, FUN, dFUN, x0, k, ksc, log = '',
 		
 		x = i[2,name]
 		if (is.null(yg)) {
-			y = FUN(x, param(x0), ksc * param(k))	/ sc
-			g = dFUN(x, param(x0), ksc * param(k), normalise= FALSE) / sc	
+			y = FUN(x, param(x0), ksc * param(k))	#/ sc
+			g = dFUN(x, param(x0), ksc * param(k), normalise= FALSE) #/ sc	
 		} else 	{
 			c(y, g) := yg[, index]
 			gmax =  dFUN(param(x0), param(x0), ksc * param(k), normalise= FALSE)
@@ -210,7 +224,7 @@ plotAll <- function(fname0 = NULL, fuel = NULL, moisture = NULL,
 	return(list(fuel, moisture, ignitions, suppression))
 }
 
-allThePlottingPlease <- function(fname, ...) {
+plotByYlog <- function(fname, ...) {
 	c(fuel, moisture, ignitions, suppression) := plotAll(fname, ...)
 
 	suppCon = 1 - LimFIRE.supression(0, param('suppression_x0'), param('suppression_k'))
@@ -246,15 +260,29 @@ allThePlottingPlease <- function(fname, ...) {
 	}
 }
 
+plotAllThese <- function() {
+	plotByYlog('noGrad', plotGrad = FALSE)
+	plotByYlog('empty', plot = c(F, F, F, F), plotGrad = FALSE)
+	plotByYlog('noGrad-Desert', plot = c(T, F, F, F), plotGrad = FALSE)
+	plotByYlog('noGrad-Rainforest', plot = c(T, T, F, F), plotGrad = FALSE)
+	plotByYlog('noGrad-Savanna', plot = c(T, T, T, F), plotGrad = FALSE)
 
-allThePlottingPlease('noGrad', plotGrad = FALSE)
-allThePlottingPlease('empty', plot = c(F, F, F, F), plotGrad = FALSE)
-allThePlottingPlease('noGrad-Desert', plot = c(T, F, F, F), plotGrad = FALSE)
-allThePlottingPlease('noGrad-Rainforest', plot = c(T, T, F, F), plotGrad = FALSE)
-allThePlottingPlease('noGrad-Savanna', plot = c(T, T, T, F), plotGrad = FALSE)
 
+	plotByYlog('')
+	plotByYlog('Desert', plot = c(T, F, F, F))
+	plotByYlog('Rainforest', plot = c(T, T, F, F))
+	plotByYlog('Savanna', plot = c(T, T, T, F))
+}
 
-allThePlottingPlease('')
-allThePlottingPlease('Desert', plot = c(T, F, F, F))
-allThePlottingPlease('Rainforest', plot = c(T, T, F, F))
-allThePlottingPlease('Savanna', plot = c(T, T, T, F))
+polygonsNotPoints = FALSE
+ylog = FALSE
+plotAllThese()
+
+ylog = TRUE
+plotAllThese()
+
+polygonsNotPoints = TRUE
+plotAllThese()
+
+ylog = FALSE
+plotAllThese()
