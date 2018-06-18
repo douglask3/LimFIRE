@@ -4,7 +4,7 @@
 source('cfg.r')
 graphics.off()
 
-grab_cache = TRUE
+grab_cache = FALSE
 
 fig_fname       = 'figs/limitation_map'
 fig_fname_indiv = 'figs/ind_limiataions'
@@ -13,7 +13,7 @@ fig_fname_indiv = 'figs/ind_limiataions'
 labs = c('Raw limitation', 'Potential limitation', 'Control sensitivity',
          '', '', '')
 
-ens_tfile = 'temp/limitation_maps_ens2'
+ens_tfile = 'temp/limitation_maps_ens3'
 mod_files = paste(temp_dir, '/LimFIRE_',
                  c('fire', 'fuel','moisture','ignitions','supression'),
                   sep = '')
@@ -22,19 +22,28 @@ niterations = 11
 #########################################################################
 ## Run model                                                           ##
 #########################################################################
-findParameterLimitation <- function(line) {
-	mod_files = paste(mod_files, '-paramLine', line, sep = "")
-	rw_mod_files = paste(mod_files,    '-rw', sep = '')
-	lm_mod_files = paste(mod_files,    '-lm', sep = '')
-	sn_mod_files0 = paste(mod_files,    '-sn', sep = '')
-	sn_mod_files = paste(mod_files,    '-sn-ws', sep = '')
-                  
 
-	runLimFIRE <- function(fname, ...){
-		fname = paste(fname,    '.nc', sep = '')
-		return(runIfNoFile(fname, runLimFIREfromstandardIns, pline = line, test = grab_cache, ...))
+open_ensemble <- function(dir, vars = c('lm', 'rw', 'sn', 'sn-ws')) {
+	files = list.files(dir, full.names = TRUE)            
+	
+	openSet <- function(st) {
+		st = paste('-', st, '.nc', sep = '')
+		files = files[grepl(st, files)]
 	}
+	
+	mod = lapply(vars, openSet)
+	return(mod)
+}
 
+findParameterLimitation <- function(dir) {
+	#mod_files = paste(mod_files, '-paramLine', line, sep = "")
+	#rw_mod_files = paste(mod_files,    '-rw', sep = '')
+	#lm_mod_files = paste(mod_files,    '-lm', sep = '')
+	#sn_mod_files0 = paste(mod_files,    '-sn', sep = '')
+	#sn_mod_files = paste(mod_files,    '-sn-ws', sep = '')
+    
+	mod = open_ensemble(dir)
+	browser()
 	lm_mod = runLimFIRE(lm_mod_files, normalise = TRUE, add21 = TRUE)
 	rw_mod = runLimFIRE(rw_mod_files, raw = TRUE, normalise = TRUE)
 	sn_mod = runLimFIRE(sn_mod_files0, sensitivity = TRUE)
@@ -125,10 +134,11 @@ findParameterLimitation <- function(line) {
 	return(list(aa_rw_mod, aa_lm_mod, aa_sn_mod, fs_rw_mod, fs_lm_mod, fs_sn_mod))
 }
 niterations = 11
-
+dirs = list.dirs('outputs/')
+dirs = dirs[grepl('ensemble_', dirs)]
 ens_tfile = paste(ens_tfile, niterations, '.Rd', sep = '-')
 if (file.exists(ens_tfile)) load(ens_tfile) else {
-	ensamble = lapply(seq(0, 1, length.out = niterations), findParameterLimitation)
+	ensamble = lapply(dirs, findParameterLimitation)
 	ensambleSum =  lapply(1:length(ensamble[[1]]),
 					      function(i) extractEnsamble(ensamble, i, mean90quant.ens))
 	save(ensamble, ensambleSum,  file = ens_tfile)
