@@ -12,12 +12,7 @@ limitTitles = c('e) Fire', 'a) Fuel', 'b) Moisture', 'c) Ignitions', 'd) Suppres
 
 tempF1 = 'temp/limitations4trends-Tree-alphaMax2'
 tempF2 = 'temp/trendsFromLimitations-Tree-alphaMax2'
-esnambleTemp <- 'temp/ensamble4'
-
-tempFile <- function(fnames, extraName = '') {
-	fnames = paste(fnames, extraName, sep = '')
-	fnames = paste(fnames, c('fire', 'fuel', 'moisture', 'igntions', 'suppression'), '.nc', sep = '-')
-}
+esnambleTemp <- 'temp/ensamble_12FFonly4'
 
 dfire_lims = c(-5, -2, -1, -0.5, -0.2, -0.1, 0.1, 0.2, 0.5, 1, 2, 5)/100
 dfire_cols = c('#000033', '#0099DD', 'white', '#DD9900', '#330000')
@@ -25,41 +20,42 @@ prob_lims = c(0.001, 0.01, 0.05)
 
 limit_cols = list(c('magenta', 'white', 'green'), c('yellow', 'white', 'blue'), c('cyan', 'white', 'red'), c('white', '#111111'))
 
-niterations = 21
+Nensmble = 20
 factor = 1
 
 #########################################################################
 ## Run model                                                           ##
 #########################################################################
-findParameterTrends <- function(line, factor, 
-							    simpleTrend = FALSE, seasonTrend = FALSE) {
-	print(line)
-	fnameLine = paste('paramLine', line, sep = "")
-	tempF1A = tempFile(tempF1, fnameLine)
-	lims  = runIfNoFile(tempF1A, runLimFIREfromstandardIns, raw = TRUE, pline = line, 
-					    test = grab_cache)
+tempFile <- function(fnames, extraName = '') {
+       fnames = paste(fnames, extraName, sep = '')
+       fnames = paste(fnames, c('fire', 'fuel', 'moisture', 'igntions', 'suppression'), '.nc', sep = '-')
+}
+
+findParameterTrends <- function(files, factor) {
+	files = files[[2]]
+	files = files[c(1, 2, 4, 3, 5)]
+	lims = lapply(files, brick)
+	
+	ensID = strsplit(files[1], '/')[[1]]
+	ensID = ensID[grepl('ensemble_', ensID)]
 		
 	if (factor != 1) {
-		fnameLine = paste(fnameLine, '-factor', factor, sep = '')
-		tempF1B = tempFile(tempF1, fnameLine)
-		aggregateFUN <- function()  lapply(lims, raster::aggregate, factor = factor)
+		ensID = paste(ensID, '-factor', factor, sep = '')
+		tempF1B = tempFile(tempF1, ensID)
+		aggregateFUN <- function()  lapply(lims, raster::aggregate, factor)
 		lims = runIfNoFile(tempF1B, aggregateFUN, test = grab_cache)
 	}
-	
-	lims[[2]] = lims[[2]] -  LimFIRE.fuel(0, param('fuel_x0'), param('fuel_k'))
-	fire = lims[[1]]
-	print(line)
-
 
 	#########################################################################
 	## Find  Trends                                                        ##
 	#########################################################################
 	findTrend <- function(lno, smoothFun = running12, 
-						  trendFUN = Trend, removeFire = FALSE) {
+						  trendFUN = Trend, removeFire = FALSE, ...) {
 		
 		if (removeFire) lims = lims[-1]
 		lim  = lims[[lno]]
 		lims = lims[-lno]
+		if (!removeFire) lims = NULL
 		return(trendFUN(lim, smoothFun, lims))
 	}
 
@@ -83,81 +79,53 @@ findParameterTrends <- function(line, factor,
 	#########################################################################
 	## Simple Trends                                                       ##
 	#########################################################################	
-	trend12 = findTrendNoFile(running12, Trend, tempF2, fnameLine, fireOnly = !simpleTrend)
+	trend12 = findTrendNoFile(running12, removeTrend, tempF2, ensID, fireOnly = TRUE)
 	trend12[[1]][[1]] = trend12[[1]][[1]] * 100 * 14 * 12
+	
 	#########################################################################
 	## Trend removal                                                       ##
 	#########################################################################
 
 
 	trend12F = findTrendNoFile(running12, removeTrend, tempF2,
-							   paste('removeTrend', fnameLine, sep = '-'), trend1 = trend12[[1]])
+							   paste('removeTrend', ensID, sep = '-'), trend1 = trend12[[1]])
 	
 	
 	## weigted by fire
-	trend12FFname = tempFile(tempF2, paste('removeTrendAndNormalise', fnameLine, sep = '-'))
+	trend12FFname = tempFile(tempF2, paste('removeTrendAndNormalise', ensID, sep = '-'))
 	sfire = runIfNoFile(tempFile(tempF2, '-sfire')[1], function() sum(fire), test = TRUE)
 	trend12FF = runIfNoFile(trend12FFname,
 							function() lapply(trend12F, function(i) {i[[1]] = i[[1]] / sfire; return(i)}), test = TRUE)
 	
-	#########################################################################
-	## During fire season                                                  ##
-	######################################################################### 
-	findFireMonth <- function(yr) {
-		mn = (1 + (yr -1) * 12):(yr*12)
-		fmax = fire[[mn]]
-		return(which.max(fmax))
-	}
-
-	fireSeasonLim <- function(x, ...) {
-
-		mask = !is.na(x[[1]])
-		vx = x[mask]
-		fireMonths = fireMonths[mask]
-		
-		xoutv = vx[,1:nyrs]
-		
-		for (i in 1:(dim(xoutv)[1])) for (j in 1:nyrs)  xoutv[i,j] = vx[i,fireMonths[i,j]]
-		
-		xout = x[[1:nyrs]]
-		xout[mask] = xoutv
-		return(xout)
-	}
-	if (seasonTrend) {
-		nyrs = (nlayers(fire)/12)
-		fireMonths = layer.apply(1:nyrs, findFireMonth)
-		trendFS = findTrendNoFile(fireSeasonLim, Trend, tempF2,  trend1 = trend12[[1]], 'season')
-	} else trendFS = NULL
-	
-	
-	return(list(trend12, trend12F, trend12FF, trendFS, lapply(lims, mean)))
+	return(trend12FF)
 }
 
-esnambleTemp = paste(esnambleTemp, niterations, sep = '-')
 if (file.exists(esnambleTemp)) {
 	load (esnambleTemp)
 } else {
-	ensamble = lapply(seq(0, 1, length.out = niterations), findParameterTrends, factor)
+	ens_files = open_ensembles()
+	ensamble = lapply(ens_files[1:Nensmble], findParameterTrends, factor)
 	save(ensamble, file = esnambleTemp)
 }
 
-findIndex <- function(member, id = 3) {
-	member = member[[id]][-1]
+findIndex <- function(member) {
+	member = member[-1]
 	trendIndex = 100 * (prod(layer.apply(member, function(i) 1 + abs(i[[1]])/10)) - 1)
 	pvals = mean(layer.apply(member, function(i) i[[2]]))
 	return(addLayer(trendIndex, pvals))
 }
 
-#lims      = extractEnsamble(ensamble, 5,   brick.ens)
-#trend12F  = extractEnsamble(ensamble, 2, summary.ens)
-trend12FF = extractEnsamble(ensamble, 3, summary.ens)
+extractEnsamble <- function(id, FUN)
+	 summary.ens(lapply(ensamble, function(i) i[[id]]))
+
+trend12FF = lapply(1:5, extractEnsamble, summary.ens)	
 trendIndex = lapply(ensamble, findIndex)
 trendVals = layer.apply(trendIndex, function(i) i[[1]])
 trendIndex = addLayer(mean(trendVals),
 					  fisherPval(grabCommonField(trendIndex, 2)),
 					  sd.raster(trendVals))
 trendIndex[[2]][is.na(trendIndex[[2]]) & !is.na(trendIndex[[1]])] = 0.0      
-prob_lims = qchisq(c(0.9, 0.95, 0.99, .999), niterations)[2]
+prob_lims = qchisq(c(0.9, 0.95, 0.99, .999), Nensmble)[2]
 
 
 #########################################################################

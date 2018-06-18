@@ -2,7 +2,7 @@ findRasterTrend <- function(r, seasonal = FALSE, mask = NULL, factor = 1) {
 	
 	if (factor > 1) r = aggregate(r, factor)
 	if (is.null(mask)) mask = !is.na(r[[1]])
-
+	
 	findSubsetTrend <- function(vr) {				
 		lmFUN <- function(y) {
 			fit = lm(as.vector(y) ~ c(1:length(y)))
@@ -35,22 +35,30 @@ Trend <- function(r, smoothFun = running12, ...) {
 }
 
 
-removeTrend <- function(r, smoothFun = running12, rs, ...) {
-	fireUnControl = rs[[1]] * rs[[2]] * rs[[3]]
-	fireControl = r * fireUnControl
-	r0 = r
+removeTrend <- function(r, smoothFun = running12, rs = NULL, ...) {
 	
+	if (is.null(rs)) fireUnControl = 1
+	else fireUnControl = rs[[1]] * rs[[2]] * rs[[3]] 
+	fireControl = r * fireUnControl
+	
+	r0 = r
 	mask = !is.na(fireControl[[1]])
+	
+	r = (r*(nlayers(r) - 1) + 0.5) /nlayers(r) 
+	r = log(r/(1-r))
+	
 	trends = findRasterTrend(r, seasonal = TRUE, mask = mask,...)
-		
+	
 	removeTrend <- function(i) {
 		mn = 12*(i/12-floor(i/12))
 		yr = ceiling(i/12)
 		if (mn==0) mn = 12
 		return(r[[i]] - trends[[mn]][[1]] * yr)
 	}
-	r  = layer.apply(1:nlayers(r), removeTrend)
-		
+	r  = layer.apply(1:nlayers(r), removeTrend)	
+	
+	r = f1(r, 0, 1)
+	r = (nlayers(r) * r - 0.5)/(nlayers(r) - 1)
 	#r = layer.apply(1:nlayers(r), function(i) r[[i]] - trend[[1]] * i)
 	
 	fireTrendRm = r * fireUnControl
