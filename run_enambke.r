@@ -6,8 +6,8 @@ source('cfg.r')
 grab_cache = TRUE
 
 	  
-nensembles = 1320	  
-niterations = 1320+1
+nensembles = 3000	  
+niterations = 19
 #########################################################################
 ## Run model                                                           ##
 #########################################################################
@@ -45,12 +45,12 @@ findParameterLimitation <- function(line) {
 		return(sn_mod)
 	}
 
-	ws_mod = runIfNoFile(paste(sn_mod_files, '.nc', sep = ''), weightedSensitivity, test = grab_cache)
+	ws_mod = runIfNoFile(paste(ws_mod_files, '.nc', sep = ''), weightedSensitivity, test = grab_cache)
 	
 	return(c(rw_mod_files,  lm_mod_files, sn_mod_files, ws_mod_files))
 	
 }
-lines= seq(0, 1, length.out = niterations)
+lines= seq(0, 1, length.out = nensembles + 1)
 lines = sample(lines, niterations, replace = FALSE)
 files = sapply(lines, findParameterLimitation)
 
