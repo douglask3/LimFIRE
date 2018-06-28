@@ -32,7 +32,7 @@ loadData4Ecosystem_analysis <- function() {
 			#plot.new()
 			legend('bottomleft', legend = names(biomes)[-1], col = biomesCols[-1], pch = 15, bty = 'n', ncol = 2, cex = 1.0, pt.cex = 2) 
 		dev.off() 	
-		save(lims, trend12F,  trend12FF, fireTrend, fireMean, biomeAssigned, biome, varMns, trends,prob_lims, trendIndex,
+		save(ensamble,  trend12FF, fireTrend, fireMean, biomeAssigned, biome, varMns, trends,prob_lims, trendIndex1, trendIndex2, 
 			 file = tempFile4Eco)
 	} else load(tempFile4Eco, envir = .GlobalEnv)
 	

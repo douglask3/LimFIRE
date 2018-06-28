@@ -34,6 +34,24 @@ Trend <- function(r, smoothFun = running12, ...) {
 	return(findRasterTrend(r))
 }
 
+squishBounds <- function(r, n = nlayers(r)) 
+	(r*(n - 1) + 0.5) /n
+
+
+unsquishBounds <- function(r, n = nlayers(r)) 
+	(n * r - 0.5)/(n - 1)
+
+logistic <- function(r, unsquish = TRUE, ...) {
+	r = f1(r, 0, 1)
+	if (unsquish) r = unsquishBounds(r, ...)
+	return(r)
+}
+	
+logitFun <- function(r, squish = TRUE, ...) {
+	if (squish) r = squishBounds(r, ...)
+	r = log(r/(1-r))
+	return(r)
+}
 
 removeTrend <- function(r, smoothFun = running12, rs = NULL, ...) {
 	
@@ -44,8 +62,7 @@ removeTrend <- function(r, smoothFun = running12, rs = NULL, ...) {
 	r0 = r
 	mask = !is.na(fireControl[[1]])
 	
-	r = (r*(nlayers(r) - 1) + 0.5) /nlayers(r) 
-	r = log(r/(1-r))
+	r = logitFun(r)
 	
 	trends = findRasterTrend(r, seasonal = TRUE, mask = mask,...)
 	
@@ -57,15 +74,14 @@ removeTrend <- function(r, smoothFun = running12, rs = NULL, ...) {
 	}
 	r  = layer.apply(1:nlayers(r), removeTrend)	
 	
-	r = f1(r, 0, 1)
-	r = (nlayers(r) * r - 0.5)/(nlayers(r) - 1)
+	r = logistic(r)
+	
 	#r = layer.apply(1:nlayers(r), function(i) r[[i]] - trend[[1]] * i)
 	
 	fireTrendRm = r * fireUnControl
-	fireTrendRm = fireControl - fireTrendRm
+	fireTrendDf = fireControl - fireTrendRm
 	
-	trend = trends[[1]]
-	trend[[1]] = sum(fireTrendRm)
-	trend[[2]] = mean(layer.apply(trends, function(t) t[[2]]))
+	trend = sum(fireTrendDf)
+	for (i in trends) trend = addLayer(trend, i[[1]])
 	return(trend)
 }

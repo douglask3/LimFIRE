@@ -12,7 +12,7 @@ limitTitles = c('e) Fire', 'a) Fuel', 'b) Moisture', 'c) Ignitions', 'd) Suppres
 
 tempF1 = 'temp/limitations4trends-Tree-alphaMax2'
 tempF2 = 'temp/trendsFromLimitations-Tree-alphaMax2'
-esnambleTemp <- 'temp/ensamble_12FFonly4'
+esnambleTemp <- 'temp/ensamble_12FFonly15'
 
 dfire_lims = c(-5, -2, -1, -0.5, -0.2, -0.1, 0.1, 0.2, 0.5, 1, 2, 5)/100
 dfire_cols = c('#000033', '#0099DD', 'white', '#DD9900', '#330000')
@@ -20,7 +20,7 @@ prob_lims = c(0.001, 0.01, 0.05)
 
 limit_cols = list(c('magenta', 'white', 'green'), c('yellow', 'white', 'blue'), c('cyan', 'white', 'red'), c('white', '#111111'))
 
-Nensmble = 20
+Nensmble = 25
 factor = 1
 
 #########################################################################
@@ -45,6 +45,8 @@ findParameterTrends <- function(files, factor) {
 		aggregateFUN <- function()  lapply(lims, raster::aggregate, factor)
 		lims = runIfNoFile(tempF1B, aggregateFUN, test = grab_cache)
 	}
+	
+	fire = lims[[1]]
 
 	#########################################################################
 	## Find  Trends                                                        ##
@@ -80,7 +82,7 @@ findParameterTrends <- function(files, factor) {
 	## Simple Trends                                                       ##
 	#########################################################################	
 	trend12 = findTrendNoFile(running12, removeTrend, tempF2, ensID, fireOnly = TRUE)
-	trend12[[1]][[1]] = trend12[[1]][[1]] * 100 * 14 * 12
+	trend12[[1]][[1]] = trend12[[1]][[1]] * 100 #* 14 * 12
 	
 	#########################################################################
 	## Trend removal                                                       ##
@@ -93,9 +95,9 @@ findParameterTrends <- function(files, factor) {
 	
 	## weigted by fire
 	trend12FFname = tempFile(tempF2, paste('removeTrendAndNormalise', ensID, sep = '-'))
-	sfire = runIfNoFile(tempFile(tempF2, '-sfire')[1], function() sum(fire), test = TRUE)
+	sfire = runIfNoFile(tempFile(tempF2, '-sfire')[1], function() sum(fire), test = FALSE)
 	trend12FF = runIfNoFile(trend12FFname,
-							function() lapply(trend12F, function(i) {i[[1]] = i[[1]] / sfire; return(i)}), test = TRUE)
+							function() lapply(trend12F, function(i) {i[[1]] = i[[1]] / sfire; return(i)}), test = FALSE)
 	
 	return(trend12FF)
 }
@@ -107,7 +109,7 @@ if (file.exists(esnambleTemp)) {
 	ensamble = lapply(ens_files[1:Nensmble], findParameterTrends, factor)
 	save(ensamble, file = esnambleTemp)
 }
-
+browser()
 findIndex <- function(member) {
 	member = member[-1]
 	trendIndex = 100 * (prod(layer.apply(member, function(i) 1 + abs(i[[1]])/10)) - 1)
@@ -118,14 +120,27 @@ findIndex <- function(member) {
 extractEnsamble <- function(id, FUN)
 	 summary.ens(lapply(ensamble, function(i) i[[id]]))
 
-trend12FF = lapply(1:5, extractEnsamble, summary.ens)	
-trendIndex = lapply(ensamble, findIndex)
-trendVals = layer.apply(trendIndex, function(i) i[[1]])
-trendIndex = addLayer(mean(trendVals),
-					  fisherPval(grabCommonField(trendIndex, 2)),
-					  sd.raster(trendVals))
-trendIndex[[2]][is.na(trendIndex[[2]]) & !is.na(trendIndex[[1]])] = 0.0      
-prob_lims = qchisq(c(0.9, 0.95, 0.99, .999), Nensmble)[2]
+trend12FF = lapply(1:5, function(i) layer.apply(ensamble, function(ens) ens[[i]][[1]]))
+
+make_trend_index_local <- function(ens, files, name = 'trendIndex1', ...) {
+	tfname = head(strsplit(files[[1]][1], '/')[[1]], -1)
+	tfname = paste(tfname, collapse = '/')
+	tfname = paste(tfname, paste(name, '.nc', sep = ''), sep = '/')
+	print(tfname)
+	out = runIfNoFile(tfname, make_trend_index, ens, files, ..., test = grab_cache)
+	return(out)
+}
+
+trendIndex1 = mapply(make_trend_index_local, ensamble, ens_files[1:Nensmble])
+trendIndex2 = mapply(make_trend_index_local, ensamble, ens_files[1:Nensmble], MoreArgs = list('trendIndex2', absTrend = TRUE))
+
+#trendIndex = lapply(ensamble, findIndex)
+#trendVals = layer.apply(trendIndex, function(i) i[[1]])
+#trendIndex = addLayer(mean(trendVals),
+#					  fisherPval(grabCommonField(trendIndex, 2)),
+#					  sd.raster(trendVals))
+#trendIndex[[2]][is.na(trendIndex[[2]]) & !is.na(trendIndex[[1]])] = 0.0      
+#prob_lims = qchisq(c(0.9, 0.95, 0.99, .999), Nensmble)[2]
 
 
 #########################################################################
@@ -202,10 +217,10 @@ plotHotspots <- function(trends, figName, limits = dfire_lims, fire_limits = lim
 		#			  function(cl) apply(cv[vclusters == cl,], 2,
 		#							 function(i) list(quantile(i, c(0.1, 0.9)))))
 		
-		cols = cbind(cols	, list(c(Productive = '#00FF00', Arid = '#FF00FF'),
-								c(Drier = '#FFFF00', Wetter = '#0000FF'),
-								c("More Ignitions" = '#FF0000',"Less Ignitions" = '#00FFFF'),
-								c(Wilding = 0, Suppressing = 2)))
+		cols = cbind(cols	, list(c(Productive = '#00FF00'      , Arid = '#FF00FF'),
+								   c(Drier = '#FFFF00'           , Wetter = '#0000FF'),
+								   c("More Ignitions" = '#FF0000',"Less Ignitions" = '#00FFFF'),
+								   c(Wilding = 0                 , Suppressing = 2)))
 		
 		findCol <- function(x, cols = NULL) {
 			
@@ -231,7 +246,7 @@ plotHotspots <- function(trends, figName, limits = dfire_lims, fire_limits = lim
 			ud[wmax] = 2
 			return(c(y,z, ud))
 		}
-		
+		browser()
 		cols = apply(cols, 1, findCol) 
 	
 		fireChange <- function(clst) {
@@ -387,10 +402,10 @@ if (!is.True(dontPlot)) {
 	#			 fire_limits = c(-1, -0.5, -0.1, -0.05, -0.01, 0.01, 0.05, 0.1, 0.5, 1), 
 	#			 scaling = 120)
 	
-	plotHotspots(trend12FF, 'figs/trend12FFTest.png', limits = dfire_lims*100,
-				 #fire_limits = c(-1, -0.5, -0.1, -0.05, -0.01, 0.01, 0.05, 0.1, 0.5, 1), 
-				 fire_limits = c(-20, -10, -5, -2, -1,  1, 2, 5, 10, 20), 
-				 lims4way = c(1, 10, 100), scaling = 10)
+	#plotHotspots(trend12FF, 'figs/trend12FFTest.png', limits = dfire_lims*100,
+	#			 #fire_limits = c(-1, -0.5, -0.1, -0.05, -0.01, 0.01, 0.05, 0.1, 0.5, 1), 
+	#			 fire_limits = c(-20, -10, -5, -2, -1,  1, 2, 5, 10, 20), 
+	#			 lims4way = c(1, 10, 100), scaling = 10)
 	#plotHotspots(trendFS  , 'figs/trendFS.png'  , limits = dfire_lims * 100)
 }
 
