@@ -23,21 +23,9 @@ plotControl <- function(trd, nme, sc = 1, limits = trend_lims, cols = dfire_cols
 	mtext(nme, adj = 0.02, line = -1.2, cex = 0.9)
 }
 
-##########
-## Control Trend
-##########
-
-plotStandardMap <- function(x, txt, limits, cols, ...) {
-	
-    plot_raster_from_raster(x, y_range = c(-60, 90), limits = limits, cols = cols,
-                            transpose = FALSE, srt = 0,
-                            plot_loc = c(0.35,0.83,0.01,0.04),
-                            quick = TRUE, ...)
-    mtext(txt,side = 1, line = -3.33)
-}
-
-
-if (1 == 0	) {
+##########################################
+## Plot trends in controls              ##
+##########################################
 fname = paste(figName, 'controls.png', sep = '-')
 png(fname, height = 4, width = 8, units = 'in', res = 300)
 	layout(rbind(1:2, 3:4, c(5, 5)), heights = c(1,1, 0.3))
@@ -50,13 +38,14 @@ png(fname, height = 4, width = 8, units = 'in', res = 300)
 					   transpose = FALSE, plot_loc = c(0.25, 0.75, 0.75, 0.9), ylabposScling=0.85)
 	mtext(cex = 0.8, side = 1, '% change in area burnt', line = -1)
 dev.off()
-}
 
 grabFirst <- function(lr) layer.apply(lr, function(r) r[[1]])
 trendIndex = list(grabFirst(trendIndex1), grabFirst(trendIndex2))
 trendIndex = lapply(trendIndex, function(i) {i[is.infinite(i)] = NaN; i})
 
-
+##########################################
+## Trends in burnt area and fire regime ##
+##########################################
 fname = paste(figName, 'trendIndicies.png', sep = '-')
 png(fname, height = 4 * 3.3/2.3, width = 4, units = 'in', res = 300)
 	
@@ -65,31 +54,18 @@ png(fname, height = 4 * 3.3/2.3, width = 4, units = 'in', res = 300)
 						limits = index_lims, cols = list(dfire_cols, fire_cols),
 						sc = 100/14, add_legend = TRUE)
 	
+
+##########################################
+## Plot attribution map                 ##
+##########################################
 	trend = trendIndex[[2]]	
 	mask  = mean(trend) > 0.5 & !is.na(trend[[1]])	
-	
-	quantile.raster <- function(r, ...) {
-	
-		mask = is.na(sum(r)) 
-		rv = r[!mask]
-		qnt = apply(rv, 1, quantile, ...)
-		
-		r = r[[1]]
-		r = apply(qnt, 1, function(i) {r[!mask] = i; r})
-		r = layer.apply(r, function(i) i)
-		
-		return(r)
-	}
 	
 	controlTrendsLoc <- function(cntr) {
 		cntr[[1]][!mask] = NaN
 		out = cntr[[1]]
 		out[] = 0
 		cntr = quantile.raster(cntr, c(0.1, 0.9))
-		#out[cntr[[2]] < -sin(2 * pi * 67.5/360)] = -1
-		#out[cntr[[1]] > sin(2 * pi * 67.5/360)] = 1
-		#browser()
-		#out[!mask] = NaN
 		out = sum(cntr > 0)-1
 		
 		return(out)
@@ -99,13 +75,6 @@ png(fname, height = 4 * 3.3/2.3, width = 4, units = 'in', res = 300)
 	
 	combinations = c()
 	id = c(-1, 0, 1)
-	
-	cols = rbind(c('#00FF00', '#FF00FF'),
-		         c('#FFFF00', '#0000FF'),
-		         c('#FF0000', '#00FFFF'),
-			     c(0        , 2))
-				 
-	
 	
 	cols = rbind(c('#00FF00', '#FF0000'),
 		         c('#FFFF00', '#0000FF'),
@@ -143,7 +112,6 @@ png(fname, height = 4 * 3.3/2.3, width = 4, units = 'in', res = 300)
 
 	plotStandardMap(tmap, '', limits = (1:nrow(combinations)) - 0.5, cols  = c('white', combinations[,7]), add_legend = FALSE)
 	
-	### legend 1: Productive and Wet
 	addLegend <- function(f, m, title, x, y) {
 		test = which(combinations[,2] == f & combinations[,3] == m)
 		test = test[1:(length(test)/3)]
@@ -179,74 +147,4 @@ png(fname, height = 4 * 3.3/2.3, width = 4, units = 'in', res = 300)
 	addLegend(-1, 0, "Arid", -80, -120)
 	addLegend(0, 1, "Dry", 20, -120)
 	addLegend(0, -1, "Wet", 120, -120)
-	
-	#mask = !is.na(trendIndex[[2]][[1]])
-	#tv = trendIndex[[2]][mask]
-	
-	#tmin = apply(tv, 1, quantile, 0.5)
-	#plot.new()	
-	#add_raster_legend2(dfire_cols, trend_lims, dat = trend12FF[[2]][[1]],
-	#				   transpose = FALSE, plot_loc = c(0.25, 0.75, 0.75, 0.9), ylabposScling=0.85)
-	#mtext(cex = 0.8, side = 1, '% change in area burnt', line = -1)
 dev.off()
-
-browser()
-
-#####
-    
-
-IAV <- function(r) {
-	sumYear <- function(yr) {
-		mn = 12*(yr - 1) + 1
-		mn = mn:(yr*12)
-		sum(r[[mn]])
-	}
-	yrs =  nlayers(r)/12
-	IA = layer.apply(1:yrs, sumYear)
-	return(sd.raster(IA))
-}
-
-
-
-
-
-simpleStat <- function(ens, FUN) {
-	ens = ens[[2]][[1]]
-	tfileName = paste(strsplit(ens, '.nc')[[1]], '-', FUN, '.nc', sep = '')
-	
-	runFUN <- function() {
-		print(ens)
-		ens = brick(ens)
-		match.fun(FUN)(ens)
-	}
-	runIfNoFile(tfileName, runFUN, test = grab_cache)
-}
-
-#ens_files = open_ensembles()
-#IAV = layer.apply(ens_files, simpleStat, 'IAV')
-#Mean = lapply(ens_files, simpleStat, 'mean')
-
-
-findIndex <- function(member, mn  = 1) {
-	member = member[-1]
-	indexComp <- function(i0) {
-		i = mn * abs(i0[[1]]) + 1
-		#i[i > 11] = 11
-		return(i)
-	}
-	trendIndex =  (prod(layer.apply(member, indexComp)) - 1)/mn
-	return(trendIndex)
-}
-
-trendIndex0 = mapply(findIndex, ensamble, Mean)
-
-trendIndex0 = layer.apply(trendIndex0, function(i) i)
-trendIndex0[trendIndex0 > 4] = 4
-trendSig = trendIndex0 / IAV
-trendSig = trendSig > 4
-trendIndex = addLayer(mean(trendIndex0),
-					  mean(trendSig),
-					  sd.raster(trendIndex0))
-
-dev.new()
-plotControl(trendIndex, '', 100/14, c(1, 2, 5, 10, 20), fire_cols, TRUE)	
