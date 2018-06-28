@@ -5,14 +5,16 @@ source('cfg.r')
 
 grab_cache = TRUE
 
-	  
-nensembles = 3000	  
-niterations = 19
+sensembles = 0	  
+nensembles = 2000	  
+niterations = 10
 #########################################################################
 ## Run model                                                           ##
 #########################################################################
 findParameterLimitation <- function(line) {
+	
 	dir = paste(outputs_dir, 'ensemble_', line * nensembles, '/', sep = "")
+	print(dir)
 	makeDir(dir)
 	
 	mod_files = paste(dir, '/LimFIRE_',
@@ -50,7 +52,7 @@ findParameterLimitation <- function(line) {
 	return(c(rw_mod_files,  lm_mod_files, sn_mod_files, ws_mod_files))
 	
 }
-lines= seq(0, 1, length.out = nensembles + 1)
+lines= seq(sensembles/nensembles, 1, length.out = nensembles + 1 - sensembles)
 lines = sample(lines, niterations, replace = FALSE)
 files = sapply(lines, findParameterLimitation)
 
