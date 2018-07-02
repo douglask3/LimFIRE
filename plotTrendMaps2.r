@@ -16,11 +16,12 @@ grab_cache = TRUE
 
 loadData4Ecosystem_analysis()
 
-plotControl <- function(trd, nme, sc = 1, limits = trend_lims, cols = dfire_cols, add_legend = FALSE) {
+plotControl <- function(trd, nme, sc = 1, limits = trend_lims, cols = dfire_cols, add_legend = FALSE, units = '', ...) {
 	plotStandardMap(mean(trd) * sc, '', limits = limits, cols =  cols, 
 					e = sd.raster(trd), ePatternRes = 30, ePatternThick = 0.2, limits_error = c(1/10, 1/2),
-					add_legend = add_legend)
+					add_legend = add_legend, ...)
 	mtext(nme, adj = 0.02, line = -1.2, cex = 0.9)
+	mtext(cex = 0.8 * 0.8, side = 1, units, line = -2.75, adj = 0.58)
 }
 
 ##########################################
@@ -34,9 +35,9 @@ png(fname, height = 4, width = 8, units = 'in', res = 300)
 	mapply(plotControl, trend12FF[-1], limFnames[-1], 1)
 
 	plot.new()	
-	add_raster_legend2(dfire_cols, trend_lims, dat = trend12FF[[2]][[1]],
-					   transpose = FALSE, plot_loc = c(0.25, 0.75, 0.75, 0.9), ylabposScling=0.85)
-	mtext(cex = 0.8, side = 1, '% change in area burnt', line = -1)
+	add_raster_legend2(dfire_cols, trend_lims, dat = trend12FF[[2]][[1]], srt = 0,
+					   transpose = FALSE, plot_loc = c(0.25, 0.75, 0.75, 0.9), ylabposScling=1.5, oneSideLabels = NA)
+	mtext(cex = 0.8, side = 1, '% change in area burnt', line = -2.5)
 dev.off()
 
 grabFirst <- function(lr) layer.apply(lr, function(r) r[[1]])
@@ -47,12 +48,13 @@ trendIndex = lapply(trendIndex, function(i) {i[is.infinite(i)] = NaN; i})
 ## Trends in burnt area and fire regime ##
 ##########################################
 fname = paste(figName, 'trendIndicies.png', sep = '-')
-png(fname, height = 4 * 3.3/2.3, width = 4, units = 'in', res = 300)
+png(fname, height = 1.1 * 4 * 3.3/2.3, width = 4, units = 'in', res = 300)
 	
-	par(mar = rep(0, 4), mfcol = c(3, 1), oma = c(10, 0, 0, 0))
-	mapply(plotControl, trendIndex, c('Controls removed', 'fire regime shift'), 
+	par(mar = rep(0, 4), mfcol = c(3, 1), oma = c(6, 0, 0, 0))
+	mapply(plotControl, trendIndex, c('Normalised Trend in Burnt Area', 'Shift in fire regime'), 
+						units = c('% change in area burnt', '% shift in controls'),
 						limits = index_lims, cols = list(dfire_cols, fire_cols),
-						sc = 100/14, add_legend = TRUE)
+						sc = 100/14, add_legend = TRUE, oneSideLabels = NA, ylabposScling=1.1)
 	
 
 ##########################################
@@ -79,7 +81,7 @@ png(fname, height = 4 * 3.3/2.3, width = 4, units = 'in', res = 300)
 	cols = rbind(c('#00FF00', '#FF0000'),
 		         c('#FFFF00', '#0000FF'),
 		         c('#FFFFFF', '#000000'),
-			     c(0        , 2))
+			     c(1        , -1))
 	
 	colIndex <- function(i) {
 		if (i == -1) return(2)
@@ -88,13 +90,14 @@ png(fname, height = 4 * 3.3/2.3, width = 4, units = 'in', res = 300)
 	}
 	
 	nID = 0
-	tmap = controls[[1]]
+	tmap = controls[[1:2]]
 	tmap[] = 0
 	for (l in id) for (i in id) for (j in  id) for (k in id)  {
 		nID = nID + 1
 		test = (controls[[1]] == i) + (controls[[2]] == j) + (controls[[3]] == k) + (controls[[4]] == l)
 		test = test == 4
-		tmap[test] = nID
+		tmap[[1]][test] = nID
+		tmap[[2]][test] = as.numeric(cols[4, colIndex(l)])
 		
 		num = sum(area(test)[test])
 		
@@ -109,8 +112,12 @@ png(fname, height = 4 * 3.3/2.3, width = 4, units = 'in', res = 300)
 		
 		combinations = rbind(combinations, row)		
 	}
-
-	plotStandardMap(tmap, '', limits = (1:nrow(combinations)) - 0.5, cols  = c('white', combinations[,7]), add_legend = FALSE)
+	
+	plotStandardMap(tmap[[1]], '', limits = (1:nrow(combinations)) - 0.5, cols  = c('white', combinations[,7]),
+					e = tmap[[2]] + 2, e_lims = 1:3,  ePatternRes = 50, ePatternThick = 0.2,
+								ePointPattern = c(25, 0, 24), eThick = c(1.5, 0, 1.5),
+								preLeveled = TRUE, add_legend = FALSE)
+	mtext('Significant Drivers', adj = 0.02, line = -1.2, cex = 0.9)
 	
 	addLegend <- function(f, m, title, x, y) {
 		test = which(combinations[,2] == f & combinations[,3] == m)
@@ -120,31 +127,35 @@ png(fname, height = 4 * 3.3/2.3, width = 4, units = 'in', res = 300)
 		pc = combinations[test, 6]
 		tot = sum(as.numeric(combinations[, 6]))
 		
-		title = paste(title, ' -',  round(100 * sum(as.numeric(pc)) / tot, 0), '%', sep = '')
+		title = paste(title, ' (',  round(100 * sum(as.numeric(pc)) / tot, 0), '%)', sep = '')
 		
 		pc = as.character(standard.round(100 * as.numeric(pc) / tot, 1))
 		
 		pc[as.numeric(pc) < 0.1] = '0.0'
 		pc[nchar(pc) == 1] = paste(pc[nchar(pc) == 1], '.0', sep = '')
 		
-	
-		legend(x, y, c('More ignitions      ', '', 'Less ignitions      '),
-			   col = cols, pch = 15, pt.cex = 2.5,
-			   xpd = NA, title = title, y.intersp = 1.5)
+		cexLeg = 2/3
+		legend(x, y, c('More ignitions          ', '', 'Less ignitions          '),
+			   col = cols, pch = 15, pt.cex = 2.5 * cexLeg, cex = cexLeg,
+			   xpd = NA, title = title, y.intersp = 1.5 * cexLeg, box.col = make.transparent("black", 0.0))
 		
-		legend(x, y, c(pc), bty = 'n', adj = 1.33 * 0.67, title = ' ', cex = 0.67,
-			   xpd = NA, y.intersp = 1.5/0.63,
+		legend(x, y, c(pc), bty = 'n', adj = 0.9 * cexLeg, title = ' ', cex = 0.67 * cexLeg,
+			   xpd = NA, y.intersp = 1.5/0.63 * cexLeg,
 			   pt.cex = 2, col = make.transparent("white", 1.0))
 	}
-	addLegend(1,  1, "Productive, Dry", -180, -60)
-	addLegend(1, -1, "Productive, Wet", -80, -60)
 	
-	addLegend(-1, -1, "Arid, Wet", 20, -60)
-	addLegend(-1,  1, "Arid, Dry", 120	, -60)
+	legend(-170, -20, legend = c('Increased', 'Decreased'), pch = c(25, 24), cex = 2/3, title = 'Suppression', box.col =  make.transparent("black", 1.0), horiz = TRUE) 
+	addLegend(1, -1, "Productive, Wet", -160, -44)
+	addLegend(-1, 1, "Sparse, Dry",    -160, -80)
+	text(-166, -80, 'Counteracting drivers', srt = 90, xpd = NA, cex = 0.8)
 	
+	addLegend(1,  1, "Productive, Dry", -50, -44)
+	addLegend(0, 1, "Dry", 19, -44)
+	addLegend(1,  0, "Productive"     , 88, -44)
+	text(-56, -78, 'Increase', srt = 90, xpd = NA, adj = 0, cex = 0.8)
 	
-	addLegend(1, 0, "Productive", -180, -120)
-	addLegend(-1, 0, "Arid", -80, -120)
-	addLegend(0, 1, "Dry", 20, -120)
-	addLegend(0, -1, "Wet", 120, -120)
+	addLegend(-1, -1, "Sparse, Wet", -50, -80)
+	addLegend(-1, 0, "Sparse", 19, -80)
+	addLegend(0, -1, "Wet", 88, -80)
+	text(-56, -114, 'Decrease', srt = 90, xpd = NA, adj = 0, cex = 0.8)
 dev.off()
