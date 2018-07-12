@@ -1,17 +1,19 @@
-openAllObs <- function() {
+openAllObs <- function(replace = NULL) {
 	Obs = lapply(drive_fname, stack)
-	#test = is.na(Obs[['npp']][[1]]) & !is.na(Obs[['alpha']][[1]])
-	#Obs[['npp']][test] = 0.0
+	if (!is.null(replace)) {
+		if (length(replace) == length(Obs)) Obs = replace
+		else Obs[[replace[[1]]]] = replace[[2]]
+	}
 	return(Obs)
 }
 
 runLimFIREfromstandardIns <- function(fireOnly = FALSE, remove = NULL, sensitivity = FALSE, 
-                                      mnthIndex = 1:nlayers(Obs[[1]]), raw = FALSE, pline = NULL, ...) {
+                                      mnthIndex = 1:nlayers(Obs[[1]]), raw = FALSE, pline = NULL, nline = NULL, replace = NULL,...) {
     
-    Obs = openAllObs()
+    Obs = openAllObs(replace)
 	if (!is.null(remove)) for (i in remove) Obs[[i]][] = 0
 
-	paramFun <- function(...) param(..., pline = pline)
+	paramFun <- function(...) param(..., pline = pline, nline = nline)
     #mnthIndex = 1:12#
     
     runMonthly <- function(i) {

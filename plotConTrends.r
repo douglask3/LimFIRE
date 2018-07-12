@@ -12,7 +12,7 @@ limitTitles = c('e) Fire', 'a) Fuel', 'b) Moisture', 'c) Ignitions', 'd) Suppres
 
 tempF1 = 'temp/limitations4trends-Tree-alphaMax2'
 tempF2 = 'temp/trendsFromLimitations-Tree-alphaMax2'
-esnambleTemp <- 'temp/ensamble_12FFonly15'
+esnambleTemp <- 'temp/ensamble_12FFonly17'
 
 dfire_lims = c(-5, -2, -1, -0.5, -0.2, -0.1, 0.1, 0.2, 0.5, 1, 2, 5)/100
 dfire_cols = c('#000033', '#0099DD', 'white', '#DD9900', '#330000')
@@ -20,7 +20,7 @@ prob_lims = c(0.001, 0.01, 0.05)
 
 limit_cols = list(c('magenta', 'white', 'green'), c('yellow', 'white', 'blue'), c('cyan', 'white', 'red'), c('white', '#111111'))
 
-Nensmble = 25
+Nensmble = 50
 factor = 1
 
 #########################################################################
@@ -108,13 +108,6 @@ if (file.exists(esnambleTemp)) {
 	ens_files = open_ensembles()
 	ensamble = lapply(ens_files[1:Nensmble], findParameterTrends, factor)
 	save(ensamble, file = esnambleTemp)
-}
-browser()
-findIndex <- function(member) {
-	member = member[-1]
-	trendIndex = 100 * (prod(layer.apply(member, function(i) 1 + abs(i[[1]])/10)) - 1)
-	pvals = mean(layer.apply(member, function(i) i[[2]]))
-	return(addLayer(trendIndex, pvals))
 }
 
 extractEnsamble <- function(id, FUN)

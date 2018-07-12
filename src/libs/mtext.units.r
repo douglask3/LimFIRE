@@ -55,6 +55,7 @@ combineMtext <- function(txt,...) {
 unitExpressionSearches <- list(
     list("km2"    , bquote(km^2)         ),
     list("m2"     , bquote(m^2)          ),
+    list("m-2"    , bquote(m^(-2))       ),
     list("DEG"    , bquote(degree)       ),
     list("alpha"  , bquote(alpha)        ),
     list("DELTA"  , bquote(Delta)        ),

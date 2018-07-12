@@ -15,6 +15,8 @@ open_ensembles <- function(...) {
 	dirs = dirs[grep('ensemble_', dirs)]
 	
 	dats = lapply(dirs, open_ensemble, ...)
+	test = sapply(dats, function(i) length(unlist(i))) > 0
+	dats = dats[test]
 	
 	return(dats)
 }
