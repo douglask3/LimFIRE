@@ -1,8 +1,7 @@
 source("cfg.r")
 
-
 figName = 'figs/boxyWhistery'
-limFnames = c('Burnt_Area', 'Fuel', 'Moisture', 'Igntions', 'Suppression')
+limFnames = c('Burnt_Area', 'Fuel', 'Moisture', 'Ignitions', 'Suppression')
 
 ylog = FALSE
 nsamples = 100
