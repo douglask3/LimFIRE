@@ -1,14 +1,21 @@
 source("cfg.r")
 
-figName = 'figs/trendHistergrams'
-legLabs = c('Burnt Area', 'Fuel'   , 'Moisture', 'Ignitions', 'Suppression', 'Overall Trend')
-loadData4Ecosystem_analysis()
-for (i in 1:length(ensamble)) ensamble[[i]] = c(ensamble[[i]], trendIndex2[[i]])
+fnameOut = 'outputs/trendTable'
+legLabs = c('Burnt Area', 'Fuel'   , 'Moisture', 'Ignitions', 'Suppression', 'Overall Trend', 'Absolute Trend')
 
-trendInClass <- function(r) {
-	
-	r = abs(r[[1]] )
-	mask = !is.na(r)
+
+loadData4Ecosystem_analysis()
+for (i in 1:length(ensamble)) {
+	ensamble[[i]][[1]][[1]]= ensamble[[i]][[1]][[1]] / 100
+	ensamble[[i]] = c(ensamble[[i]], trendIndex1[[i]], trendIndex2[[i]])
+}
+
+trendInClass <- function(r, mask, biome) {
+	mask0 = mask
+	r = abs(r[[1]])
+	mask = mask + !is.na(r)
+	mask = mask == max.raster(mask, na.rm = TRUE)
+	#if (biome == 2) browser()
 	vr = r[mask]
 	va = area(r)[mask]
 	
@@ -19,16 +26,43 @@ trendInClass <- function(r) {
 	return(ot)
 }
 
-qs = sapply(ensamble[1:10], function(i) lapply(i, trendInClass))
-
 summerize <- function(class, FUN) {
 	class = sapply(class, function(i) i)
 	ot = apply(class, 1, FUN)
-	return(ot)#
+	
+	return(ot)
 }
 
-mn   = apply(qs, 1, summerize, mean)
-sdev = apply(qs, 1, summerize, sd  )
+trends4Ecosystem <- function(biome) {
+	print(biome)
+	mask = biomeAssigned == biome
+	qs = sapply(ensamble, function(i) lapply(i, trendInClass, mask, biome))
+
+	mn   = apply(qs, 1, summerize, mean)
+	sdev = apply(qs, 1, summerize, sd)
+	colnames(mn)   = legLabs
+	colnames(sdev) = legLabs
 	
+	return(list(mn, sdev))
+}
+
+out = lapply(1:8, trends4Ecosystem)	
+
+extractTab <- function(i) {
+	tab =  sapply(out, function(j) j[[i]][6,])
+	tab =  rbind(tab,sapply(out, function(j) j[[i]][,7]))
+	tab = round(tab * 100, 2)
+	colnames(tab) = names(biomes)
+	return(tab)
+}
+
+mn   = extractTab(1) 
+sdev = extractTab(2)
+
+fnameOut = paste(fnameOut, c('mn', 'sdev'), '.csv', sep = '-')
+
+write.csv(mn, fnameOut[1])
+write.csv(mn, fnameOut[2])
+
 # ot = paste(standard.round(mn), standard.round(sd), sep = '+/-')
 
