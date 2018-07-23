@@ -1,15 +1,9 @@
 source("cfg.r")
 
-limFnames = c('Burnt_Area', 'Fuel', 'Moisture', 'Igntions', 'Suppression')
-
 figName = 'figs/trendHistergrams'
-nsamples = 100
-
-barCols = c("#CC8800"   , "#6eff6e", "#0000CC" , "#480000"  , "grey"       , "white")
 legLabs = c('Burnt Area', 'Fuel'   , 'Moisture', 'Ignitions', 'Suppression', 'Overall Trend')
-
 loadData4Ecosystem_analysis()
-
+for (i in 1:length(ensamble)) ensamble[[i]] = c(ensamble[[i]], trendIndex2[[i]])
 
 trendInClass <- function(r) {
 	
@@ -25,7 +19,6 @@ trendInClass <- function(r) {
 	return(ot)
 }
 
-for (i in 1:length(ensamble)) ensamble[[i]][[1]] = trendIndex2[[i]]
 qs = sapply(ensamble[1:10], function(i) lapply(i, trendInClass))
 
 summerize <- function(class, FUN) {
