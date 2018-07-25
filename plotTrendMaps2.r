@@ -1,5 +1,4 @@
 source("cfg.r")
-source("mainDriversMap.r")
 source("~/work/benchmarkmetrics/benchmarkMetrics/R/standard.round.r")
 graphics.off()
 
