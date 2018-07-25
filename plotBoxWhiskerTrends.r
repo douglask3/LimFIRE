@@ -14,12 +14,6 @@ loadData4Ecosystem_analysis()
 
 mask = !is.na(trend12FF[[1]][[1]])
 
-#maskX = trend12F[[1]][[1]] > 1.3286
-'trend12F[[1]][[1]][maskX] = 0.0
-trend12FF[[1]][[1]][maskX] = 0.0'
-#dat = c(trend12FF[[1]][[1]] * 10, lapply(trend12FF, function(i) i[[1]] * 10))
-#dat[[7]] = (prod(layer.apply(dat[3:6], function(i) 1 + abs(i)/100)) - 1)* 100#abs(dat[[3]]) + abs(dat[[4]]) + abs(dat[[5]])
-
 dat = lapply(1:5, function(con) layer.apply(ensamble, function(i) i[[con]][[1]]))
 dat = c(dat,
 		layer.apply(trendIndex1, function(i) i[[1]]),
@@ -90,10 +84,7 @@ plotAllTheBoxesAndWhiskers <- function(fname = '', ylims = c(-5.3, 3), ytextPos 
 	figName = paste(figName, fname, ylog, '.png', sep ='-')
 	png(figName, height = 7, width = 8.5, res = 300, unit = 'in')
 		layout(rbind(c(1,1), c(2,1)), heights = c(1, 0.3), widths = c(0.45, 0.55))
-		
-			
 		par(mar = c(0, 4, 0, 1))
-		
 		
 		if (ylog) ylims = ylims * (0.5^exp(-1))
 		else ylims = ylims / 10
@@ -113,11 +104,7 @@ plotAllTheBoxesAndWhiskers <- function(fname = '', ylims = c(-5.3, 3), ytextPos 
 		
 		par(mar = c(0.5, 4, 0, 0))
 		addLegend()
-		#plot.new()
-		#if (ylog) pos = 'center' else pos = 'bottom'
-		#legend(pos, legend = legLabs, pch = 15, pt.cex = 1.2, col =  'black', horiz = TRUE, bty = 'n')
-		#legend(pos, legend = legLabs, pch = 15, col =  barCols[-1], horiz = TRUE, bty = 'n')
-		#legend('center', legend = legLabs, lty = 1, col =  'black', horiz = TRUE, bty = 'n')
+		
 	dev.off()
 }
 
