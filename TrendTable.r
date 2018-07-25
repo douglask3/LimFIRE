@@ -12,6 +12,7 @@ for (i in 1:length(ensamble)) {
 
 trendInClass <- function(r, mask, biome) {
 	mask0 = mask
+	
 	r = abs(r[[1]])
 	mask = mask + !is.na(r)
 	mask = mask == max.raster(mask, na.rm = TRUE)
@@ -40,6 +41,7 @@ trends4Ecosystem <- function(biome) {
 
 	mn   = apply(qs, 1, summerize, mean)
 	sdev = apply(qs, 1, summerize, sd)
+	
 	colnames(mn)   = legLabs
 	colnames(sdev) = legLabs
 	
@@ -49,7 +51,7 @@ trends4Ecosystem <- function(biome) {
 out = lapply(1:8, trends4Ecosystem)	
 
 extractTab <- function(i) {
-	tab =  sapply(out, function(j) j[[i]][6,])
+	tab =  sapply(out, function(j) j[[i]][3,])
 	tab =  rbind(tab,sapply(out, function(j) j[[i]][,7]))
 	tab = round(tab * 100, 2)
 	colnames(tab) = names(biomes)
@@ -59,10 +61,14 @@ extractTab <- function(i) {
 mn   = extractTab(1) 
 sdev = extractTab(2)
 
-fnameOut = paste(fnameOut, c('mn', 'sdev'), '.csv', sep = '-')
+fnameOut = paste(fnameOut, c('mn', 'sdev', 'comb'), '.csv', sep = '-')
 
 write.csv(mn, fnameOut[1])
-write.csv(mn, fnameOut[2])
+write.csv(sdev, fnameOut[2])
 
+cmb = mn
+cmb[] = paste(mn, sdev, sep = '\n')
+
+write.csv(cmb, fnameOut[3])
 # ot = paste(standard.round(mn), standard.round(sd), sep = '+/-')
 
