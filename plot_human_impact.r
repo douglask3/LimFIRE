@@ -15,7 +15,7 @@ dfire_lims = c(-20, -10, -5, -2, -1, 1, 2, 5, 10, 20)
 #########################################################################
 ens_files = open_ensembles()
 ens_no <- function(file) strsplit(strsplit(file[[1]][[1]], 'outputs//ensemble_')[[1]][-1], '/')[[1]][1]
-ens_nos = as.numeric(sapply(ens_files, ens_no))#[1:17]
+ens_nos = as.numeric(sapply(ens_files, ens_no))#[1:27]
 
 findParameterLimitation <- function(var, ens_no) {	
 	dir = paste(outputs_dir, 'ensemble_noVar', ens_no, '/', sep = "")
@@ -80,10 +80,12 @@ plotVar <- function(i, xlim, ylim, noraliseByControl, name, title, xlab,...) {
 	}
 
 	par(mar = c(3, 3, 0, 0))
-	plot(xlim, ylim, type = 'n', log = log, xlim = xlim, ylim = ylim, xlab = xlab)
-	for (i in 1:nlayers(contr)) points(var[],100* (diffv[[i]]/norm[[i]])[]	, col = make.transparent("black", 0.98), pch = 19, cex = 0.01)
-	
-	mtext(title, side = 2, line = 2)
+	if (title != "NaN") {
+		plot(xlim, ylim, type = 'n', log = log, xlim = xlim, ylim = ylim, xlab = xlab)
+		for (i in 1:nlayers(contr)) points(var[],100* (diffv[[i]]/norm[[i]])[]	, col = make.transparent("black", 0.98), pch = 19, cex = 0.01)
+		
+		mtext(title, side = 1, line = 2)
+	} else plot.new()
 	par(mar = rep(0,4))
 	plotMap(diffv * 100 * 12, ...)
 	plotMap(100*(1-trend/contr), ...)
@@ -95,7 +97,7 @@ png('figs/human_impact.png', width = 7.5, height = 6.5, res = 300, unit = 'in')
 	mapply(plotVar, 1:4, 
 		   list(c(0, 80), c(0, 80), c(0, 2000), c(0.001, 100)),
 		   list(c(-100, 0), c(0, 100), c(-100, 100), c(-100, 100)), 
-		   c(FALSE, TRUE, FALSE), vars, c("cropland", "pasture", "population density", "overall impact"),
+		   c(FALSE, TRUE, FALSE), vars, c("cropland", "pasture", "population density", NaN),
 		                                c('% cover', '% cover', 'pop/km2', '% Burnt Area'))
 		   
 	plot.new()
