@@ -23,6 +23,8 @@ limit_cols = list(c('magenta', 'white', 'green'), c('yellow', 'white', 'blue'), 
 Nensmble = 50
 factor = 1
 
+## returns fraction of cummlative burnt area change over the period, normalised by the sum of un-detrended burnt area.
+
 #########################################################################
 ## Run model                                                           ##
 #########################################################################
