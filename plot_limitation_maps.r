@@ -4,13 +4,13 @@
 source('cfg.r')
 graphics.off()
 
-grab_cache = FALSE
+grab_cache = TRUE
 
 fig_fname       = 'figs/limitation_map'
 fig_fname_indiv = 'figs/ind_limiataions'
 
 
-labs = c('Raw limitation', 'Potential limitation', 'Control sensitivity',
+labs = c('Standard limitation', 'Potential limitation', 'Sensitivity',
          '', '', '')
 
 ens_tfile = 'temp/limitation_maps_ens3'
@@ -23,17 +23,6 @@ niterations = 11
 ## Run model                                                           ##
 #########################################################################
 
-open_ensemble <- function(dir, vars = c('lm', 'rw', 'sn', 'sn-ws')) {
-	files = list.files(dir, full.names = TRUE)            
-	
-	openSet <- function(st) {
-		st = paste('-', st, '.nc', sep = '')
-		files = files[grepl(st, files)]
-	}
-	
-	mod = lapply(vars, openSet)
-	return(mod)
-}
 
 findParameterLimitation <- function(dir) {
 	#mod_files = paste(mod_files, '-paramLine', line, sep = "")
@@ -43,10 +32,12 @@ findParameterLimitation <- function(dir) {
 	#sn_mod_files = paste(mod_files,    '-sn-ws', sep = '')
     
 	mod = open_ensemble(dir)
-	browser()
-	lm_mod = runLimFIRE(lm_mod_files, normalise = TRUE, add21 = TRUE)
-	rw_mod = runLimFIRE(rw_mod_files, raw = TRUE, normalise = TRUE)
-	sn_mod = runLimFIRE(sn_mod_files0, sensitivity = TRUE)
+	lm_mod = lapply(mod[[1]], brick)
+	rw_mod = lapply(mod[[2]], brick)
+	sn_mod = lapply(mod[[4]], brick)
+	#lm_mod = runLimFIRE(lm_mod_files, normalise = TRUE, add21 = TRUE)
+	#rw_mod = runLimFIRE(rw_mod_files, raw = TRUE, normalise = TRUE)
+	#sn_mod = runLimFIRE(sn_mod_files0, sensitivity = TRUE)
 
 	weightedSensitivity <- function() {
 		ws <- function(sn, i) {
@@ -59,40 +50,49 @@ findParameterLimitation <- function(dir) {
 		return(sn_mod)
 	}
 
-	sn_mod = runIfNoFile(paste(sn_mod_files, '.nc', sep = ''), weightedSensitivity, test = grab_cache)
+	#sn_mod = runIfNoFile(paste(sn_mod_files, '.nc', sep = ''), weightedSensitivity, test = grab_cache)
 
 	#########################################################################
 	## Annual Average                                                      ##
 	#########################################################################
-	cal_annual_average <- function(fname, xx_mod) {
-		fname = paste(fname, '-aa.nc', sep = '')
-		xx_mod = runIfNoFile(fname, function(x) lapply(x, mean), xx_mod, test = grab_cache)
-		xx_mod[[2]][is.na(xx_mod[[2]])] = 100
-		return(xx_mod)
+	cal_annual_average <- function(r) {
+		fname = paste(dirname(filename(r)), '/', filename.noPath(r, TRUE), '-mean.nc', sep = '')
+		print(fname)
+		r = runIfNoFile(fname, mean, r, test = grab_cache)
+		
+		#xx_mod = runIfNoFile(fname, function(x) lapply(x, mean), xx_mod, test = grab_cache)
+		#xx_mod[[2]][is.na(xx_mod[[2]])] = 100
+		return(r)
 	}
 
-	aa_rw_mod = cal_annual_average(rw_mod_files, rw_mod)
-	aa_lm_mod = cal_annual_average(lm_mod_files, lm_mod)
-	aa_sn_mod = cal_annual_average(sn_mod_files, sn_mod)
+	aa_rw_mod = lapply(rw_mod, cal_annual_average)
+	aa_lm_mod = lapply(lm_mod, cal_annual_average)
+	aa_sn_mod = lapply(sn_mod, cal_annual_average)
 
 	#########################################################################
 	## Fire Season                                                         ##
 	#########################################################################
 
-	which.maxMonth <- function(x) {    
-		nyears = nlayers(x) / 12
+	which.maxMonth <- function(r) {   
+		fname = paste(dirname(filename(r)), '/', filename.noPath(r, TRUE), '-which.maxMonth.nc', sep = '')
+		print(fname)
 		
-		forYear <- function(yr) {
-			index = ((yr - 1) * 12 + 1):(yr * 12)
-			y = x[[index]]
-			y = which.max(y)
-			return(y)
+		maxMonth <- function() {
+			nyears = nlayers(r) / 12
+			
+			forYear <- function(yr) {
+				index = ((yr - 1) * 12 + 1):(yr * 12)
+				y = r[[index]]
+				y = which.max(y)
+				return(y)
+			}
+			
+			return(layer.apply(1:nyears, forYear))
 		}
-		
-		return(layer.apply(1:nyears, forYear))
+		out = runIfNoFile(fname, maxMonth, test = grab_cache)
 	}
-
-	maxMonth = runIfNoFile('temp/maxMonth.nc', which.maxMonth, lm_mod[[1]], test = grab_cache)
+	
+	maxMonth = which.maxMonth(lm_mod[[1]])
 
 	maxFireLimiation <- function(x) {
 		nyears = nlayers(x) / 12
@@ -117,16 +117,16 @@ findParameterLimitation <- function(dir) {
 		return(out)
 	}
 
-	cal_fire_season_average <- function(fname, xx_mod) {
-		fname = paste(fname, '-fs.nc', sep = '')
-		xx_mod = runIfNoFile(fname, function(x) lapply(x, maxFireLimiation), xx_mod, test = grab_cache)
-		xx_mod[[2]][is.na(xx_mod[[2]])] = 100
-		return(xx_mod)
-}
+	cal_fire_season_average <- function(r) {
+		fname = paste(dirname(filename(r)), '/', filename.noPath(r, TRUE), '-fs.nc', sep = '')
+		print(fname)
+		r = runIfNoFile(fname, maxFireLimiation, r, test = grab_cache)
+		return(r)
+	}
 
-	fs_rw_mod = cal_fire_season_average(rw_mod_files, rw_mod)
-	fs_lm_mod = cal_fire_season_average(lm_mod_files, lm_mod)
-	fs_sn_mod = cal_fire_season_average(sn_mod_files, sn_mod)
+	fs_rw_mod = lapply(rw_mod, cal_fire_season_average)
+	fs_lm_mod = lapply(lm_mod, cal_fire_season_average)
+	fs_sn_mod = lapply(sn_mod, cal_fire_season_average)
 	
 	aa_rw_mod = lapply(aa_rw_mod, function(i) 1 - i) 
 	fs_rw_mod = lapply(fs_rw_mod, function(i) 1 - i)
@@ -138,7 +138,7 @@ dirs = list.dirs('outputs/')
 dirs = dirs[grepl('ensemble_', dirs)]
 ens_tfile = paste(ens_tfile, niterations, '.Rd', sep = '-')
 if (file.exists(ens_tfile)) load(ens_tfile) else {
-	ensamble = lapply(dirs, findParameterLimitation)
+	ensamble = lapply(dirs[1:50], findParameterLimitation)
 	ensambleSum =  lapply(1:length(ensamble[[1]]),
 					      function(i) extractEnsamble(ensamble, i, mean90quant.ens))
 	save(ensamble, ensambleSum,  file = ens_tfile)
@@ -204,10 +204,10 @@ plot_pmod <- function(i, index = NULL, normalise = FALSE, ...) {
     xy = xyFromCell(pmod[[1]], 1:length(pmod[[1]]))
     pmod = lapply(pmod, values)
 
-    plot_4way(xy[,1], xy[,2], pmod[[3]], pmod[[1]], pmod[[2]], pmod[[4]],
+    plot_4way(xy[,1], xy[,2], pmod[[2]], pmod[[1]], pmod[[3]], pmod[[4]],
               x_range = c(-180, 180), y_range = c(-60, 90),
               cols = 	cols, limits = limits, 
-              coast.lwd=par("lwd"),
+              coast.lwd=par("lwd"),ePatternRes = 40, ePatternThick = 0.5,
               add_legend=FALSE, smooth_image=FALSE,smooth_factor=5, normalise = normalise, ...)
     addLocPoints()    
     pcs = calculate_weightedAverage(xy, pmod)
