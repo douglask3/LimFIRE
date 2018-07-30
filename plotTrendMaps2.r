@@ -6,9 +6,9 @@ limFnames = c('Burnt_Area', 'Fuel', 'Moisture', 'Igntions', 'Suppression')
 
 figName = 'figs/TrendMaps'
 
-trend_lims = c(-5, -2, -1, -0.5, -0.2, -0.1, 0.1, 0.2, 0.5, 1, 2, 5) 
+trend_lims = c(-50, -40, -30, -20, -10, -5, 5, 10, 20, 30, 40, 50) 
 index_lims = list(c(-10, -5, -2, -1, 1, 2, 5, 10),
-				  c(0, 1, 2, 5, 10, 20))
+				  c(0, 10, 20, 30, 40, 50, 60, 70, 80))
 
 
 grab_cache = TRUE
@@ -31,7 +31,8 @@ png(fname, height = 4, width = 8, units = 'in', res = 300)
 	layout(rbind(1:2, 3:4, c(5, 5)), heights = c(1,1, 0.3))
 	
 	par(mar = rep(0, 4))
-	mapply(plotControl, trend12FF[-1], limFnames[-1], 1)
+	
+	mapply(plotControl, trend12FF[-1], limFnames[-1], 100)
 
 	plot.new()	
 	add_raster_legend2(dfire_cols, trend_lims, dat = trend12FF[[2]][[1]], srt = 0,
@@ -42,7 +43,7 @@ dev.off()
 grabFirst <- function(lr) layer.apply(lr, function(r) r[[1]])
 trendIndex = list(grabFirst(trendIndex1), grabFirst(trendIndex2))
 trendIndex = lapply(trendIndex, function(i) {i[is.infinite(i)] = NaN; i})
-
+trendIndex[[2]][is.na(trendIndex[[1]][[1]])] = NaN
 ##########################################
 ## Trends in burnt area and fire regime ##
 ##########################################
@@ -50,17 +51,17 @@ fname = paste(figName, 'trendIndicies.png', sep = '-')
 png(fname, height = 1.1 * 4 * 3.3/2.3, width = 4, units = 'in', res = 300)
 	
 	par(mar = rep(0, 4), mfcol = c(3, 1), oma = c(6, 0, 0, 0))
-	mapply(plotControl, trendIndex, c('Normalised Trend in Burnt Area', 'Shift in fire regime'), 
+	mapply(plotControl, trendIndex, c('Normalised trend in burnt area', 'Shift in fire regime'), 
 						units = c('% change in area burnt', '% shift in controls'),
 						limits = index_lims, cols = list(dfire_cols, fire_cols),
-						sc = 100/14, add_legend = TRUE, oneSideLabels = NA, ylabposScling=1.1)
+						sc = c(100/14, 100), add_legend = TRUE, oneSideLabels = NA, ylabposScling=1.1)
 	
 
 ##########################################
 ## Plot attribution map                 ##
 ##########################################
-	trend = trendIndex[[2]]	
-	mask  = mean(trend) > 0.5 & !is.na(trend[[1]])	
+	trend = trendIndex[[2]]
+	mask  = mean(trend) > median(trend[], na.rm = TRUE) & !is.na(trend[[1]])	
 	
 	controlTrendsLoc <- function(cntr) {
 		cntr[[1]][!mask] = NaN
@@ -116,7 +117,7 @@ png(fname, height = 1.1 * 4 * 3.3/2.3, width = 4, units = 'in', res = 300)
 					e = tmap[[2]] + 2, e_lims = 1:3,  ePatternRes = 50, ePatternThick = 0.2,
 								ePointPattern = c(25, 0, 24), eThick = c(1.5, 0, 1.5),
 								preLeveled = TRUE, add_legend = FALSE)
-	mtext('Significant Drivers', adj = 0.02, line = -1.2, cex = 0.9)
+	mtext('Drivers', adj = 0.02, line = -1.2, cex = 0.9)
 	
 	addLegend <- function(f, m, title, x, y) {
 		test = which(combinations[,2] == f & combinations[,3] == m)
@@ -138,12 +139,12 @@ png(fname, height = 1.1 * 4 * 3.3/2.3, width = 4, units = 'in', res = 300)
 			   col = cols, pch = 15, pt.cex = 2.5 * cexLeg, cex = cexLeg,
 			   xpd = NA, title = title, y.intersp = 1.5 * cexLeg, box.col = make.transparent("black", 0.0))
 		
-		legend(x, y, c(pc), bty = 'n', adj = 0.9 * cexLeg, title = ' ', cex = 0.67 * cexLeg,
+		legend(x-0.1, y, c(pc), bty = 'n', adj = 1.2 * cexLeg, title = ' ', cex = 0.67 * cexLeg,
 			   xpd = NA, y.intersp = 1.5/0.63 * cexLeg,
 			   pt.cex = 2, col = make.transparent("white", 1.0))
 	}
 	
-	legend(-170, -20, legend = c('Increased', 'Decreased'), pch = c(25, 24), cex = 2/3, title = 'Suppression', box.col =  make.transparent("black", 1.0), horiz = TRUE) 
+	legend(-173, -8, legend = c('Increased\n(less fire)', 'Decreased\n(more fire)'), pch = c(25, 24), cex = 2/3, title = 'Suppression', box.col =  make.transparent("black", 1.0), horiz = TRUE) 
 	addLegend(1, -1, "Productive, Wet", -160, -44)
 	addLegend(-1, 1, "Sparse, Dry",    -160, -80)
 	text(-166, -80, 'Counteracting drivers', srt = 90, xpd = NA, cex = 0.8)
