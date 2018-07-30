@@ -12,7 +12,7 @@ limitTitles = c('e) Fire', 'a) Fuel', 'b) Moisture', 'c) Ignitions', 'd) Suppres
 
 tempF1 = 'temp/limitations4trends-Tree-alphaMax2'
 tempF2 = 'temp/trendsFromLimitations-Tree-alphaMax2'
-esnambleTemp <- 'temp/ensamble_12FFonly17'
+esnambleTemp <- 'temp/ensamble_12FFonly22'
 
 dfire_lims = c(-5, -2, -1, -0.5, -0.2, -0.1, 0.1, 0.2, 0.5, 1, 2, 5)/100
 dfire_cols = c('#000033', '#0099DD', 'white', '#DD9900', '#330000')
@@ -84,7 +84,7 @@ findParameterTrends <- function(files, factor) {
 	## Simple Trends                                                       ##
 	#########################################################################	
 	trend12 = findTrendNoFile(running12, removeTrend, tempF2, ensID, fireOnly = TRUE)
-	trend12[[1]][[1]] = trend12[[1]][[1]] * 100 #* 14 * 12
+	#trend12[[1]][[1]] = trend12[[1]][[1]]
 	
 	#########################################################################
 	## Trend removal                                                       ##
@@ -98,16 +98,42 @@ findParameterTrends <- function(files, factor) {
 	## weigted by fire
 	trend12FFname = tempFile(tempF2, paste('removeTrendAndNormalise', ensID, sep = '-'))
 	sfire = runIfNoFile(tempFile(tempF2, '-sfire')[1], function() sum(fire), test = FALSE)
+	
+	makeIndex <- function(x) {
+	
+		x0 = x[[1]]/14
+		i = sfire/14
+		
+		s = (i - x0)		
+		
+		ss = squishBounds(s, 14)
+		s[s <= 0] = ss[s <= 0]
+		s[s < 0] = 0
+		
+		test = i < s	
+		x0[test] = (x0[test]) / s[test]
+		
+		test = !test
+		x0[test] = (x0[test]) / i[test]
+		
+		x0[x0 >  1] =  1
+		x0[x0 > -1] = -1
+		
+		x[[1]] = x0
+		
+		
+		return(x)
+	}
 	trend12FF = runIfNoFile(trend12FFname,
-							function() lapply(trend12F, function(i) {i[[1]] = i[[1]] / sfire; return(i)}), test = FALSE)
+							function() lapply(trend12F, makeIndex), test = FALSE)
 	
 	return(trend12FF)
 }
 
+ens_files = open_ensembles()
 if (file.exists(esnambleTemp)) {
 	load (esnambleTemp)
 } else {
-	ens_files = open_ensembles()
 	ensamble = lapply(ens_files[1:Nensmble], findParameterTrends, factor)
 	save(ensamble, file = esnambleTemp)
 }
@@ -122,9 +148,10 @@ make_trend_index_local <- function(ens, files, name = 'trendIndex1', ...) {
 	tfname = paste(tfname, collapse = '/')
 	tfname = paste(tfname, paste(name, '.nc', sep = ''), sep = '/')
 	print(tfname)
-	out = runIfNoFile(tfname, make_trend_index, ens, files, ..., test = grab_cache)
+	out = runIfNoFile(tfname, make_trend_index, ens, files, ...)
 	return(out)
 }
 
-trendIndex1 = mapply(make_trend_index_local, ensamble, ens_files[1:Nensmble])
-trendIndex2 = mapply(make_trend_index_local, ensamble, ens_files[1:Nensmble], MoreArgs = list('trendIndex2', absTrend = TRUE))
+trendIndex1 = mapply(make_trend_index_local, ensamble, ens_files[1:Nensmble], test = grab_cache)
+trendIndex2 = mapply(make_trend_index_local, ensamble, ens_files[1:Nensmble], 
+					 MoreArgs = list('trendIndex2.2', absTrend = TRUE, test = grab_cache))
