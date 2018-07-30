@@ -24,10 +24,13 @@ make_trend_indexX <- function(T, lims) {
 }
 
 make_trend_index_control_month <- function(trend, lim, lims, yr, absTrend = FALSE) {
-	clim = logitFun(lim, n = 10000)
-	if (absTrend) dc = abs(trend) else dc = trend * (-1)
-	clim_dt = clim + dc * yr
-	return(logistic(clim_dt, n = 10000))
+	clim = logitFun(lim, n = 10000)	
+	
+	if (absTrend) clim_dt = clim + yr * (abs(trend) + trend * (-1))
+	else clim_dt = clim + trend * (-1) * yr
+	
+	out = logistic(clim_dt, n = 10000)
+	return(out)
 }
 
 make_trend_index_control <- function(trend, lim, lims, ...) {
@@ -47,6 +50,7 @@ make_trend_index_control <- function(trend, lim, lims, ...) {
 
 
 make_trend_index <- function(trends, files, absTrend = FALSE, ...) {
+	
 	files = files[[2]]
 	files = files[c(1, 2, 4, 3, 5)]
 	lims = lapply(files, brick)
@@ -54,13 +58,14 @@ make_trend_index <- function(trends, files, absTrend = FALSE, ...) {
 	lims = lims[-1]
 	trend = trends[-1]
 	
-	for_control <- function(i) {
+	for_control <- function(i, ...) {
 		lim = lims[[i]]
 		lims = lims[-i]
+		
 		trend = trend[[i]][[-1]]
-		make_trend_index_control(trend, lim, lims, absTrend = absTrend, ...)
+		make_trend_index_control(trend, lim, lims, ...)
 	}
-	Cs = lapply(1:4, for_control)
+	Cs = lapply(1:4, for_control, absTrend = FALSE)
 	
 	calFireMn <- function(i, x)
 		x[[1]][[i]] * x[[2]][[i]] * x[[3]][[i]] * x[[4]][[i]]
@@ -68,13 +73,19 @@ make_trend_index <- function(trends, files, absTrend = FALSE, ...) {
 	calFire <- function(x)
 		layer.apply(1:nlayers(fire), calFireMn, x)
 	
-	TrendFire = calFire(lims)
-	noTrendFire = calFire(Cs)
+	if (absTrend) {
+		Cs2 = lapply(1:4, for_control, absTrend = absTrend)
+		TrendFire = calFire(Cs2)
+		noTrendFire = calFire(Cs)
+	} else {
+		TrendFire = calFire(lims)
+		noTrendFire = calFire(Cs)		
+	}
+	
 	sTrendFire = sum(TrendFire)
 	snoTrendFire = sum(noTrendFire)
 	
-	if (absTrend) index = snoTrendFire/sTrendFire - 1
-		else index =(sTrendFire - snoTrendFire)/sTrendFire
+	index =(sTrendFire - snoTrendFire)/sTrendFire
 	index[is.infinite(index)] = NaN
 	return(addLayer(index, sTrendFire, snoTrendFire))
 	
