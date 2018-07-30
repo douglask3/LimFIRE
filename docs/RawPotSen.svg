@@ -1243,9 +1243,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.68719825"
-     inkscape:cx="85.926388"
-     inkscape:cy="421.96292"
+     inkscape:zoom="0.97184508"
+     inkscape:cx="479.45322"
+     inkscape:cy="274.51503"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -1702,16 +1702,16 @@
     </g>
     <g
        id="g5766"
-       transform="matrix(2.2239607,0,0,2.2239607,13.848421,-392.83926)">
+       transform="matrix(1.5317678,0,0,1.5317678,55.193309,-202.06917)">
       <image
          sodipodi:absref="C:\Users\dougl\Documents\work\LimFIRE\docs\limitation_legend.png"
          xlink:href="limitation_legend.png"
-         y="275.77701"
-         x="4.3422718"
-         id="image4493"
-         preserveAspectRatio="none"
+         width="65.531998"
          height="19.811998"
-         width="65.531998" />
+         preserveAspectRatio="none"
+         id="image4493"
+         x="4.3422718"
+         y="275.77701" />
       <rect
          y="292.70825"
          x="39.088184"
