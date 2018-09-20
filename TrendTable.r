@@ -6,8 +6,9 @@ legLabs = c('Burnt Area', 'Fuel'   , 'Moisture', 'Ignitions', 'Suppression', 'Ov
 
 loadData4Ecosystem_analysis()
 for (i in 1:length(ensamble)) {
-	ensamble[[i]][[1]][[1]]= ensamble[[i]][[1]][[1]] / 100
-	ensamble[[i]] = c(ensamble[[i]], trendIndex1[[i]], trendIndex2[[i]])
+	ens = ensamble[[i]]
+	#ens[[1]][[1]]= ens[[1]][[1]] / 100
+	ensamble[[i]] = c(ens, trendIndex1[[i]], trendIndex2[[i]])
 }
 
 trendInClass <- function(r, mask, biome) {
