@@ -12,6 +12,7 @@ library(vegan)
 library(RcppEigen)
 library(parallel)
 library(snow)
+library(reldist)
 data(worldHiresMapEnv)
 
 sourceAllLibs('../rasterextrafuns/rasterPlotFunctions/R/')
@@ -58,9 +59,9 @@ nms = names(drive_fname)
 drive_fname = paste(outputs_dir, drive_fname, min(years), '-', max(years), '.nc', sep = '')
 names(drive_fname) = nms
 
-hlghtPnts = list("Desert"      = list( 14, 27.5, col = '#00BB00'),
-                 "Rainforest"  = list(-61,   -3, col = '#0000BB'), 
-				 "Savanna"     = list( 24,   10.5, col = '#BB0000'),
+hlghtPnts = list("Desert"      = list( 14, 27.5, col = '#00AA66'),
+                 "Rainforest"  = list(-61,   -3, col = '#0000DD'), 
+				 "Savanna"     = list( 24,   10.5, col = '#660000'),
 				 "Cropland"    = list( 83, 23.5, col = '#AAAA00'))
 
 #coefficants_file = paste(coefficants_file, gitVersionNumber(), '.csv', sep = '-')
@@ -68,5 +69,5 @@ hlghtPnts = list("Desert"      = list( 14, 27.5, col = '#00BB00'),
 try(memSafeFile.remove(), silent = TRUE)
 memSafeFile.initialise('temp/tempGenerated')
 
-tempFile4Eco = 'temp/files4EcosystemPlot2-newEnsmebles5.Rd'
+tempFile4Eco = 'temp/files4EcosystemPlot2-newEnsmebles9.Rd'
 ecoFile = "data/official_teow/official"
