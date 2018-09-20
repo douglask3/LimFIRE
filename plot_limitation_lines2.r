@@ -185,12 +185,14 @@ plotAll <- function(fname0 = NULL, fuel = NULL, moisture = NULL,
 					   xlim = c(0, 1), ...)
 					   
 	axis(2, at = yticks, labels = yticks * 100)
-	mtext('Vegetation Cover (%)', 1, line = 2.3)
+	mtext(side = 3, 'a)', adj = 0.1, line = -1)
+	mtext('Fuel Continuity (%)', 1, line = 2.3)
 
 	moisture = plotScatter('moisture', col = 'blue', moisture,
 						   LimFIRE.moisture, dLimFIRE.moisture, 
 						   'moisture_x0', 'moisture_k', -1.0, 
 						   x2pc = TRUE, xlim = c(0, 1), ...)
+	mtext(side = 3, 'b)', adj = 0.1, line = -1)
 	mtext('Fuel Moisture (%)', 1, line = 2.3)
 	if (axis4) axis(side = 4, at = yticks, labels = 100 - yticks * 100)
 	
@@ -198,6 +200,7 @@ plotAll <- function(fname0 = NULL, fuel = NULL, moisture = NULL,
 							LimFIRE.ignitions, dLimFIRE.ignitions, 
 							'igntions_x0', 'igntions_k', 1.0, 
 							xlim = c(0, 8), ...)
+	mtext(side = 3, 'c)', adj = 0.1, line = -1)
 	mtext('No. Ignitions', 1, line = 2.3)
 	axis(2, at = yticks, labels = yticks * 100)
 
@@ -215,6 +218,7 @@ plotAll <- function(fname0 = NULL, fuel = NULL, moisture = NULL,
 							  'suppression_x0', 'suppression_k', -1.0, 
 							  xlim = xlim, ...)
 	mtext('Suppression Index', 1, line = 2.3)
+	mtext(side = 3, 'd)', adj = 0.1, line = -1)
 	if (axis4) axis(side = 4, at = yticks, labels = 100 - yticks * 100)
 
 	mtext('Burnt Area(%)', side = 2, line = 2, outer = TRUE)
@@ -261,28 +265,26 @@ plotByYlog <- function(fname, ...) {
 }
 
 plotAllThese <- function() {
-	plotByYlog('noGrad', plotGrad = FALSE)
-	plotByYlog('empty', plot = c(F, F, F, F), plotGrad = FALSE)
-	plotByYlog('noGrad-Desert', plot = c(T, F, F, F), plotGrad = FALSE)
-	plotByYlog('noGrad-Rainforest', plot = c(T, T, F, F), plotGrad = FALSE)
-	plotByYlog('noGrad-Savanna', plot = c(T, T, T, F), plotGrad = FALSE)
+	#plotByYlog('noGrad', plotGrad = FALSE)
+	#plotByYlog('empty', plot = c(F, F, F, F), plotGrad = FALSE)
+	#plotByYlog('noGrad-Desert', plot = c(T, F, F, F), plotGrad = FALSE)
+	#plotByYlog('noGrad-Rainforest', plot = c(T, T, F, F), plotGrad = FALSE)
+	#plotByYlog('noGrad-Savanna', plot = c(T, T, T, F), plotGrad = FALSE)
 
 
 	plotByYlog('')
-	plotByYlog('Desert', plot = c(T, F, F, F))
-	plotByYlog('Rainforest', plot = c(T, T, F, F))
-	plotByYlog('Savanna', plot = c(T, T, T, F))
+	#plotByYlog('Desert', plot = c(T, F, F, F))
+	#plotByYlog('Rainforest', plot = c(T, T, F, F))
+	#plotByYlog('Savanna', plot = c(T, T, T, F))
 }
 
-polygonsNotPoints = FALSE
-ylog = FALSE
-plotAllThese()
+#polygonsNotPoints = FALSE
+#ylog = FALSE
+#plotAllThese()
 
-ylog = TRUE
-plotAllThese()
+#ylog = TRUE
+#plotAllThese()
 
 polygonsNotPoints = TRUE
-plotAllThese()
-
 ylog = FALSE
 plotAllThese()
