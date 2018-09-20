@@ -79,7 +79,7 @@ addLegend <- function() {
 	addAxisLab(0.9, '90%')
 }
 
-plotAllTheBoxesAndWhiskers <- function(fname = '', ylims = c(-9.5, 9.5), ytextPos = ylims[1] * 8) {
+plotAllTheBoxesAndWhiskers <- function(fname = '', ylims = c(-8, 10), ytextPos = ylims[1] * 8) {
 	figName = paste(figName, fname, ylog, '.png', sep ='-')
 	png(figName, height = 7, width = 8.5, res = 300, unit = 'in')
 		layout(rbind(c(1, 1, 1), c(1, 2,1)), heights = c(0.85, 0.15), widths = c(0.745, 0.22, 0.035))
@@ -92,14 +92,14 @@ plotAllTheBoxesAndWhiskers <- function(fname = '', ylims = c(-9.5, 9.5), ytextPo
 		plot(c(4, 8 * 5 + 1), ylims, type = 'n', axes = FALSE, 
 			 xlab = '', ylab = '% change in burnt area/limitation')
 		
-		labels = seq(-90, 80, 5)
+		labels = seq(-75, 90, 5)
 		at = labels / 100
 		
 		axis(2, at = at, labels = labels)
 		
 		for (y in at) lines(c(-9E9, 9E9), c(y, y), lty = 2, col = "#CCCCCC")
 		lines(c(-9E9, 9E9), c(0, 0), col = "#CCCCCC")
-		text(x = 5 * (1:8), y = 0.73, labels = names(biomes), srt = 0, xpd = NA, cex = 1.3)
+		text(x = 5 * (1:8), y = 0.95, labels = names(biomes), srt = 0, xpd = NA, cex = 1.3)
 		
 		mapply(addAllDatPlot, 1:8, biomes)
 		
