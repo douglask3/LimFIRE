@@ -52,14 +52,30 @@ combineMtext <- function(txt,...) {
     mtext(txti, ...)
 }
 
+
+
 unitExpressionSearches <- list(
     list("km2"    , bquote(km^2)         ),
     list("m2"     , bquote(m^2)          ),
     list("m-2"    , bquote(m^(-2))       ),
     list("DEG"    , bquote(degree)       ),
     list("alpha"  , bquote(alpha)        ),
+    list("omega"  , bquote(omega)        ),
+    list("sigma"  , bquote(sigma)        ),
     list("DELTA"  , bquote(Delta)        ),
     list("CO2"    , bquote(CO[2])        ),
     list("AET/PET", bquote(over(AET,PET))),
     list("PET"    , bquote({}[PET])      ),
-    list("AET"    , bquote({}^AET)       ))
+    list("AET"    , bquote({}^AET)       ),
+	list("_max"   , bquote({}[max])      ),
+	list("_0"     , bquote({}[0])           ),
+	list("_W"     , bquote({}[W])           ),
+	list("_omega" , bquote({}[omega])     ),
+	list("_ig"    , bquote({}[ig])        ),
+	list("_S"     , bquote({}[S])           ),
+	list("_ECM"   , bquote({}[ECM])       ),
+	list("_pas"   , bquote({}[pas])       ),
+	list("_Tree"  , bquote({}[Tree])      ),
+	list("_popDenS", bquote({}[popDenS])  ),
+	list("_popDenIg", bquote({}[popDenIg])))
+	

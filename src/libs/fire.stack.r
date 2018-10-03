@@ -1,5 +1,5 @@
 fire.stack <- function(x, y) {
-    x = x0 = stack(x)
+    x = x0 = brick(x)
     x0= mean(x0)
     
     x = layer.apply(1:nlayers(y), function(i) {
@@ -13,6 +13,6 @@ fire.stack <- function(x, y) {
     })
     x = mean(x, na.rm = TRUE)
     
-    x[is.na(x)] = x0[is.na(x)]
+    x[is.na(x)] = x0[[1]][is.na(x)]
     return(x)
 }
