@@ -71,12 +71,12 @@ lims_msure = list(fuel    = seq(0.1, 0.8, 0.1) * 100,
                   igntions= c(0.1, 1, 2, 5, 10, 20, 30),
                   supress = c(1, 2, 5, 10, 20, 50))
 
-names_msure = c('Fuel continuity', 'Fuel moisture', 'Ignitions', 'Suppression')
+names_msure = c('a) Fuel continuity', 'b) Fuel moisture', 'c) Ignitions', 'd) Suppression')
 units_msure = c('%', '%', '/~km2~', 'index')  
 
-names_input = c("Vegetation cover", "~alpha~~_max~", "Tree cover", "~alpha~", "EMC", 
-			    "Cloud-ground lightning", "Pasture", "Population density", 
-				"Cropland", "Burnt area")
+names_input = c("a) Vegetation cover", "b) ~alpha~~_max~", "c) Tree cover", "d) ~alpha~", "e) EMC", 
+			    "f) Cloud-ground lightning", "g) Pasture", "h) Population density", 
+				"i) Cropland", "j) Burnt area")
 units_input = c('%', '', '%', '', '%', 'flashes/~km2~', '%', 'people/~km2~', '%', '%')
                 
 #########################################################################
@@ -186,8 +186,8 @@ lmat = rbind(c(1, 2, 0),
 			 c(6, 7, 0),
 			 8:10)
 			 
-#plot_inputs(Obs_mean, fignames[1], lmat = lmat)
-#plot_inputs(Obs_fire, fignames[2], lmat = lmat)
+plot_inputs(Obs_mean, fignames[1], lmat = lmat)
+plot_inputs(Obs_fire, fignames[2], lmat = lmat)
 plot_inputs(Obs_trnd, fignames[3], lmat = lmat, cols = colt_input, lims = limt_input)
 
 
