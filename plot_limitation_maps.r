@@ -10,10 +10,10 @@ fig_fname       = 'figs/limitation_map'
 fig_fname_indiv = 'figs/ind_limiataions'
 
 
-labs = c('Standard limitation', 'Potential limitation', 'Sensitivity',
+labs = c('Standard\nlimitation', 'Potential\nlimitation', '\nSensitivity',
          '', '', '')
 
-ens_tfile = 'temp/limitation_maps_ens3'
+ens_tfile = 'temp/limitation_maps_ens4'
 mod_files = paste(temp_dir, '/LimFIRE_',
                  c('fire', 'fuel','moisture','ignitions','supression'),
                   sep = '')
@@ -140,7 +140,7 @@ ens_tfile = paste(ens_tfile, niterations, '.Rd', sep = '-')
 if (file.exists(ens_tfile)) load(ens_tfile) else {
 	ensamble = lapply(dirs[1:50], findParameterLimitation)
 	ensambleSum =  lapply(1:length(ensamble[[1]]),
-					      function(i) extractEnsamble(ensamble, i, mean90quant.ens))
+					      function(i) extractEnsamble(ensamble, i, mean90quant.ens, quantiles = c(0.215, 0.785)))
 	save(ensamble, ensambleSum,  file = ens_tfile)
 }
 #niterations = 21
@@ -187,19 +187,22 @@ calculate_weightedAverage <- function(xy, pmod) {
 plot_pmod <- function(i, index = NULL, normalise = FALSE, ...) {
     pmods = ensambleSum[[i]]
 	lab = labs[i]
+	let = letters[i]
+	let = paste(let, ')', sep = '')
     pmods = pmods[-1] # remove first element of simulated fire
 	#pmod = mapply(function(pm, FUN) FUN(pm), pmods, FUNs)
 	pmod = lapply(pmods, function(i) i[[1]])
 	if (!is.null(index)) {
-		pmod = mapply(function(p, pm, i) pm[[i]] - p, pmod, pmods, index)
+		#pmod = mapply(function(p, pm, i) pm[[i]] - p, pmod, pmods, index)
+		pmod = mapply(function(pm, i) pm[[i]], pmods, index)
 		normalise = normalise
 		limits = c(0.001, 0.01, 0.1)
 		cols = c("FF", "CC", "99", "55", "11")
-	} else {
-		normalise = TRUE
-		limits = c(0.1, 0.5, 0.9)
-		cols = rev(c("FF", "CC", "99", "55", "11"))
 	}
+	
+	normalise = TRUE
+	limits = c(0.1, 0.5, 0.9)
+	cols = rev(c("FF", "CC", "99", "55", "11"))
 	
     xy = xyFromCell(pmod[[1]], 1:length(pmod[[1]]))
     pmod = lapply(pmod, values)
@@ -207,14 +210,15 @@ plot_pmod <- function(i, index = NULL, normalise = FALSE, ...) {
     plot_4way(xy[,1], xy[,2], pmod[[2]], pmod[[1]], pmod[[3]], pmod[[4]],
               x_range = c(-180, 180), y_range = c(-60, 90),
               cols = 	cols, limits = limits, 
-              coast.lwd=par("lwd"),ePatternRes = 40, ePatternThick = 0.5,
+              coast.lwd=par("lwd"),ePatternRes = 40, ePatternThick = 0.6,
               add_legend=FALSE, smooth_image=FALSE,smooth_factor=5, normalise = normalise, ...)
+	mtext(let, side = 1, adj  = 0.2, cex = 1.5, line = -2)
     addLocPoints()    
     pcs = calculate_weightedAverage(xy, pmod)
 	
 	polygon(c(-180, -140, -140, -180), c(-60, -60, 30, 30), col = 'white', border = NA)
     #text(lab, x = -160, y = 0, cex = 1.5, srt = 90)
-    mtext(lab, line = -2, adj = 0.05, side = 2)
+    mtext(lab, line = -3.5, adj = 0.05, side = 2, cex = 1.5)
     return(pcs)
 }
 
@@ -254,14 +258,14 @@ plotAddLimTypes <- function(fname, ...) {
 
 plotAddLimTypes('', NULL)
 
-#plotAddLimTypes('maxFuel', c(3, rep(2, 3)))
-#plotAddLimTypes('minFuel', c(2, rep(3, 3)))
+plotAddLimTypes('maxFuel', c(3, rep(2, 3)))
+plotAddLimTypes('minFuel', c(2, rep(3, 3)))
 
-#plotAddLimTypes('maxMist', c(2, 3, 2, 2))
-#plotAddLimTypes('minMist', c(3, 2, 3, 3))
+plotAddLimTypes('maxIgni', c(2, 3, 2, 2))
+plotAddLimTypes('minIgni', c(3, 2, 3, 3))
 
-#plotAddLimTypes('maxIgni', c(2, 2, 3, 2))
-#plotAddLimTypes('minIgni', c(3, 3, 2, 3))
+plotAddLimTypes('maxMist', c(2, 2, 3, 2))
+plotAddLimTypes('minMist', c(3, 3, 2, 3))
 
-#plotAddLimTypes('maxSupp', c(2, 2, 2, 3))
-#plotAddLimTypes('minSupp', c(3, 3, 3, 2))
+plotAddLimTypes('maxSupp', c(2, 2, 2, 3))
+plotAddLimTypes('minSupp', c(3, 3, 3, 2))
