@@ -1,4 +1,4 @@
-extractEnsamble <- function(ensamble, id, FUN)  apply(sapply(ensamble, function(i) i[[id]]), 1, FUN)
+extractEnsamble <- function(ensamble, id, FUN, ...)  apply(sapply(ensamble, function(i) i[[id]]), 1, FUN, ...)
 
 fisherPval <- function(pvals)
 	-2 * sum(log(1 - pvals))
@@ -26,14 +26,14 @@ meanSD.ens <- function(i, ...) {
 	return(addLayer(mn, sd))
 }
 
-mean90quant.ens <- function(i, ...) {
-	print("yay")
+mean90quant.ens <- function(i, quantiles = c(0.1, 0.9),...) {
+	
 	i = brick.ens(i)
 	mn = mean(i, na.rm = TRUE)
 	
 	vi = values(i)
 	mask = apply(vi, 1, function(i) !all(is.na(i)))
-	qu = apply(vi[mask,], 1, quantile, c(0.1, 0.9), na.rm = TRUE)
+	qu = apply(vi[mask,], 1, quantile, quantiles, na.rm = TRUE)
 	
 	mask = !all(is.na(i))
 	qu = layer.apply(1:2, function(i) {mn[mask] = qu[i,]; mn})

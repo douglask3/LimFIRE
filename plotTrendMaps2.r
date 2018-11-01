@@ -9,7 +9,7 @@ figName = 'figs/TrendMaps'
 trend_lims = seq(10, 90, 10)
 trend_lims = c(-rev(trend_lims), trend_lims)
 index_lims = list(c(-10, -5, -2, -1, 1, 2, 5, 10),
-				  c(0, 10, 20, 30, 40, 50, 60, 70, 80))
+				  c(0, 10, 20, 30, 40, 50, 60, 70))
 
 
 grab_cache = TRUE
@@ -18,15 +18,16 @@ loadData4Ecosystem_analysis()
 
 plotControl <- function(trd, nme, sc = 1, limits = trend_lims, cols = dfire_cols, add_legend = FALSE, units = '', ...) {
 	plotStandardMap(mean(trd) * sc, '', limits = limits, cols =  cols, 
-					e = sd.raster(trd), ePatternRes = 30, ePatternThick = 0.2, limits_error = c(1/10, 1/2),
+					e = sd.raster(trd), ePatternRes = 40, ePatternThick = 0.6, limits_error = c(1/10, 1/2),
 					add_legend = add_legend, ...)
 	mtext(nme, adj = 0.02, line = -1.2, cex = 0.9)
 	mtext(cex = 0.8 * 0.8, side = 1, units, line = -2.75, adj = 0.58)
 }
-
+#fire_cols = c('white', '#FFDD00', '#BB0000', '#220000')
 ##########################################
 ## Plot trends in controls              ##
 ##########################################
+"
 fname = paste(figName, 'controls.png', sep = '-')
 png(fname, height = 4, width = 8, units = 'in', res = 300)
 	layout(rbind(1:2, 3:4, c(5, 5)), heights = c(1,1, 0.3))
@@ -40,11 +41,18 @@ png(fname, height = 4, width = 8, units = 'in', res = 300)
 					   transpose = FALSE, plot_loc = c(0.25, 0.75, 0.75, 0.9), ylabposScling=1.5, oneSideLabels = NA)
 	mtext(cex = 0.8, side = 1, '% change in area burnt', line = -2.5)
 dev.off()
-
+"
 grabFirst <- function(lr) layer.apply(lr, function(r) r[[1]])
-trendIndex = list(grabFirst(trendIndex1), grabFirst(trendIndex2))
-trendIndex = lapply(trendIndex, function(i) {i[is.infinite(i)] = NaN; i})
-trendIndex[[2]][is.na(trendIndex[[1]][[1]])] = NaN
+trendIndex = list(grabFirst(trendIndex1), grabFirst(trendIndex3))
+#trendIndex[[2]] = layer.apply(1:50, function(i) {	
+#	trendIndex[[2]][[i]][trendIndex[[1]][[i]]<0] = -trendIndex[[2]][[i]][trendIndex[[1]][[i]]]; 
+#	trendIndex[[2]][[i]]})
+#trendIndex = lapply(trendIndex, function(i) {i[is.infinite(i)] = NaN; i})
+#trendIndex[[2]][is.na(trendIndex[[1]][[1]])] = NaN
+trendIndex[[2]] = layer.apply(1:50, function(i) sqrt( trend12FF[[2]][[i]]^2 + 
+												trend12FF[[3]][[i]]^2 + 
+												trend12FF[[4]][[i]]^2 +
+												trend12FF[[5]][[i]]^2))/2
 trendIndex[[1]] =  trend12FF[[1]]
 ##########################################
 ## Trends in burnt area and fire regime ##
@@ -62,7 +70,8 @@ png(fname, height = 1.1 * 4 * 3.3/2.3, width = 4, units = 'in', res = 300)
 ## Plot attribution map                 ##
 ##########################################
 	trend = trendIndex[[2]]
-	mask  = mean(trend) > median(trend[], na.rm = TRUE) & !is.na(trend[[1]])	
+	#mask  = mean(trend) > median(trend[], na.rm = TRUE) & !is.na(trend[[1]])	
+	mask  = mean(trend) > sqrt(0.25)/2 & !is.na(trend[[1]])	
 	#mask = !is.na(trend[[1]])	
 	controlTrendsLoc <- function(cntr) {
 		cntr[[1]][!mask] = NaN
@@ -100,7 +109,7 @@ png(fname, height = 1.1 * 4 * 3.3/2.3, width = 4, units = 'in', res = 300)
 		tmap[[1]][test] = nID
 		tmap[[2]][test] = as.numeric(cols[4, colIndex(l)])
 		
-		num = sum(area(test)[test])
+		num = sum(raster::area(test)[test])
 		
 		colsi = c(cols[1,colIndex(i)], cols[2, colIndex(j)], cols[3, colIndex(k)])
 		colsi = colsi[!is.na(colsi)]

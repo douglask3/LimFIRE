@@ -5,26 +5,39 @@ legLabs = c('Burnt Area', 'Fuel'   , 'Moisture', 'Ignitions', 'Suppression', 'Ov
 
 
 loadData4Ecosystem_analysis()
-for (i in 1:length(ensamble)) {
-	ens = ensamble[[i]]
-	#ens[[1]][[1]]= ens[[1]][[1]] / 100
-	ensamble[[i]] = c(ens, trendIndex1[[i]], trendIndex2[[i]])
+
+trendDistance_ensamble <- function(ens) {
+	fname = paste('temp/trendDistance_ensamble2_', ens, '.nc', sep = '')
+	print(fname)
+	FUN <- function() {
+		facs = layer.apply(trend12FF[-1], function(i) abs(i[[ens]]))
+		return(sqrt(sum(facs^2))/sqrt(4))
+	}
+	return(runIfNoFile(fname, FUN))
 }
 
+for (i in 1:length(ensamble)) {
+	ens = ensamble[[i]][1:5]
+	ens[[1]][[1]]= ens[[1]][[1]] / 100
+	#trendIndex2[[i]] = trendDistance_ensamble(i)
+	ensamble[[i]] = c(ens, trendIndex1[[i]], trendIndex3[[i]])
+}
+#browser()
 trendInClass <- function(r, mask, biome) {
 	mask0 = mask
-	
+	print("yay")
 	r = abs(r[[1]])
 	mask = mask + !is.na(r)
 	mask = mask == max.raster(mask, na.rm = TRUE)
 	#if (biome == 2) browser()
 	vr = r[mask]
-	va = area(r)[mask]
+	va = raster::area(r)[mask]
 	
 	ot = wtd.quantile(vr, c(0.1, 0.25, 0.5, 0.75, 0.9), weight = va) ## area weight
 	r[r < -100] = -100
 	r[r > 100] = 100
 	ot = c(ot, mean = sum(vr * va)/ sum(va))
+	
 	return(ot)
 }
 
@@ -38,6 +51,7 @@ summerize <- function(class, FUN) {
 trends4Ecosystem <- function(biome) {
 	print(biome)
 	mask = biomeAssigned == biome
+	
 	qs = sapply(ensamble, function(i) lapply(i, trendInClass, mask, biome))
 
 	mn   = apply(qs, 1, summerize, mean)

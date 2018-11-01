@@ -12,7 +12,7 @@ limitTitles = c('e) Fire', 'a) Fuel', 'b) Moisture', 'c) Ignitions', 'd) Suppres
 
 tempF1 = 'temp/limitations4trends-Tree-alphaMax2'
 tempF2 = 'temp/trendsFromLimitations-Tree-alphaMax2'
-esnambleTemp <- 'temp/ensamble_12FFonly22'
+esnambleTemp <- 'temp/ensamble_12FFonly23'
 
 dfire_lims = c(-5, -2, -1, -0.5, -0.2, -0.1, 0.1, 0.2, 0.5, 1, 2, 5)/100
 dfire_cols = c('#000033', '#0099DD', 'white', '#DD9900', '#330000')
@@ -117,10 +117,9 @@ findParameterTrends <- function(files, factor) {
 		x0[test] = (x0[test]) / i[test]
 		
 		x0[x0 >  1] =  1
-		x0[x0 > -1] = -1
+		x0[x0 < -1] = -1
 		
-		x[[1]] = x0
-		
+		x[[1]] = x0	
 		
 		return(x)
 	}
@@ -143,15 +142,24 @@ extractEnsamble <- function(id, FUN)
 
 trend12FF = lapply(1:5, function(i) layer.apply(ensamble, function(ens) ens[[i]][[1]]))
 
-make_trend_index_local <- function(ens, files, name = 'trendIndex1', ...) {
+make_trend_index_local <- function(ens, files, name = 'trendIndex1', trendFun =  make_trend_index,...) {
 	tfname = head(strsplit(files[[1]][1], '/')[[1]], -1)
 	tfname = paste(tfname, collapse = '/')
 	tfname = paste(tfname, paste(name, '.nc', sep = ''), sep = '/')
 	print(tfname)
-	out = runIfNoFile(tfname, make_trend_index, ens, files, ...)
+	out = runIfNoFile(tfname, trendFun, ens, files, ...)
 	return(out)
 }
 
 trendIndex1 = mapply(make_trend_index_local, ensamble, ens_files[1:Nensmble], test = grab_cache)
 trendIndex2 = mapply(make_trend_index_local, ensamble, ens_files[1:Nensmble], 
 					 MoreArgs = list('trendIndex2.2', absTrend = TRUE, test = grab_cache))
+					 
+
+#trendIndex3 = mapply(make_trend_index_local, ensamble, ens_files[1:Nensmble], #
+					 #MoreArgs = list('trendIndex3', trendFun = control_distance, absTrend = NULL, test = FALSE))
+
+					 trendIndex3 = layer.apply(1:50, function(i)sqrt( trend12FF[[2]][[i]]^2 + 
+												trend12FF[[3]][[i]]^2 + 
+												trend12FF[[4]][[i]]^2 +
+												trend12FF[[5]][[i]]^2)/2)
