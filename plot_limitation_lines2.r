@@ -71,7 +71,7 @@ plotScatter <- function(name, col, yg = NULL, FUNi, dFUNi, x0, k, ksc, log = '',
 	  	 xaxt = 'n', xlab = '', ylab = '', yaxt = 'n', type = 'n', log = c('','y')[ylog + 1], ...)
 		
 	if (polygonsNotPoints) {
-		quantileDesnityPoly(Obs[, name], Obs[, 'fire'], xlim = xlim)	
+		quantileDesnityPoly(Obs[, name], Obs[, 'fire'], xlim = xlim, nbins = 100)	
 	} else {
 		obsPoints <- function(cex, alpha, col) {
 			colp = make.transparent(col, alpha)	
@@ -114,7 +114,7 @@ plotScatter <- function(name, col, yg = NULL, FUNi, dFUNi, x0, k, ksc, log = '',
 	addPoints <- function(i, info, index, plot = TRUE, plotPnts = TRUE, ...) {
 		
 		col = info[[3]]
-		colt = make.transparent(col, c(0.75, 0.95))
+		colt = make.transparent(col, c(0.6, 0.9))
 		
 		x = seq(min(i[,name]), max(i[, name]), length.out = 1000)	
 		y = c(rep(2, length(x)), rep(c(-2, 0.00001)[ylog+1], length(x))); x = c(x, rev(x))
@@ -142,11 +142,11 @@ plotScatter <- function(name, col, yg = NULL, FUNi, dFUNi, x0, k, ksc, log = '',
 		xl = x + dx
 		yl = y + dy
 		
-		if (plot)
-			if (plotGrad) lines(xl, yl, lwd = 3, col = col, xpd = NA, ...)
+		#if (plot)
+		#	if (plotGrad) lines(xl, yl, lwd = 3, col = col, xpd = NA, ...)
 		
-		if (plot && plotPnts)
-			points(x, y, col = col, pch = 16 , cex = 2.5 , lwd = 4)
+		#if (plot && plotPnts)
+		#	points(x, y, col = col, pch = 16 , cex = 2.5 , lwd = 4)
 		
 		return(c(lim = y, sen = g))
 	} 
@@ -174,56 +174,61 @@ plotAll <- function(fname0 = NULL, fuel = NULL, moisture = NULL,
 
 	par(mar = c(3,0.5,1,0), oma = c(0,3.5,1,3.5))
 
-	leg <- function(pch, col, ...) 
-		legend('right', legend = legNames,
-			   pch = pch, col = col, lty = 2, lwd = 2, 
+	leg <- function(pch, col, ...)  {
+		legend(x=20, y = 1, pch = pch, col = c('#BBBBBB', '#999999', '#777777', '#555555', '#333333'), 
+			   legend = c('99%', '95%', '90%', '75%', '50%'), bty = 'n', cex = 1.33, ...)
+		legend(x = 42, y = 1, legend = legNames,
+			   pch = pch, col = col,  
 			   cex = 1.33, ncol = 1, bty = 'n', seg.len	= 4, ...)
-
+	}
 	fuel = plotScatter('fuel', col = 'green', fuel,
 					   LimFIRE.fuel, dLimFIRE.fuel, 
 					   'fuel_x0', 'fuel_k', 1.0,   x2pc = TRUE,
 					   xlim = c(0, 1), ...)
 					   
 	axis(2, at = yticks, labels = yticks * 100)
-	mtext(side = 3, 'a)', adj = 0.1, line = -1)
+	mtext(side = 3, 'a)', adj = 0.1, line = -1.3)
 	mtext('Fuel Continuity (%)', 1, line = 2.3)
 
 	moisture = plotScatter('moisture', col = 'blue', moisture,
 						   LimFIRE.moisture, dLimFIRE.moisture, 
 						   'moisture_x0', 'moisture_k', -1.0, 
-						   x2pc = TRUE, xlim = c(0, 1), ...)
-	mtext(side = 3, 'b)', adj = 0.1, line = -1)
+						   x2pc = TRUE, xlim = c(0, 0.9), ...)
+	mtext(side = 3, 'b)', adj = 0.1, line = -1.3)
 	mtext('Fuel Moisture (%)', 1, line = 2.3)
 	if (axis4) axis(side = 4, at = yticks, labels = 100 - yticks * 100)
 	
 	ignitions = plotScatter('ignitions', col = 'red', ignitions, 
 							LimFIRE.ignitions, dLimFIRE.ignitions, 
 							'igntions_x0', 'igntions_k', 1.0, 
-							xlim = c(0, 8), ...)
-	mtext(side = 3, 'c)', adj = 0.1, line = -1)
+							xlim = c(0, 5), ...)
+	mtext(side = 3, 'c)', adj = 0.1, line = -1.3)
 	mtext('No. Ignitions', 1, line = 2.3)
 	axis(2, at = yticks, labels = yticks * 100)
 
+	
+	if (ylog) xlim = c(0, 90) else xlim = c(0, 80)
+	suppression = plotScatter('suppression', col = 'black', suppression,
+							  LimFIRE.supression, dLimFIRE.supression, 
+							  'suppression_x0', 'suppression_k', -1.0, 
+							  xlim = xlim, ...)
+	mtext('Suppression Index', 1, line = 2.3)
+	mtext(side = 3, 'd)', adj = 0.1, line = -1.3)
+	if (axis4) axis(side = 4, at = yticks, labels = 100 - yticks * 100)
+
+	mtext('Burnt Area(%)', side = 2, line = 2, outer = TRUE)
+	if (axis4) 
+		mtext('Limitation on Burnt Area', side = 4, line = 2, outer = TRUE)
+		
 	if (fname0 != "empty") {
 		legNames =  names(hlghtPnts)
 		cols = listSelectItem(hlghtPnts, 'col')
 		colt = make.transparent(cols, 0.75)
 
 		leg(15, colt, pt.cex = 5)
-		leg(16, cols, pt.cex = 2)		
+		#leg(16, cols, pt.cex = 2)		
 	}
-	if (ylog) xlim = c(0, 90) else xlim = c(0, 100)
-	suppression = plotScatter('suppression', col = 'black', suppression,
-							  LimFIRE.supression, dLimFIRE.supression, 
-							  'suppression_x0', 'suppression_k', -1.0, 
-							  xlim = xlim, ...)
-	mtext('Suppression Index', 1, line = 2.3)
-	mtext(side = 3, 'd)', adj = 0.1, line = -1)
-	if (axis4) axis(side = 4, at = yticks, labels = 100 - yticks * 100)
-
-	mtext('Burnt Area(%)', side = 2, line = 2, outer = TRUE)
-	if (axis4) 
-		mtext('Limitation on Burnt Area', side = 4, line = 2, outer = TRUE)
+	
 	dev.off()
 	return(list(fuel, moisture, ignitions, suppression))
 }
