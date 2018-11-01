@@ -19,7 +19,7 @@ mask = !is.na(trend12FF[[1]][[1]])
 dat = lapply(1:5, function(con) layer.apply(ensamble, function(i) i[[con]][[1]]))
 dat = c(dat,
 		layer.apply(trendIndex1, function(i) i[[1]]),
-		layer.apply(trendIndex2, function(i) i[[1]]))
+		layer.apply(trendIndex3, function(i) i[[1]]))
 dat[[1]] = dat[[1]]
 
 

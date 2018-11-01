@@ -7,45 +7,38 @@ graphics.off()
 grab_cache = TRUE
 
 tempF1 = 'temp/limitations4trends-Tree-alphaMax2'
-tempF2 = 'temp/removeControl'
+tempF2 = 'temp/removeControl2'
 esnambleTemp <- 'temp/ensamble4contols'
 
 tempFile <- function(fnames, extraName = '') {
 	fnames = paste(fnames, extraName, sep = '')
 	fnames = paste(fnames, c('fire', 'fuel', 'moisture', 'igntions', 'suppression'), '.nc', sep = '-')
 }
-
+loadData4Ecosystem_analysis()
 niterations = 11
 
 #########################################################################
 ## Run model                                                           ##
 #########################################################################
-findLims <- function(line) {
-	print(line)
-	fnameLine = paste('paramLine', line, sep = "")
-	tempF1A = tempFile(tempF1, fnameLine)
-	lims  = runIfNoFile(tempF1A, runLimFIREfromstandardIns, raw = TRUE, pline = line, 
-					    test = grab_cache)
-	return(lims)
-	
-}
-esnambleTemp = paste(esnambleTemp, niterations, sep = '-')
-if (file.exists(esnambleTemp)) {
-	load (esnambleTemp)
-} else {
-	ensamble = lapply(seq(0, 1, length.out = niterations), findLims)
-	save(ensamble, file = esnambleTemp)
-}
+ens_files = open_ensembles()
 
 removeControl <- function( lims, crm) {
-
+	cnt = brick(lims[[1]])
+	lims = lims[-1]
+	lims = lapply(lims, brick)
 	mnthRm <- function(mn) {
 		print(mn)
-		prod(layer.apply(lims[c(-1, -crm - 1)], function(i) i[[mn]]))
+		#prod(layer.apply(lims[-crm], function(i) i[[mn]]))
+		lim = lims[-crm]
+		lim[[1]][[mn]] * lim[[2]][[mn]] * lim[[3]][[mn]]
 	}
-	
+	#browser()
+	#cl = makeCluster(c("localhost","localhost","localhost","localhost"),  type = 'SOCK')
+	#	exp = clusterApply(cl, 1:12, fun = mnthRm)
+	#stopCluster(cl)
+	#exp = layer.apply(exp, function(i) i)
 	exp = layer.apply(1:(nlayers(lims[[1]])), mnthRm)
-	cnt = lims[[1]]
+	#exp = layer.apply(1:12, mnthRm)
 	
 	exp = sum(exp)
 	cnt = sum(cnt)
@@ -55,10 +48,13 @@ removeControl <- function( lims, crm) {
 RunControl <- function(crm) {
 	
 	RunMember <- function(lims, ensN) {
+		lims = lims[[2]]
 		tempF2A = tempFile(tempF2, paste(niterations, ensN, sep = '-'))[crm + 1]
+		print(tempF2A)
 		return(runIfNoFile(tempF2A, removeControl, lims, crm))
 	}
-	out = mapply(RunMember, ensamble, 1:length(ensamble)) 
+	
+	out = mapply(RunMember, ens_files, 1:length(ensamble)) 
 	out = layer.apply(out, function(i) i) /168
 	mn = mean(out)
 	sd = sd.raster(out, FALSE)
