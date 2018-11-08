@@ -142,7 +142,7 @@ png('figs/human_impact.png', width = 7.5 *7/5, height = 6.5, res = 300, unit = '
 	addLegend(dfire_lims[[2]], '% change in normalised burnt area')
 	addLegend(dfire_lims[[3]], '% change in normalised burnt area')
 	
-	mapply(mtext, c("Impact on fire", "Impact of trend"), adj = c(2.2, 4.5)/5, 
+	mapply(mtext, c("Impact on fire", "Impact on trend"), adj = c(2.2, 4.5)/5, 
 		   MoreArgs = list(side = 3, outer = TRUE))
 	mtext('change in burnt area (%)', side = 2, line = 1.5, cex = 0.8, outer = TRUE, adj = 0.5 * 4.3/4)
 dev.off()
