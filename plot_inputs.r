@@ -99,8 +99,8 @@ trend.brick <- function(fname) {
 }
 
 # open Obs
-#Obs = lapply(drive_fname, stack)
-#Obs = Obs[names(cols_input)]
+Obs = lapply(drive_fname, stack)
+Obs = Obs[names(cols_input)]
 
 # monthly mean                    
 Obs_mean = lapply(drive_fname, openMean)
@@ -111,8 +111,8 @@ Obs_fire = lapply(drive_fname, openMean, fire.stack, '-season.nc', fire_season_r
 Obs_fire = Obs_fire[names(cols_input)]
 
 # monthly mean during fire season height
-#Obs_trnd = lapply(drive_fname, openMean, trend.brick, '-trend.nc')
-#Obs_trnd = Obs_trnd[names(cols_input)]
+Obs_trnd = lapply(drive_fname, openMean, trend.brick, '-trend.nc')
+Obs_trnd = Obs_trnd[names(cols_input)]
 
 ## Combined Inputs (i.e, fuel, mositure, igntions, supression measures)
 fnames = fnames = c('nnfire', 'fuel', 'moisture', 'igntions', 'supression')
@@ -121,12 +121,12 @@ fnames_mean = paste('temp/', fnames[-1], '-measuresMean.nc', sep = '')
 fnames_fire = paste('temp/', fnames[-1], '-measuresFire.nc', sep = '')
       
 	  
-#measures = runIfNoFile(fnames_mod, runLimFIREfromstandardIns,
-#                       just_measures = TRUE, raw = TRUE, test = grab_cache)
+measures = runIfNoFile(fnames_mod, runLimFIREfromstandardIns,
+                       just_measures = TRUE, raw = TRUE, test = grab_cache)
 					   
-#measures = measures[-1]
-#measures_mean = runIfNoFile(fnames_mean, function(i) lapply(i, mean), measures, test = grab_cache)
-#measures_fire = runIfNoFile(fnames_fire, function(i) lapply(i, fire.stack, fire_season_r), measures, test = grab_cache)
+measures = measures[-1]
+measures_mean = runIfNoFile(fnames_mean, function(i) lapply(i, mean), measures, test = grab_cache)
+measures_fire = runIfNoFile(fnames_fire, function(i) lapply(i, fire.stack, fire_season_r), measures, test = grab_cache)
 
 #########################################################################
 ## Plot maps                                                           ##
