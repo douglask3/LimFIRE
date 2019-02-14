@@ -5,7 +5,7 @@
 source('cfg.r')
 graphics.off()
 
-grab_cache = TRUE
+grab_cache = FALSE
 
 fignames = paste('figs/',
                 c('inputs_mean','inputs_fireSeason', 'inputs_trend',
