@@ -5,7 +5,7 @@
 source('cfg.r')
 graphics.off()
 
-grab_cache = FALSE
+grab_cache = TRUE
 
 fignames = paste('figs/',
                 c('inputs_mean','inputs_fireSeason', 'inputs_trend',
@@ -29,14 +29,25 @@ cols_input = list(bare     = c('white', '#77DD00', '#004400'),
 
 lims_input = list(bare     = c(0, 20, 40, 60, 80, 90, 95),
                   alphaMax = c(1.2, 1.4, 1.6, 1.8, 2.0, 2.2, 2.4),
-				  tree     = c(0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8) * 100,
-				  alpha    = c(0.2, 0.4, 0.6, 0.8, 1.0),
+		  tree     = c(0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8) * 100,
+		  alpha    = c(0.2, 0.4, 0.6, 0.8, 1.0) *100,
                   emc      = c(5, 10, 20, 40, 60, 80),
                   Lightn   = c(0.01, 0.1, 0.2, 0.5, 1, 2, 3),
                   pas      = c(1, 2, 5, 10, 20, 50),
                   popdens  = c(0.01, 0.1, 1, 10, 100, 1000),
                   crop     = c(0.1, 0.3, 1, 3, 10, 30),
                   fire     = fire_lims)
+
+maxL_input = list(bare     =100,
+                  alphaMax = NULL,
+		  tree     = 100,
+		  alpha    = NULL,
+                  emc      = 100,
+                  Lightn   = NULL,
+                  pas      = 100,
+                  popdens  = NULL,
+                  crop     = 100,
+                  fire     = 100)
 				  
 colt_input = list(bare     = c('#220022', '#DD0077', 'white', '#77DD00', '#004400'),
 				  alphaMax = c('#440000','#AAAA00', 'white', '#00AAAA', '#220022'),
@@ -51,8 +62,8 @@ colt_input = list(bare     = c('#220022', '#DD0077', 'white', '#77DD00', '#00440
 
 limt_input = list(bare     = c(-1, -0.5, -0.2, -0.1, 0.1, 0.2, 0.5, 1),
                   alphaMax = c(-0.05, -0.02, -0.01, -0.001, 0.001, 0.01, 0.02, 0.05),
-				  tree     = c(-2, -1, -0.2, -0.1, 0.1, 0.2, 1, 2),
-				  alpha    = c(-0.02, -0.01, -0.005, -0.001, 0.001, 0.005, 0.01, 0.02),
+		  tree     = c(-2, -1, -0.2, -0.1, 0.1, 0.2, 1, 2),
+		  alpha    = c(-0.02, -0.01, -0.005, -0.001, 0.001, 0.005, 0.01, 0.02) * 100,
                   emc      = c(-0.5, -0.1, -0.05, -0.01, 0.01, 0.05, 0.1, 0.5),
                   Lightn   = c(NaN),
                   pas      = c(-0.1, -0.01, -0.001, 0.001, 0.01, 0.1),
@@ -60,7 +71,8 @@ limt_input = list(bare     = c(-1, -0.5, -0.2, -0.1, 0.1, 0.2, 0.5, 1),
                   crop     = c(-1, -0.5, -0.1, 0.1, 0.5, 1),
                   fire     = c(-0.1, -0.05, -0.01, -0.005, -0.001, 0.001, 0.005, 0.01, 0.05, 0.1))
 
-                 
+
+units_input = c('%', '', '%', '%', '%', 'flashes k~m-2~', '%', 'people k~m-2~', '%', '%')                 
 cols_msure = list(fuel    = c('white', '#33FF33', '#002200'),
                   moisture= c('white', '#3333FF', '#000022'),
                   igntions= c('white', '#FF3333', '#220000'),
@@ -77,7 +89,6 @@ units_msure = c('%', '%', '/~km2~', 'index')
 names_input = c("a) Vegetation cover", "b) ~alpha~~_max~", "c) Tree cover", "d) ~alpha~", "e) EMC", 
 			    "f) Cloud-ground lightning", "g) Pasture", "h) Population density", 
 				"i) Cropland", "j) Burnt area")
-units_input = c('%', '', '%', '', '%', 'flashes/~km2~', '%', 'people/~km2~', '%', '%')
                 
 #########################################################################
 ## open data                                                           ##
@@ -133,65 +144,68 @@ measures_fire = runIfNoFile(fnames_fire, function(i) lapply(i, fire.stack, fire_
 #########################################################################
 plot_inputs <- function(Obs, fname, names = names_input, units = units_input,
                         lims = lims_input, cols = cols_input, 
-						lmat = NULL, lineMod = 0,...) {
+			lmat = NULL, lineMod = 0.9,
+                        maxLab = NULL, extend_max = FALSE, extend_min = FALSE, ...) {
     print(fname)
-    
-    plot_input <- function(x, lim, col, name, unit= '') {
-		if (nlayers(x) == 1) e = NULL else e = x[[2]]
-        dev.new()
+    if (!extend_max & !is.null(maxLab)) extend_max = sapply(maxLab, is.null)
+    if (is.null(maxLab)) maxLab = list(NULL)
+    plot_input <- function(x, lim, col, name, unit= '', maxLab, extend_max, extend_min) {
+	if (nlayers(x) == 1) e = NULL else e = x[[2]]
+        
         plot_raster(x, lim, col, quick = TRUE, limits_error = c(0.05, 0.1), e = e,
-							ePatternRes = 40, ePatternThick = 0.5, interior = FALSE,...)
+                    ePatternRes = 35, ePatternThick = 0.3, interior = FALSE,...)
 		#addLocPoints()
         mtext.units(name, line = -1 + lineMod * 0.5, adj = 0.1)
 		
-		if (length(lim) > 1 && !is.na(lim)) {
-			standard_legend(col, lim, x, add = TRUE, plot_loc = c(0.37, 0.88, 0.03, 0.06), ylabposScling = 1.25, oneSideLabels = FALSE)
-			mtext.units(unit, side = 1, line = -3 + lineMod, adj = 0.75, cex = 0.85)
-		}
-        browser()
+        if (length(lim) > 1 && !is.na(lim)) {
+	    standard_legend(col, lim, x, add = TRUE, plot_loc = c(0.37, 0.86, 0.015, 0.05), 
+                            ylabposScling = 1.33, oneSideLabels = FALSE, units = unit,
+                           maxLab = maxLab, extend_max = extend_max, extend_min = extend_min)
+	    #mtext.units(unit, side = 1, line = -3 + lineMod, adj = 0.75, cex = 0.85)
+	}
     }
     
     nplts = length(lims)
     nrows = ceiling(sqrt(length(lims)))
-	nplts = ceiling(nplts/nrows) * nrows
+    nplts = ceiling(nplts/nrows) * nrows
     
-    png(fname, height = 0.8 * 2.2 * nrows, width = 0.8 * 4.5 * ceiling(nplts/nrows), 
-	    res = 300, units = 'in')
+    png(fname, height = 0.95 * 2.2 * nrows, width = 0.8 * 4.5 * ceiling(nplts/nrows), 
+	res = 300, units = 'in')
 		
 					 
-		if (is.null(lmat)) lmat = (matrix(1:nplts, nrow = nrows))
+	if (is.null(lmat)) lmat = (matrix(1:nplts, nrow = nrows))
         layout(lmat)#, height = rep(1, 3))
 
-        par(mar = rep(0.5, 4))
-        mapply(plot_input, Obs, lims, cols, names, units)
+        par(mar = c(2, 0, 0.5, 0), oma = c(0, 0, 0.2, 0))
+        mapply(plot_input, Obs, lims, cols, names, units, maxLab, extend_max, extend_min)
     dev.off()#.gitWatermark()
 }
 
 ## Plot Individuals
 ready4Plot <- function(r, maxBare = 100) {
-	r[['bare']][[1]] = maxBare - r[['bare']][[1]]
-	r[['tree']][is.na(r[['emc']])] = NaN
-	r[['bare']][is.na(r[['emc']])] = NaN
-	r[['fire']][[1]] = r[['fire']][[1]] * 100
-	return(r)
+    r[['bare']][[1]] = maxBare - r[['bare']][[1]]
+    r[['tree']][is.na(r[['emc']])] = NaN
+    r[['bare']][is.na(r[['emc']])] = NaN
+    r[['fire']][[1]] = r[['fire']][[1]] * 100
+    r[['alpha']][[1]] = r[['alpha']][[1]] * 100
+    return(r)
 }
 
 Obs_mean = ready4Plot(Obs_mean)
 Obs_fire = ready4Plot(Obs_fire)
-#Obs_trnd = ready4Plot(Obs_trnd, 0)
+Obs_trnd = ready4Plot(Obs_trnd, 0)
 Obs_mean[['fire']] = Obs_mean[['fire']] * 12
 
-#Obs_trnd = lapply(Obs_trnd, function(i) {i[[1]] = i[[1]] * 12; i})
-
 lmat = rbind(c(1, 2, 0),
-			 3:5,
-			 c(6, 7, 0),
-			 8:10)
+	     3:5,
+	     c(6, 7, 0),
+	     8:10)
 			 
-plot_inputs(Obs_mean, fignames[1], lmat = lmat)
-plot_inputs(Obs_fire, fignames[2], lmat = lmat)
-browser()
-#plot_inputs(Obs_trnd, fignames[3], lmat = lmat, cols = colt_input, lims = limt_input)
+#plot_inputs(Obs_mean, fignames[1], lmat = lmat, maxLab = maxL_input)
+#plot_inputs(Obs_fire, fignames[2], lmat = lmat, maxLab = maxL_input)
+
+Obs_trnd = lapply(Obs_trnd, function(i) {i[[1]] = i[[1]] * 12; i})
+plot_inputs(Obs_trnd, fignames[3], lmat = lmat, cols = colt_input, lims = limt_input,extend_max = TRUE, extend_min = TRUE)
 
 
 ## Plot measures
