@@ -5,15 +5,16 @@ source('cfg.r')
 
 grab_cache = TRUE
 
-sensembles = 0	  
-nensembles = 6000	  
-niterations = 6
+sensembles = 1	  
+nensembles = 8000	  
+niterations = 81
 #########################################################################
 ## Run model                                                           ##
 #########################################################################
 findParameterLimitation <- function(line) {
 	
 	dir = paste(outputs_dir, 'ensemble_noFuelAlpha', line * nensembles, '/', sep = "")
+        browser()
 	print(dir)
 	makeDir(dir)
 	
