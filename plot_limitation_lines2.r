@@ -6,10 +6,10 @@ graphics.off()
 
 #polygonsNotPoints set at bootom
 #ylog set at bottom
-fracSample    = 50
-grabe_cache   = TRUE
-obsSampleFile = paste('temp/ObsSample', fracSample, '.Rd', sep = '-')
-obsLimsFile   = 'temp/ObsLimsEGs-Tree-alphasMax7.Rd'
+fracSample    = 10
+grabe_cache   = FALSE
+obsSampleFile = paste('temp/ObsSample-noAlphaScaling', fracSample, '.Rd', sep = '-')
+obsLimsFile   = 'temp/ObsLimsEGs-Tree-alphasMax7-noAlphaScaling.Rd'
 if (file.exists(obsSampleFile) & grabe_cache) load(obsSampleFile) else {
 	if (file.exists(obsLimsFile)) load(obsLimsFile) else {
 		Obs        = openAllObs()

@@ -13,12 +13,12 @@ fig_fname_indiv = 'figs/ind_limiataions'
 labs = c('Standard\nlimitation', 'Potential\nlimitation', '\nSensitivity',
          '', '', '')
 
-ens_tfile = 'temp/limitation_maps_ens4'
+ens_tfile = 'temp/limitation_maps_ens4_noAlphaFuel'
 mod_files = paste(temp_dir, '/LimFIRE_',
                  c('fire', 'fuel','moisture','ignitions','supression'),
                   sep = '')
 
-niterations = 11
+niterations = 6
 #########################################################################
 ## Run model                                                           ##
 #########################################################################
@@ -133,12 +133,12 @@ findParameterLimitation <- function(dir) {
 	
 	return(list(aa_rw_mod, aa_lm_mod, aa_sn_mod, fs_rw_mod, fs_lm_mod, fs_sn_mod))
 }
-niterations = 11
+niterations = 6
 dirs = list.dirs('outputs/')
-dirs = dirs[grepl('ensemble_', dirs)]
+dirs = dirs[grepl('ensemble_noFuelAlpha', dirs)]
 ens_tfile = paste(ens_tfile, niterations, '.Rd', sep = '-')
 if (file.exists(ens_tfile)) load(ens_tfile) else {
-	ensamble = lapply(dirs[1:50], findParameterLimitation)
+	ensamble = lapply(dirs[1:niterations], findParameterLimitation)
 	ensambleSum =  lapply(1:length(ensamble[[1]]),
 					      function(i) extractEnsamble(ensamble, i, mean90quant.ens, quantiles = c(0.215, 0.785)))
 	save(ensamble, ensambleSum,  file = ens_tfile)
