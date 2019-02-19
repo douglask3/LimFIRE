@@ -12,7 +12,7 @@ open_ensemble <- function(dir, vars = c('lm', 'rw', 'sn', 'sn-ws')) {
 
 open_ensembles <- function(...) {
 	dirs = list.dirs(outputs_dir, full.names = TRUE)
-	dirs = dirs[grep('ensemble_', dirs)]
+	dirs = dirs[grep('ensemble_noFuelAlpha', dirs)]
 	
 	dats = lapply(dirs, open_ensemble, ...)
 	test = sapply(dats, function(i) length(unlist(i))) > 0

@@ -6,14 +6,14 @@ source('cfg.r')
 grab_cache = TRUE
 
 sensembles = 0	  
-nensembles = 2000	  
-niterations = 10
+nensembles = 6000	  
+niterations = 6
 #########################################################################
 ## Run model                                                           ##
 #########################################################################
 findParameterLimitation <- function(line) {
 	
-	dir = paste(outputs_dir, 'ensemble_', line * nensembles, '/', sep = "")
+	dir = paste(outputs_dir, 'ensemble_noFuelAlpha', line * nensembles, '/', sep = "")
 	print(dir)
 	makeDir(dir)
 	

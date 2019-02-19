@@ -10,9 +10,9 @@ fig_fname = 'figs/Trends.png'
 
 limitTitles = c('e) Fire', 'a) Fuel', 'b) Moisture', 'c) Ignitions', 'd) Suppression')
 
-tempF1 = 'temp/limitations4trends-Tree-alphaMax2'
-tempF2 = 'temp/trendsFromLimitations-Tree-alphaMax2'
-esnambleTemp <- 'temp/ensamble_12FFonly23'
+tempF1 = 'temp/limitations4trends-Tree-alphaMax2-noAlphaFuel'
+tempF2 = 'temp/trendsFromLimitations-Tree-alphaMax2-noAlphaFuel'
+esnambleTemp <- 'temp/ensamble_12FFonly23-noAlphaFuel'
 
 dfire_lims = c(-5, -2, -1, -0.5, -0.2, -0.1, 0.1, 0.2, 0.5, 1, 2, 5)/100
 dfire_cols = c('#000033', '#0099DD', 'white', '#DD9900', '#330000')
@@ -20,7 +20,7 @@ prob_lims = c(0.001, 0.01, 0.05)
 
 limit_cols = list(c('magenta', 'white', 'green'), c('yellow', 'white', 'blue'), c('cyan', 'white', 'red'), c('white', '#111111'))
 
-Nensmble = 50
+Nensmble = 11
 factor = 1
 
 ## returns fraction of cummlative burnt area change over the period, normalised by the sum of un-detrended burnt area.
@@ -39,7 +39,7 @@ findParameterTrends <- function(files, factor) {
     lims = lapply(files, brick)
 	
     ensID = strsplit(files[1], '/')[[1]]
-    ensID = ensID[grepl('ensemble_', ensID)]
+    ensID = ensID[grepl('ensemble_noFuelAlpha', ensID)]
 		
     if (factor != 1) {
 	    ensID = paste(ensID, '-factor', factor, sep = '')
@@ -50,11 +50,12 @@ findParameterTrends <- function(files, factor) {
 	
     fire = lims[[1]]
 
-	#########################################################################
-	## Find  Trends                                                        ##
-	#########################################################################
+    #########################################################################
+    ## Find  Trends                                                        ##
+    #########################################################################
     findTrend <- function(lno, smoothFun = running12, 
 			  trendFUN = Trend, removeFire = FALSE, ...) {	
+        print(lno)
 	if (removeFire) lims = lims[-1]
     	lim  = lims[[lno]]
 	lims = lims[-lno]
@@ -90,7 +91,6 @@ findParameterTrends <- function(files, factor) {
     #########################################################################
     trend12F = findTrendNoFile(running12, removeTrend, tempF2,
 			       paste('removeTrend', ensID, sep = '-'), trend1 = trend12[[1]])
-	
 	
     ## weigted by fire
     trend12FFname = tempFile(tempF2, paste('removeTrendAndNormalise', ensID, sep = '-'))
