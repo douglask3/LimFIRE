@@ -9,7 +9,6 @@ findRasterTrend <- function(r, seasonal = FALSE, mask = NULL, factor = 1) {
 			trend = coefficients(fit)[2]
 			return(c(trend, summary(fit)[[4]][2,4], trend/sd(y)))
 		}
-		
 		res = apply(vr, 1, lmFUN)
 		return(res)
 	}
@@ -17,13 +16,19 @@ findRasterTrend <- function(r, seasonal = FALSE, mask = NULL, factor = 1) {
 	trends = r[[1:3]]
 	
 	if (seasonal)  {
-		start.time = Sys.time()
-		vrs = lapply(1:12, function(mn) vr[, seq(mn, dim(vr)[2], 12)])
-		cl = makeCluster(c("localhost","localhost","localhost","localhost"),  type = 'SOCK')
-			vtrend = clusterApply(cl, vrs, findSubsetTrend)
-		stopCluster(cl)
-		trends = lapply(vtrend, function(i) {trends[mask] = t(i); return(trends)})	
-		print(Sys.time() - start.time)
+	    start.time = Sys.time()
+            cat("start time:", start.time)
+	    vrs = lapply(1:12, function(mn) vr[, seq(mn, dim(vr)[2], 12)])
+            vtrend = lapply(vrs, findSubsetTrend)
+            cl = makeCluster(c("localhost","localhost","localhost","localhost"),  type = 'SOCK')
+		    vtrend = clusterApply(cl, vrs, findSubsetTrend)
+	    stopCluster(cl)
+            end.time = Sys.time()                
+            cat("\nend time:", end.time)	
+	    cat("\nDiff:")
+	    trends = lapply(vtrend, function(i) {trends[mask] = t(i); return(trends)})
+            
+            print(end.time - start.time)
 	} else trends[mask] = t(findSubsetTrend(vr))
 	
 	return(trends)	
