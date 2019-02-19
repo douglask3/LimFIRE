@@ -11,7 +11,7 @@ plot_raster <- function(x, lims = fire_lims, cols = fire_cols, add_legend = FALS
                             #x_range = c(-160, 160),
                             y_range = y_range, #projection = "mollweide",
                             ...) #projection = "azequalarea",
-
+    add_icemask()
     
     x     = raster::crop(x   , extent(c(90, 165, -11, 7.5)))
     mask  = raster::crop(mask, extent(c(90, 165, -11, 7.5)))
@@ -32,7 +32,7 @@ plot_raster <- function(x, lims = fire_lims, cols = fire_cols, add_legend = FALS
 }
 
 addCoastlineAndIce2map <- function() {
-    add_icemask()
+    
     
     mask = raster('data/seamask.nc')
     plot_raster_from_raster(mask, add = TRUE, col = c("white", "transparent"), limits = c(0.5), quick = TRUE, interior = FALSE, coast.lwd = NULL, add_legend = FALSE)
