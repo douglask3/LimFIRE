@@ -20,7 +20,7 @@ findRasterTrend <- function(r, seasonal = FALSE, mask = NULL, factor = 1) {
             cat("start time:", start.time)
 	    vrs = lapply(1:12, function(mn) vr[, seq(mn, dim(vr)[2], 12)])
             vtrend = lapply(vrs, findSubsetTrend)
-            cl = makeCluster(c("localhost","localhost","localhost","localhost"),  type = 'SOCK')
+            cl = makeCluster(c("localhost","localhost","localhost","localhost","localhost","localhost"),  type = 'SOCK')
 		    vtrend = clusterApply(cl, vrs, findSubsetTrend)
 	    stopCluster(cl)
             end.time = Sys.time()                
