@@ -27,8 +27,8 @@ cols_input = list(bare     = c('white', '#77DD00', '#004400'),
                   crop     = c('white', '#AAAA00', '#222200'),
                   fire     = fire_cols)
 
-lims_input = list(bare     = c(0, 20, 40, 60, 80, 90, 95),
-                  alphaMax = c(1.2, 1.4, 1.6, 1.8, 2.0, 2.2, 2.4),
+lims_input = list(bare     = c(20, 40, 60, 80, 90, 95),
+                  alphaMax = c(1, 1.2, 1.4, 1.6, 1.8, 2.0, 2.2, 2.4),
 		  tree     = c(0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8) * 100,
 		  alpha    = c(0.2, 0.4, 0.6, 0.8, 1.0) *100,
                   emc      = c(5, 10, 20, 40, 60, 80),
@@ -36,7 +36,7 @@ lims_input = list(bare     = c(0, 20, 40, 60, 80, 90, 95),
                   pas      = c(1, 2, 5, 10, 20, 50),
                   popdens  = c(0.01, 0.1, 1, 10, 100, 1000),
                   crop     = c(0.1, 0.3, 1, 3, 10, 30),
-                  fire     = fire_lims)
+                  fire     = fire_lims[-1])
 
 maxL_input = list(bare     =100,
                   alphaMax = NULL,
@@ -69,7 +69,7 @@ limt_input = list(bare     = c(-1, -0.5, -0.2, -0.1, 0.1, 0.2, 0.5, 1),
                   pas      = c(-0.1, -0.01, -0.001, 0.001, 0.01, 0.1),
                   popdens  = c(-10, -1, -0.1, -0.01, 0.01, 0.1, 1, 10),
                   crop     = c(-1, -0.5, -0.1, 0.1, 0.5, 1),
-                  fire     = c(-0.1, -0.05, -0.01, -0.005, -0.001, 0.001, 0.005, 0.01, 0.05, 0.1))
+                  fire     = 10* c(-0.1, -0.05, -0.01, -0.005, -0.001, 0.001, 0.005, 0.01, 0.05, 0.1))
 
 
 units_input = c('%', '', '%', '%', '%', 'flashes k~m-2~', '%', 'people k~m-2~', '%', '%')                 
@@ -147,18 +147,22 @@ plot_inputs <- function(Obs, fname, names = names_input, units = units_input,
 			lmat = NULL, lineMod = 0.9,
                         maxLab = NULL, extend_max = FALSE, extend_min = FALSE, ...) {
     print(fname)
+    if (extend_max && extend_min) plot_loc = c(0.33, 0.93, 0.015, 0.05)
+        else plot_loc = c(0.35, 0.8, 0.015, 0.05)
     if (!extend_max & !is.null(maxLab)) extend_max = sapply(maxLab, is.null)
     if (is.null(maxLab)) maxLab = list(NULL)
+   
     plot_input <- function(x, lim, col, name, unit= '', maxLab, extend_max, extend_min) {
 	if (nlayers(x) == 1) e = NULL else e = x[[2]]
         
         plot_raster(x, lim, col, quick = TRUE, limits_error = c(0.05, 0.1), e = e,
                     ePatternRes = 35, ePatternThick = 0.5, interior = FALSE,...)
 		#addLocPoints()
+        if (name == "b) ~alpha~~_max~") lineMod = lineMod - 0.5
         mtext.units(name, line = -1 + lineMod * 0.5, adj = 0.1)
 		
         if (length(lim) > 1 && !is.na(lim)) {
-	    standard_legend(col, lim, x, add = TRUE, plot_loc = c(0.35, 0.86, 0.015, 0.05), 
+	    standard_legend(col, lim, x, add = TRUE, plot_loc = plot_loc, 
                             ylabposScling = 1.33, oneSideLabels = FALSE, units = unit,
                            maxLab = maxLab, extend_max = extend_max, extend_min = extend_min)
 	    #mtext.units(unit, side = 1, line = -3 + lineMod, adj = 0.75, cex = 0.85)
@@ -194,6 +198,7 @@ ready4Plot <- function(r, maxBare = 100) {
 Obs_mean = ready4Plot(Obs_mean)
 Obs_fire = ready4Plot(Obs_fire)
 Obs_trnd = ready4Plot(Obs_trnd, 0)
+Obs_trnd[['fire']][[1]] = Obs_trnd[['fire']][[1]] * 12
 Obs_mean[['fire']] = Obs_mean[['fire']] * 12
 
 lmat = rbind(c(1, 2, 0),
