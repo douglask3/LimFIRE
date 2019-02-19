@@ -153,12 +153,12 @@ plot_inputs <- function(Obs, fname, names = names_input, units = units_input,
 	if (nlayers(x) == 1) e = NULL else e = x[[2]]
         
         plot_raster(x, lim, col, quick = TRUE, limits_error = c(0.05, 0.1), e = e,
-                    ePatternRes = 35, ePatternThick = 0.3, interior = FALSE,...)
+                    ePatternRes = 35, ePatternThick = 0.5, interior = FALSE,...)
 		#addLocPoints()
         mtext.units(name, line = -1 + lineMod * 0.5, adj = 0.1)
 		
         if (length(lim) > 1 && !is.na(lim)) {
-	    standard_legend(col, lim, x, add = TRUE, plot_loc = c(0.37, 0.86, 0.015, 0.05), 
+	    standard_legend(col, lim, x, add = TRUE, plot_loc = c(0.35, 0.86, 0.015, 0.05), 
                             ylabposScling = 1.33, oneSideLabels = FALSE, units = unit,
                            maxLab = maxLab, extend_max = extend_max, extend_min = extend_min)
 	    #mtext.units(unit, side = 1, line = -3 + lineMod, adj = 0.75, cex = 0.85)
@@ -201,7 +201,7 @@ lmat = rbind(c(1, 2, 0),
 	     c(6, 7, 0),
 	     8:10)
 			 
-#plot_inputs(Obs_mean, fignames[1], lmat = lmat, maxLab = maxL_input)
+plot_inputs(Obs_mean, fignames[1], lmat = lmat, maxLab = maxL_input)
 #plot_inputs(Obs_fire, fignames[2], lmat = lmat, maxLab = maxL_input)
 
 Obs_trnd = lapply(Obs_trnd, function(i) {i[[1]] = i[[1]] * 12; i})
