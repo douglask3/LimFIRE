@@ -1,8 +1,7 @@
 findRasterTrend <- function(r, seasonal = FALSE, mask = NULL, factor = 1) {
-	
 	if (factor > 1) r = aggregate(r, factor)
 	if (is.null(mask)) mask = !is.na(r[[1]])
-	
+            else mask = aggregate(mask, factor) == 1	
 	findSubsetTrend <- function(vr) {				
 		lmFUN <- function(y) {
 			fit = lm(as.vector(y) ~ c(1:length(y)))
@@ -17,15 +16,18 @@ findRasterTrend <- function(r, seasonal = FALSE, mask = NULL, factor = 1) {
 	
 	if (seasonal)  {
 	    start.time = Sys.time()
-            cat("start time:", start.time)
+            
 	    vrs = lapply(1:12, function(mn) vr[, seq(mn, dim(vr)[2], 12)])
             vtrend = lapply(vrs, findSubsetTrend)
-            cl = makeCluster(c("localhost","localhost","localhost","localhost","localhost","localhost"),  type = 'SOCK')
-		    vtrend = clusterApply(cl, vrs, findSubsetTrend)
-	    stopCluster(cl)
+            #cl = makeCluster(c("localhost","localhost","localhost","localhost","localhost","localhost"),  type = 'SOCK')
+	#	    vtrend = clusterApply(cl, vrs, findSubsetTrend)
+	    #stopCluster(cl)
+            cat("start time:", start.time)
+                vtrend = mclapply(vrs, findSubsetTrend, mc.cores = getOption("mc.cores", 4L))
             end.time = Sys.time()                
             cat("\nend time:", end.time)	
 	    cat("\nDiff:")
+            
 	    trends = lapply(vtrend, function(i) {trends[mask] = t(i); return(trends)})
             
             print(end.time - start.time)
@@ -77,6 +79,7 @@ removeTrend <- function(r, smoothFun = running12, rs = NULL, ...) {
 		if (mn==0) mn = 12
 		return(r[[i]] - trends[[mn]][[1]] * yr)
 	}
+        
 	r  = layer.apply(1:nlayers(r), removeTrend)	
 	
 	r = logistic(r)
