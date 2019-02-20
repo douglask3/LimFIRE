@@ -14,7 +14,6 @@ niterations = 81
 findParameterLimitation <- function(line) {
 	
 	dir = paste(outputs_dir, 'ensemble_noFuelAlpha', line * nensembles, '/', sep = "")
-        browser()
 	print(dir)
 	makeDir(dir)
 	
