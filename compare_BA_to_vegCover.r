@@ -16,7 +16,7 @@ vdat = cbind(vdat, vbiome = rep(biomeAssigned[mask], 168))
 
 mask2 = vdat[,2] > 0 & !is.na(vdat[,4])
 vdat = vdat[mask2,]
-vdat[,2] = vdat[,2] * 12 * 100
+vdat[,2] = vdat[,2] * 100
 vdat[,1] = 100 - vdat[,1]
 
 p = 3
@@ -25,8 +25,11 @@ y = vdat[,2]
 plotTrScatter <- function(cols, rep = 1, maxCEX = 2, ...) {
     plot(x, y, xaxt = 'n', xaxs = 'i', yaxs = 'i', xlim = c(0, 100^p), 
          xlab = '', ylab = '', cex = maxCEX,  ...)
+    
     for (j in 1:rep)  for (cex in c(maxCEX, 1, 0.5, 1/4, 1/8, 1/16, 1/32)) 
         points(x, y, col = cols, pch = 19, cex  = cex)
+
+    axis(side = 1, c(-9E9, 9E9))
 }
 png('figs/alphaMax_justification.png', height = 9, width = 6, units = 'in', res = 300)
     layout(rbind(1, 2, 3, 4), height = c(1, 0.2, 1, 0.2))
@@ -53,7 +56,7 @@ png('figs/alphaMax_justification.png', height = 9, width = 6, units = 'in', res 
     labels = c(30, 50, 60, 70, 75, 80, 85, 90, 95, 99)
     axis(1, at = labels^p, labels)
     mtext(side = 1, 'VCF total vegetation cover (%)', line = 2.5)
-    mtext(outer = TRUE, side = 2, 'GFED4s burnt area (%)', line = 1.5)
+    mtext(outer = TRUE, side = 2, 'GFED4s monthly burnt area (%)', line = 1.5)
     par(mar = c(0, 0, 2, 0))
     standard_legend(cols = reds6, lims = limits, add = FALSE, extend_max = TRUE, dat =vdat[,3],
                     plot_loc = c(0.35,0.75,0.1,0.3))
