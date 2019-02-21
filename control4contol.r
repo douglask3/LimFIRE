@@ -22,53 +22,67 @@ niterations = 11
 #########################################################################
 ens_files = open_ensembles()
 
-removeControl <- function( lims, crm) {
+standardLimitation <- function(lims, crm) {
+    lims = lims[-1][[crm]]
+    return(mean(brick(lims)))
+}
+
+potentialLimiation <- function( lims, crm) {
+        print(lims)
 	cnt = brick(lims[[1]])
 	lims = lims[-1]
 	lims = lapply(lims, brick)
+        
 	mnthRm <- function(mn) {
 		print(mn)
 		#prod(layer.apply(lims[-crm], function(i) i[[mn]]))
 		lim = lims[-crm]
-		lim[[1]][[mn]] * lim[[2]][[mn]] * lim[[3]][[mn]]
+		pot = lim[[1]][[mn]] * lim[[2]][[mn]] * lim[[3]][[mn]]
 	}
-	#browser()
-	#cl = makeCluster(c("localhost","localhost","localhost","localhost"),  type = 'SOCK')
-	#	exp = clusterApply(cl, 1:12, fun = mnthRm)
-	#stopCluster(cl)
-	#exp = layer.apply(exp, function(i) i)
-	exp = layer.apply(1:(nlayers(lims[[1]])), mnthRm)
-	#exp = layer.apply(1:12, mnthRm)
+
+        mnth <- function(mn) 
+            lims[[1]][[mn]] * lims[[2]][[mn]] * lims[[3]][[mn]] * lims[[4]][[1]]
 	
-	exp = sum(exp)
-	cnt = sum(cnt)
+	exp = exp0 = layer.apply(1:(nlayers(lims[[1]])), mnthRm)
+        #cnt = cnt0 = layer.apply(1:(nlayers(lims[[1]])), mnth)
+	exp = mean(exp)
+	cnt = mean(cnt)
+        #browser()
 	return(exp - cnt)
 }
 
-RunControl <- function(crm) {
-	
+RunControl <- function(crm, FUN = potentialLimiation, name = "potential", fileLayer = 2) {	
 	RunMember <- function(lims, ensN) {
-		lims = lims[[2]]
-		tempF2A = tempFile(tempF2, paste(niterations, ensN, sep = '-'))[crm + 1]
+		lims = lims[[fileLayer]]
+		tempF2A = tempFile(tempF2, paste(name, niterations, ensN, sep = '-'))[crm + 1]
 		print(tempF2A)
-		return(runIfNoFile(tempF2A, removeControl, lims, crm))
+		return(runIfNoFile(tempF2A, FUN, lims, crm, test = FALSE))
 	}
-	
-	out = mapply(RunMember, ens_files, 1:length(ensamble)) 
-	out = layer.apply(out, function(i) i) /168
+        
+	out = mcmapply(RunMember, ens_files, (1:length(ensamble)),
+                        mc.cores = getOption("mc.cores", 4L))
+        out = layer.apply(out, function(i) i)
 	mn = mean(out)
 	sd = sd.raster(out, FALSE)
 	
 	return(addLayer(mn, sd))
 }
+
+runType <- function(...)
+    lapply(1:4, RunControl, ...)
+
+#standard = runType(standardLimitation, "standard")
 	
-unburnt = lapply(1:4, RunControl)
-unburnt[[2]] = unburnt[[2]] * f1(0.0, param('moisture_x0'), -param('moisture_k'))
-unburnt[[4]] = unburnt[[4]] * f1(0.0, param('suppression_x0'), -param('suppression_k'))
+potential = runType(potentialLimiation, "potential2")
+potential[[2]] = potential[[2]] * f1(0.0, param('moisture_x0'), -param('moisture_k'))
+potential[[4]] = potential[[4]] * f1(0.0, param('suppression_x0'), -param('suppression_k'))
+
+#sensitivity = runType(standardLimitation, "sensitivity", 3)
 
 totalArea.raster <- function(r) {
 	AR  = area(r, na.rm = TRUE)
 	out = sum(values(AR*r), na.rm = TRUE)/sum(values(AR), na.rm = TRUE)
+        return(out)
 }
 
 
@@ -77,5 +91,5 @@ rbf = layer.apply(ensamble, function(i) mean(i[[1]]))
 rbfmean = mean(rbf)
 rbfAW = totalArea.raster(rbfmean)
 
-pc_unburnt = 100 * sapply(unburnt, totalArea.raster) / rbfAW
+pc_unburnt = 100 * sapply(potential, totalArea.raster) / rbfAW
 browser()
