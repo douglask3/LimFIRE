@@ -20,7 +20,7 @@ plot_raster <- function(x, lims = fire_lims, cols = fire_cols, add_legend = FALS
     contour(mask, add = TRUE, drawlabels = FALSE, lwd = 0.5)  
 }
 
-cropIndonesia < -function(x, mask)
+cropIndonesia <- function(x, mask) {
     x = raster::crop(x, extent(c(90, 165, -11, 7.5)))
     mask = raster::crop(mask, extent(c(90, 165, -11, 7.5)))
     mask = mask == 2
