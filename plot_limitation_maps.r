@@ -20,7 +20,7 @@ mod_files = paste(temp_dir, '/LimFIRE_',
                  c('fire', 'fuel','moisture','ignitions','supression'),
                   sep = '')
 
-niterations = 11
+niterations = 50
 #########################################################################
 ## Run model                                                           ##
 #########################################################################
@@ -135,7 +135,6 @@ findParameterLimitation <- function(dir) {
 	
 	return(list(aa_rw_mod, aa_lm_mod, aa_sn_mod, fs_rw_mod, fs_lm_mod, fs_sn_mod))
 }
-niterations = 11
 browser()
 dirs = list.dirs(ens_dir)
 dirs = dirs[grepl('ensemble_', dirs)]
