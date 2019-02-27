@@ -20,7 +20,7 @@ mod_files = paste(temp_dir, '/LimFIRE_',
                  c('fire', 'fuel','moisture','ignitions','supression'),
                   sep = '')
 
-niterations = 3
+niterations = 50
 #########################################################################
 ## Run model                                                           ##
 #########################################################################
