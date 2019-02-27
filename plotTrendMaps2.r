@@ -1,5 +1,4 @@
 source("cfg.r")
-source("~/work/benchmarkmetrics/benchmarkMetrics/R/standard.round.r")
 graphics.off()
 
 limFnames = c('Burnt_Area', 'Fuel', 'Moisture', 'Igntions', 'Suppression')
