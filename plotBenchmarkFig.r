@@ -6,7 +6,7 @@ temp_file = 'temp/benchmarking_plot_dat.Rd'
 grab_cache = FALSE
 
 fire_lims = c(1, 2, 5, 10, 20, 50)
-dfire_lims = c(-0.01, -0.005, -0.002, -0.001, 0.001, 0.002, 0.005, 0.01) /10
+dfire_lims = c(-0.01, -0.005, -0.002, -0.001, 0.001, 0.002, 0.005, 0.01)
 
 
 if (file.exists(temp_file) && grab_cache) {
@@ -17,11 +17,11 @@ if (file.exists(temp_file) && grab_cache) {
     aa_mod = ens_annual_average()
     aa_obs = 12 * 100 * mean(obs)
 
-    tr_mod = trend12FF[[1]] / 100
+    tr_mod = trend12FF[[1]] * 100 /14
 
     tfile = paste(outputs_dir, filename.noPath(obs_file, TRUE), '-trendDiff.nc', sep = '')
     tr_obs = runIfNoFile(tfile, removeTrend, obs)
-    tr_obs = tr_obs[[1]]/(aa_obs * nlayers(obs)/(100*12))
+    tr_obs = 100 * (tr_obs[[1]]/aa_obs) / 14
     tr_obs[is.infinite(tr_obs)] = NaN
 
     tr_mod_mn = mean(tr_mod)
@@ -34,8 +34,8 @@ if (file.exists(temp_file) && grab_cache) {
     save(aa_mod, aa_obs, tr_mod, tr_obs, tr_mod_mn, tr_mod_sd, file = temp_file)
 }
 
-tr_obs = tr_obs/14
-tr_mod_mn = tr_mod_mn * 168/14
+    
+
 
 
     
