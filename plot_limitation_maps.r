@@ -9,6 +9,8 @@ grab_cache = TRUE
 fig_fname       = 'figs/limitation_map'
 fig_fname_indiv = 'figs/ind_limiataions'
 
+ens_dir = 'D:/Laurens22122018/Documents/work/LimFIRE/outputs/'
+
 
 labs = c('Standard\nlimitation', 'Potential\nlimitation', '\nSensitivity',
          '', '', '')
@@ -134,11 +136,14 @@ findParameterLimitation <- function(dir) {
 	return(list(aa_rw_mod, aa_lm_mod, aa_sn_mod, fs_rw_mod, fs_lm_mod, fs_sn_mod))
 }
 niterations = 11
-dirs = list.dirs('outputs/')
+browser()
+dirs = list.dirs(ens_dir)
 dirs = dirs[grepl('ensemble_', dirs)]
+dirs = dirs[!grepl('noVar', dirs)]
+
 ens_tfile = paste(ens_tfile, niterations, '.Rd', sep = '-')
 if (file.exists(ens_tfile)) load(ens_tfile) else {
-	ensamble = lapply(dirs[1:50], findParameterLimitation)
+	ensamble = lapply(dirs[1:niterations], findParameterLimitation)
 	ensambleSum =  lapply(1:length(ensamble[[1]]),
 					      function(i) extractEnsamble(ensamble, i, mean90quant.ens, quantiles = c(0.215, 0.785)))
 	save(ensamble, ensambleSum,  file = ens_tfile)
@@ -210,15 +215,15 @@ plot_pmod <- function(i, index = NULL, normalise = FALSE, ...) {
     plot_4way(xy[,1], xy[,2], pmod[[2]], pmod[[1]], pmod[[3]], pmod[[4]],
               x_range = c(-180, 180), y_range = c(-60, 90),
               cols = 	cols, limits = limits, 
-              coast.lwd=par("lwd"),ePatternRes = 40, ePatternThick = 0.6,
+              ePatternRes = 50, ePatternThick = 0.4,
               add_legend=FALSE, smooth_image=FALSE,smooth_factor=5, normalise = normalise, ...)
-	mtext(let, side = 1, adj  = 0.2, cex = 1.5, line = -2)
+	mtext(let, side = 1, adj  = 0.2, line = -2)
     addLocPoints()    
     pcs = calculate_weightedAverage(xy, pmod)
 	
 	polygon(c(-180, -140, -140, -180), c(-60, -60, 30, 30), col = 'white', border = NA)
     #text(lab, x = -160, y = 0, cex = 1.5, srt = 90)
-    mtext(lab, line = -3.5, adj = 0.05, side = 2, cex = 1.5)
+    mtext(lab, line = -3.5, adj = 0.05, side = 2)
     return(pcs)
 }
 
@@ -226,7 +231,7 @@ plot_pmod <- function(i, index = NULL, normalise = FALSE, ...) {
 plotAddLimTypes <- function(fname, ...) {
 ## Set up plotting window
 	figName = paste(fig_fname, fname, '.png')	
-	png(figName, width = 9 * 2/2, height = 6 * 4/3, unit = 'in', res = 600)
+	png(figName, width = 7.2, height = 6 * 4/3 * 7.2/9, unit = 'in', res = 600)
 	layout(rbind(cbind(1:3,4:6),7))#, heights = c(4.5, 4.5, 1))
 
 	par(mar = c(0,0,0,0), oma = c(0,0,1.5,0))
@@ -234,8 +239,8 @@ plotAddLimTypes <- function(fname, ...) {
 	
 	## Plot and put pcs in table
 	pc_out = sapply(1:6, plot_pmod, ...)
-	mtext('Annual average', side = 3, outer = TRUE, adj = 0.325, line = -0.5, bg = 'white')
-	mtext('Fire season'   , side = 3, outer = TRUE, adj = 0.775, line = -0.5, bg = 'white')
+	mtext('Annual average', side = 3, outer = TRUE, adj = 0.22, bg = 'white')
+	mtext('Fire season'   , side = 3, outer = TRUE, adj = 0.80, bg = 'white')
 
 	colnames(pc_out) = c('annual average raw', 'annual average lim', 'annual average sensitivity', 
 			            'fire season raw',    'fire season lim',    'fire season sensitivity')
