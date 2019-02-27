@@ -82,10 +82,11 @@ plot_4way <- function(x, y, A, B, C, D, x_range = c(-180, 180), y_range = c(-90,
     e = rasterFromXYZ(cbind(x, y, length(limits) + 2 - Dz))
     
     lims = (min.raster(z, na.rm = TRUE):max.raster(z, na.rm = TRUE) -  0.5)[-1]
+    zcols_p = zcols[sort(unique(z))]
     
-    plotFun <- function(add) plot_raster_from_raster(z, cols = zcols[sort(unique(z))], 
+    plotFun <- function(add) plot_raster_from_raster(z, cols = zcols_p, 
         limits = lims, x_range = x_range, y_range = y_range, 
-        quick = TRUE, readyCut = TRUE, 
+        quick = TRUE, readyCut = TRUE, coast.lwd = NULL,
         add_legend = FALSE, add = add, 
         e = e, limits_error = 0.5 + 1:length(limits),  
         ePatternRes = ePatternRes,  ePatternThick = ePatternThick, e_polygon = FALSE,
@@ -96,12 +97,24 @@ plot_4way <- function(x, y, A, B, C, D, x_range = c(-180, 180), y_range = c(-90,
 	#						ePatternRes = 30, ePatternThick = 0.2,
 	#						quick = TRUE, add_legend = FALSE)
 	
+    mask = raster('data/seamask.nc')
+    
+    z[mask != 2] = NaN
+    e[mask != 2] = NaN
+    
     plotFun(add)
+    addCoastlineAndIce2map()
+    
+    c(z, nn)   := cropIndonesia(z, mask)
+    c(e, mask) := cropIndonesia(e, mask)
+    plotFun(TRUE)
+    contour(mask, add = TRUE, drawlabels = FALSE, lwd = 0.5)  
     
     if (add_legend) {
         add_raster_4way_legend(cols, limits, ...)            
         plotFun(TRUE)
     }
-	add_icemask()
+	#add_icemask()
+    
     return(out)
 }
