@@ -1,4 +1,4 @@
-plotStandardMap <- function(x, txt, limits, cols, e = NULL, plot_loc = c(0.35,0.83,0.01,0.04), ...) {
+plotStandardMap <- function(x, txt, limits, cols, e = NULL, plot_loc = c(0.35,0.83,0.015,0.045), ...) {
     mask = raster('data/seamask.nc')
     x[mask != 2] = NaN
     if(!is.null(e)) e[mask != 2] = NaN
