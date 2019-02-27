@@ -58,6 +58,7 @@ unitExpressionSearches <- list(
     list("km2"    , bquote(km^2)         ),
     list("m2"     , bquote(m^2)          ),
     list("m-2"    , bquote(m^(-2))       ),
+    list("yr-1"   , bquote(yr^(-1))      ),
     list("DEG"    , bquote(degree)       ),
     list("alpha"  , bquote(alpha)        ),
     list("omega"  , bquote(omega)        ),
