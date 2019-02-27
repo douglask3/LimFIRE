@@ -169,7 +169,7 @@ plotAll <- function(fname0 = NULL, fuel = NULL, moisture = NULL,
 		
 	axis4 = !is.null(fuel)	
 		
-	png(fname, width = 6, height = 5.5 * 1.15, units = 'in', res = 300)
+	png(fname, width = 7.2, height = 5.5 * 1.15 * 7.2/6, units = 'in', res = 300)
 	layout(rbind(1:2,3:4, 5), heights = c(1,1,0.3))
 
 	par(mar = c(3,0.5,1,0), oma = c(0,3.5,1,3.5))
