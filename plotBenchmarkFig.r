@@ -3,7 +3,7 @@ graphics.off()
 obs_file  = 'outputs/fire2000-2014.nc'
 
 temp_file = 'temp/benchmarking_plot_dat.Rd'
-grab_cache = TRUE
+grab_cache = FALSE
 
 fire_lims = c(1, 2, 5, 10, 20, 50)
 dfire_lims = c(-0.01, -0.005, -0.002, -0.001, 0.001, 0.002, 0.005, 0.01) /10
