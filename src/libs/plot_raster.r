@@ -1,4 +1,5 @@
-plot_raster <- function(x, lims = fire_lims, cols = fire_cols, add_legend = FALSE, y_range = c(-60, 90), ...) {
+plot_raster <- function(x, lims = fire_lims, cols = fire_cols, add_legend = FALSE, 
+                        y_range = c(-60, 90), e = NULL, ...) {
     
     mask = raster('data/seamask.nc')
     x[mask != 2] = NaN
@@ -28,15 +29,19 @@ cropIndonesia <- function(x, mask) {
 }
 
 addCoastlineAndIce2map <- function() {
-    add_icemask()
+    
     
     mask = raster('data/seamask.nc')
     plot_raster_from_raster(mask, add = TRUE, col = c("white", "transparent"), limits = c(0.5), quick = TRUE, interior = FALSE, coast.lwd = NULL, add_legend = FALSE)
     #
     #contour(mask, add = TRUE, drawlabels = FALSE, lwd = 0.5)  
+    add_additional_island_mask()
+}
 
+add_additional_island_mask <- function() {
     ployBox <- function(x, y)
-        polygon(c(x[1], x[2], x[2], x[1]), c(y[1], y[1], y[2], y[2]), col = "white", border = "white")
+        polygon(c(x[1], x[2], x[2], x[1]), c(y[1], y[1], y[2], y[2]), 
+                col = "white", border = "white")
         
     ployBox(c(-180, -90), c(-60, 0))
     #ployBox(c(-180, -120), c(-60, 25))
@@ -45,6 +50,4 @@ addCoastlineAndIce2map <- function() {
     #ployBox(c(115, 125), c(-8, -7))
     #ployBox(c(104, 111), c(2.5, 8))
     #ployBox(c(122, 128), c(2.5, 5)) 
-    
-    
 }
