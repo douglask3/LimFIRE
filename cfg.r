@@ -1,11 +1,5 @@
 library(benchmarkMetrics)
-#library(gitBasedProjects)
-source("../gitProjectExtras/gitBasedProjects/R/sourceAllLibs.r")
-sourceAllLibs('../gitProjectExtras/gitBasedProjects/R/')
-
-## uncomment on windows
-source('../gitProjectExtras/package_git2r.r')
-config(repository(), user.name="Douglas Kelley", user.email="douglas.i.kelley@gmail.com")
+library(gitBasedProjects)
 library(raster)
 library(ncdf4)
 library(rasterExtras)
@@ -75,5 +69,5 @@ hlghtPnts = list("Desert"      = list( 14, 27.5, col = '#00AA66'),
 try(memSafeFile.remove(), silent = TRUE)
 memSafeFile.initialise('temp/tempGenerated')
 
-tempFile4Eco = 'temp/files4EcosystemPlot2-newEnsmebles13.Rd'
+tempFile4Eco = 'temp/files4EcosystemPlot2-newEnsmebles12.Rd'
 ecoFile = "data/official_teow/official"
