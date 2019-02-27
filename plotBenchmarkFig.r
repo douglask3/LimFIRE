@@ -45,6 +45,7 @@ plotMap <- function(...)
 
 png('figs/benchmarkFigure.png', height = 4.7 * 7.2/10, width = 7.2, units = 'in', res = 300)
 	par(mfcol = c(2,2), mar = rep(0,4), oma = c(1.05, 0, 1, 0))
+    
 	plotMap(aa_obs, '', limits =  fire_lims, cols =  fire_cols, 
 				   add_legend = FALSE)
 	mtext('GFED4s\nObserved', side = 2, line = -2.3, adj = 0.1)					
