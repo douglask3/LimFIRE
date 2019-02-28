@@ -1,4 +1,4 @@
-plotStandardMap <- function(x, txt, limits, cols, e = NULL, plot_loc = c(0.35,0.83,0.015,0.045), ...) {
+plotStandardMap <- function(x, txt, limits, cols, e = NULL, recrop_e = TRUE, plot_loc = c(0.35,0.83,0.015,0.045), ...) {
     mask = raster('data/seamask.nc')
     x[mask != 2] = NaN
     if(!is.null(e)) e[mask != 2] = NaN
@@ -13,7 +13,7 @@ plotStandardMap <- function(x, txt, limits, cols, e = NULL, plot_loc = c(0.35,0.
     FUN(...)
     addCoastlineAndIce2map()
     
-    if (!is.null(e)) c(e, nn) := cropIndonesia(e, mask)
+    if (recrop_e && !is.null(e)) c(e, nn) := cropIndonesia(e, mask)
     c(x, mask) := cropIndonesia(x, mask)
     
     FUN(add = TRUE, ...)
