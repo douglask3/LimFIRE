@@ -1,5 +1,11 @@
 library(benchmarkMetrics)
-library(gitBasedProjects)
+#library(gitBasedProjects)
+source("../gitProjectExtras/gitBasedProjects/R/sourceAllLibs.r")
+sourceAllLibs('../gitProjectExtras/gitBasedProjects/R/')
+
+## uncomment on windows
+source('../gitProjectExtras/package_git2r.r')
+config(repository(), user.name="Douglas Kelley", user.email="douglas.i.kelley@gmail.com")
 library(raster)
 library(ncdf4)
 library(rasterExtras)
@@ -14,6 +20,7 @@ library(parallel)
 library(snow)
 library(reldist)
 data(worldHiresMapEnv)
+
 
 sourceAllLibs('../rasterextrafuns/rasterPlotFunctions/R/')
 sourceAllLibs('../rasterextrafuns/rasterExtras/R/')
