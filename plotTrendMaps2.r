@@ -19,7 +19,7 @@ plotControl <- function(trd, nme, sc = 1, limits = trend_lims, cols = dfire_cols
 	plotStandardMap(mean(trd) * sc, '', limits = limits, cols =  cols, 
 					e = sd.raster(trd), ePatternRes = 40, ePatternThick = 0.6, limits_error = c(1/10, 1/2),
 					add_legend = add_legend, ...)
-	mtext(nme, adj = 0.02, line = -0.5, cex = 0.9)
+	mtext(nme, adj = 0.02, line = -0.6, cex = 0.9)
 	mtext(cex = 0.8 * 0.8, side = 1, units_title, line = -2.9, adj = 0.58)
 }
 #fire_cols = c('white', '#FFDD00', '#BB0000', '#220000')
@@ -59,7 +59,7 @@ trendIndex[[1]] =  trend12FF[[1]]
 ##########################################
 fname = paste(figName, 'trendIndicies.png', sep = '-')
 png(fname, height = 7.2, width = 4 * 7.2/6.3, units = 'in', res = 600)
-	par(mar = c(0.4, 0, 0, 0), mfcol = c(3, 1), oma = c(6, 0, 0.3, 0))
+	par(mar = c(0.4, 0, 0, 0), mfcol = c(3, 1), oma = c(6, 0, 0.5, 0))
 	mapply(plotControl, trendIndex, c('a) Normalised trend in burnt area', 'b) Shift in fire regime'), 
 						units_title = c(' ', ' '), units = c('% ~yr-1~', '% ~yr-1~'), 
                         extend_max = c(TRUE, TRUE), extend_min = c(TRUE, FALSE),
@@ -202,8 +202,8 @@ png(fname, height = 7.2, width = 4 * 7.2/6.3, units = 'in', res = 600)
 	addLegend(1,  0, "Increased Fuel\n"     , 88, -54)
 	text(-56, -78, 'Increase', srt = 90, xpd = NA, adj = 0, cex = 0.8)
 	
-	addLegend(-1, 0, "Decreased Fuel\n", -50, -90)
+	addLegend(-1, 0, "Decreased Fuel\n", 88, -90)
 	addLegend(-1, -1, " Decreased Fuel &\nIncreased Moisture", 19, -90)
-	addLegend(0, -1, "Increased Moisture\n", 88, -90)
+	addLegend(0, -1, "Increased Moisture\n", -50, -90)
 	text(-56, -114, 'Decrease', srt = 90, xpd = NA, adj = 0, cex = 0.8)
 dev.off()
