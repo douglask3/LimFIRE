@@ -83,8 +83,8 @@ lims_msure = list(fuel    = seq(0.1, 0.8, 0.1) * 100,
                   igntions= c(0.1, 1, 2, 5, 10, 20, 30),
                   supress = c(1, 2, 5, 10, 20, 50))
 
-names_msure = c('a) Fuel continuity', 'b) Fuel moisture', 'c) Ignitions', 'd) Suppression')
-units_msure = c('%', '%', '/~km2~', 'index')  
+names_msure = c('a) Fuel', 'b) Moisture', 'c) Ignitions', 'd) Suppression')
+units_msure = c('%', '%', 'k~m-2~', 'index')  
 
 names_input = c("a) Vegetation cover", "b) ~alpha~~_max~", "c) Tree cover", "d) ~alpha~", "e) EMC", 
 			    "f) Cloud-ground lightning", "g) Pasture", "h) Population density", 
@@ -110,34 +110,58 @@ trend.brick <- function(fname) {
 }
 
 # open Obs
-Obs = lapply(drive_fname, stack)
-Obs = Obs[names(cols_input)]
+#Obs = lapply(drive_fname, stack)
+#Obs = Obs[names(cols_input)]
 
 # monthly mean                    
-Obs_mean = lapply(drive_fname, openMean)
-Obs_mean = Obs_mean[names(cols_input)]
+#Obs_mean = lapply(drive_fname, openMean)
+#Obs_mean = Obs_mean[names(cols_input)]
 
 # monthly mean during fire season height
-Obs_fire = lapply(drive_fname, openMean, fire.stack, '-season.nc', fire_season_r)
-Obs_fire = Obs_fire[names(cols_input)]
+#Obs_fire = lapply(drive_fname, openMean, fire.stack, '-season.nc', fire_season_r)
+#Obs_fire = Obs_fire[names(cols_input)]
 
 # monthly mean during fire season height
-Obs_trnd = lapply(drive_fname, openMean, trend.brick, '-trend.nc')
-Obs_trnd = Obs_trnd[names(cols_input)]
+#Obs_trnd = lapply(drive_fname, openMean, trend.brick, '-trend.nc')
+#Obs_trnd = Obs_trnd[names(cols_input)]
 
 ## Combined Inputs (i.e, fuel, mositure, igntions, supression measures)
+ens_files = open_ensembles()
+ens_no <- function(file) strsplit(strsplit(file[[1]][[1]], 'outputs//ensemble_')[[1]][-1], '/')[[1]][1]
+ens_nos = as.numeric(sapply(ens_files, ens_no))
+
 fnames = fnames = c('nnfire', 'fuel', 'moisture', 'igntions', 'supression')
-fnames_mod  = paste('temp/', fnames    , '-measuresOnly.nc', sep = '')
 fnames_mean = paste('temp/', fnames[-1], '-measuresMean.nc', sep = '')
 fnames_fire = paste('temp/', fnames[-1], '-measuresFire.nc', sep = '')
-      
-	  
-measures = runIfNoFile(fnames_mod, runLimFIREfromstandardIns,
-                       just_measures = TRUE, raw = TRUE, test = grab_cache)
-					   
-measures = measures[-1]
-measures_mean = runIfNoFile(fnames_mean, function(i) lapply(i, mean), measures, test = grab_cache)
-measures_fire = runIfNoFile(fnames_fire, function(i) lapply(i, fire.stack, fire_season_r), measures, test = grab_cache)
+
+ens_files = open_ensembles()[1:50]  
+
+measures_mean <- function(ens) {
+    files = ens[[5]][-1]
+    ensNo = strsplit(strsplit(files[1], 'ensemble_')[[1]][2], '/')[[1]][1]
+    print(ensNo)
+    measure_mean <- function(file) {        
+        fname = paste0('temp/', filename.noPath(file, noExtension=TRUE), ensNo, '-mean.nc')
+        mn = runIfNoFile(fname, function(i) mean(brick(i)), file, test = grab_cache)
+        return(mn)
+    }
+    lapply(files, measure_mean)
+}
+
+measures = mclapply(ens_files, measures_mean, mc.cores = getOption("mc.cores", 4L))
+
+measure_mean_sd <- function(i) {
+    cnt = layer.apply(measures, function(j) j[[i]])
+    mn = mean(cnt)
+    sd = sd.raster(cnt)
+    return(addLayer(mn, sd, sd))
+}
+measures_mean = mapply(function(i,j) runIfNoFile(i, measure_mean_sd, j, grad_cache = TRUE),
+                     fnames_mean, 1:4)
+
+
+
+#measures_fire = runIfNoFile(fnames_fire, function(i) lapply(i, fire.stack, fire_season_r), measures, test = grab_cache)
 
 #########################################################################
 ## Plot maps                                                           ##
@@ -145,7 +169,8 @@ measures_fire = runIfNoFile(fnames_fire, function(i) lapply(i, fire.stack, fire_
 plot_inputs <- function(Obs, fname, names = names_input, units = units_input,
                         lims = lims_input, cols = cols_input, 
 			lmat = NULL, lineMod = 0.9,
-                        maxLab = NULL, extend_max = FALSE, extend_min = FALSE, ...) {
+                        maxLab = NULL, extend_max = FALSE, extend_min = FALSE, 
+                        limits_error = c(0.05, 0.1), ...) {
     print(fname)
     if (extend_max && extend_min) plot_loc = c(0.33, 0.93, 0.015, 0.05)
         else plot_loc = c(0.35, 0.8, 0.015, 0.05)
@@ -155,8 +180,8 @@ plot_inputs <- function(Obs, fname, names = names_input, units = units_input,
     plot_input <- function(x, lim, col, name, unit= '', maxLab, extend_max, extend_min) {
 	if (nlayers(x) == 1) e = NULL else e = x[[2]]
         
-        plot_raster(x, lim, col, quick = TRUE, limits_error = c(0.05, 0.1), e = e,
-                    ePatternRes = 35, ePatternThick = 0.5, interior = FALSE,...)
+        plot_raster(x, lim, col, quick = TRUE, limits_error = limits_error, e = e,
+                    ePatternRes = 50, ePatternThick = 0.5, interior = FALSE,...)
 		#addLocPoints()
         if (name == "b) ~alpha~~_max~") lineMod = lineMod - 0.5
         mtext.units(name, line = -1 + lineMod * 0.5, adj = 0.1)
@@ -195,35 +220,37 @@ ready4Plot <- function(r, maxBare = 100) {
     return(r)
 }
 
-Obs_mean = ready4Plot(Obs_mean)
-Obs_fire = ready4Plot(Obs_fire)
-Obs_trnd = ready4Plot(Obs_trnd, 0)
-Obs_trnd[['fire']][[1]] = Obs_trnd[['fire']][[1]] * 12
-Obs_mean[['fire']] = Obs_mean[['fire']] * 12
+#Obs_mean = ready4Plot(Obs_mean)
+#Obs_fire = ready4Plot(Obs_fire)
+#Obs_trnd = ready4Plot(Obs_trnd, 0)
+#Obs_trnd[['fire']][[1]] = Obs_trnd[['fire']][[1]] * 12
+#Obs_mean[['fire']] = Obs_mean[['fire']] * 12
 
 lmat = rbind(c(1, 2, 0),
 	     3:5,
 	     c(6, 7, 0),
 	     8:10)
 			 
-plot_inputs(Obs_mean, fignames[1], lmat = lmat, maxLab = maxL_input)
+#plot_inputs(Obs_mean, fignames[1], lmat = lmat, maxLab = maxL_input)
 #plot_inputs(Obs_fire, fignames[2], lmat = lmat, maxLab = maxL_input)
 
-Obs_trnd = lapply(Obs_trnd, function(i) {i[[1]] = i[[1]] * 12; i})
-plot_inputs(Obs_trnd, fignames[3], lmat = lmat, cols = colt_input, lims = limt_input,extend_max = TRUE, extend_min = TRUE)
+#Obs_trnd = lapply(Obs_trnd, function(i) {i[[1]] = i[[1]] * 12; i})
+#plot_inputs(Obs_trnd, fignames[3], lmat = lmat, cols = colt_input, lims = limt_input,extend_max = TRUE, extend_min = TRUE)
 
 
 ## Plot measures
-measures_mean[[1]] = measures_mean[[1]] * 100/0.8
-measures_mean[[2]] = measures_mean[[2]] * 100
-measures_mean[[3]] = measures_mean[[3]] * 12
+measures_mean[[1]][[1]] = measures_mean[[1]][[1]] * 100/0.8
+measures_mean[[2]][[1]] = measures_mean[[2]][[1]] * 100
+measures_mean[[3]][[1]] = measures_mean[[3]][[1]] * 12
 
-measures_fire[[1]] = measures_fire[[1]] * 100/0.8
-measures_fire[[2]] = measures_fire[[2]] * 100
- 
-plot_inputs(measures_mean, fignames[4], names_msure, units_msure, lims_msure, cols_msure, lineMod = 0.5) 
-lims_msure[[3]] = lims_msure[[3]] / 10   
-plot_inputs(measures_fire, fignames[5], names_msure, units_msure, lims_msure, cols_msure, lineMod = 0.5) 
+#measures_fire[[1]][[1]] = measures_fire[[1]][[1]] * 100/0.8
+#measures_fire[[2]][[1]] = measures_fire[[2]][[1]] * 100
+
+porder = c(1, 3, 2, 4)
+plot_inputs(measures_mean[porder], fignames[4], names_msure[porder], units_msure[porder], lims_msure[porder], cols_msure[porder], 
+            maxLab = list(100, NULL, 100, NULL), extend_max = FALSE, extend_min = FALSE, lineMod = 1, limits_error = c(0.1, 0.5)) 
+#lims_msure[[3]] = lims_msure[[3]] / 10   
+#plot_inputs(measures_fire[porder], fignames[5], names_msure[porder], units_msure[porder], lims_msure[porder], cols_msure[porder], lineMod = 0.5) 
 
            
 
