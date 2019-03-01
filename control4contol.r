@@ -78,9 +78,9 @@ runType <- function(...)
 standard = runType(standardLimitation, "standard")
 	
 potential = runType(potentialLimiation, "potential3")
-#potential[[2]] = potential[[2]] * f1(0.0, param('moisture_x0'), -param('moisture_k'))
-#potential[[4]] = potential[[4]] * f1(0.0, param('suppression_x0'), -param('suppression_k'))
-#potential[[4]][potential[[4]][[1]] > 1] = 1
+potential[[2]] = potential[[2]] * f1(0.0, param('moisture_x0'), -param('moisture_k'))
+potential[[4]] = potential[[4]] * f1(0.0, param('suppression_x0'), -param('suppression_k'))
+potential[[4]][potential[[4]][[1]] > 1] = NaN
 sensitivity = runType(standardLimitation, "sensitivity", 3)
 
 totalArea.raster <- function(r) {

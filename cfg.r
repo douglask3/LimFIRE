@@ -19,6 +19,7 @@ library(RcppEigen)
 library(parallel)
 library(snow)
 library(reldist)
+library(rgdal)
 data(worldHiresMapEnv)
 
 
