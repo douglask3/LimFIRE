@@ -1,4 +1,4 @@
-open_ensemble <- function(dir, vars = c('lm', 'rw', 'sn', 'sn-ws')) {
+open_ensemble <- function(dir, vars = c('lm', 'rw', 'sn', 'sn-ws', 'mnsures')) {
 	files = list.files(dir, full.names = TRUE)            
 	
 	openSet <- function(st) {
@@ -11,7 +11,6 @@ open_ensemble <- function(dir, vars = c('lm', 'rw', 'sn', 'sn-ws')) {
 }
 
 open_ensembles <- function(...) {
-    outputs_dir = 'D:/Laurens22122018/Documents/work/LimFIRE/outputs/'
 	dirs = list.dirs(outputs_dir, full.names = TRUE)
 	dirs = dirs[grep('ensemble_', dirs)]
 	
