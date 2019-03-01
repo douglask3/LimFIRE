@@ -2,22 +2,25 @@
 ## cfg                                                                 ##
 #########################################################################
 dontPlot = TRUE
+#loadData4Ecosystem_analysis()
 source("plotVariableTrends.r")
 grab_cache = TRUE
 
+reds9   = c("#FFF7FB", "#F7DEEB", "#EFC6DB", "#E19ECA", "#D66BAE", 
+            "#C64292", "#B52171", "#9C0851", "#6B0830")
 
 obs = lapply(drive_fname, stack)
 vars = list('crop', 'pas', 'popdens', c('crop', 'pas', 'popdens'))
 dfire_lims = list(c(-10, -5, -1,  -0.5, -0.1,  0.1, 0.5, 1, 5, 10),
 				  c(-80, -60, -40, -20, -10,  -1, 1, 10, 20, 40, 60, 80),
-				  c(-50, -20, -10, -5, -2, -1, 1, 2, 5, 10, 20, 50))
+				  c(-20, -10, -5, -2, -1, 1, 2, 5, 10, 20)/10)
 
 #########################################################################
 ## Run model                                                           ##
 #########################################################################
 ens_files = open_ensembles()
 ens_no <- function(file) strsplit(strsplit(file[[1]][[1]], 'outputs//ensemble_')[[1]][-1], '/')[[1]][1]
-ens_nos = as.numeric(sapply(ens_files, ens_no))[1:27]
+ens_nos = as.numeric(sapply(ens_files, ens_no))[1:40]
 
 findParameterLimitation <- function(var, ens_no) {	
 	dir = paste(outputs_dir, 'ensemble_noVar', ens_no, '/', sep = "")
@@ -30,7 +33,7 @@ findParameterLimitation <- function(var, ens_no) {
 		dat = mean(dat)
 		return(dat)
 	}
-	
+	print(fname)
 	ct = runIfNoFile(fname[1], runLimFire, test = grab_cache)		
 	mn = runIfNoFile(fname[2], runLimFire, remove = var, test = grab_cache)
 	
@@ -51,7 +54,7 @@ findParameterLimitation <- function(var, ens_no) {
 }
 
 findParameterLimitationVar <- function(...) 
-	lapply(vars, findParameterLimitation, ...)
+	mclapply(vars, findParameterLimitation, ..., mc.cores = getOption("mc.cores", 4L))
 
 mod = lapply(ens_nos, findParameterLimitationVar)
 
@@ -76,25 +79,48 @@ plotVar <- function(i, xlim, ylim, name, title, xlab, log = '', plotFun,...) {
 	
 	plotMap <- function(x, limits = limits, cols = dfire_cols, add_legend = FALSE,...) {
 		plotStandardMap(mean(x), '', limits = limits, cols =  cols, 
-						e = sd.raster(x), ePatternRes = 30, ePatternThick = 0.2, limits_error = c(1/10, 1/2),
-						add_legend = add_legend, ...)
+			        e = sd.raster(x), ePatternRes = 40, ePatternThick = 0.5, 
+                                #limits_error = c(1/10, 1/2),
+				add_legend = add_legend, ...)
 	}
-
-	par(mar = c(3, 0.5, 0, 0))
+        
+	par(mar = c(3, 0.5, 0, 0.5))
 	if (title != "NaN") {
 		plot(xlim, ylim, type = 'n', log = log, xlim = xlim, ylim = ylim, xlab = xlab)
-		for (i in 1:nlayers(contr)) points(var[],100* (diffv[[i]]/norm[[i]])[]	, col = make.transparent("black", 0.99), pch = 19, cex = 0.001)
+                cols = reds9
+                cols = cols[unlist(mapply(rep, 2:9, 9 + (2:9)^3))]
+                x = var
+                y = 100* (diffv/norm)
+                mask = !is.na(x) & x < xlim[2] & x > xlim[1]
+                x = x[mask]; y = y[mask]
+                x = matrix(x, nrow = nrow(y), ncol = ncol(y))
+                x = as.vector(x); y = as.vector(y)
+                cuts   = cut_results(x, seq(0, 100, 1))
+                cuts_n = unique(cuts)
+                probs = 1/sapply(cuts_n, function(i) sum(i == cuts))
+                prob = sapply(cuts, function(i) probs[which(i == cuts_n)])
+                index = sample(1:length(x), round(length(x)/nlayers(diffv)), replace = TRUE, prob = prob)
+                x = x[index]; y = y[index]
+                
+                cols = densCols(x,y, colramp = colorRampPalette(cols), bandwidth = 0.1)
+                #cols = densCols(x,y, nbin = 128* 4, bandwidth = 0.1)
+                points(y~x, pch = 20, col = cols)#, 
+         #xaxt = 'n', yaxt = 'n', xlim = xlim, ylim = ylim)
+		for (i in 1:nlayers(contr))
+                    points(var[],100* (diffv[[i]]/norm[[i]])[], 
+                            col = make.transparent("black", 0.99), pch = 19, cex = 0.001)
 		
 		mtext(title, side = 3, line = -1.3)
 		mtext(xlab , side = 1, line =  1.67, cex =0.8)
 		plotFun()
 	} else plot.new()
 	par(mar = rep(0,4))
+        
 	plotMap(diffv * 100 * 12, dfire_lims[[1]], ...)
 	
 	
-	plotMap(layer.apply(1:nlayers(diffv), function(i) diffv[[i]]/norm[[i]]) * 100, dfire_lims[[2]],...)
-	plotMap(100*(contr - trend)/norm, dfire_lims[[3]], ...)
+	#plotMap(layer.apply(1:nlayers(diffv), function(i) diffv[[i]]/norm[[i]]) * 100, dfire_lims[[2]],...)
+	plotMap((100/14)*(contr - trend)/norm, dfire_lims[[3]], ...)
 	
 	areaIncreaseDecrease <- function(x) {
 		a  = raster::area(x, na.rm = TRUE)
@@ -116,30 +142,32 @@ plotVar <- function(i, xlim, ylim, name, title, xlab, log = '', plotFun,...) {
 	return(cbind(mout, sdout))
 }
 	
-FUNcrop <- function() lines(c(0,100), c(0, -100), col = 'red')
-FUNpas  <- function() lines(c(0,100), c(0,  100), col = 'red')
-FUNpopd <- function() lines(c(0.00001, 9E9), c(0, 0), col = 'red')
+FUNcrop <- function() lines(c(0,100), c(0, -100), col = 'blue')
+FUNpas  <- function() lines(c(0,100), c(0,  100), col = 'blue')
+FUNpopd <- function() lines(c(0.00001, 9E9), c(0, 0), col = 'blue')
 	
-png('figs/human_impact.png', width = 7.5 *7/5, height = 6.5, res = 300, unit = 'in')
-	par(oma = c(0, 2.5, 1.5, 0))
-	layout(rbind(1:4, 5:8, 9:12, 13:16, c(0, 17:19)), widths = c(1, 2, 2, 2), heights = c(1, 1, 1, 1, 0.3))
-	out = mapply(plotVar, 1:4, 
-		   list(c(0, 80), c(0, 80), c(0.5, 10000), c(0.001, 100)),
-		   list(c(-100, 0), c(0, 100), c(-100, 100), c(-100, 100)), 
+png('figs/human_impact.png', width = 7.2, height = 5.5, res = 300, unit = 'in')
+    par(oma = c(0, 2.5, 1.5, 0))
+    layout(rbind(1:3, 4:6, 7:9, 10:12, c(0, 13:14)),
+           widths = c(1, 2, 2), heights = c(1, 1, 1, 1, 0.3))
+    out = mapply(plotVar, 1:4, 
+		  list(c(0, 80), c(0, 80), c(0.5, 10000), c(0.001, 100)),
+		  list(c(-100, 0), c(0, 100), c(-100, 100), c(-100, 100)), 
 		   vars, c("cropland", "pasture", "pop. density", NaN),
 		                                c('% cover', '% cover', 'pop/km2', '% Burnt Area'), c('', '', 'x', ''), 
 										c(FUNcrop, FUNpas, FUNpopd), SIMPLIFY = FALSE)
 		   
 	addLegend <- function(limits, units) {
-		add_raster_legend2(dfire_cols, limits, dat = mod[[1]][[1]][[1]], srt = 0,
-						   transpose = FALSE, plot_loc = c(0.05, 0.95, 0.75, 0.9), ylabposScling=1.5, 
-						   oneSideLabels = NA, add = FALSE)
-		mtext(units, side = 1, line = -1)
+	    add_raster_legend2(dfire_cols, limits, dat = mod[[1]][[1]][[1]], srt = 0,
+			       transpose = FALSE, plot_loc = c(0.05, 0.95, 0.75, 0.9), 
+                               ylabposScling=1.5,  oneSideLabels = FALSE, add = FALSE,
+                               extend_max = TRUE, extend_min = TRUE)
+	    mtext(units, side = 1, line = -1)
 	}
 	
 	
 	addLegend(dfire_lims[[1]], '% change in burnt area')
-	addLegend(dfire_lims[[2]], '% change in normalised burnt area')
+	#addLegend(dfire_lims[[2]], '% change in normalised burnt area')
 	addLegend(dfire_lims[[3]], '% change in normalised burnt area')
 	
 	mapply(mtext, c("Impact on fire", "Impact on trend"), adj = c(2.2, 4.5)/5, 
