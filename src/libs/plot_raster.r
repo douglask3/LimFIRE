@@ -1,10 +1,12 @@
-plot_raster <- function(x, lims = fire_lims, cols = fire_cols, add_legend = FALSE, y_range = c(-60, 90), ...) {
+plot_raster <- function(x, lims = fire_lims, cols = fire_cols, add_legend = FALSE, y_range = c(-60, 90), e = NULL, ...) {
     
     mask = raster('data/seamask.nc')
     x[mask != 2] = NaN
     
+    if (!is.null(e)) e[mask != 2] = NaN
+    
     FUN <- function(...) {
-        plot_raster_from_raster(x, limits = lims, cols = cols, coast.lwd = NULL,
+        plot_raster_from_raster(x, limits = lims, cols = cols, coast.lwd = NULL, e = e,
                                 #x_range = c(-160, 160),
                                 y_range = y_range, #projection = "mollweide",
                                 ...) #projection = "azequalarea",
@@ -14,6 +16,7 @@ plot_raster <- function(x, lims = fire_lims, cols = fire_cols, add_legend = FALS
 
     addCoastlineAndIce2map()
     
+    if (!is.null(e)) c(e, nn) := cropIndonesia(e, mask)
     c(x, mask) := cropIndonesia(x, mask)
     
     FUN(add = TRUE, add_legend = FALSE, ...)
