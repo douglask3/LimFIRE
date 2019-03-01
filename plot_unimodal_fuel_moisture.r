@@ -6,17 +6,17 @@ reds9   = c("#FFF7FB", "#F7DEEB", "#EFC6DB", "#E19ECA", "#D66BAE",
             "#C64292", "#B52171", "#9C0851", "#6B0830")
 greens9 = c("#FBFFF7", "#EBF7DE", "#DBEFC6", "#CAE19E", "#AED66B", 
             "#92C642", "#71B521", "#519C08", "#306B08")
-#source("control4contol.r")
-#controls = runType(standardLimitation, "controls", fileLayer = 1)
+source("control4contol.r")
+controls = runType(standardLimitation, "controls", fileLayer = 1)
 
-#fnames = fnames = c('nnfire', 'fuel', 'moisture', 'igntions', 'supression')
-#fnames_mod  = paste('temp/', fnames    , '-measuresOnly.nc', sep = '')	  
-#measures = runIfNoFile(fnames_mod, runLimFIREfromstandardIns,
-#                       just_measures = TRUE, raw = TRUE, test = grab_cache)[-1]
+fnames = fnames = c('nnfire', 'fuel', 'moisture', 'igntions', 'supression')
+fnames_mod  = paste('temp/', fnames    , '-measuresOnly.nc', sep = '')	  
+measures = runIfNoFile(fnames_mod, runLimFIREfromstandardIns,
+                       just_measures = TRUE, raw = TRUE, test = grab_cache)[-1]
 
-#fuel_cont = mean(measures[[1]])
-#moisture  = mean(measures[[2]])
-moisture = moisture0^1.3
+fuel_cont = mean(measures[[1]])
+moisture  = mean(measures[[2]])
+moisture = moisture^1.3
 params = read.csv(coefficants_file)
 
 y = standard[[1]][[1]] * (standard[[3]][[1]])
@@ -32,8 +32,8 @@ plot_xy <- function(x, y, cols = blues9, flip = FALSE, normalise = TRUE, fitLine
         prob = sapply(cuts, function(i) probs[which(i == cuts_n)])
 
         index = sample(1:length(x), length(x), replace = TRUE, prob = prob)
-        x =  x[index]
-        y =  y[index]
+        #x =  x[index]
+        #y =  y[index]
     }
     if (flip) {
         c(x, y) := list(y, x)
@@ -46,11 +46,11 @@ plot_xy <- function(x, y, cols = blues9, flip = FALSE, normalise = TRUE, fitLine
         xlim = range(x)
         ylim = range(y)
     }
-    
-    cols = cols[unlist(mapply(rep, 1:9, 9 + (1:9)^5))]
     #cols = blues9
+    cols = cols[unlist(mapply(rep, 1:9, 9 + (1:9)^5))]
+    #
     cols = densCols(x,y, colramp = colorRampPalette(cols))
-    plot(y~x, pch = 20, cex = 2, col = cols, 
+    plot(y~x, pch = 20, col = cols, 
          xaxt = 'n', yaxt = 'n', xlim = xlim, ylim = ylim)
     
     if (is.null(fitLine)) {
@@ -88,7 +88,7 @@ png('figs/fuel_vs_moisture_scatters.png', height = 7, width = 7, res = 300, unit
     par(mfrow = c(2,2), mar = rep(0.5, 4), oma = c(4,4,0,0))
 
     ### fuel
-    plot_xy(fuel_cont, y, greens9, fitLine = list(LimFIRE.fuel, "fuel_x0", "fuel_k"))
+    plot_xy(fuel_cont, y, cols = greens9, fitLine = list(LimFIRE.fuel, "fuel_x0", "fuel_k"))
     axis(2)
     mtext(side = 2, 'Monthly burnt area (%)', line = 2.5)
     mtext(side = 3, 'a)', adj = 0.1, line = -1.5)
@@ -97,7 +97,7 @@ png('figs/fuel_vs_moisture_scatters.png', height = 7, width = 7, res = 300, unit
     plot.new()
     
     ### both
-    plot_xy(moisture, fuel_cont, reds9, normalise = FALSE)
+    plot_xy(moisture, fuel_cont, cols = reds9, normalise = FALSE)
     mtext(side = 3, 'b)', adj = 0.1, line = -1.5)
     axis(1)
     axis(2)
