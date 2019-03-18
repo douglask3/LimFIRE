@@ -1,12 +1,13 @@
 source("cfg.r")
+loadData4Ecosystem_analysis()
 graphics.off()
 obs_file  = 'outputs/fire2000-2014.nc'
 
 temp_file = 'temp/benchmarking_plot_dat.Rd'
-grab_cache = FALSE
+grab_cache = TRUE
 
 fire_lims = c(1, 2, 5, 10, 20, 50)
-dfire_lims = c(-0.01, -0.005, -0.002, -0.001, 0.001, 0.002, 0.005, 0.01)
+dfire_lims = c(-8, -4, -2, -1, -0.5, 0.5, 1, 2, 4, 8)
 
 
 if (file.exists(temp_file) && grab_cache) {
@@ -21,7 +22,7 @@ if (file.exists(temp_file) && grab_cache) {
 
     tfile = paste(outputs_dir, filename.noPath(obs_file, TRUE), '-trendDiff.nc', sep = '')
     tr_obs = runIfNoFile(tfile, removeTrend, obs)
-    tr_obs = 100 * (tr_obs[[1]]/aa_obs) / 14
+    tr_obs = 12 * 100* tr_obs[[1]]/(aa_obs * nlayers(obs))
     tr_obs[is.infinite(tr_obs)] = NaN
 
     tr_mod_mn = mean(tr_mod)
@@ -59,12 +60,12 @@ png('figs/benchmarkFigure.png', height = 4.7 * 7.2/10, width = 7.2, units = 'in'
 	mtext('Reconstructed', side = 2, line = -2.3, adj = 0.1)
     mtext('c)', adj = 0.1, side = 3, line = -1)					
 						
-	plotMap(100 * tr_obs/nlayers(obs), '', 
-					limits =  dfire_lims * 100, cols =  dfire_cols, add_legend = FALSE)					
+	plotMap(tr_obs, '', 
+					limits =  dfire_lims, cols =  dfire_cols, add_legend = FALSE)					
 	mtext('Trend in Burnt Area', side = 3)	
     mtext('b)', adj = 0.1, side = 3, line = -1)
     
-	plotMap(tr_mod_mn, '', limits = dfire_lims * 100, cols = dfire_cols,
+	plotMap(tr_mod_mn, '', limits = dfire_lims, cols = dfire_cols,
 					e = tr_mod_sd, extend_min = TRUE, extend_max = TRUE, units = '% ~yr-1~',
                     plot_loc = c(0.35, 0.93, 0.01, 0.04))
     mtext('d)', adj = 0.1, side = 3, line = -1)
