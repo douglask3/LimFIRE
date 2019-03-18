@@ -9,9 +9,9 @@ nsamples = 100
 
 
 barCols = c("#CC8800", "#6eff6e", "#0000CC", "#480000", "#999999", "purple")
-legLabs = c('Burnt\nArea', 'All\nControls', ' \nFuel', 'Moisture\n ', 
-            ' \nIgnitions', 'Suppression\n ', 'Fire\nRegime')
-legLabs = c('Burnt Area', 'All Controls', 'Fuel'   , 'Moisture', ' Ignitions', 'Suppression')
+legLabs = c('Burnt\nArea',  ' \nFuel', 'Moisture\n ', 
+            ' \nIgnitions', 'Suppression\n ')
+legLabs = c('Burnt Area', 'Fuel', 'Moisture', 'Ignitions', 'Suppression', 'Fire Regime')
 
 
 loadData4Ecosystem_analysis()
@@ -25,13 +25,14 @@ dat = c(dat,layer.apply(trendIndex1, function(i) i[[1]]),
 dat[[1]] = dat[[1]]
 
 
-dat = dat[c(1, 2:5)]
+dat = dat[c(1, 2:5, 7)]
 
 #dat[3:6] = lapply(dat[3:6], function(i) i)
 
 
 addboxPlot <- function(x, y, col, mask) {
     #if (col == "purple") browser()
+   
     #y = y[[1:5]]
     mask[is.na(mask)] = 0.0
 
@@ -55,11 +56,12 @@ addboxPlot <- function(x, y, col, mask) {
 addAllDatPlot <- function(x, biomeN) {
     if (!is.null(biomeN)) mask = mask & any(layer.apply(biomeN, function(i) biome == i))
     x = 5 * (x + seq(-0.35, 0.25, length.out = 6))
+    
     mapply(addboxPlot, x, dat, barCols, MoreArgs = list(mask))		
 }
 
 addLegend <- function() {
-    pplot(c(0.7, 6.5), c(-1.15, 1.15), axes = FALSE, type = 'n', xlab = '', ylab = '')
+    plot(c(0.7, 6.5), c(-1.15, 1.15), axes = FALSE, type = 'n', xlab = '', ylab = '')
     addLegItem <- function(x, col) {
         addBoxLeg <- function(dif) {
 	    boxplot(c(-0.4, 0.4)+ dif, at = x, add = TRUE, 
@@ -108,7 +110,7 @@ plotAllTheBoxesAndWhiskers <- function(fname = '', ylims = c(-.6, 0.85),
 	at = labels / 100
         labels[seq(2, length(labels), by = 2)] = ''		
 	axis(2, at = at, labels = labels)
-        mtext.units('change in burnt area/limitation (% ~yr-1~)', side = 2, line = 2)
+        mtext.units('change in burnt area or limitation (% ~yr-1~)', side = 2, line = 2)
 
 	for (y in at) lines(c(-9E9, 9E9), c(y, y), lty = 2, col = "#CCCCCC")
 	lines(c(-9E9, 9E9), c(0, 0), col = "#CCCCCC")
