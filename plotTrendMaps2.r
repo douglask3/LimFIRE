@@ -19,7 +19,7 @@ plotControl <- function(trd, nme, sc = 1, limits = trend_lims, cols = dfire_cols
 	plotStandardMap(mean(trd) * sc, '', limits = limits, cols =  cols, 
 					e = sd.raster(trd), ePatternRes = 40, ePatternThick = 0.6, limits_error = c(1/10, 1/2),
 					add_legend = add_legend, ...)
-	mtext(nme, adj = 0.02, line = -0.5, cex = 0.9,)
+	mtext(nme, adj = 0.02, line = -0.6, cex = 0.9)
 	mtext(cex = 0.8 * 0.8, side = 1, units_title, line = -2.9, adj = 0.58)
 }
 #fire_cols = c('white', '#FFDD00', '#BB0000', '#220000')
@@ -28,7 +28,7 @@ plotControl <- function(trd, nme, sc = 1, limits = trend_lims, cols = dfire_cols
 ##########################################
 
 fname = paste(figName, 'controls.png', sep = '-')
-png(fname, height = 4 * 7.2/8, width = 7.2, units = 'in', res = 300)
+"png(fname, height = 4 * 7.2/8, width = 7.2, units = 'in', res = 300)
 	layout(rbind(1:2, 3:4, c(5, 5)), heights = c(1,1, 0.3))
 	
 	par(mar = rep(0, 4), oma = c(0, 0, 1, 0))
@@ -41,7 +41,7 @@ png(fname, height = 4 * 7.2/8, width = 7.2, units = 'in', res = 300)
                        extend_min = TRUE, extend_max = TRUE)
 	#mtext(cex = 0.8, side = 1, 'change in area burnt/mean burnt area', line = -2.5)
 dev.off()
-
+"
 grabFirst <- function(lr) layer.apply(lr, function(r) r[[1]])
 trendIndex = list(grabFirst(trendIndex1), grabFirst(trendIndex3))
 #trendIndex[[2]] = layer.apply(1:50, function(i) {	
@@ -58,9 +58,8 @@ trendIndex[[1]] =  trend12FF[[1]]
 ## Trends in burnt area and fire regime ##
 ##########################################
 fname = paste(figName, 'trendIndicies.png', sep = '-')
-png(fname, height = 7.2, width = 4 * 7.2/6.3, units = 'in', res = 300)
-	
-	par(mar = c(0.4, 0, 0, 0), mfcol = c(3, 1), oma = c(6, 0, 0.3, 0))
+png(fname, height = 7.2, width = 4 * 7.2/6.3, units = 'in', res = 600)
+	par(mar = c(0.4, 0, 0, 0), mfcol = c(3, 1), oma = c(6, 0, 0.5, 0))
 	mapply(plotControl, trendIndex, c('a) Normalised trend in burnt area', 'b) Shift in fire regime'), 
 						units_title = c(' ', ' '), units = c('% ~yr-1~', '% ~yr-1~'), 
                         extend_max = c(TRUE, TRUE), extend_min = c(TRUE, FALSE),
@@ -112,8 +111,8 @@ png(fname, height = 7.2, width = 4 * 7.2/6.3, units = 'in', res = 300)
     FUN <- function(j, i)
         runIfNoFile(paste0('temp/cntr_tr_ration_qr05',i, '-', j, '.nc') , controlRatio, i, j)
 	control_rarios = lapply(1:4, function(i) layer.apply(1:4, FUN, i))
-    control_rarios = layer.apply(control_rarios, function(i) sum(i > 0.5))
-    for (i in 1:4) controls_switch[[i]][control_rarios[[i]] <2] = 0
+    control_rarios = layer.apply(control_rarios, function(i) sum(i > 0.1))
+    for (i in 1:4) controls_switch[[i]][control_rarios[[i]] != 4] = 0
     controls = controls_switch
 	combinations = c()
 	id = c(-1, 0, 1)
@@ -154,20 +153,21 @@ png(fname, height = 7.2, width = 4 * 7.2/6.3, units = 'in', res = 300)
 	}
 	
 	plotStandardMap(tmap[[1]], '', limits = (1:nrow(combinations)) - 0.5, cols  = c('white', combinations[,7]),
-					e = tmap[[2]] + 2, e_lims = 1:3,  ePatternRes = 50, ePatternThick = 0.4,
-								ePointPattern = c(25, 0, 24), eThick = c(1.5, 0, 1.5),
+					e = tmap[[2]] + 2, e_lims = 1:3,  ePatternRes = 60, ePatternThick = 0.4,
+								ePointPattern = c(25, 0, 24), eThick = c(1.5, 0, 1.5), e_alpha = 0.6,
 								preLeveled = TRUE, add_legend = FALSE, interior = FALSE)
-	mtext('c) Drivers', adj = 0.02, line = -1.2, cex = 0.9)
+	mtext('c) Driving controls', adj = 0.02, line = -0.5, cex = 0.9)
 	
 	addLegend <- function(f, m, title, x, y) {
 		test = which(combinations[,2] == f & combinations[,3] == m)
-		test = test[1:(length(test)/3)]
-		cols = combinations[test,7]
+		test1 = test[1:(length(test)/3)]
+		cols = combinations[test1,7]
 		
 		pc = combinations[test, 6]
+        pc = as.numeric(pc[1:3])  + as.numeric(pc[4:6]) + as.numeric(pc[7:9])
 		tot = sum(as.numeric(combinations[, 6]))
 		
-		title = paste(title, ' (',  round(100 * sum(as.numeric(pc)) / tot, 0), '%)', sep = '')
+		#title = paste(title, ' (',  round(100 * sum(as.numeric(pc)) / tot, 0), '%)', sep = '')
 		
 		pc = as.character(standard.round(100 * as.numeric(pc) / tot, 1))
 		
@@ -175,27 +175,35 @@ png(fname, height = 7.2, width = 4 * 7.2/6.3, units = 'in', res = 300)
 		pc[nchar(pc) == 1] = paste(pc[nchar(pc) == 1], '.0', sep = '')
 		
 		cexLeg = 2/3
-		legend(x, y, c('More ignitions          ', '', 'Less ignitions          '),
-			   col = cols, pch = 15, pt.cex = 2.5 * cexLeg, cex = cexLeg,
-			   xpd = NA, title = title, y.intersp = 1.5 * cexLeg, box.col = make.transparent("black", 0.0))
+		legend(x, y, c('Increased ignitions          ', '', 'Decreased ignitions          '),
+			   col = cols, pch = 15, pt.cex = 3 * cexLeg, cex = cexLeg,
+			   xpd = NA, title = ' ', y.intersp = 1.5 * cexLeg, bty = 'n')
+        
+        xwidth = 66
+        ywidth = 30
+        lines(x + c(0, 1, 1, 0, 0) * xwidth, y + c(0.17, 0.17, -1, -1, 0.17) * ywidth, xpd = NA)
 		
-		legend(x-0.1, y, c(pc), bty = 'n', adj = 1.2 * cexLeg, title = ' ', cex = 0.67 * cexLeg,
+		legend(x-0.08, y, c(pc), bty = 'n', adj = 1.2 * cexLeg, title = ' ', cex = 0.67 * cexLeg,
 			   xpd = NA, y.intersp = 1.5/0.63 * cexLeg,
 			   pt.cex = 2, col = make.transparent("white", 1.0))
+        
+        text(paste0('(',  round(sum(as.numeric(pc)), 0), '%)'), 
+             x = x + xwidth * 0.87, y = y - ywidth * 0.67, cex = cexLeg, xpd = NA)
+        text(title, x = x + xwidth/2, y = y - 1, cex = cexLeg, font = 2, xpd = NA)
 	}
 	
 	legend(-173, -8, legend = c('Increased\n(less fire)', 'Decreased\n(more fire)'), pch = c(25, 24), cex = 2/3, title = 'Suppression', box.col =  make.transparent("black", 1.0), horiz = TRUE) 
-	addLegend(1, -1, "Increased Fuel \n& Moisture", -160, -44)
-	addLegend(-1, 1, "Decreased Fuel \n& Moisture",    -160, -80)
+	addLegend(1, -1, "Increased Fuel \n& Moisture", -160, -54)
+	addLegend(-1, 1, "Decreased Fuel \n& Moisture",    -160, -90)
 	text(-166, -80, 'Counteracting drivers', srt = 90, xpd = NA, cex = 0.8)
 	
-	addLegend(0, 1, "Decreased Moisture", 88, -80)
-	addLegend(1,  1, "Increased Fuel\n& Decreased Moisture", 19, -44)
-	addLegend(1,  0, "Increased Fuel"     , 88, -44)
+	addLegend(0, 1, "Decreased Moisture\n", -50, -54)
+	addLegend(1,  1, "Increased Fuel &\nDecreased Moisture", 19, -54)
+	addLegend(1,  0, "Increased Fuel\n"     , 88, -54)
 	text(-56, -78, 'Increase', srt = 90, xpd = NA, adj = 0, cex = 0.8)
 	
-	addLegend(-1, 0, "Decreased Fuel", -50, -80)
-	addLegend(-1, -1, " Decreased Fuel \n& Increased Moisture", 19, -80)
-	addLegend(0, -1, "Increased Moisture", -50, -44)
+	addLegend(-1, 0, "Decreased Fuel\n", 88, -90)
+	addLegend(-1, -1, " Decreased Fuel &\nIncreased Moisture", 19, -90)
+	addLegend(0, -1, "Increased Moisture\n", -50, -90)
 	text(-56, -114, 'Decrease', srt = 90, xpd = NA, adj = 0, cex = 0.8)
 dev.off()

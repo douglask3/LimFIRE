@@ -203,7 +203,7 @@ plotAll <- function(fname0 = NULL, fuel = NULL, moisture = NULL,
 							'igntions_x0', 'igntions_k', 1.0, 
 							xlim = c(0, 5), ...)
 	mtext(side = 3, 'c)', adj = 0.1, line = -1.3)
-	mtext.units('No. Ignitions (k~m2~)', 1, line = 2.3)
+	mtext.units('No. Ignitions (k~m2~ ~month-1~)', 1, line = 2.3)
 	axis(2, at = yticks, labels = yticks * 100)
 
 	
