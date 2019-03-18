@@ -60,6 +60,7 @@ mod = lapply(ens_nos, findParameterLimitationVar)
 
 
 plotVar <- function(i, xlim, ylim, name, title, xlab, log = '', plotFun,...) {
+        print(title)
 	mod = lapply(mod, function(m) m[[i]])
 
 	contr = layer.apply(mod, function(i) i[[1]])
@@ -80,7 +81,7 @@ plotVar <- function(i, xlim, ylim, name, title, xlab, log = '', plotFun,...) {
 	plotMap <- function(x, limits = limits, cols = dfire_cols, add_legend = FALSE,...) {
 		plotStandardMap(mean(x), '', limits = limits, cols =  cols, 
 			        e = sd.raster(x), ePatternRes = 40, ePatternThick = 0.5, 
-                                #limits_error = c(1/10, 1/2),
+                                limits_error = c(0.1, 0.2),
 				add_legend = add_legend, ...)
 	}
         
@@ -88,7 +89,7 @@ plotVar <- function(i, xlim, ylim, name, title, xlab, log = '', plotFun,...) {
 	if (title != "NaN") {
 		plot(xlim, ylim, type = 'n', log = log, xlim = xlim, ylim = ylim, xlab = xlab)
                 cols = reds9
-                cols = cols[unlist(mapply(rep, 2:9, 9 + (2:9)^3))]
+                cols = cols[unlist(mapply(rep, 3:9, 9 + (3:9)^3))]
                 x = var
                 y = 100* (diffv/norm)
                 mask = !is.na(x) & x < xlim[2] & x > xlim[1]
@@ -104,14 +105,14 @@ plotVar <- function(i, xlim, ylim, name, title, xlab, log = '', plotFun,...) {
                 
                 cols = densCols(x,y, colramp = colorRampPalette(cols), bandwidth = 0.1)
                 #cols = densCols(x,y, nbin = 128* 4, bandwidth = 0.1)
-                points(y~x, pch = 20, col = cols)#, 
+                points(y~x, pch = 20, col = cols, cex = 0.5)#, 
          #xaxt = 'n', yaxt = 'n', xlim = xlim, ylim = ylim)
-		for (i in 1:nlayers(contr))
-                    points(var[],100* (diffv[[i]]/norm[[i]])[], 
-                            col = make.transparent("black", 0.99), pch = 19, cex = 0.001)
+		#for (i in 1:nlayers(contr))
+                #    points(var[],100* (diffv[[i]]/norm[[i]])[], 
+                 #           col = make.transparent("black", 0.99), pch = 19, cex = 0.001)
 		
 		mtext(title, side = 3, line = -1.3)
-		mtext(xlab , side = 1, line =  1.67, cex =0.8)
+		mtext.units(xlab , side = 1, line =  1.67, cex =0.8)
 		plotFun()
 	} else plot.new()
 	par(mar = rep(0,4))
@@ -154,7 +155,7 @@ png('figs/human_impact.png', width = 7.2, height = 5.5, res = 300, unit = 'in')
 		  list(c(0, 80), c(0, 80), c(0.5, 10000), c(0.001, 100)),
 		  list(c(-100, 0), c(0, 100), c(-100, 100), c(-100, 100)), 
 		   vars, c("cropland", "pasture", "pop. density", NaN),
-		                                c('% cover', '% cover', 'pop/km2', '% Burnt Area'), c('', '', 'x', ''), 
+		                                c('% cover', '% cover', 'pop k~m-2~', '% Burnt Area'), c('', '', 'x', ''), 
 										c(FUNcrop, FUNpas, FUNpopd), SIMPLIFY = FALSE)
 		   
 	addLegend <- function(limits, units) {
@@ -166,13 +167,13 @@ png('figs/human_impact.png', width = 7.2, height = 5.5, res = 300, unit = 'in')
 	}
 	
 	
-	addLegend(dfire_lims[[1]], '% change in burnt area')
+	addLegend(dfire_lims[[1]], ' ')
 	#addLegend(dfire_lims[[2]], '% change in normalised burnt area')
-	addLegend(dfire_lims[[3]], '% change in normalised burnt area')
+	addLegend(dfire_lims[[3]], ' ')
 	
 	mapply(mtext, c("Impact on fire", "Impact on trend"), adj = c(2.2, 4.5)/5, 
 		   MoreArgs = list(side = 3, outer = TRUE))
-	mtext('change in burnt area (%)', side = 2, line = 1.5, cex = 0.8, outer = TRUE, adj = 0.5 * 4.3/4)
+	mtext('change in burnt area (%)', side = 2, line = 1.5, cex = 0.8, outer = TRUE, adj = 0.67 * 4.3/4)
 dev.off()
 
 
