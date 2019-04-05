@@ -162,14 +162,14 @@ plot_ensemble <- function(i, x, poly = TRUE, col = 'cyan') {
 
     if (poly) {
         polygon(x + 0.35 * c(1, 1, -1, -1, 1), y[c(2, 4, 4, 2, 2)], 
-                col = make.transparent(col, 0.96), xpd = TRUE, border = 'transparent')
+                col = make.transparent(col, 0.99), xpd = TRUE, border = 'transparent')
     } else {
         mapply(addLine, y[c(1,3,5)], c(0.99, 0.97, 0.99), c(1, 1, 1))
         lines(c(x, x), y[c(1, 5)], col = make.transparent('black', 0.99), xpd = TRUE)
     }
 }
 plot_biome <- function(x, ...) {
-    for (i in 1:3) {
+    for (i in 1:2) {
         lapply(1:50, plot_ensemble, x,...)
         lapply(1:50, plot_ensemble, x, FALSE, ...)
     }
