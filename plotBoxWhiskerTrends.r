@@ -42,22 +42,26 @@ addboxPlot <- function(x, y, col, mask) {
     quants = apply(y, 2, quantile, c(0.1, 0.9), na.rm = TRUE)
     qrange = apply(quants, 2, diff)
     lwd = 0.5 + 2.5 * (qrange - min(qrange)) / (max(qrange) - min(qrange))
+    
+    outAll = matrix(NaN, ncol = ncol(y), nrow = 5)
     for (i in seq(1, ncol(y), 1)) {
     	out = boxplot(y[,i], add = TRUE, at = x, axes = FALSE, 
 		      col = make.transparent(col, 0.97), pch = 19, 
 		      cex = 0.2, outline = ylog, 
 		      border = make.transparent('black', 1.0))[[1]][,1]
+        outAll[, i] = out 
 	lines(x + c(-.15, .15), rep( out[3], 2), col = make.transparent('black', 0.9))
 	lines(c(x, x), quants[,i], col = make.transparent('black', 0.98), 
               lwd = lwd[i], xpd = TRUE)
     }
+    return(outAll)
 }
 
 addAllDatPlot <- function(x, biomeN) {
     if (!is.null(biomeN)) mask = mask & any(layer.apply(biomeN, function(i) biome == i))
     x = 5 * (x + seq(-0.35, 0.25, length.out = 6))
     
-    mapply(addboxPlot, x, dat, barCols, MoreArgs = list(mask))		
+    mapply(addboxPlot, x, dat, barCols, MoreArgs = list(mask), SIMPLIFY = FALSE)		
 }
 
 addLegend <- function() {
@@ -118,15 +122,16 @@ plotAllTheBoxesAndWhiskers <- function(fname = '', ylims = c(-.6, 0.85),
 	text(x = 5 * (1:8) + 0.35 * c(-1, -1.1, -1.2, -1.35, 0, 1.35, 1.2, 1.0),
              y = 0.08, labels = names(biomes), srt = 0, xpd = NA, cex = 1.3)
 
-	mapply(addAllDatPlot, 1:8, biomes)
+	out = mapply(addAllDatPlot, 1:8, biomes)
 	par(mar = c(0.5, 4, 0, 0))
 	addLegend()
 		
     dev.off()
+    return(out)
 }
 
 if (ylog) ytextPos = -(0.5^exp(-1)) else ytextPos = -0.8
-plotAllTheBoxesAndWhiskers(ytextPos = ytextPos)
+out = plotAllTheBoxesAndWhiskers(ytextPos = ytextPos)
 
 #dat = lapply(dat, abs)
 #if (ylog) ytextPos = -(0.02^exp(-1)) else ytextPos = -0.03
@@ -134,4 +139,42 @@ plotAllTheBoxesAndWhiskers(ytextPos = ytextPos)
 
 
 #axis(2, at = c(-0.9, -0.5, 0.0, 0.5, 0.9), labels = c('10%', '25%', 'Median', '75%', '90%'))
+
+
+i = 1
+
+png('figs/regime_shift_boxand2hisker.png', height = 6, width = 7.5, res = 300, units = 'in')
+trends =out[6, ]
+mx = max(unlist(trends))*100
+par(mar = c(8, 4, 1, 1))
+plot(c(0, ncol(out)) + 0.5, c(0, mx), type = 'n', axes = FALSE, xlab = '', ylab = '')
+for (y in 1:7) lines(c(-9E9, 9E9), c(y,y), lty = 3, col = 'grey')
+axis(2)
+axis(1, at = 1:ncol(out), labels = rep('', 8))
+text(x = 1:ncol(out), y = -mx * 0.1, names(biomesCols), srt = 90, xpd = NA, adj = 1)
+mtext(side = 2, "Overall control shift (%)", line = 2)
+
+plot_ensemble <- function(i, x, poly = TRUE, col = 'cyan') {
+    y = out[[6,x]][,i]*100
+
+    addLine <- function(yj, alpha, lwd)
+        lines(x + c(-.35, .35), rep( yj, 2), col = make.transparent('black', alpha), lwd = lwd)
+
+    if (poly) {
+        polygon(x + 0.35 * c(1, 1, -1, -1, 1), y[c(2, 4, 4, 2, 2)], 
+                col = make.transparent(col, 0.96), xpd = TRUE, border = 'transparent')
+    } else {
+        mapply(addLine, y[c(1,3,5)], c(0.99, 0.97, 0.99), c(1, 1, 1))
+        lines(c(x, x), y[c(1, 5)], col = make.transparent('black', 0.99), xpd = TRUE)
+    }
+}
+plot_biome <- function(x, ...) {
+    for (i in 1:3) {
+        lapply(1:50, plot_ensemble, x,...)
+        lapply(1:50, plot_ensemble, x, FALSE, ...)
+    }
+}
+biomesCols[1] = "grey"
+mapply(plot_biome, 1:8, col = biomesCols)
+dev.off()
 
