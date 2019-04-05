@@ -169,17 +169,17 @@ plotAll <- function(fname0 = NULL, fuel = NULL, moisture = NULL,
 		
 	axis4 = !is.null(fuel)	
 		
-	png(fname, width = 7.2, height = 5.5 * 1.15 * 7.2/6, units = 'in', res = 300)
+	png(fname, width = 7.2*0.75, height = 0.75*5.5 * 1.15 * 7.2/6, units = 'in', res = 300)
 	layout(rbind(1:2,3:4, 5), heights = c(1,1,0.3))
 
 	par(mar = c(3,0.5,1,0), oma = c(0,3.5,1,3.5))
 
 	leg <- function(pch, col, ...)  {
-		legend(x=20, y = 1, pch = pch, col = c('#BBBBBB', '#999999', '#777777', '#555555', '#333333'), 
+		legend(x=55, y = 1, pch = pch, col = c('#BBBBBB', '#999999', '#777777', '#555555', '#333333'), 
 			   legend = c('99%', '95%', '90%', '75%', '50%'), bty = 'n', cex = 1.33, ...)
-		legend(x = 42, y = 1, legend = legNames,
-			   pch = pch, col = col,  
-			   cex = 1.33, ncol = 1, bty = 'n', seg.len	= 4, ...)
+		#legend(x = 42, y = 1, legend = legNames,
+		#	   pch = pch, col = col,  
+		#	   cex = 1.33, ncol = 1, bty = 'n', seg.len	= 4, ...)
 	}
 	fuel = plotScatter('fuel', col = 'green', fuel,
 					   LimFIRE.fuel, dLimFIRE.fuel, 
@@ -187,14 +187,14 @@ plotAll <- function(fname0 = NULL, fuel = NULL, moisture = NULL,
 					   xlim = c(0, 1), ...)
 					   
 	axis(2, at = yticks, labels = yticks * 100)
-	mtext(side = 3, 'a)', adj = 0.1, line = -1.3)
+	#mtext(side = 3, 'a)', adj = 0.1, line = -1.3)
 	mtext('Fuel Continuity (%)', 1, line = 2.3)
 
 	moisture = plotScatter('moisture', col = 'blue', moisture,
 						   LimFIRE.moisture, dLimFIRE.moisture, 
 						   'moisture_x0', 'moisture_k', -1.0, 
 						   x2pc = TRUE, xlim = c(0, 0.9), ...)
-	mtext(side = 3, 'b)', adj = 0.1, line = -1.3)
+	#mtext(side = 3, 'b)', adj = 0.1, line = -1.3)
 	mtext('Fuel Moisture (%)', 1, line = 2.3)
 	if (axis4) axis(side = 4, at = yticks, labels = 100 - yticks * 100)
 	
@@ -202,7 +202,7 @@ plotAll <- function(fname0 = NULL, fuel = NULL, moisture = NULL,
 							LimFIRE.ignitions, dLimFIRE.ignitions, 
 							'igntions_x0', 'igntions_k', 1.0, 
 							xlim = c(0, 5), ...)
-	mtext(side = 3, 'c)', adj = 0.1, line = -1.3)
+	#mtext(side = 3, 'c)', adj = 0.1, line = -1.3)
 	mtext.units('No. Ignitions (k~m2~ ~month-1~)', 1, line = 2.3)
 	axis(2, at = yticks, labels = yticks * 100)
 
@@ -213,7 +213,7 @@ plotAll <- function(fname0 = NULL, fuel = NULL, moisture = NULL,
 							  'suppression_x0', 'suppression_k', -1.0, 
 							  xlim = xlim, ...)
 	mtext('Suppression Index', 1, line = 2.3)
-	mtext(side = 3, 'd)', adj = 0.1, line = -1.3)
+	#mtext(side = 3, 'd)', adj = 0.1, line = -1.3)
 	if (axis4) axis(side = 4, at = yticks, labels = 100 - yticks * 100)
 
 	mtext('Monthly Burnt Area(%)', side = 2, line = 2, outer = TRUE)
@@ -278,9 +278,11 @@ plotAllThese <- function() {
 
 
 	plotByYlog('')
-	#plotByYlog('Desert', plot = c(T, F, F, F))
-	#plotByYlog('Rainforest', plot = c(T, T, F, F))
-	#plotByYlog('Savanna', plot = c(T, T, T, F))
+	plotByYlog('Desert', plot = c(T, F, F, F))
+	plotByYlog('Rainforest', plot = c(F, T, F, F))
+	plotByYlog('Savanna', plot = c(F, F, T, F))
+        plotByYlog('cropland', plot = c(F, F, F, T))
+	plotByYlog('none', plot = c(F, F, F, F))
 }
 
 #polygonsNotPoints = FALSE
