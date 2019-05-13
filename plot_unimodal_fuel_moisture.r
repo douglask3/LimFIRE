@@ -58,7 +58,7 @@ plot_xy <- function(x, y, cols = blues9, flip = FALSE, normalise = TRUE, fitLine
         y_fit = predict(fit, newdata = list(x = xlim))
         #lines(xlim, y_fit)
         R2 = cor(x, y)^2
-        mtext(side = 3, adj = 0.9, line = -1.5, paste("R2:", round(R2,2)))
+        mtext.units(side = 3, adj = 0.9, line = -1.5, paste("~R2~:", round(R2,2)))
     } else {
         xs = seq(0, 1, 0.01)
         x0 = params[,fitLine[[2]]]#[1:200]
@@ -90,7 +90,7 @@ png('figs/fuel_vs_moisture_scatters.png', height = 7, width = 7, res = 300, unit
     ### fuel
     plot_xy(fuel_cont, y, cols = greens9, fitLine = list(LimFIRE.fuel, "fuel_x0", "fuel_k"))
     axis(2)
-    mtext(side = 2, 'Monthly burnt area (%)', line = 2.5)
+    mtext(side = 2, 'Burnt area (% ~month-1~)', line = 2.5)
     mtext(side = 3, 'a)', adj = 0.1, line = -1.5)
 
     ### blank
@@ -109,7 +109,7 @@ png('figs/fuel_vs_moisture_scatters.png', height = 7, width = 7, res = 300, unit
             fitLine = list(LimFIRE.moisture, "moisture_x0", "moisture_k"))
     axis(1)
     mtext(side = 3, 'c)', adj = 0.1, line = -1.5)
-    mtext(side = 1, 'Monthly burnt area (%)', line = 2.5)
+    mtext(side = 1, 'Burnt area (% ~month-1~)', line = 2.5)
 dev.off()
 
 
