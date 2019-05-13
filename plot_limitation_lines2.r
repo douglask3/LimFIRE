@@ -188,14 +188,14 @@ plotAll <- function(fname0 = NULL, fuel = NULL, moisture = NULL,
 					   
 	axis(2, at = yticks, labels = yticks * 100)
 	#mtext(side = 3, 'a)', adj = 0.1, line = -1.3)
-	mtext('Fuel Continuity (%)', 1, line = 2.3)
+	mtext('Fuel continuity (%)', 1, line = 2.3)
 
 	moisture = plotScatter('moisture', col = 'blue', moisture,
 						   LimFIRE.moisture, dLimFIRE.moisture, 
 						   'moisture_x0', 'moisture_k', -1.0, 
 						   x2pc = TRUE, xlim = c(0, 0.9), ...)
 	#mtext(side = 3, 'b)', adj = 0.1, line = -1.3)
-	mtext('Fuel Moisture (%)', 1, line = 2.3)
+	mtext('Fuel moisture (%)', 1, line = 2.3)
 	if (axis4) axis(side = 4, at = yticks, labels = 100 - yticks * 100)
 	
 	ignitions = plotScatter('ignitions', col = 'red', ignitions, 
@@ -203,7 +203,7 @@ plotAll <- function(fname0 = NULL, fuel = NULL, moisture = NULL,
 							'igntions_x0', 'igntions_k', 1.0, 
 							xlim = c(0, 5), ...)
 	#mtext(side = 3, 'c)', adj = 0.1, line = -1.3)
-	mtext.units('No. Ignitions (k~m2~ ~month-1~)', 1, line = 2.3)
+	mtext.units('No. ignitions (k~m-2~ ~month-1~)', 1, line = 2.3)
 	axis(2, at = yticks, labels = yticks * 100)
 
 	
@@ -212,13 +212,13 @@ plotAll <- function(fname0 = NULL, fuel = NULL, moisture = NULL,
 							  LimFIRE.supression, dLimFIRE.supression, 
 							  'suppression_x0', 'suppression_k', -1.0, 
 							  xlim = xlim, ...)
-	mtext('Suppression Index', 1, line = 2.3)
+	mtext('Suppression index', 1, line = 2.3)
 	#mtext(side = 3, 'd)', adj = 0.1, line = -1.3)
 	if (axis4) axis(side = 4, at = yticks, labels = 100 - yticks * 100)
 
-	mtext('Monthly Burnt Area(%)', side = 2, line = 2, outer = TRUE)
+	mtext('Burnt area (% ~month-1~)', side = 2, line = 2, outer = TRUE)
 	if (axis4) 
-		mtext('Limitation on Burnt Area', side = 4, line = 2, outer = TRUE)
+		mtext('Limitation on burnt area', side = 4, line = 2, outer = TRUE)
 		
 	if (fname0 != "empty") {
 		legNames =  names(hlghtPnts)
