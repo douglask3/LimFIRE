@@ -11,7 +11,7 @@ nsamples = 100
 barCols = c("#CC8800", "#6eff6e", "#0000CC", "#480000", "#999999", "purple")
 legLabs = c('Burnt\nArea',  ' \nFuel', 'Moisture\n ', 
             ' \nIgnitions', 'Suppression\n ')
-legLabs = c('Burnt Area', 'Fuel', 'Moisture', 'Ignitions', 'Suppression', 'Fire Regime')
+legLabs = c('Burnt area', 'Fuel', 'Moisture', 'Ignitions', 'Suppression', 'Fire regime')
 
 
 loadData4Ecosystem_analysis()
@@ -114,7 +114,7 @@ plotAllTheBoxesAndWhiskers <- function(fname = '', ylims = c(-.6, 0.85),
 	at = labels / 100
         labels[seq(2, length(labels), by = 2)] = ''		
 	axis(2, at = at, labels = labels)
-        mtext.units('change in burnt area or limitation (% ~yr-1~)', side = 2, line = 2)
+        mtext.units('Change in burnt area or limitation (% ~yr-1~)', side = 2, line = 2)
 
 	for (y in at) lines(c(-9E9, 9E9), c(y, y), lty = 2, col = "#CCCCCC")
 	lines(c(-9E9, 9E9), c(0, 0), col = "#CCCCCC")
