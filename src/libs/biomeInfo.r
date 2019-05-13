@@ -14,21 +14,21 @@
 #13	"Deserts & Xeric Shrublands",
 #14	"Mangroves")
 
-biomes = list("global" = NULL,
-			  "tropical\nwet forest" = c(1, 3),
-			  "tropical\ndry forest" = 2,
-			  "tropical\nsavanna/\ngrassland" = c(7, 9),
-			  "mediterranean\nforest/woodland\nand scrub" = 12,
-			  "temperate\nforest and\nwoodland" = c(4, 8, 5),
-			  "boreal\nforests" = 6,
-			  "shrublands" = c(10, 11, 13))
+biomes = list("Global" = NULL,
+              "Tropical\nwet forest" = c(1, 3),
+              "Tropical\ndry forest" = 2,
+              "Tropical\nsavanna/\ngrassland" = c(7, 9),
+              "Mediterranean\nforest/woodland\nand scrub" = 12,
+              "Temperate\nforest and\nwoodland" = c(4, 8, 5),
+              "Boreal\nforests" = 6,
+              "Shrublands" = c(10, 11, 13))
 			  
-biomesCols = c("global" = "black",
-			   "tropical\nwet forest" = "blue",
-			   "tropical\ndry forest" = "#459900",
-			   "tropical\nsavanna/\ngrassland" = "red",
-			   "mediterranean\nforest/woodland\nand scrub" = "magenta",
-			   "temperate\nforest and\nwoodland" = "green",
-			   "boreal\nforests" = "cyan",
-			   "shrublands" = "orange")
+biomesCols = c("Global" = "black",
+	       "Tropical\nwet forest" = "blue",
+               "Tropical\ndry forest" = "#459900",
+               "Tropical\nsavanna/\ngrassland" = "red",
+               "Mediterranean\nforest/woodland\nand scrub" = "magenta",
+               "Temperate\nforest and\nwoodland" = "green",
+               "Boreal\nforests" = "cyan",
+               "Shrublands" = "orange")
 
