@@ -41,19 +41,19 @@ fire_lims = c(0, 0.1, 1, 2, 5, 10, 20, 50)
 coefficants_file = 'data/params.csv'
 
 drive_fname = c(alpha   = 'alpha',
-				alphaMax= 'alpha_12monthMax',
+                alphaMax= 'alpha_12monthMax',
                 emc     = 'emc',
                 emcMax  = 'emc_12monthMax',
-				Hr      = 'Hr',
-				Tas     = 'Tas',
-				Wet     = 'Wet', 
-				Prc     = 'Prc',
-				Cld     = 'cld',
-				Vap     = 'vap',
+                Hr      = 'Hr',
+                 Tas     = 'Tas',
+                Wet     = 'Wet', 
+                Prc     = 'Prc',
+                Cld     = 'cld',
+                Vap     = 'vap',
                 npp     = 'NPP',
-				bare    = 'bareground',
-				grass   = 'nontree',
-				tree    = 'treecover',
+                bare    = 'bareground',
+                grass   = 'nontree',
+                tree    = 'treecover',
                 crop    = 'cropland',
                 pas     = 'pasture',
                 urban   = 'urban_area',
@@ -69,8 +69,8 @@ names(drive_fname) = nms
 
 hlghtPnts = list("Desert"      = list( 14, 27.5, col = '#00AA66'),
                  "Rainforest"  = list(-72,   0, col = '#0000DD'), 
-				 "Savanna"     = list( 27.5,   10.5, col = '#660000'),
-				 "Cropland"    = list( 83, 23.5, col = '#AAAA00'))
+                 "Savanna"     = list( 27.5,   10.5, col = '#660000'),
+                 "Cropland"    = list( 83, 23.5, col = '#AAAA00'))
 
 #coefficants_file = paste(coefficants_file, gitVersionNumber(), '.csv', sep = '-')
 
