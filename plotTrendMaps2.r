@@ -188,7 +188,7 @@ png(fname, height = sum(heights), width = 4 * 7.2/6.3, units = 'in', res = 600)
     }
     mapply(plot_combs, combs4plotting, paste0(letters[3:6],') ',  c("Counteracting drivers", "Mositure drivers", "Moisture & fuel drivers", "Fuel drivers")))
     par(mai = c(0.0, 0, 0, 0))
-    plot(c(-160, 150), c(-120, -45), type = 'n', axes = FALSE, xlab = '', ylab = '')
+    plot(c(-160, 150), c(-120, -35), type = 'n', axes = FALSE, xlab = '', ylab = '')
 	addLegend <- function(f, m, title, x, y) {
 		test = which(combinations[,2] == f & combinations[,3] == m)
 		test1 = test[1:(length(test)/3)]
