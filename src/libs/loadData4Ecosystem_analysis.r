@@ -25,12 +25,15 @@ loadData4Ecosystem_analysis <- function() {
 		
 		for (i in 2:length(biomes)) biomeAssigned[any(layer.apply(biomes[[i]], function(j) biome == j))] = i
 		
-		png('figs/biome.png', height = 5, width = 10, units = 'in', res = 300)
+		png('figs/biome.png', height = 4.6, width = 10, units = 'in', res = 300)
 			#layout(rbind(1, 1:2, 2), heights = c(1, 0.7, 0.0001))
 			par(mar = rep(0,4))
-			plot_raster_from_raster(biomeAssigned, limits = 1.5:7.5, cols = biomesCols, quick = TRUE, add_legend = FALSE, y_range = c(-60, 90))	
+			plotStandardMap(biomeAssigned, limits = 1.5:7.5, cols = biomesCols, add_legend = FALSE, txt = '')	
 			#plot.new()
-			legend('bottomleft', legend = names(biomes)[-1], col = biomesCols[-1], pch = 15, bty = 'n', ncol = 2, cex = 1.0, pt.cex = 2) 
+                        cols = biomesCols[-1]
+                        legs = names(cols)
+			legend(x = -180, y = 62, legend = legs[1:3], col = cols[1:3], pch = 15, bty = 'n', ncol = 1, cex = 1.0, pt.cex = 2, y.intersp = 1.7)  
+                        legend(x = -180, y = -3, legend = legs[4:7], col = cols[4:7], pch = 15, bty = 'n', ncol = 2, cex = 1.0, pt.cex = 2, y.intersp = 1.7)  
 		dev.off() 	
 		save(ensamble,  trend12FF, fireTrend, fireMean, biomeAssigned, biome, varMns, trends,prob_lims, trendIndex1, trendIndex2, trendIndex3,
 			 file = tempFile4Eco)
