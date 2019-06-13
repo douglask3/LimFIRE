@@ -9,7 +9,7 @@ annual_average <- function(ens) {
 
 
 ens_annual_average <- function() {
-	ens_files = open_ensembles()
+	ens_files = open_ensembles()[1:50]
 	aa_mod = 12 * 100 * layer.apply(ens_files, annual_average)
 	return(aa_mod)
 }
