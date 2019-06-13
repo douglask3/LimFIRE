@@ -34,7 +34,10 @@ addCoastlineAndIce2map <- function() {
     add_icemask()
     
     mask = raster('data/seamask.nc')
-    plot_raster_from_raster(mask, add = TRUE, col = c("white", "transparent"), limits = c(0.5), quick = TRUE, interior = FALSE, coast.lwd = NULL, add_legend = FALSE)
+    plot_raster_from_raster(mask, add = TRUE, 
+                            col = c("white", "white", "transparent", "transparent"),
+                             limits = c(0.45, 0.5, 0.55), quick = TRUE, interior = FALSE, 
+                             coast.lwd = NULL, add_legend = FALSE)
     #
     #contour(mask, add = TRUE, drawlabels = FALSE, lwd = 0.5)  
 
