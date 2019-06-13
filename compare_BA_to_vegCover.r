@@ -1,4 +1,5 @@
 source("cfg.r")
+loadData4Ecosystem_analysis()
 
 reds6 = c("#FFF7FB", "#EFC6DB", "#D66BAE", "#B52171",
            "#6B0830", '#210203')
@@ -37,10 +38,10 @@ png('figs/alphaMax_justification.png', height = 9, width = 6, units = 'in', res 
     cols = biomesCols[vdat[,4]] 
     cols = make.transparent(cols, 0.9)
     plotTrScatter(cols)
-    mtext('a) biomes', adj = 0.1, line = -1.5)
+    mtext('a) Biomes', adj = 0.05, line = -1.5)
 
     plot.new()
-    txt = sapply(strsplit(names(biomesCols)[-1], '\n'), paste, collapse = '')
+    txt = sapply(strsplit(names(biomesCols)[-1], '\n'), paste, collapse = ' ')
     legend('left', txt, pch = 19, 
            col = biomesCols[-1], ncol = 3, xpd = NA, bty = 'n')
 
@@ -51,12 +52,12 @@ png('figs/alphaMax_justification.png', height = 9, width = 6, units = 'in', res 
     cols   = make.transparent(cols0[cuts], 0.9)
 
     plotTrScatter(cols, 4, 1)
-    mtext(expression(paste('b) ', alpha[max]/alpha)), adj = 0.1, line = -1.8)
+    mtext(expression(paste('b) ', alpha[max]/alpha[mean])), adj = 0.05, line = -1.8)
 
     labels = c(30, 50, 60, 70, 75, 80, 85, 90, 95, 99)
     axis(1, at = labels^p, labels)
     mtext(side = 1, 'VCF total vegetation cover (%)', line = 2.5)
-    mtext(outer = TRUE, side = 2, 'GFED4s monthly burnt area (%)', line = 1.5)
+    mtext.units(outer = TRUE, side = 2, 'GFED4s burnt area (% ~month-1~)', line = 1.0)
     par(mar = c(0, 0, 2, 0))
     standard_legend(cols = reds6, lims = limits, add = FALSE, extend_max = TRUE, dat =vdat[,3],
                     plot_loc = c(0.35,0.75,0.1,0.3))
