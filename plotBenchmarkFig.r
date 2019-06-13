@@ -21,8 +21,11 @@ if (file.exists(temp_file) && grab_cache) {
     tr_mod = trend12FF[[1]] * 100 /14
 
     tfile = paste(outputs_dir, filename.noPath(obs_file, TRUE), '-trendDiff.nc', sep = '')
+    
+    #tr_obs = 12 * tr_obs[[1]]/(aa_obs)
+
     tr_obs = runIfNoFile(tfile, removeTrend, obs)
-    tr_obs = 12 * 100* tr_obs[[1]]/(aa_obs * nlayers(obs))
+    tr_obs = 14 * 100* tr_obs[[1]]/(aa_obs * nlayers(obs))
     tr_obs[is.infinite(tr_obs)] = NaN
 
     tr_mod_mn = mean(tr_mod)
@@ -36,10 +39,6 @@ if (file.exists(temp_file) && grab_cache) {
 }
 
     
-
-
-
-    
 plotMap <- function(...)
 	plotStandardMap(..., ePatternRes = 40, ePatternThick = 0.4,
 						limits_error = c(1/10, 1/2), ylabposScling=1.5, oneSideLabels = FALSE)
@@ -49,8 +48,8 @@ png('figs/benchmarkFigure.png', height = 4.7 * 7.2/10, width = 7.2, units = 'in'
     
 	plotMap(aa_obs, '', limits =  fire_lims, cols =  fire_cols, 
 				   add_legend = FALSE)
-	mtext('GFED4s\nObserved', side = 2, line = -2.3, adj = 0.1)					
-	mtext('Annual Average Burnt Area', side = 3)	
+	mtext('GFED4s\nobserved', side = 2, line = -2.3, adj = 0.1)					
+	mtext('Annual average burnt area', side = 3)	
     mtext('a)', adj = 0.1, side = 3, line = -1)
 						
 	plotMap(mean(aa_mod), '', limits =  fire_lims, cols =  fire_cols, 
@@ -60,9 +59,8 @@ png('figs/benchmarkFigure.png', height = 4.7 * 7.2/10, width = 7.2, units = 'in'
 	mtext('Reconstructed', side = 2, line = -2.3, adj = 0.1)
     mtext('c)', adj = 0.1, side = 3, line = -1)					
 						
-	plotMap(tr_obs, '', 
-					limits =  dfire_lims, cols =  dfire_cols, add_legend = FALSE)					
-	mtext('Trend in Burnt Area', side = 3)	
+	plotMap(tr_obs * 2, '', limits =  dfire_lims, cols =  dfire_cols, add_legend = FALSE)					
+	mtext('Trend in burnt area', side = 3)	
     mtext('b)', adj = 0.1, side = 3, line = -1)
     
 	plotMap(tr_mod_mn, '', limits = dfire_lims, cols = dfire_cols,
