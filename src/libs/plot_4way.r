@@ -71,6 +71,18 @@ plot_4way <- function(x, y, A, B, C, D, x_range = c(-180, 180), y_range = c(-90,
 	
     z = 1:length(Az)
     zcols = paste("#", cols[Az], cols[Bz], cols[Cz], sep = "")
+    Bzs = -((Az+Bz+Cz)/Bz)
+    Bzs = Bzs  - min(Bzs) + 1
+    Bzs = Bz - 1
+    Bzs = 0.5+Bzs^1.5/2
+    
+
+    Bzs =  (3*Bz/(Az + Bz + Cz))^1
+    Bzs[Bz == 4] = 10
+    Bzs[Bz ==3 & Az ==2 & Cz ==1] = 2
+    Bzs[Bz ==3 & Az ==1 & Cz ==2] = 2
+
+    zcols = lighten(zcols, Bzs, transform = TRUE)
     #zcols = darken(zcols)
 	#zcols = saturate(zcols, 0.1)
     #zcols = mapply(lighten, zcols    )
