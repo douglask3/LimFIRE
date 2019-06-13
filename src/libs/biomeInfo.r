@@ -24,11 +24,11 @@ biomes = list("Global" = NULL,
               "Shrublands" = c(10, 11, 13))
 			  
 biomesCols = c("Global" = "black",
-	       "Tropical\nwet forest" = "blue",
-               "Tropical\ndry forest" = "#459900",
+	       "Tropical\nwet forest" = "#000066",
+               "Tropical\ndry forest" = "#2B5000",
                "Tropical\nsavanna/\ngrassland" = "red",
                "Mediterranean\nforest/woodland\nand scrub" = "magenta",
-               "Temperate\nforest and\nwoodland" = "green",
+               "Temperate\nforest and\nwoodland" = "#99CC00",
                "Boreal\nforests" = "cyan",
                "Shrublands" = "orange")
 
