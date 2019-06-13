@@ -229,7 +229,7 @@ plot_pmod <- function(i, index = NULL, normalise = FALSE, ...) {
 
 plotAddLimTypes <- function(fname, ...) {
 ## Set up plotting window
-	figName = paste(fig_fname, fname, '.png')	
+	figName = paste(fig_fname, fname, 'png')	
 	png(figName, width = 7.2, height = 6 * 4/3 * 7.2/9, unit = 'in', res = 600)
 	layout(rbind(cbind(1:3,4:6),7))#, heights = c(4.5, 4.5, 1))
 
@@ -249,7 +249,7 @@ plotAddLimTypes <- function(fname, ...) {
 	## Add legend
 	par(mar = c(3, 10, 0, 8))
 	add_raster_4way_legend(cols = rev(c("FF","CC","99","55","11")),
-						   labs = c('<- Moisture', 'Fuel ->', 'Igntions ->', 'Land Use'))
+						   labs = c('Moisture', 'Fuel', 'Igntions', 'Suppression'))
 
 	## add footer
 	par(fig = c(0, 1, 0, 1), mar = rep(0, 4))
@@ -262,14 +262,14 @@ plotAddLimTypes <- function(fname, ...) {
 
 plotAddLimTypes('', NULL)
 
-plotAddLimTypes('maxFuel', c(3, rep(2, 3)))
-plotAddLimTypes('minFuel', c(2, rep(3, 3)))
+#plotAddLimTypes('maxFuel', c(3, rep(2, 3)))
+#plotAddLimTypes('minFuel', c(2, rep(3, 3)))
 
-plotAddLimTypes('maxIgni', c(2, 3, 2, 2))
-plotAddLimTypes('minIgni', c(3, 2, 3, 3))
+#plotAddLimTypes('maxIgni', c(2, 3, 2, 2))
+#plotAddLimTypes('minIgni', c(3, 2, 3, 3))
 
-plotAddLimTypes('maxMist', c(2, 2, 3, 2))
-plotAddLimTypes('minMist', c(3, 3, 2, 3))
+#plotAddLimTypes('maxMist', c(2, 2, 3, 2))
+#plotAddLimTypes('minMist', c(3, 3, 2, 3))
 
-plotAddLimTypes('maxSupp', c(2, 2, 2, 3))
-plotAddLimTypes('minSupp', c(3, 3, 3, 2))
+#plotAddLimTypes('maxSupp', c(2, 2, 2, 3))
+#plotAddLimTypes('minSupp', c(3, 3, 3, 2))
