@@ -32,9 +32,8 @@ plot_4way <- function(x, y, A, B, C, D, x_range = c(-180, 180), y_range = c(-90,
     #C = sqrt(C^2/mag)
     #D = sqrt(D^2/mag)
     
-	if (normalise) {
-		mag = A + B + C
-	
+    if (normalise) {
+		mag = A + B + C	
 		A = A/mag
 		B = B/mag
 		C = C/mag
@@ -51,9 +50,9 @@ plot_4way <- function(x, y, A, B, C, D, x_range = c(-180, 180), y_range = c(-90,
 		A = Ai
 		B = Bi
 		C = Ci
-	}
+    }
 	
-    out = rasterFromXYZ(cbind(x, y, D))
+    out = rasterFromXYZ(cbind(x, y, A))
 	
     out = addLayer(out, rasterFromXYZ(cbind(x, y, B)),
                         rasterFromXYZ(cbind(x, y, C)),
@@ -71,17 +70,19 @@ plot_4way <- function(x, y, A, B, C, D, x_range = c(-180, 180), y_range = c(-90,
 	
     z = 1:length(Az)
     zcols = paste("#", cols[Az], cols[Bz], cols[Cz], sep = "")
+    zcols = paste("#", cols[Az], cols[Bz], cols[Cz], sep = "")
+   
     Bzs = -((Az+Bz+Cz)/Bz)
     Bzs = Bzs  - min(Bzs) + 1
     Bzs = Bz - 1
     Bzs = 0.5+Bzs^1.5/2
     
 
-    Bzs =  (3*Bz/(Az + Bz + Cz))^1
-    Bzs[Bz == 4] = 10
-    Bzs[Bz ==3 & Az ==2 & Cz ==1] = 2
-    Bzs[Bz ==3 & Az ==1 & Cz ==2] = 2
-
+    Bzs =  (3*Bz/(Az + Bz + Cz))^0.9
+    #Bzs[Bz == 4] = 10
+    #Bzs[Bz ==3 & Az ==2 & Cz ==1] = 2
+    #Bzs[Bz ==3 & Az ==1 & Cz ==2] = 2
+    #browser()
     zcols = lighten(zcols, Bzs, transform = TRUE)
     #zcols = darken(zcols)
 	#zcols = saturate(zcols, 0.1)
@@ -115,7 +116,7 @@ plot_4way <- function(x, y, A, B, C, D, x_range = c(-180, 180), y_range = c(-90,
     e[mask != 2] = NaN
     
     plotFun(add)
-    addCoastlineAndIce2map()
+    for (i in 1:4) addCoastlineAndIce2map()
     
     c(z, nn)   := cropIndonesia(z, mask)
     c(e, mask) := cropIndonesia(e, mask)
