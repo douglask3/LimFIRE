@@ -188,25 +188,26 @@ calculate_weightedAverage <- function(xy, pmod) {
 }
 
 ## Plot limitation or sesativity, and outputting pcs 
-plot_pmod <- function(i, index = NULL, normalise = FALSE, ...) {
+plot_pmod <- function(i, let, index = NULL, normalise = FALSE, combineLetter = FALSE, ...) {
     pmods = ensambleSum[[i]]
-	lab = labs[i]
-	let = letters[i]
-	let = paste(let, ')', sep = '')
+
+    lab = labs[i]    
+    let = paste(let, ')', sep = '')
+
     pmods = pmods[-1] # remove first element of simulated fire
-	#pmod = mapply(function(pm, FUN) FUN(pm), pmods, FUNs)
-	pmod = lapply(pmods, function(i) i[[1]])
-	if (!is.null(index)) {
-		#pmod = mapply(function(p, pm, i) pm[[i]] - p, pmod, pmods, index)
-		pmod = mapply(function(pm, i) pm[[i]], pmods, index)
-		normalise = normalise
-		limits = c(0.001, 0.01, 0.1)
-		cols = c("FF", "CC", "99", "55", "11")
-	}
+    #pmod = mapply(function(pm, FUN) FUN(pm), pmods, FUNs)
+    pmod = lapply(pmods, function(i) i[[1]])
+    if (!is.null(index)) {
+    	#pmod = mapply(function(p, pm, i) pm[[i]] - p, pmod, pmods, index)
+    	pmod = mapply(function(pm, i) pm[[i]], pmods, index)
+    	normalise = normalise
+    	limits = c(0.001, 0.01, 0.1)
+    	cols = c("FF", "CC", "99", "55", "11")
+    }
 	
-	normalise = TRUE
-	limits = c(0.1, 0.5, 0.9)
-	cols = rev(c("FF", "CC", "99", "55", "11"))
+    normalise = TRUE
+    limits = c(0.1, 0.5, 0.9)
+    cols = rev(c("FF", "CC", "99", "55", "11"))
 	
     xy = xyFromCell(pmod[[1]], 1:length(pmod[[1]]))
     pmod = lapply(pmod, values)
@@ -216,49 +217,71 @@ plot_pmod <- function(i, index = NULL, normalise = FALSE, ...) {
               cols = 	cols, limits = limits, 
               ePatternRes = 50, ePatternThick = 0.4,
               add_legend=FALSE, smooth_image=FALSE,smooth_factor=5, normalise = normalise, ...)
-	mtext(let, side = 1, adj  = 0.2, line = -2)
+    
+    
     addLocPoints()    
     pcs = calculate_weightedAverage(xy, pmod)
 	
 	polygon(c(-180, -140, -140, -180), c(-60, -60, 30, 30), col = 'white', border = NA)
-    #text(lab, x = -160, y = 0, cex = 1.5, srt = 90)
-    mtext(lab, line = -3.5, adj = 0.05, side = 2)
+    
+    if (combineLetter) {
+        lab = paste(let, lab)
+        lab = gsub('\n', ' ', lab)
+        mtext(lab, side = 3, adj = 0.0, line = 0.0)
+    } else {
+        mtext(let, side = 1, adj  = 0.2, line = -2)
+        mtext(lab, line = -3.5, adj = 0.05, side = 2)
+    }
     return(pcs)
 }
 
-
-plotAddLimTypes <- function(fname, ...) {
-## Set up plotting window
-	figName = paste(fig_fname, fname, 'png')	
-	png(figName, width = 7.2, height = 6 * 4/3 * 7.2/9, unit = 'in', res = 600)
-	layout(rbind(cbind(1:3,4:6),7))#, heights = c(4.5, 4.5, 1))
-
-	par(mar = c(0,0,0,0), oma = c(0,0,1.5,0))
-
+plot_Lims <- function(whichPlots = 1:6,...) {
+    par(mar = c(0,0,0.67,0), oma = c(0,0,1.5,0))
 	
-	## Plot and put pcs in table
-	pc_out = sapply(1:6, plot_pmod, ...)
-	mtext('Annual average', side = 3, outer = TRUE, adj = 0.22, bg = 'white')
-	mtext('Fire season'   , side = 3, outer = TRUE, adj = 0.80, bg = 'white')
+    ## Plot and put pcs in table
+    pc_out = mapply(plot_pmod, whichPlots, letters[1:length(whichPlots)], MoreArgs = list(...))
 
-	colnames(pc_out) = c('annual average raw', 'annual average lim', 'annual average sensitivity', 
-			            'fire season raw',    'fire season lim',    'fire season sensitivity')
-	rownames(pc_out) = c('Fuel Discontinuity', 'Moisture', 'Ignitions', 'Land use')
-
-
-	## Add legend
-	par(mar = c(3, 10, 0, 8))
-	add_raster_4way_legend(cols = rev(c("FF","CC","99","55","11")),
+    par(mar = c(3, 2, 0, 2))
+    add_raster_4way_legend(cols = rev(c("FF","CC","99","55","11")),
 						   labs = c('Moisture', 'Fuel', 'Igntions', 'Suppression'))
 
 	## add footer
-	par(fig = c(0, 1, 0, 1), mar = rep(0, 4))
-	points(0.5, 0.5, col = 'white', cex = 0.05)
-	dev.off()
+    par(fig = c(0, 1, 0, 1), mar = rep(0, 4))
+    points(0.5, 0.5, col = 'white', cex = 0.05)
+    dev.off()
+    
+    if (all(whichPlots == 1:6)) {
+        mtext('Annual average', side = 3, outer = TRUE, adj = 0.22, bg = 'white')
+        mtext('Fire season'   , side = 3, outer = TRUE, adj = 0.80, bg = 'white')
+
+
+        colnames(pc_out) = c('annual average raw', 'annual average lim', 
+                             'annual average sensitivity', 'fire season raw',
+                              'fire season lim', 'fire season sensitivity')
+        rownames(pc_out) = c('Fuel Discontinuity', 'Moisture', 'Ignitions', 'Land use')
+    }
+    return(pc_out)
+}
+    ## Add legend
+    
+
+plotAddLimTypes <- function(fname, ...) {
+## Set up plotting window
+	figName = paste0(fig_fname, '-', fname, '.png')	
+	png(figName, width = 7.2, height = 6 * 4/3 * 7.2/9, unit = 'in', res = 600)
+	layout(rbind(cbind(1:3,4:6),7))#, heights = c(4.5, 4.5, 1))
+    
+	plot_Lims(1:6, ...)
 }
 
 #maxLim <- function(i) i[[1]] + i[[2]]
 #minLim <- function(i) i[[1]] - i[[2]]
+
+figName = paste0('figs/MainLimSenPlot.png')
+heights = c(1.7, 1.18, 0.51, 0.75)
+png(figName, width = 3.46457, height = sum(heights), unit = 'in', res = 600)
+layout(rbind(1,c(2,2),c(2,3),3), heights = heights)#, heights = c(4.5, 4.5, 1))
+plot_Lims(whichPlots = c(2,3), combineLetter = TRUE)
 
 plotAddLimTypes('', NULL)
 
