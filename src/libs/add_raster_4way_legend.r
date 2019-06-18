@@ -30,16 +30,16 @@ add_raster_4way_legend <- function(labs = letters[1:4], limits = c(0.25, 0.5, 0.
                             coast.lwd = NULL, readyCut = TRUE, 
                             add_legend = FALSE, e = legend.e, invert_e = FALSE,
                             limits_error = seq(1.5, 3.5),
-                            add = TRUE,  ePatternRes = 28,  ePatternThick = 0.4, 
+                            add = TRUE,  ePatternRes = 28*5,  ePatternThick = 0.4, 
                             e_polygon = FALSE)
     
     
-    text  (nx * 0.020, ny * 0.05, labs[1], srt = 45, adj = 0, col = 'white')
-    text  (nx * 0.230, ny * 0.05, labs[3], srt = -45, adj = 1, col = 'white')
-    text  (nx * 0.125, ny * 0.92, labs[2], srt = 90, adj = 1, col = 'white')
-    text  (nx * 0.5, ny * 0.12, labs[4])
-    lines (nx * c(0.320,0.7), ny * c(0.01, 0.01), lwd = 2, xpd = NA) 
-    Arrows(nx * 0.65, ny * 0.01, nx * 0.7, ny * 0.01, lwd = 2, xpd = NA) 
+    text  (nx * 0.022, ny * 0.05, labs[1], srt = 45, adj = 0, col = 'white', font = 2)
+    text  (nx * 0.230, ny * 0.05, labs[3], srt = -45, adj = 1, col = 'white', font = 2)
+    text  (nx * 0.125, ny * 0.90, labs[2], srt = 90, adj = 1, col = 'white', font = 2)
+    text  (nx * 0.5, ny * 0.10, labs[4], font = 2)
+    lines (nx * c(0.320,0.7), ny * c(0.0, 0.0), lwd = 2, xpd = NA) 
+    Arrows(nx * 0.65, ny * 0.0, nx * 0.7, ny * 0.0, lwd = 2, xpd = NA) 
 }
 
 add_raster_3way_legend_for_4way <- function(legend.z, cols, limits = c(0.25, 0.5, 0.75), 
