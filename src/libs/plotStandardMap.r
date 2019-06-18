@@ -11,14 +11,13 @@ plotStandardMap <- function(x, txt, limits, cols, e = NULL, recrop_e = TRUE, plo
     }
     
     FUN(...)
-    addCoastlineAndIce2map()
+    for (i in 1:4) addCoastlineAndIce2map()
     
     if (recrop_e && !is.null(e)) c(e, nn) := cropIndonesia(e, mask)
     c(x, mask) := cropIndonesia(x, mask)
     
     FUN(add = TRUE, ...)
     contour(mask, add = TRUE, drawlabels = FALSE, lwd = 0.5)
-    
     
     mtext(txt,side = 1, line = -3.33)
 }
