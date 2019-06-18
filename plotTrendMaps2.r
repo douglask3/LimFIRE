@@ -58,10 +58,10 @@ trendIndex[[1]] =  trend12FF[[1]]
 ## Trends in burnt area and fire regime ##
 ##########################################
 fname = paste(figName, 'trendIndicies.png', sep = '-')
-heights = c(1.4, 1.3, 1.3, 1.3)
+heights = c(1.3, 1.2, 1.2, 1.1)
 png(fname, height = sum(heights), width = 4 * 7.2/6.3, units = 'in', res = 600)
         layout(rbind(1:2, 3:4, 5:6, 7), heights = heights)
-	par(mai = c(0.2, 0, 0, 0), oma = c(0, 0, 0.5, 0), xpd = NA)
+	par(mai = c(0.2, 0, 0, 0), oma = c(0, 0, 1, 0), xpd = NA)
 	mapply(plotControl, trendIndex, 
                             c('a) Normalised trend in burnt area', 'b) Shift in fire regime'), 
 			    units_title = c(' ', ' '), units = c('% ~yr-1~', '% ~yr-1~'), 
@@ -69,7 +69,7 @@ png(fname, height = sum(heights), width = 4 * 7.2/6.3, units = 'in', res = 600)
                             labelss = list(NULL, c(0, index_lims[[2]])),
 			    limits = index_lims, cols = list(dfire_cols, fire_cols),
 			    sc = c(100/14, 100/14), 
-                            add_legend = TRUE, oneSideLabels = FALSE, ylabposScling=1.4)
+                            add_legend = TRUE, oneSideLabels = FALSE, ylabposScling=1.7)
 	
 ##########################################
 ## Plot attribution map                 ##
@@ -123,8 +123,13 @@ png(fname, height = sum(heights), width = 4 * 7.2/6.3, units = 'in', res = 600)
 	
     cols = rbind(c('#00FF00', '#FF0000'),
 		 c('#FFFF00', '#0000FF'),
-		 c('#FFFFFF', '#000000'),
+		 c('#000000', '#FFFFFF'),
 		 c(1        , -1))
+
+    cols = rbind(c('#00FF00', '#990099'),
+		 c('#AA8800', '#0000FF'),
+		 c('#000000', '#FFFFFF'),
+		 c(-1        , 1))
 	
     colIndex <- function(i) {
 	if (i == -1) return(2)
@@ -157,12 +162,31 @@ png(fname, height = sum(heights), width = 4 * 7.2/6.3, units = 'in', res = 600)
 		
 	combinations = rbind(combinations, row)		
     }
+    test = combinations[,7] == '#E0E0E0'
+    combinations[test,7] = '#999999'
     
-    
+    test = combinations[,2] == -1 & combinations[,3] ==  1
+    combinations[test & combinations[,4] == -1, 7] = "#FF9999"
+    combinations[test & combinations[,4] ==  0, 7] = "#FF0000"
+    combinations[test & combinations[,4] ==  1, 7] = "#990000"
 
-    combs4plotting = list(list(c( 1,  1), c(-1, -1)),
+    test = combinations[,2] ==  1 & combinations[,3] == -1
+    combinations[test & combinations[,4] == -1, 7] = "#77CCFF"
+    combinations[test & combinations[,4] ==  0, 7] = "#0099DD"
+    combinations[test & combinations[,4] ==  1, 7] = "#004488"
+
+    test = combinations[,2] ==  0 & combinations[,3] == 1
+    combinations[test, 7] = lighten(combinations[test, 7], 1.6, FALSE, TRUE)
+
+    test = combinations[,2] ==  1 & combinations[,3] == 1
+    combinations[test, 7] = lighten(combinations[test, 7], 1.8, FALSE, TRUE)
+
+    test = combinations[,2] ==  1 & combinations[,3] == 0
+    combinations[test, 7] = lighten(combinations[test, 7], 1.8, FALSE, TRUE)
+    
+    combs4plotting = list(list(c( 1, -1), c(-1,  1)),
                           list(c( 0,  1), c( 0, -1)),
-                          list(c( 1, -1), c(-1,  1)),
+                          list(c( 1,  1), c(-1, -1)),
                           list(c( 1,  0), c(-1,  0)))
     
     combs4test = apply(combinations[,1:3], 2, as.numeric)
@@ -179,62 +203,106 @@ png(fname, height = sum(heights), width = 4 * 7.2/6.3, units = 'in', res = 600)
         }
         
         plotStandardMap(tmapi, '', limits = (1:(nrow(combinations)+1)) - 0.5, 
-                        cols  = c('white', combinations[,7], '#E0E0E0'), #  
+                        cols  = c('white', combinations[,7], '#999999'), #  
 		        e = tmap[[2]] + 2, e_lims = 1:3,  
-                        ePatternRes = 90, ePatternThick = 0.3,
+                        ePatternRes = 75, ePatternThick = 0.3,
                         ePointPattern = c(25, 0, 24), eThick = c(1.5, 0, 1.5), e_alpha = 0.6,
 		        preLeveled = TRUE, add_legend = FALSE, interior = FALSE)
 	mtext(title, adj = 0.02, line = -0.3, cex = 0.9)
     }
-    mapply(plot_combs, combs4plotting, paste0(letters[3:6],') ',  c("Counteracting drivers", "Mositure drivers", "Moisture & fuel drivers", "Fuel drivers")))
+    mapply(plot_combs, combs4plotting, paste0(letters[3:6],') ',  c("Counteracting drivers", "Moisture drivers", "Moisture & fuel drivers", "Fuel drivers")))
     par(mai = c(0.0, 0, 0, 0))
-    plot(c(-160, 150), c(-120, -35), type = 'n', axes = FALSE, xlab = '', ylab = '')
-	addLegend <- function(f, m, title, x, y) {
-		test = which(combinations[,2] == f & combinations[,3] == m)
-		test1 = test[1:(length(test)/3)]
-		cols = combinations[test1,7]
+    plot(c(-160, 150), c(-120, -60), type = 'n', axes = FALSE, xlab = '', ylab = '')
+
+    addLegend <- function(f, m, title, x, y) {
+	test = which(combinations[,2] == f & combinations[,3] == m)
+	test1 = test[1:(length(test)/3)]
+	cols = rev(combinations[test1,7])
 		
-		pc = combinations[test, 6]
+	pc = combinations[test, 6]
         pc = as.numeric(pc[1:3])  + as.numeric(pc[4:6]) + as.numeric(pc[7:9])
-		tot = sum(as.numeric(combinations[, 6]))
+	tot = sum(as.numeric(combinations[, 6]))
 		
-		#title = paste(title, ' (',  round(100 * sum(as.numeric(pc)) / tot, 0), '%)', sep = '')
+	#title = paste(title, ' (',  round(100 * sum(as.numeric(pc)) / tot, 0), '%)', sep = '')
 		
-		pc = as.character(standard.round(100 * as.numeric(pc) / tot, 1))
+	pc = as.character(standard.round(100 * as.numeric(pc) / tot, 1))
 		
-		pc[as.numeric(pc) < 0.1] = '0.0'
-		pc[nchar(pc) == 1] = paste(pc[nchar(pc) == 1], '.0', sep = '')
+	pc[as.numeric(pc) < 0.1] = '0.0'
+	pc[nchar(pc) == 1] = paste(pc[nchar(pc) == 1], '.0', sep = '')
 		
-		cexLeg = 2/3
-		legend(x, y, c('Increased ignitions          ', '', 'Decreased ignitions          '),
-			   col = cols, pch = 15, pt.cex = 3 * cexLeg, cex = cexLeg,
-			   xpd = NA, title = ' ', y.intersp = 1.5 * cexLeg, bty = 'n')
+	cexLeg = 2/3
+         
+        select_arrow <- function(i) {
+            
+            if (i ==  1) x = bquote(phantom() %up%     phantom())
+            else if (i == -1) x = bquote(phantom() %down%   phantom())
+            else         x = bquote(phantom() %~~%     phantom())
+            
+            return(x)
+        }
         
-        xwidth = 66
+        legend_main = bquote(paste(.(select_arrow(f)), 'fuel,', .(select_arrow(-m)), 'moisture'))
+        
+        #legend = as.expression(c(bquote(paste(.(legend), paste(phantom() %up%   phantom(), "ignition"))),
+        #                      bquote(paste(.(legend), paste(phantom() %~~%   phantom(), "igntions"))),
+        #                      bquote(paste(.(legend),  paste(phantom() %down% phantom(), "igntions")))))
+       
+
+       # expression(paste(select_arrow(f), phantom() %up%   phantom(), "ignition"))
+
+        legend = c(expression(paste(phantom() %up%   phantom(), "ignitions")),
+                   expression(paste(phantom() %~~%   phantom(), "ignitions")),
+                   expression(paste(phantom() %down% phantom(), "ignitions")))
+        #
+#
+##
+  #      legend = c(expression(legend, paste(phantom() %up%   phantom(), "ignition")),
+   #                expression(legend, paste(phantom() %~~%   phantom(), "igntions")),
+    #               expression(legend, paste(phantom() %down% phantom(), "igntions")))
+     #   
+        #legend = c('Increased ignitions          ', '', 'Decreased ignitions          ')         
+         
+	legend(x, y, legend,
+	       col = cols, pch = 15, pt.cex = 3 * cexLeg, cex = cexLeg,
+	       xpd = NA, title = ' ', y.intersp = 1.5 * cexLeg, bty = 'n')
+        
+        xwidth = 50
         ywidth = 30
-        lines(x + c(0, 1, 1, 0, 0) * xwidth, y + c(0.17, 0.17, -1, -1, 0.17) * ywidth, xpd = NA)
+        lines(x + c(-0.05, 1, 1, -0.05, -0.05) * xwidth, y + c(0.0, 0.0, -1.10, -1.10, 0.0) * ywidth, xpd = NA)
 		
-		legend(x-0.08, y, c(pc), bty = 'n', adj = 1.2 * cexLeg, title = ' ', cex = 0.67 * cexLeg,
-			   xpd = NA, y.intersp = 1.5/0.63 * cexLeg,
-			   pt.cex = 2, col = make.transparent("white", 1.0))
+	legend(x-0.08, y, rev(pc), bty = 'n', adj = 1.2 * cexLeg, title = ' ', cex = 0.67 * cexLeg,
+	       xpd = NA, y.intersp = 1.5/0.63 * cexLeg, text.col = c('white', 'white', 'black'),
+	       pt.cex = 2, col = make.transparent("white", 1.0))
         
-        text(paste0('(',  round(sum(as.numeric(pc)), 0), '%)'), 
-             x = x + xwidth * 0.87, y = y - ywidth * 0.67, cex = cexLeg, xpd = NA)
-        text(title, x = x + xwidth/2, y = y - 1, cex = cexLeg, font = 2, xpd = NA)
-	}
+        text(paste0('',  round(sum(as.numeric(pc)), 0), '%'), 
+             x = x + xwidth * 0.1, y = y - ywidth * 0.985, cex = cexLeg, xpd = NA)
+
+        title = ''
+        text(legend_main, x = x + xwidth*0.1, y = y - ywidth * 0.15, cex = cexLeg, font = 2, xpd = NA, adj = 0)
+    }
 	
-	legend(-90, -20, legend = c('Increased\n(less fire)', 'Decreased\n(more fire)'), pch = c(25, 24), cex = 2/3, title = 'Suppression', box.col =  make.transparent("black", 1.0), horiz = TRUE) 
-	addLegend(1, -1, "Increased fuel \n& moisture", -160, -54)
-	addLegend(-1, 1, "Decreased fuel \n& moisture",    -160, -90)
-	text(-166, -80, 'Counteracting drivers', srt = 90, xpd = NA, cex = 0.8)
+    legend(-170, -77, legend = c('Increased\n(decreased\nburning)', 'Decreased\n(increased\nburning)'), 
+           bg = make.transparent("black", 1.0),
+           pch = c(24, 25), cex = 2/3, box.col =  make.transparent("black", 1.0), horiz = TRUE) 
+    text(-130, -80, 'Suppression', xpd = NA, cex = 0.8)
+
+    addLegend(1, -1, "Increased fuel \n& moisture", -82, -54)
+    addLegend(-1, 1, "Decreased fuel \n& moisture", -82, -88.5)
+    text(-56, -50, 'Counteracting\ndrivers', srt = 0, xpd = NA, cex = 0.8, adj = c(0.5, 0))
 	
-	addLegend(0, 1, "Decreased moisture\n", -50, -54)
-	addLegend(1,  1, "Increased fuel &\ndecreased moisture", 19, -54)
-	addLegend(1,  0, "Increased fuel\n"     , 88, -54)
-	text(-56, -78, 'Increase', srt = 90, xpd = NA, adj = 0, cex = 0.8)
+    addLegend(0, 1, "Decreased moisture\n", -08, -54)
+    addLegend(0, -1, "Increased moisture\n", -08, -88.5)
+    text(17, -50, 'Moisture drivers', srt = 0, xpd = NA, cex = 0.8)
+
+    addLegend(1,  1, "Increased fuel &\ndecreased moisture", 47, -54)
+    addLegend(-1, -1, " Decreased fuel &\nincreased moisture", 47, -88.5)
+    text(72, -50, 'Moisture &\nfuel drivers', srt = 0, xpd = NA, cex = 0.8, adj = c(0.5, 0))
+
+    addLegend(1,  0, "Increased fuel\n", 102, -54)
+    addLegend(-1, 0, "Decreased fuel\n", 102, -88.5)
+    text(127, -50, 'Fuel drivers', srt = 0, xpd = NA, cex = 0.8)
+
+    text(-14, -69, 'Increased\nburning', srt = 90, xpd = NA, adj = c(0.5, 0), cex = 0.8)
+    text(-14, -103.5, 'Decreased\nburning', srt = 90, xpd = NA, adj = c(0.5, 0), cex = 0.8)
 	
-	addLegend(-1, 0, "Decreased fuel\n", 88, -90)
-	addLegend(-1, -1, " Decreased fuel &\nincreased moisture", 19, -90)
-	addLegend(0, -1, "Increased moisture\n", -50, -90)
-	text(-56, -114, 'Decrease', srt = 90, xpd = NA, adj = 0, cex = 0.8)
 dev.off()
