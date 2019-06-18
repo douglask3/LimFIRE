@@ -165,11 +165,11 @@ plotAll <- function(fname0 = NULL, fuel = NULL, moisture = NULL,
 	}
 	
 	
-	fname = paste('figs/limLines', fname0, ylog, polygonsNotPoints, '.png', sep = '-')
+	fname = paste('figs/limLines', fname0, ylog, polygonsNotPoints, '.pdf', sep = '-')
 		
 	axis4 = !is.null(fuel)	
 		
-	png(fname, width = 7.2, height = 5.5 * 1.15 * 7.2/6, units = 'in', res = 300)
+	pdf(fname, width = 7.0866, height = 5.5 * 1.15 * 7.0866/6)#, units = 'in', res = 300)
 	layout(rbind(1:2,3:4, 5), heights = c(1,1,0.3))
 
 	par(mar = c(3,0.5,1,0), oma = c(0,3.5,1,3.5))
@@ -177,7 +177,7 @@ plotAll <- function(fname0 = NULL, fuel = NULL, moisture = NULL,
 	leg <- function(pch, col, ...)  {
 		legend(x=35, y = 1, pch = pch, col = c('#BBBBBB', '#999999', '#777777', '#555555', '#333333'), 
 			   legend = c('99%', '95%', '90%', '75%', '50%'), bty = 'n', cex = 1.33, ...)
-		legend(x = 60, y = 1, legend = legNames,
+		legend(x = 57, y = 1, legend = legNames,
 			   pch = pch, col = col,  
 			   cex = 1.33, ncol = 1, bty = 'n', seg.len = 4, ...)
 	}
