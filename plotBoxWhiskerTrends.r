@@ -15,7 +15,7 @@ legLabs = c('Burnt area', 'Fuel', 'Moisture', 'Ignitions', 'Suppression', 'Fire 
 
 
 loadData4Ecosystem_analysis()
- names(biomes)[4] = "tropical\nsavanna/\ngrassland\n"
+ names(biomes)[4] = "Tropical\nsavanna/\ngrassland\n"
 
 mask = !is.na(trend12FF[[1]][[1]])
 
@@ -95,8 +95,8 @@ addLegend <- function() {
 
 plotAllTheBoxesAndWhiskers <- function(fname = '', ylims = c(-.6, 0.85), 
                                        ytextPos = ylims[1] * 8) {
-    figName = paste(figName, fname, ylog, '.png', sep ='-')
-    png(figName, height = 7 * 7.2/8.5, width = 7.2, res = 300, unit = 'in')
+    figName = paste(figName, fname, ylog, '.pdf', sep ='-')
+    pdf(figName, height = 7 * 7.10866/8.5, width = 7.10866)#, res = 300, unit = 'in')
 	 layout(rbind(c(1, 1, 1), c(1, 2,1)), heights = c(0.78, 0.22), 
                 widths = c(0.73, 0.235, 0.035))
 	par(mar = c(0, 4, 0, 1))
