@@ -86,7 +86,7 @@ lims_msure = list(fuel    = seq(0.1, 0.8, 0.1) * 100,
 names_msure = c('a) Fuel', 'b) Moisture', 'c) Ignitions', 'd) Suppression')
 units_msure = c('%', '%', 'k~m-2~', 'index')  
 
-names_input = c("a) Vegetation cover", "b) ~alpha~~_max~", "c) Tree cover", "d) ~alpha~", "e) EMC", 
+names_input = c("a) Vegetation cover", "b) ~alpha~~_max~/~alpha~~_mean~", "c) Tree cover", "d) ~alpha~", "e) EMC", 
 			    "f) Cloud-ground lightning", "g) Pasture", "h) Population density", 
 				"i) Cropland", "j) Burnt area")
                 
@@ -110,20 +110,20 @@ trend.brick <- function(fname) {
 }
 
 # open Obs
-#Obs = lapply(drive_fname, stack)
-#Obs = Obs[names(cols_input)]
+Obs = lapply(drive_fname, stack)
+Obs = Obs[names(cols_input)]
 
 # monthly mean                    
-#Obs_mean = lapply(drive_fname, openMean)
-#Obs_mean = Obs_mean[names(cols_input)]
+Obs_mean = lapply(drive_fname, openMean)
+Obs_mean = Obs_mean[names(cols_input)]
 
 # monthly mean during fire season height
-#Obs_fire = lapply(drive_fname, openMean, fire.stack, '-season.nc', fire_season_r)
-#Obs_fire = Obs_fire[names(cols_input)]
+Obs_fire = lapply(drive_fname, openMean, fire.stack, '-season.nc', fire_season_r)
+Obs_fire = Obs_fire[names(cols_input)]
 
 # monthly mean during fire season height
-#Obs_trnd = lapply(drive_fname, openMean, trend.brick, '-trend.nc')
-#Obs_trnd = Obs_trnd[names(cols_input)]
+Obs_trnd = lapply(drive_fname, openMean, trend.brick, '-trend.nc')
+Obs_trnd = Obs_trnd[names(cols_input)]
 
 ## Combined Inputs (i.e, fuel, mositure, igntions, supression measures)
 ens_files = open_ensembles()
@@ -183,7 +183,7 @@ plot_inputs <- function(Obs, fname, names = names_input, units = units_input,
         plot_raster(x, lim, col, quick = TRUE, limits_error = limits_error, e = e,
                     ePatternRes = 50, ePatternThick = 0.5, interior = FALSE,...)
 		#addLocPoints()
-        if (name == "b) ~alpha~~_max~") lineMod = lineMod - 0.5
+        if (name == "b) ~alpha~~_max~/~alpha~~_mean~") lineMod = lineMod - 0.5
         mtext.units(name, line = -1 + lineMod * 0.5, adj = 0.1)
 		
         if (length(lim) > 1 && !is.na(lim)) {
@@ -220,24 +220,24 @@ ready4Plot <- function(r, maxBare = 100) {
     return(r)
 }
 
-#Obs_mean = ready4Plot(Obs_mean)
-#Obs_fire = ready4Plot(Obs_fire)
-#Obs_trnd = ready4Plot(Obs_trnd, 0)
-#Obs_trnd[['fire']][[1]] = Obs_trnd[['fire']][[1]] * 12
-#Obs_mean[['fire']] = Obs_mean[['fire']] * 12
+Obs_mean = ready4Plot(Obs_mean)
+Obs_fire = ready4Plot(Obs_fire)
+Obs_trnd = ready4Plot(Obs_trnd, 0)
+Obs_trnd[['fire']][[1]] = Obs_trnd[['fire']][[1]] * 12
+Obs_mean[['fire']] = Obs_mean[['fire']] * 12
 
 lmat = rbind(c(1, 2, 0),
 	     3:5,
 	     c(6, 7, 0),
 	     8:10)
 			 
-#plot_inputs(Obs_mean, fignames[1], lmat = lmat, maxLab = maxL_input)
+plot_inputs(Obs_mean, fignames[1], lmat = lmat, maxLab = maxL_input)
 #plot_inputs(Obs_fire, fignames[2], lmat = lmat, maxLab = maxL_input)
 
-#Obs_trnd = lapply(Obs_trnd, function(i) {i[[1]] = i[[1]] * 12; i})
-#plot_inputs(Obs_trnd, fignames[3], lmat = lmat, cols = colt_input, lims = limt_input,extend_max = TRUE, extend_min = TRUE)
+Obs_trnd = lapply(Obs_trnd, function(i) {i[[1]] = i[[1]] * 12; i})
+plot_inputs(Obs_trnd, fignames[3], lmat = lmat, cols = colt_input, lims = limt_input,extend_max = TRUE, extend_min = TRUE)
 
-
+browser()
 ## Plot measures
 measures_mean[[1]][[1]] = measures_mean[[1]][[1]] * 100/0.8
 measures_mean[[2]][[1]] = measures_mean[[2]][[1]] * 100
