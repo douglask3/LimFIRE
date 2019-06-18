@@ -86,7 +86,7 @@ plotVar <- function(i, xlim, ylim, name, title, xlab, log = '', plotFun,...) {
 	}
         
 	par(mar = c(3, 0.5, 0, 0.5))
-	if (title != "NaN") {
+	if (title != "All human drivers") {
 		plot(xlim, ylim, type = 'n', log = log, xlim = xlim, ylim = ylim, xlab = xlab)
                 cols = reds9
                 cols = cols[unlist(mapply(rep, 3:9, 9 + (3:9)^3))]
@@ -111,10 +111,12 @@ plotVar <- function(i, xlim, ylim, name, title, xlab, log = '', plotFun,...) {
                 #    points(var[],100* (diffv[[i]]/norm[[i]])[], 
                  #           col = make.transparent("black", 0.99), pch = 19, cex = 0.001)
 		
-		mtext(title, side = 3, line = -1.3)
+		#mtext(title, side = 2, line = 2.5)
 		mtext.units(xlab , side = 1, line =  1.67, cex =0.8)
 		plotFun()
 	} else plot.new()
+        mtext(title, side = 2, line = 3)
+        
 	par(mar = rep(0,4))
         
 	plotMap(diffv * 100 * 12, dfire_lims[[1]], ...)
@@ -148,13 +150,13 @@ FUNpas  <- function() lines(c(0,100), c(0,  100), col = 'blue')
 FUNpopd <- function() lines(c(0.00001, 9E9), c(0, 0), col = 'blue')
 	
 png('figs/human_impact.png', width = 7.2, height = 5.5, res = 300, unit = 'in')
-    par(oma = c(0, 2.5, 1.5, 0))
+    par(oma = c(0, 4, 1.5, 0))
     layout(rbind(1:3, 4:6, 7:9, 10:12, c(0, 13:14)),
            widths = c(1, 2, 2), heights = c(1, 1, 1, 1, 0.3))
     out = mapply(plotVar, 1:4, 
 		  list(c(0, 80), c(0, 80), c(0.5, 10000), c(0.001, 100)),
 		  list(c(-100, 0), c(0, 100), c(-100, 100), c(-100, 100)), 
-		   vars, c("cropland", "pasture", "pop. density", NaN),
+		   vars, c("Cropland", "Pasture", "Pop. density", "All human drivers"),
 		                                c('% cover', '% cover', 'pop k~m-2~', '% Burnt Area'), c('', '', 'x', ''), 
 										c(FUNcrop, FUNpas, FUNpopd), SIMPLIFY = FALSE)
 		   
@@ -173,7 +175,7 @@ png('figs/human_impact.png', width = 7.2, height = 5.5, res = 300, unit = 'in')
 	
 	mapply(mtext, c("Impact on fire", "Impact on trend"), adj = c(2.2, 4.5)/5, 
 		   MoreArgs = list(side = 3, outer = TRUE))
-	mtext('change in burnt area (%)', side = 2, line = 1.5, cex = 0.8, outer = TRUE, adj = 0.67 * 4.3/4)
+	mtext.units('Change in burnt area (% ~month-1~)', side = 2, line = 1, cex = 0.8, outer = TRUE, adj = 0.67 * 4.3/4)
 dev.off()
 
 
