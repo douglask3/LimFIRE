@@ -248,7 +248,7 @@ plot_Lims <- function(whichPlots = 1:6,...) {
 	## add footer
     par(fig = c(0, 1, 0, 1), mar = rep(0, 4))
     points(0.5, 0.5, col = 'white', cex = 0.05)
-    dev.off()
+    
     
     if (all(whichPlots == 1:6)) {
         mtext('Annual average', side = 3, outer = TRUE, adj = 0.22, bg = 'white')
@@ -260,6 +260,7 @@ plot_Lims <- function(whichPlots = 1:6,...) {
                               'fire season lim', 'fire season sensitivity')
         rownames(pc_out) = c('Fuel Discontinuity', 'Moisture', 'Ignitions', 'Land use')
     }
+    dev.off()
     return(pc_out)
 }
     ## Add legend
@@ -277,9 +278,9 @@ plotAddLimTypes <- function(fname, ...) {
 #maxLim <- function(i) i[[1]] + i[[2]]
 #minLim <- function(i) i[[1]] - i[[2]]
 
-figName = paste0('figs/MainLimSenPlot.png')
+figName = paste0('figs/MainLimSenPlot.pdf')
 heights = c(1.7, 1.18, 0.51, 0.75)
-png(figName, width = 3.46457, height = sum(heights), unit = 'in', res = 600)
+pdf(figName, width = 3.46457, height = sum(heights))#, unit = 'in', res = 600)
 layout(rbind(1,c(2,2),c(2,3),3), heights = heights)#, heights = c(4.5, 4.5, 1))
 plot_Lims(whichPlots = c(2,3), combineLetter = TRUE)
 
