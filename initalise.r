@@ -13,8 +13,9 @@ install.packages('ellipse')
 install.packages('vagan')
 install.packages("RcppEigen")
 install.packages("parallel")
-install.packages("snow")
+install.packages("snow"i
 install.packages("reldist")
+install.packages("shape")
 
 install_github("rhyswhitley/r_stash/rstash")
 
