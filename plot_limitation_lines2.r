@@ -175,11 +175,11 @@ plotAll <- function(fname0 = NULL, fuel = NULL, moisture = NULL,
 	par(mar = c(3,0.5,1,0), oma = c(0,3.5,1,3.5))
 
 	leg <- function(pch, col, ...)  {
-		legend(x=20, y = 1, pch = pch, col = c('#BBBBBB', '#999999', '#777777', '#555555', '#333333'), 
+		legend(x=35, y = 1, pch = pch, col = c('#BBBBBB', '#999999', '#777777', '#555555', '#333333'), 
 			   legend = c('99%', '95%', '90%', '75%', '50%'), bty = 'n', cex = 1.33, ...)
-		legend(x = 42, y = 1, legend = legNames,
+		legend(x = 60, y = 1, legend = legNames,
 			   pch = pch, col = col,  
-			   cex = 1.33, ncol = 1, bty = 'n', seg.len	= 4, ...)
+			   cex = 1.33, ncol = 1, bty = 'n', seg.len = 4, ...)
 	}
 	fuel = plotScatter('fuel', col = 'green', fuel,
 					   LimFIRE.fuel, dLimFIRE.fuel, 
@@ -203,22 +203,22 @@ plotAll <- function(fname0 = NULL, fuel = NULL, moisture = NULL,
 							'igntions_x0', 'igntions_k', 1.0, 
 							xlim = c(0, 5), ...)
 	mtext(side = 3, 'c)', adj = 0.1, line = -1.3)
-	mtext.units('No. ignitions (k~m-2~ ~month-1~)', 1, line = 2.3)
+	mtext.units('  No. ignitions (k~m-2~ ~month-1~)', 1, line = 2.5)
 	axis(2, at = yticks, labels = yticks * 100)
 
 	
-	if (ylog) xlim = c(0, 90) else xlim = c(0, 80)
+	if (ylog) xlim = c(0, 90) else xlim = c(0, 83)
 	suppression = plotScatter('suppression', col = 'black', suppression,
 							  LimFIRE.supression, dLimFIRE.supression, 
 							  'suppression_x0', 'suppression_k', -1.0, 
 							  xlim = xlim, ...)
-	mtext('Suppression index', 1, line = 2.3)
+	mtext('Suppression index', 1, line = 2.5)
 	mtext(side = 3, 'd)', adj = 0.1, line = -1.3)
 	if (axis4) axis(side = 4, at = yticks, labels = 100 - yticks * 100)
 
-	mtext('Burnt area (% ~month-1~)', side = 2, line = 2, outer = TRUE)
+	mtext.units('Burnt area (% ~month-1~)', side = 2, line = 1.5, outer = TRUE)
 	if (axis4) 
-		mtext('Limitation on burnt area', side = 4, line = 2, outer = TRUE)
+		mtext('Limitation on burnt area', side = 4, line = 1.5, outer = TRUE)
 		
 	if (fname0 != "empty") {
 		legNames =  names(hlghtPnts)
