@@ -98,12 +98,12 @@ plotAllTheBoxesAndWhiskers <- function(fname = '', ylims = c(-.6, 0.85),
     figName = paste(figName, fname, ylog, '.pdf', sep ='-')
     pdf(figName, height = 7 * 7.10866/8.5, width = 7.10866)#, res = 300, unit = 'in')
 	 layout(rbind(c(1, 1, 1), c(1, 2,1)), heights = c(0.78, 0.22), 
-                widths = c(0.73, 0.235, 0.035))
+                widths = c(0.72, 0.235, 0.045))
 	par(mar = c(0, 4, 0, 1))
 
 	if (ylog) ylims = ylims * (0.5^exp(-1))
     	    else ylims = ylims / 10
-	plot(c(4, 8 * 5 + 1), ylims, type = 'n', axes = FALSE, 
+	plot(c(4, 8 * 5 + 1.5), ylims, type = 'n', axes = FALSE, 
 	     xlab = '', ylab = '')
 		
 	labels = seq(-6, 7, .5)
