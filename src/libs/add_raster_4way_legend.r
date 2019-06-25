@@ -62,9 +62,9 @@ add_raster_3way_legend_for_4way <- function(legend.z, cols, limits = c(0.25, 0.5
         y = round(rep(i, length(x)))
         
         
-        bl = (x - y)/(nsq)
+        bl = (nsq - x - y)/(nsq)
         gr = y/(nsq)
-        rd = (nsq - x - y)/(nsq)
+        rd = (x - y)/(nsq)
         
         new_xyz1 = cbind(x, y*2, rd, gr, bl)
         new_xyz2 = cbind(x, y*2+1, rd, gr, bl)
