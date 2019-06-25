@@ -239,11 +239,13 @@ plot_Lims <- function(whichPlots = 1:6,...) {
     par(mar = c(0,0,0.67,0), oma = c(0,0,1.5,0))
 	
     ## Plot and put pcs in table
-    pc_out = mapply(plot_pmod, whichPlots, letters[1:length(whichPlots)], MoreArgs = list(...))
+    lets = letters[1:length(whichPlots)]
+    if (length(whichPlots) == 6) lets = lets[c(1,3,5,2,4,6)]
+    pc_out = mapply(plot_pmod, whichPlots, lets, MoreArgs = list(...))
 
     par(mar = c(3, 2, 0, 2))
     add_raster_4way_legend(cols = rev(c("FF","CC","99","55","11")),
-						   labs = c('Moisture', 'Fuel', 'Igntions', 'Suppression'))
+			   labs = c('Moisture', 'Fuel', 'Ignitions', 'Suppression'))
 
 	## add footer
     par(fig = c(0, 1, 0, 1), mar = rep(0, 4))
