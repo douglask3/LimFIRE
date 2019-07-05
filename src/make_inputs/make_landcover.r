@@ -6,7 +6,7 @@ source('cfg.r')
 
 ## Paths and parameters
 dir       = 'data/hyde_land/'
-variables = c(crop = 'cropland', pas = 'grazing', urban = 'uopp', popdens = 'popd')
+variables = c(popdens = 'popd', crop = 'cropland', pas = 'grazing', urban = 'uopp')
 
 ## For regridding
 grid_file = 'data/cru_ts3.23/cru_ts3.23.1991.2000.cld.dat.nc'
