@@ -101,5 +101,5 @@ dat = layer.apply(1:(nlayers(dat)-1), interpolate2monthly)
 comment = list('Data extracted from geotiff files' =
 					'Source: http://www.ntsg.umt.edu/project/MOD17/')
 
-writeRaster.gitInfo(dat, drive_fname['npp'],
+writeRaster.gitInfo.time(dat, drive_fname['npp'],
                     comment = comment, overwrite = TRUE)

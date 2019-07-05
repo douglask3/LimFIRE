@@ -75,8 +75,8 @@ alpha = alpha[[-c(1:12)]]
 
 comment = list('made using rstash' = citation.text('rstash'))
 
-writeRaster.gitInfo(alpha, drive_fname['alpha'],
+writeRaster.gitInfo.time(alpha, drive_fname['alpha'],
                     comment = comment, overwrite = TRUE)
 
-writeRaster.gitInfo(alphaMax, drive_fname['alphaMax'],
+writeRaster.gitInfo.time(alphaMax, drive_fname['alphaMax'],
                     comment = comment, overwrite = TRUE)

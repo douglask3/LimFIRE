@@ -14,19 +14,22 @@ make_variable <- function(var, fname_out, frac) {
 	
     ## rerid to standard
     dat = raster::resample(dat, grid)
-    dat = interpolate2monthly(dat)
-	
-	nlayersDat =  nlayers(dat)
-	if (nlayersDat < 168) {
-		extraLayers = 168 - nlayersDat
-		nextraYrs =  ceiling(extraLayers/12)
-		extraDat = dat[[(nlayersDat-11):nlayersDat]]
-		extraDat = layer.apply(1:nextraYrs, function(i) extraDat)
-		dat = addLayer(dat, extraDat[[1:extraLayers]])
-	}
+    
+    if (max.raster(dat, na.rm = TRUE) > 50 && max.raster(dat, na.rm = TRUE) < 101)
+        dat = dat / 100
+    
+    dat = interpolate2monthly(dat)	
+    nlayersDat =  nlayers(dat)
+    if (nlayersDat < 168) {
+	extraLayers = 168 - nlayersDat
+	nextraYrs =  ceiling(extraLayers/12)
+	extraDat = dat[[(nlayersDat-11):nlayersDat]]
+	extraDat = layer.apply(1:nextraYrs, function(i) extraDat)
+	dat = addLayer(dat, extraDat[[1:extraLayers]])
+    }
     ## Output
     comment[4] = var
-    dat = writeRaster.gitInfo(dat, fname_out,
+    dat = writeRaster.gitInfo.time(dat, fname_out,
                         comment = comment, overwrite = TRUE)
 						
 	return(dat)

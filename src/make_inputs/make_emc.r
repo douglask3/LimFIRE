@@ -25,12 +25,12 @@ make_emc <- function(i) {
     m = monthOfYear(i)
     Wet = dat[['wetday']][[i]] / ml[m]
     Vap = dat[[1]][[i]]
-	Tas = dat[[2]][[i]]
-	Hr = realtive_humidity(Vap, Tas)
-	emc = fuel_moisture_equilibrium(0, Hr, Tas)
-        
+    Tas = dat[[2]][[i]]
+    Hr = realtive_humidity(Vap, Tas)
+    emc = fuel_moisture_equilibrium(0, Hr, Tas)   
+     
     emc = emc * (1-Wet) + 100 * Wet
-        
+    emc = emc / 100
     return(emc)
 }
 
@@ -42,5 +42,5 @@ emc = emc[[-c(1:12)]]
 ################################################################################
 
 
-writeRaster.gitInfo(emc, drive_fname['emc'], overwrite = TRUE)
-writeRaster.gitInfo(emcMax, drive_fname['emcMax'], overwrite = TRUE)
+writeRaster.gitInfo.time(emc, drive_fname['emc'], overwrite = TRUE)
+writeRaster.gitInfo.time(emcMax, drive_fname['emcMax'], overwrite = TRUE)
