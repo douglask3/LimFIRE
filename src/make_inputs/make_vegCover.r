@@ -6,7 +6,7 @@ source('cfg.r')
 
 ## Paths and parameters
 dir       = 'data/vcf_0.5/'
-variables = c(tree = 'treecover', grass = 'nontree', bare = 'bareground')
+variables = c(veg = 'MINUSONE_bareground', tree = 'treecover', grass = 'nontree', bare = 'bareground')
 
 ## For regridding
 grid_file = 'data/cru_ts3.23/cru_ts3.23.1991.2000.cld.dat.nc'

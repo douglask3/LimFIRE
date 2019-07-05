@@ -7,17 +7,23 @@ grid  = raster(grid_file)
 ################################################################################
 ## load, process and output                                                   ##
 ################################################################################
-make_variable <- function(var, fname_out, frac) {
+make_variable <- function(var, fname_out) {
     ## load
+
+    if (grepl("MINUSONE_", var)) {
+        minusOne = TRUE
+        var = replace.str(var, 'MINUSONE_', '')
+    } else minusOne = FALSE
     files = files[grepl(var, files)]
     dat = stack(files)
-	
+    	
     ## rerid to standard
     dat = raster::resample(dat, grid)
-    
+    dat[is.na(grid)] = NaN
     if (max.raster(dat, na.rm = TRUE) > 50 && max.raster(dat, na.rm = TRUE) < 101)
         dat = dat / 100
     
+    if (minusOne) dat = 1 - dat
     dat = interpolate2monthly(dat)	
     nlayersDat =  nlayers(dat)
     if (nlayersDat < 168) {
