@@ -6,7 +6,7 @@ source('cfg.r')
 library(rstash)
 
 ## paths and parameters
-dir   = 'data/cru_ts3.23/'
+dir   = 'data/cru_ts4.03/'
 varns = c(temp   = 'tmp',
           precip = 'pre',
           cloud  = 'cld')
@@ -17,7 +17,7 @@ varns = c(temp   = 'tmp',
 files = list.files(dir, full.names = TRUE)
 clim_layers= (min(clim_layers-12):max(clim_layers))
 loadDat <- function(varn) {
-    files = files[grepl(varn, files)]
+    files = files[grepl(varn, files)]    
     return(layer.apply(files, stack)[[clim_layers]])
 }
 

@@ -6,7 +6,7 @@ source('cfg.r')
 sourceAllLibs('src/weather/')
 
 ## paths and parameters
-dir   = 'data/cru_ts3.23/'
+dir   = 'data/cru_ts4.03/'
 varns = c(wetday = 'wet',
           vap    = 'vap',
           temp   = 'tmp')

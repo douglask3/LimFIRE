@@ -30,7 +30,7 @@ sourceAllLibs('src/libs')
 sourceAllLibs('src/LimFIRE')
 
 years       = 2000:2014
-clim_layers =  115:282
+clim_layers =  (115:282) + 90*12
 
 ml = c(31,28,31,30,31,30,31,31,30,31,30,31)
 
