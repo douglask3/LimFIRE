@@ -8,7 +8,7 @@ sourceAllLibs('src/weather/')
 ## paths and parameters
 lightn_file   = 'data/lightn_climatology_otd_mlnha.nc'
 
-wd_dir   = 'data/cru_ts3.23/'
+wd_dir   = 'data/cru_ts4.03/'
 wd_varn = c(wetday = 'wet' )
 
 ################################################################################
