@@ -71,12 +71,24 @@ year.stash <- function(y, spinup = FALSE) {
 lapply(rep(1, 40), year.stash)
 alpha = layer.apply(1:nyears, year.stash)
 alphaMax = seaCy12(alpha, function(...) max(...))
-alpha = alpha[[-c(1:12)]]
 
 comment = list('made using rstash' = citation.text('rstash'))
+
+alpha2000_2010 = alpha[[-c(1:6)]]
+alpha2000_2010 = alpha2000_2010[[1:132]]
+writeRaster.gitInfo.time(alpha2000_2010, "outputs/alpha2000-2010.nc",
+                    comment = comment, overwrite = TRUE)
+
+
+alpha = alpha[[-c(1:12)]]
+
+
 
 writeRaster.gitInfo.time(alpha, drive_fname['alpha'],
                     comment = comment, overwrite = TRUE)
 
 writeRaster.gitInfo.time(alphaMax, drive_fname['alphaMax'],
+                    comment = comment, overwrite = TRUE)
+
+writeRaster.gitInfo.time(alpha, drive_fname['alpha'],
                     comment = comment, overwrite = TRUE)
