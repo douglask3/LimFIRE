@@ -165,12 +165,14 @@ plotAll <- function(fname0 = NULL, fuel = NULL, moisture = NULL,
 	}
 	
 	
-	fname = paste('figs/limLines', fname0, ylog, polygonsNotPoints, '.pdf', sep = '-')
+	fname = paste('figs/limLines', fname0, ylog, polygonsNotPoints, '.png', sep = '-')
 		
 	axis4 = !is.null(fuel)	
 		
-	pdf(fname, width = 7.0866, height = 5.5 * 1.15 * 7.0866/6)#, units = 'in', res = 300)
-	layout(rbind(1:2,3:4, 5), heights = c(1,1,0.3))
+	#png(fname, width = 7.0866, height = 5.5 * 1.15 * 7.0866/6, units = 'in', res = 300)
+	png(fname, width = 7.0866, height = 5.5 * 1.15 * 7.0866/6, units = 'in', res = 300)
+
+        layout(rbind(1:2,3:4, 5), heights = c(1,1,0.3))
 
 	par(mar = c(3,0.5,1,0), oma = c(0,3.5,1,3.5))
 
@@ -189,7 +191,7 @@ plotAll <- function(fname0 = NULL, fuel = NULL, moisture = NULL,
 	axis(2, at = yticks, labels = yticks * 100)
 	mtext(side = 3, 'a)', adj = 0.1, line = -1.3)
 	mtext('Fuel continuity (%)', 1, line = 2.3)
-
+       
 	moisture = plotScatter('moisture', col = 'blue', moisture,
 						   LimFIRE.moisture, dLimFIRE.moisture, 
 						   'moisture_x0', 'moisture_k', -1.0, 
@@ -271,7 +273,7 @@ plotByYlog <- function(fname, ...) {
 
 plotAllThese <- function() {
 	#plotByYlog('noGrad', plotGrad = FALSE)
-	#plotByYlog('empty', plot = c(F, F, F, F), plotGrad = FALSE)
+	plotByYlog('empty', plot = c(F, F, F, F), plotGrad = FALSE)
 	#plotByYlog('noGrad-Desert', plot = c(T, F, F, F), plotGrad = FALSE)
 	#plotByYlog('noGrad-Rainforest', plot = c(T, T, F, F), plotGrad = FALSE)
 	#plotByYlog('noGrad-Savanna', plot = c(T, T, T, F), plotGrad = FALSE)
