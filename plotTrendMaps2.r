@@ -212,8 +212,9 @@ pdf(fname, height = sum(heights), width = 7.10866)#4 * 7.2/6.3)#, units = 'in', 
                         ePointPattern = c(25, 0, 24), eThick = c(1.5, 0, 1.5), e_alpha = 0.6,
 		        preLeveled = TRUE, add_legend = FALSE, interior = FALSE)
 	mtext(title, adj = 0.02, line = -0.5, cex = 1.0)
+        return(tmapi)
     }
-    mapply(plot_combs, combs4plotting, paste0(letters[3:6],') ',  c("Counteracting drivers", "Moisture drivers", "Amplifying drivers", "Fuel drivers")))
+    trcombs_out = mapply(plot_combs, combs4plotting, paste0(letters[3:6],') ',  c("Counteracting drivers", "Moisture drivers", "Amplifying drivers", "Fuel drivers")))
     par(mai = c(0.0, 0, 0, 0))
     
 
@@ -310,10 +311,10 @@ pdf(fname, height = sum(heights), width = 7.10866)#4 * 7.2/6.3)#, units = 'in', 
     xd = xd - xe; xi = xi + xe
     yd = yd - ye; yi = yi + ye 
        
-    Arrows(xd, ys, xi, ys)
-    Arrows(xs, yd, xs, yi)
-    Arrows(xi, ys, xd, ys)
-    Arrows(xs, yi, xs, yd)
+   # Arrows(xd, ys, xi, ys)
+   # Arrows(xs, yd, xs, yi)
+   # Arrows(xi, ys, xd, ys)
+   # Arrows(xs, yi, xs, yd)
 
     text(xps, yps, pid, col = "white")
     
@@ -327,3 +328,144 @@ pdf(fname, height = sum(heights), width = 7.10866)#4 * 7.2/6.3)#, units = 'in', 
     text(xs, yd, expression(paste(phantom() %down%   phantom(), "moisture")), adj = c(0.5, 1))
 	
 dev.off()
+controls2 = round(raster::disaggregate(controls, fact = 5, method = 'bilinear'))
+controls2 = controls
+map = controls2[[1:2]]
+map[!is.na(map)] = 0
+
+## Increase fuel and decrese moisture
+test = controls2[[1]] == 1 & controls2[[2]] == 1
+map[[1]][test] = 1
+
+## Increase fuel only
+test = controls2[[1]] == 1  & controls2[[2]] == 0
+map[[1]][test] = 2
+
+## Increase moisture only
+test = controls2[[1]] == 0  & controls2[[2]] == 1
+map[[1]][test] = 3
+
+## Decrease suppession
+test = controls[[4]] == 1
+map[[2]][test] = 1
+
+
+
+SimplePlot <- function(map, cols, leg, fname) {
+    cols =  c('white', cols)
+    png(paste0("figs/", fname, ".png"), height = 4, width = 4*360/150, units = 'in', res = 300)
+    par(mar = rep(0,4))
+    plotStandardMap(map, '', limits = 0.5:2.5, 
+                    cols  = cols, #  
+	    	    e = map[[2]], e_lims = 0.5,  
+                    ePatternRes = 30, ePatternThick = 1,
+	            preLeveled = TRUE, add_legend = FALSE, interior = FALSE)
+    cols[1] = 'black'
+    legend('bottomleft', col = rev(cols),  pch = c(15, 15, 15, 19), pt.cex = c(2, 2, 2, 1),
+           leg,
+            bty = 'n')
+#                ePointPattern = c(25, 0, 24), eThick = c(1.5, 0, 1.5
+    leg = sapply(leg, function(i) paste(strsplit(i, '/')[[1]], collapse = ' & '))
+    if (sum(map[[2]][], na.rm = TRUE) > 0) {
+        test = map[[2]] == 1
+        map[[1]][test] = map[[1]][test] * (-1)
+        comment = list(Values = paste(1:(length(leg)-1), head(leg, -1),
+                                        collapse = ';  ', sep = ' = '),
+                       paste0("negatives = ", tail(leg, 1)))
+    } else {
+        comment = list(Values = paste(1:(length(leg)-1), head(leg, -1),
+                                        collapse = ';  ', sep = ' = '))
+    }
+
+    writeRaster.gitInfo(map,  paste0('outputs/', fname, '.nc'),
+                       comment = paste0("Values:", paste(1:length(leg), leg),
+                                        collapse = '_', sep = '-'), overwrite = TRUE)
+    dev.off()
+}
+SimplePlot(map, c( '#a50026', '#80cdc1', '#dfc27d'),
+           c("Drying conditions", "Increasing fuel", "both", "Decreased suppression"),
+           "increasingFireControls")
+
+
+map[!is.na(map)] = 0
+
+## Increase fuel and decrese moisture
+test = controls2[[1]] == -1 & controls2[[2]] == -1
+map[[1]][test] = 1
+
+## Increase fuel only
+test = controls2[[1]] == -1  & controls2[[2]] == 0
+map[[1]][test] = 2
+
+## Increase moisture only
+test = controls2[[1]] == 0  & controls2[[2]] == -1
+map[[1]][test] = 3
+
+## Decrease suppession
+test = controls[[4]] == -1
+map[[2]][test] = 1
+
+
+SimplePlot(map, c( '#1f78b4', '#fc8d62', '#a6cee3'),
+           c("Increasing moisture", "Decreasing fuel", "both", "Increasing suppression"),
+           "decreasingFireControls")
+
+map[!is.na(map)] = 0
+
+## Increase fuel and decrese moisture
+test = controls2[[1]] == -1 & controls2[[2]] == -1
+map[[1]][test] = 1
+
+## Increase fuel only
+test = controls2[[1]] == -1  & controls2[[2]] == 0
+map[[1]][test] = 2
+
+## Increase moisture only
+test = controls2[[1]] == 0  & controls2[[2]] == -1
+map[[1]][test] = 3
+
+## Decrease suppession
+test = controls[[4]] == -1
+map[[2]][test] = 1
+
+
+SimplePlot(map, c( '#1f78b4', '#fc8d62', '#a6cee3'),
+           c("Increasing moisture", "Decreasing fuel", "both", "Increasing suppression"),
+           "decreasingFireControls")
+
+
+map[!is.na(map)] = 0
+test = controls2[[1]] == 1 & controls2[[2]] == -1
+map[[1]][test] = 1
+
+## Increase fuel only
+test = controls2[[1]] == -1  & controls2[[2]] == 1
+map[[1]][test] = 2
+
+
+SimplePlot(map, c( '#d7191c', '#2c7bb6'),
+           c("Increasing & drying fuel", "Decreasing fuel/increasing moisture"),
+           "counteractingFireControls")
+
+
+map[!is.na(map)] = 0
+# Increased ign/decre sup
+test = controls2[[3]] == 1 & controls2[[4]] == 1
+map[[1]][test] = 1
+
+test = controls2[[3]] == -1  & controls2[[4]] == 1
+map[[1]][test] = 2
+
+test = controls2[[3]] == 1  & controls2[[4]] == -1
+map[[1]][test] = 3
+
+test = controls2[[3]] == -1  & controls2[[4]] == -1
+map[[1]][test] = 4
+
+
+SimplePlot(map, c( '#e66101', '#fdb863', '#b2abd2', '#5e3c99'),
+           c("Increasing Ignitions/decreased fragmentation",
+             "Decreasing Ignitions & fragmanetation",
+             "Increaing Ignitions & fragmanetation",
+             "Decreasing Ignitions & increased fragmanetation"),
+           "HumanImpacts")
