@@ -15,12 +15,14 @@ plot_raster <- function(x, lims = fire_lims, cols = fire_cols, add_legend = FALS
     FUN(add_legend = add_legend, ...)
 
     addCoastlineAndIce2map()
+    Indonesia <- function() {
+        if (!is.null(e)) c(e, nn) := cropIndonesia(e, mask)
+        c(x, mask) := cropIndonesia(x, mask)
     
-    if (!is.null(e)) c(e, nn) := cropIndonesia(e, mask)
-    c(x, mask) := cropIndonesia(x, mask)
-    
-    FUN(add = TRUE, add_legend = FALSE, ...)
-    contour(mask, add = TRUE, drawlabels = FALSE, lwd = 0.5)  
+        FUN(add = TRUE, add_legend = FALSE, ...)
+        contour(mask, add = TRUE, drawlabels = FALSE, lwd = 0.5)  
+    }
+    try(Indonesia)
 }
 
 cropIndonesia <- function(x, mask) {

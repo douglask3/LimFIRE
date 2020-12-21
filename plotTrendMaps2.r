@@ -351,36 +351,37 @@ map[[2]][test] = 1
 
 
 
-SimplePlot <- function(map, cols, leg, fname) {
+SimplePlot <- function(map, cols, leg, fname, addleg = TRUE, limitmax = 2.5, useMap2NC = TRUE) {
     cols =  c('white', cols)
     png(paste0("figs/", fname, ".png"), height = 4, width = 4*360/150, units = 'in', res = 300)
     par(mar = rep(0,4))
-    plotStandardMap(map, '', limits = 0.5:2.5, 
+    plotStandardMap(map, '', limits = 0.5:limitmax, 
                     cols  = cols, #  
 	    	    e = map[[2]], e_lims = 0.5,  
                     ePatternRes = 30, ePatternThick = 1,
 	            preLeveled = TRUE, add_legend = FALSE, interior = FALSE)
     cols[1] = 'black'
-    legend('bottomleft', col = rev(cols),  pch = c(15, 15, 15, 19), pt.cex = c(2, 2, 2, 1),
-           leg,
-            bty = 'n')
+    if (addleg)
+        legend('bottomleft', col = rev(cols),  pch = c(rep(15, ceiling(limitmax)), 19),
+                pt.cex = c(rep(2, ceiling(limitmax)), 1),
+                leg, bty = 'n')
 #                ePointPattern = c(25, 0, 24), eThick = c(1.5, 0, 1.5
     leg = sapply(leg, function(i) paste(strsplit(i, '/')[[1]], collapse = ' & '))
-    if (sum(map[[2]][], na.rm = TRUE) > 0) {
+    if (!useMap2NC) map[[2]][] = 0
+    if (sum(map[[2]][], na.rm = TRUE) > 0 && useMap2NC) {
         test = map[[2]] == 1
         map[[1]][test] = map[[1]][test] * (-1)
         comment = list(Values = paste(1:(length(leg)-1), head(leg, -1),
                                         collapse = ';  ', sep = ' = '),
-                       paste0("negatives = ", tail(leg, 1)))
+                       negatives = tail(leg, 1))
     } else {
-        comment = list(Values = paste(1:(length(leg)-1), head(leg, -1),
+        comment = list(Values = paste(1:(length(leg)), leg,
                                         collapse = ';  ', sep = ' = '))
     }
 
     writeRaster.gitInfo(map,  paste0('outputs/', fname, '.nc'),
-                       comment = paste0("Values:", paste(1:length(leg), leg),
-                                        collapse = '_', sep = '-'), overwrite = TRUE)
-    dev.off()
+                       comment = comment, overwrite = TRUE)
+    if (addleg) dev.off()
 }
 SimplePlot(map, c( '#a50026', '#80cdc1', '#dfc27d'),
            c("Drying conditions", "Increasing fuel", "both", "Decreased suppression"),
@@ -449,23 +450,47 @@ SimplePlot(map, c( '#d7191c', '#2c7bb6'),
 
 
 map[!is.na(map)] = 0
+map[[2]] = 999
 # Increased ign/decre sup
-test = controls2[[3]] == 1 & controls2[[4]] == 1
-map[[1]][test] = 1
+p = 0
+leg = c()
+cols = c("#630013", "#fee090", "#000424", "#dda0cb", "#630013")
+cols = c( make_col_vector(cols, limits = 1:9))[1:8]#[seq(1, 15, by = 2)]
+cols = c(cols, "white")[c(5, 4, 3, 6, 9, 2, 7, 8, 1)]
+colsi = matrix(cols, ncol = 3); cols = c()
+lx = ly = c()
+for (i in c(-1:1)) for (j in c(-1:1)) {
+    if (i == 0  && j == 0) next
+    test = controls2[[3]] == i & controls2[[4]] == j
+    p = p + 1
+    map[[1]][test] = p
+    #map[[2]][test] = (i != 0 & j !=0)
+    leg = c(leg, paste(c("Less ignitions", "", "More igntions")[i+2],
+                       c("More fragmentation", "", "Less fragmentation")[j+2]))
+    cols = c(cols, colsi[i+2, j+2])
+    lx = c(lx, i); ly = c(ly, j)
+    print(i) 
+    print(j)
+    print(p)
+    print("===")
+}
 
-test = controls2[[3]] == -1  & controls2[[4]] == 1
-map[[1]][test] = 2
-
-test = controls2[[3]] == 1  & controls2[[4]] == -1
-map[[1]][test] = 3
-
-test = controls2[[3]] == -1  & controls2[[4]] == -1
-map[[1]][test] = 4
 
 
-SimplePlot(map, c( '#e66101', '#fdb863', '#b2abd2', '#5e3c99'),
-           c("Increasing Ignitions/decreased fragmentation",
-             "Decreasing Ignitions & fragmanetation",
-             "Increaing Ignitions & fragmanetation",
-             "Decreasing Ignitions & increased fragmanetation"),
+SimplePlot(map,cols, limitmax = 7.5, useMap2NC = FALSE,
+           leg, addleg = FALSE, 
            "HumanImpacts")
+
+x0 = 80; dx = 11.5
+y0 = -30; dy = 11.5
+cex = 4
+
+points(lx*dx+x0, ly*dy+y0, col = cols, pch =15, cex = cex)
+text(x = x0 + dx + cex*2, y = y0 + dy + cex*2, "Increased\nburning", srt = -45, cex = 0.8)
+text(x = x0 - dx - cex*2, y = y0 - dy - cex*2, "Decreased\nburning", srt = -45, xpd = TRUE, cex = 0.8)
+text(x = x0 + dx*0.5, y = y0, "More\nIgntions", cex = 0.6, adj = 0.0)
+text(x = x0, y = y0 + dy*0.5, "Less\nFragmentation", srt = 90, cex = 0.67, adj = 0.0)
+arrows(x0, y0, x0 + dx + cex*1.5, y0, length = 0.1)
+arrows(x0, y0, x0, y0 + dy + cex*1.5, y0, length = 0.1)
+dev.off.gitWatermark()
+
