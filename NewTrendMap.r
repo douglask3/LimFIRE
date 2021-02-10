@@ -70,7 +70,7 @@ cols = rev(c('#a50026','#d73027','#f46d43','#fdae61','#fee090','#ffffbf','#e0f3f
 
 datT[[1]][mask] = diff
 limits = c(-10, -5, -2, -1, -0.1, 0.1, 1, 2, 5, 10)/10
-addPlot(datT*100, limits, cols, 'Annual trend in burnt area', units = '%', extend_max = TRUE, extend_min = TRUE)
+addPlot(datT*100, limits, cols, 'Annual average trend in burnt area', units = '%', extend_max = TRUE, extend_min = TRUE)
 
 
 datT[[1]][mask] = mtr[1,]
