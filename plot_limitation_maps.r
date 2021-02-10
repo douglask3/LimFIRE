@@ -2,6 +2,7 @@
 ## cfg                                                                 ##
 #########################################################################
 source('cfg.r')
+library(gitBasedProjects)
 graphics.off()
 
 grab_cache = TRUE
@@ -20,7 +21,12 @@ mod_files = paste(temp_dir, '/LimFIRE_',
                  c('fire', 'fuel','moisture','ignitions','supression'),
                   sep = '')
 
-niterations = 50
+niterations = 10
+
+cols_msure = list(fuel    = c('white', '#33FF33', '#002200'),
+                  moisture= c('white', '#3333FF', '#000022'),
+                  igntions= c('white', '#FF3333', '#220000'),
+                  supress = c('white', '#666666'   , 'black'  ))
 #########################################################################
 ## Run model                                                           ##
 #########################################################################
@@ -29,7 +35,7 @@ niterations = 50
 findParameterLimitation <- function(dir) {
 	#mod_files = paste(mod_files, '-paramLine', line, sep = "")
 	#rw_mod_files = paste(mod_files,    '-rw', sep = '')
-	#lm_mod_files = paste(mod_files,    '-lm', sep = '')
+	##lm_mod_files = paste(mod_files,    '-lm', sep = '')
 	#sn_mod_files0 = paste(mod_files,    '-sn', sep = '')
 	#sn_mod_files = paste(mod_files,    '-sn-ws', sep = '')
     
@@ -147,6 +153,51 @@ if (file.exists(ens_tfile)) load(ens_tfile) else {
 					      function(i) extractEnsamble(ensamble, i, mean90quant.ens, quantiles = c(0.215, 0.785)))
 	save(ensamble, ensambleSum,  file = ens_tfile)
 }
+
+
+## plot seperate
+plot_limitation <- function(i, lims, tFUN, name, namesExtra = '', extent = NULL) {
+    mems = lapply(ensamble, function(mem) mem[[i]])
+    
+    summMems <- function(FUN)
+        lapply(c(2, 4, 3, 5), function(con) FUN(layer.apply(mems[1:5], function(r) r[[con]])))
+    cons_means = summMems(mean)
+    cons_sd = summMems(sd.raster)
+
+    if (!is.null(extent)) {
+        cons_means = lapply(cons_means, crop, extent)
+        cons_sd    = lapply(cons_sd   , crop, extent)
+    }
+    if (!is.null(tFUN)) cons_means = lapply(cons_means, tFUN)
+        
+    png(paste0("figs/control-", name, "-", namesExtra, '.png'), height = 6, width = 10, res = 300, units = 'in')
+    par(mfrow = c(2,2), mar = rep(0, 4))
+    plotFun <- function(x, sd, cols) {
+        plot_raster(x, e = sd, cols = cols, quick = TRUE,
+                    lims = lims, limits_error = c(0.05, 0.1),
+                    ePatternRes = 50, ePatternThick = 0.5)
+
+        standard_legend(cols, lims, x, add = TRUE,
+                        plot_loc = c(0.33, 0.93, 0.015, 0.05), 
+                        ylabposScling = 1.33, oneSideLabels = FALSE)
+    }
+    mapply(plotFun, cons_means, cons_sd, cols_msure)
+    
+    dev.off()
+}
+
+limits_sps = list(c(0, 0.01, 0.1, 0.2, 0.4, 0.6, 0.8),
+                  c(0, 0.01, 0.1, 0.2, 0.4, 0.6, 0.8),
+                  c(0, 0.01, 0.1, 0.2, 0.4, 0.6, 0.8))
+
+tFUNs = list(function(i) 1-i, NULL, NULL)
+plot_all_lim_types <- function(...)
+    mapply(plot_limitation, 1:6, limits_sps, tFUNs,
+           paste(c('Annual average', 'Fire season'),
+                 c('Standard', 'Potential', 'Sensitivity'), sep = '-'),
+           MoreArgs = list(...))
+
+plot_all_lim_types(extent = extent(c(-85, -30, -60, 13)), namesExtra = "SA")
 #niterations = 21
 #ensamble = lapply(seq(0, 1, length.out = niterations), findParameterLimitation)
 
@@ -196,6 +247,7 @@ plot_pmod <- function(i, let, index = NULL, normalise = FALSE, combineLetter = F
 
     pmods = pmods[-1] # remove first element of simulated fire
     #pmod = mapply(function(pm, FUN) FUN(pm), pmods, FUNs)
+    
     pmod = lapply(pmods, function(i) i[[1]])
     if (!is.null(index)) {
     	#pmod = mapply(function(p, pm, i) pm[[i]] - p, pmod, pmods, index)
@@ -210,6 +262,8 @@ plot_pmod <- function(i, let, index = NULL, normalise = FALSE, combineLetter = F
     cols = rev(c("FF", "CC", "99", "55", "11"))
 	
     xy = xyFromCell(pmod[[1]], 1:length(pmod[[1]]))
+
+   
     pmod = lapply(pmod, values)
 
     plot_4way(xy[,1], xy[,2], pmod[[2]], pmod[[1]], pmod[[3]], pmod[[4]],
@@ -242,7 +296,7 @@ plot_Lims <- function(whichPlots = 1:6,...) {
     lets = letters[1:length(whichPlots)]
     if (length(whichPlots) == 6) lets = lets[c(1,3,5,2,4,6)]
     pc_out = mapply(plot_pmod, whichPlots, lets, MoreArgs = list(...))
-
+    
     par(mar = c(3, 2, 0, 2))
     add_raster_4way_legend(cols = rev(c("FF","CC","99","55","11")),
 			   labs = c('Moisture', 'Fuel', 'Ignitions', 'Suppression'))
@@ -277,25 +331,41 @@ plotAddLimTypes <- function(fname, ...) {
 	plot_Lims(1:6, ...)
 }
 
+plotAddLimTypes_slimed <- function(fname, ...) {
+    heights = c(1.7, 1.18, 0.51, 0.75)
+    figName = paste0('figs/MainLimSenPlot', fname, '.png')
+    png(figName, width = 3.46457, height = sum(heights), unit = 'in', res = 600)
+    layout(rbind(1,c(2,2),c(2,3),3), heights = heights)#, heights = c(4.5, 4.5, 1))
+    plot_Lims(whichPlots = c(2,3), combineLetter = TRUE, ...)
+}
 #maxLim <- function(i) i[[1]] + i[[2]]
 #minLim <- function(i) i[[1]] - i[[2]]
 
-figName = paste0('figs/MainLimSenPlot.pdf')
-heights = c(1.7, 1.18, 0.51, 0.75)
-pdf(figName, width = 3.46457, height = sum(heights))#, unit = 'in', res = 600)
-layout(rbind(1,c(2,2),c(2,3),3), heights = heights)#, heights = c(4.5, 4.5, 1))
-plot_Lims(whichPlots = c(2,3), combineLetter = TRUE)
+plotAddLimTypes_slimed('', NULL)
+
+plotAddLimTypes_slimed('maxFuel', c(3, rep(2, 3)))
+plotAddLimTypes_slimed('minFuel', c(2, rep(3, 3)))
+
+plotAddLimTypes_slimed('maxIgni', c(2, 3, 2, 2))
+plotAddLimTypes_slimed('minIgni', c(3, 2, 3, 3))
+
+plotAddLimTypes_slimed('maxMist', c(2, 2, 3, 2))
+plotAddLimTypes_slimed('minMist', c(3, 3, 2, 3))
+
+plotAddLimTypes_slimed('maxSupp', c(2, 2, 2, 3))
+plotAddLimTypes_slimed('minSupp', c(3, 3, 3, 2))
+
 
 plotAddLimTypes('', NULL)
 
-#plotAddLimTypes('maxFuel', c(3, rep(2, 3)))
-#plotAddLimTypes('minFuel', c(2, rep(3, 3)))
+plotAddLimTypes('maxFuel', c(3, rep(2, 3)))
+plotAddLimTypes('minFuel', c(2, rep(3, 3)))
 
-#plotAddLimTypes('maxIgni', c(2, 3, 2, 2))
-#plotAddLimTypes('minIgni', c(3, 2, 3, 3))
+plotAddLimTypes('maxIgni', c(2, 3, 2, 2))
+plotAddLimTypes('minIgni', c(3, 2, 3, 3))
 
-#plotAddLimTypes('maxMist', c(2, 2, 3, 2))
-#plotAddLimTypes('minMist', c(3, 3, 2, 3))
+plotAddLimTypes('maxMist', c(2, 2, 3, 2))
+plotAddLimTypes('minMist', c(3, 3, 2, 3))
 
-#plotAddLimTypes('maxSupp', c(2, 2, 2, 3))
-#plotAddLimTypes('minSupp', c(3, 3, 3, 2))
+plotAddLimTypes('maxSupp', c(2, 2, 2, 3))
+plotAddLimTypes('minSupp', c(3, 3, 3, 2))
