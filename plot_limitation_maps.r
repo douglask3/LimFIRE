@@ -4,7 +4,7 @@
 source('cfg.r')
 library(gitBasedProjects)
 graphics.off()
-
+dominant = TRUE
 grab_cache = TRUE
 
 fig_fname       = 'figs/limitation_map'
@@ -21,7 +21,7 @@ mod_files = paste(temp_dir, '/LimFIRE_',
                  c('fire', 'fuel','moisture','ignitions','supression'),
                   sep = '')
 
-niterations = 10
+niterations = 50
 
 cols_msure = list(fuel    = c('white', '#33FF33', '#002200'),
                   moisture= c('white', '#3333FF', '#000022'),
@@ -239,7 +239,8 @@ calculate_weightedAverage <- function(xy, pmod) {
 }
 
 ## Plot limitation or sesativity, and outputting pcs 
-plot_pmod <- function(i, let, index = NULL, normalise = FALSE, combineLetter = FALSE, ...) {
+plot_pmod <- function(i, let, index = NULL, normalise = FALSE, combineLetter = FALSE, ...,
+                      file_ID = '') {
     pmods = ensambleSum[[i]]
 
     lab = labs[i]    
@@ -256,27 +257,38 @@ plot_pmod <- function(i, let, index = NULL, normalise = FALSE, combineLetter = F
     	limits = c(0.001, 0.01, 0.1)
     	cols = c("FF", "CC", "99", "55", "11")
     }
-	
+    
     normalise = TRUE
     limits = c(0.1, 0.5, 0.9)
     cols = rev(c("FF", "CC", "99", "55", "11"))
-	
-    xy = xyFromCell(pmod[[1]], 1:length(pmod[[1]]))
-
-   
+    xy = xyFromCell(pmod[[1]], 1:length(pmod[[1]]))   
+    pmod0 = pmod 
     pmod = lapply(pmod, values)
 
-    plot_4way(xy[,1], xy[,2], pmod[[2]], pmod[[1]], pmod[[3]], pmod[[4]],
-              x_range = c(-180, 180), y_range = c(-60, 90),
-              cols = 	cols, limits = limits, 
-              ePatternRes = 50, ePatternThick = 0.4,
+    if (dominant) {   
+        dom = which.max(layer.apply(pmod0[c(1,3,2,4)], function(i) i))
+        if (!is.null(file_ID)){
+            fout = paste0('outputs/DominantControlMap-', file_ID, '.nc')
+            print(fout)        
+            writeRaster.gitInfo(dom, file = fout, overwrite = TRUE)
+        }
+        plotStandardMap(dom, limits = 1.5:3.5,
+                        cols = c("#1b9e77", "#7570b3", "#d95f02", "#222222"),
+                        add_legend = FALSE, txt = '')
+    } else {	      
+
+        plot_4way(xy[,1], xy[,2], pmod[[2]], pmod[[1]], pmod[[3]], pmod[[4]],
+                  x_range = c(-180, 180), y_range = c(-60, 90),
+                  cols = 	cols, limits = limits, 
+               ePatternRes = 50, ePatternThick = 0.4,
               add_legend=FALSE, smooth_image=FALSE,smooth_factor=5, normalise = normalise, ...)
     
     
-    addLocPoints()    
+        addLocPoints()    
+    }
     pcs = calculate_weightedAverage(xy, pmod)
 	
-	polygon(c(-180, -140, -140, -180), c(-60, -60, 30, 30), col = 'white', border = NA)
+    polygon(c(-180, -140, -140, -180), c(-60, -60, 30, 30), col = 'white', border = NA)
     
     if (combineLetter) {
         lab = paste(let, lab)
@@ -293,14 +305,26 @@ plot_Lims <- function(whichPlots = 1:6,...) {
     par(mar = c(0,0,0.67,0), oma = c(0,0,1.5,0))
 	
     ## Plot and put pcs in table
-    lets = letters[1:length(whichPlots)]
-    if (length(whichPlots) == 6) lets = lets[c(1,3,5,2,4,6)]
-    pc_out = mapply(plot_pmod, whichPlots, lets, MoreArgs = list(...))
+    lets = letters[1:length(whichPlots)]; file_ID = NULL
+    if (length(whichPlots) == 6) {
+        lets = lets[c(1,3,5,2,4,6)];
+        file_ID = paste0(c("standard", "potential", "sensitivity"),
+                         c(rep('annual_average',3), rep('fire_season', 3)), sep = '-')
+    }
+    pc_out = mapply(plot_pmod, whichPlots, lets, file_ID = file_ID, MoreArgs = list(...))
     
     par(mar = c(3, 2, 0, 2))
-    add_raster_4way_legend(cols = rev(c("FF","CC","99","55","11")),
-			   labs = c('Moisture', 'Fuel', 'Ignitions', 'Suppression'))
-
+    if (dominant) {
+        plot.new()
+        if (all(whichPlots == 1:6)) { ncol = 1; horiz = TRUE; pos = "top"}
+            else { ncol = 2; horiz = FALSE; pos = "bottom"}
+        legend(pos, c("Fuel", "Moisture", "Ignitions", "Suppression"),
+                pch = 15, ncol = ncol, pt.cex = 2, horiz = horiz,
+                col = c("#1b9e77", "#7570b3", "#d95f02", "#222222"))
+    } else{
+        add_raster_4way_legend(cols = rev(c("FF","CC","99","55","11")),
+			     labs = c('Moisture', 'Fuel', 'Ignitions', 'Suppression'))
+    }
 	## add footer
     par(fig = c(0, 1, 0, 1), mar = rep(0, 4))
     points(0.5, 0.5, col = 'white', cex = 0.05)
@@ -324,7 +348,7 @@ plot_Lims <- function(whichPlots = 1:6,...) {
 
 plotAddLimTypes <- function(fname, ...) {
 ## Set up plotting window
-	figName = paste0(fig_fname, '-', fname, '.png')	
+	figName = paste0(fig_fname, '-', fname, 'dominant', dominant, '.png')	
 	png(figName, width = 7.2, height = 6 * 4/3 * 7.2/9, unit = 'in', res = 600)
 	layout(rbind(cbind(1:3,4:6),7))#, heights = c(4.5, 4.5, 1))
     
@@ -333,16 +357,18 @@ plotAddLimTypes <- function(fname, ...) {
 
 plotAddLimTypes_slimed <- function(fname, ...) {
     heights = c(1.7, 1.18, 0.51, 0.75)
-    figName = paste0('figs/MainLimSenPlot', fname, '.png')
+    figName = paste0('figs/MainLimSenPlot', fname, 'dominant', dominant, '.png')
     png(figName, width = 3.46457, height = sum(heights), unit = 'in', res = 600)
-    layout(rbind(1,c(2,2),c(2,3),3), heights = heights)#, heights = c(4.5, 4.5, 1))
+    if (dominant) layout = rbind(1,c(2,2),c(2,2),3) else layout = rbind(1,c(2,2),c(2,3),3)
+    layout(layout, heights = heights)#, heights = c(4.5, 4.5, 1))
     plot_Lims(whichPlots = c(2,3), combineLetter = TRUE, ...)
 }
 #maxLim <- function(i) i[[1]] + i[[2]]
 #minLim <- function(i) i[[1]] - i[[2]]
 
-plotAddLimTypes_slimed('', NULL)
-
+#plotAddLimTypes_slimed('', NULL)
+plotAddLimTypes('', NULL)
+browser()
 plotAddLimTypes_slimed('maxFuel', c(3, rep(2, 3)))
 plotAddLimTypes_slimed('minFuel', c(2, rep(3, 3)))
 
