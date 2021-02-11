@@ -97,8 +97,8 @@ FUN <- function(urlS, urlE, urlD, yrS, yrE, yrSkip) {
                             plot_loc = c(0.35, 0.85, 0.05, 0.1), ...)
 
         title = gsub(' ', '_', title)        
-        title = gsub('OVER', '/', title)
-        file = paste0("outputs/longTermRecord_", urlD, '--', , ".nc") 
+        title = gsub('/', 'OVER', title)
+        file = paste0("outputs/longTermRecord_", urlD, '--', title, ".nc") 
         writeRaster.gitInfo(r, filename = file, overwrite = TRUE)
     }
     graphics.off()
