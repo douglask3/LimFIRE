@@ -96,8 +96,9 @@ FUN <- function(urlS, urlE, urlD, yrS, yrE, yrSkip) {
             standard_legend(cols, limits, r, add = T, ylabposScling = 0.8,
                             plot_loc = c(0.35, 0.85, 0.05, 0.1), ...)
 
-        
-        file = paste0("outputs/longTermRecord_", urlD, '--', gsub(' ', '_', title), ".nc") 
+        title = gsub(' ', '_', title)        
+        title = gsub('OVER', '/', title)
+        file = paste0("outputs/longTermRecord_", urlD, '--', , ".nc") 
         writeRaster.gitInfo(r, filename = file, overwrite = TRUE)
     }
     graphics.off()
@@ -131,7 +132,7 @@ FUN <- function(urlS, urlE, urlD, yrS, yrE, yrSkip) {
                 TRUE, extend_max = TRUE, extend_min = TRUE, units = '%', oneSideLabels = FALSE)
 
         plotFun(aadat5/aadat, round(anomLimits2, 1), anomCols,
-                paste0(mnStr, yrE - ny, '-', mnEnd, yrE, ' - ', mnStr, yrS, '-', mnEnd, yrE,
+                paste0(mnStr, yrE - ny, '-', mnEnd, yrE, ' / ', mnStr, yrS, '-', mnEnd, yrE,
                        ' Annual average'),
                 TRUE, extend_max = TRUE, oneSideLabels = FALSE)
         
