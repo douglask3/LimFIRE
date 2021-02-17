@@ -333,25 +333,8 @@ controls2 = controls
 map = controls2[[1:2]]
 map[!is.na(map)] = 0
 
-## Increase fuel and decrese moisture
-test = controls2[[1]] == 1 & controls2[[2]] == 1
-map[[1]][test] = 1
 
-## Increase fuel only
-test = controls2[[1]] == 1  & controls2[[2]] == 0
-map[[1]][test] = 2
-
-## Increase moisture only
-test = controls2[[1]] == 0  & controls2[[2]] == 1
-map[[1]][test] = 3
-
-## Decrease suppession
-test = controls[[4]] == 1
-map[[2]][test] = 1
-
-
-
-SimplePlot <- function(map, cols, leg, fname, addleg = TRUE, limitmax = 2.5, useMap2NC = TRUE) {
+SimplePlot <- function(map, cols, leg, fname, addleg = TRUE, limitmax = 2.5, useMap2NC = TRUE, ...) {
     cols =  c('white', cols)
     png(paste0("figs/", fname, ".png"), height = 4, width = 4*360/150, units = 'in', res = 300)
     par(mar = rep(0,4))
@@ -359,7 +342,7 @@ SimplePlot <- function(map, cols, leg, fname, addleg = TRUE, limitmax = 2.5, use
                     cols  = cols, #  
 	    	    e = map[[2]], e_lims = 0.5,  
                     ePatternRes = 30, ePatternThick = 1,
-	            preLeveled = TRUE, add_legend = FALSE, interior = FALSE)
+	            preLeveled = TRUE, add_legend = FALSE, interior = FALSE, ...)
     cols[1] = 'black'
     if (addleg)
         legend('bottomleft', col = rev(cols),  pch = c(rep(15, ceiling(limitmax)), 19),
@@ -383,10 +366,48 @@ SimplePlot <- function(map, cols, leg, fname, addleg = TRUE, limitmax = 2.5, use
                        comment = comment, overwrite = TRUE)
     if (addleg) dev.off()
 }
+
+## Increase fuel and decrese moisture
+test = controls2[[1]] == 1 & controls2[[2]] == 1
+map[[1]][test] = 1
+
+## Increase fuel only
+test = controls2[[1]] == 1  & controls2[[2]] == 0
+map[[1]][test] = 2
+
+## Increase moisture only
+test = controls2[[1]] == 0  & controls2[[2]] == 1
+map[[1]][test] = 3
+
+## Decrease suppession
+test = controls[[4]] == 1
+map[[2]][test] = 1
+
 SimplePlot(map, c( '#a50026', '#80cdc1', '#dfc27d'),
            c("Drying conditions", "Increasing fuel", "both", "Decreased suppression"),
-           "increasingFireControls")
+             "increasingFireControls")
 
+map[!is.na(map)] = 0
+
+## Increase fuel and decrese moisture
+test = controls2[[1]] == 1 & controls2[[2]] == 1
+map[[1]][test] = 1
+
+## Increase fuel only
+test = controls2[[1]] == 1  & controls2[[2]] == 0
+map[[1]][test] = 3
+
+## Increase moisture only
+test = controls2[[1]] == 0  & controls2[[2]] == 1
+map[[1]][test] = 2
+
+map[[2]][] = 999
+
+SimplePlot(map, c("#7570b3", "#d95f02", "#1b9e77"),
+           c( "Increasing fuel","Drying conditions", "both"),
+             "increasingFireControls-noPeople")
+
+browser()
 
 map[!is.na(map)] = 0
 
@@ -442,9 +463,9 @@ map[[1]][test] = 1
 ## Increase fuel only
 test = controls2[[1]] == -1  & controls2[[2]] == 1
 map[[1]][test] = 2
+map[[2]] = 999
 
-
-SimplePlot(map, c( '#d7191c', '#2c7bb6'),
+SimplePlot(map, c( '#d7191c', '#2c7bb6'), useMap2NC = FALSE,
            c("Increasing & drying fuel", "Decreasing fuel/increasing moisture"),
            "counteractingFireControls")
 
