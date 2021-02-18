@@ -1,4 +1,4 @@
-plotStandardMap <- function(x, txt, limits, cols, e = NULL, recrop_e = TRUE, plot_loc = c(0.35,0.83,0.015,0.045), ...) {
+plotStandardMap <- function(x, txt, limits, cols, e = NULL, recrop_e = TRUE, plot_loc = c(0.35,0.83,0.015,0.045), quick = TRUE, coast.lwd = NULL,...) {
     mask = raster('data/seamask.nc')
     mask = raster::resample(mask, x)
     x[mask != 2] = NaN
@@ -6,9 +6,9 @@ plotStandardMap <- function(x, txt, limits, cols, e = NULL, recrop_e = TRUE, plo
     
     FUN <- function(...) {
         plot_raster_from_raster(x, y_range = c(-60, 90), limits = limits, cols = cols,
-                                transpose = FALSE, srt = 0, coast.lwd = NULL, 
+                                transpose = FALSE, srt = 0, coast.lwd = coast.lwd, 
                                 plot_loc = plot_loc,
-                                quick = TRUE, e = e, ...)
+                                quick = quick, e = e, ...)
     }
     
     FUN(...)

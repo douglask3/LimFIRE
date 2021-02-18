@@ -13,8 +13,8 @@ obs = lapply(drive_fname, stack)
 vars = list('crop', 'pas', 'popdens', c('crop', 'pas', 'popdens'))
 dfire_lims = list(c(-10, -5, -1,  -0.5, -0.1,  0.1, 0.5, 1, 5, 10),
 				  c(-80, -60, -40, -20, -10,  -1, 1, 10, 20, 40, 60, 80),
-				  c(-20, -10, -5, -2, -1, 1, 2, 5, 10, 20)/10)
-
+				  c(-10, -5, -2, -1, -0.1, 0.1, 1, 2, 5, 10)/10)
+add_confDots = FALSE
 #########################################################################
 ## Run model                                                           ##
 #########################################################################
@@ -77,12 +77,17 @@ plotVar <- function(i, xlim, ylim, name, title, xlab, log = '', plotFun,...) {
 		var = mean(obs[[name]])
 		log = log
 	}
-	
-	plotMap <- function(x, limits = limits, cols = dfire_cols, add_legend = FALSE,...) {
-		plotStandardMap(mean(x), '', limits = limits, cols =  cols, 
-			        e = sd.raster(x), ePatternRes = 40, ePatternThick = 0.5, 
+        
+	plotMap <- function(x, limits = limits, cols = dfire_cols, add_legend = FALSE,...,
+                            mapType = '') {
+                if (add_confDots) eMap = sd.raster(x) else eMap = NULL
+                r = mean(x)
+		plotStandardMap(r, '', limits = limits, cols =  cols, 
+			        e = eMap, ePatternRes = 40, ePatternThick = 0.5, 
                                 limits_error = c(0.1, 0.2),
 				add_legend = add_legend, ...)
+                fname = paste0("outputs/", "impactOf_", title, "_on_", mapType, ".nc")
+                writeRaster.gitInfo(r, file = fname, overwrite = TRUE)
 	}
         
 	par(mar = c(3, 0.5, 0, 0.5))
@@ -119,11 +124,11 @@ plotVar <- function(i, xlim, ylim, name, title, xlab, log = '', plotFun,...) {
         
 	par(mar = rep(0,4))
         
-	plotMap(diffv * 100 * 12, dfire_lims[[1]], ...)
+	plotMap(diffv * 100 * 12, dfire_lims[[1]], ..., mapType = 'annualAverage')
 	
 	
 	#plotMap(layer.apply(1:nlayers(diffv), function(i) diffv[[i]]/norm[[i]]) * 100, dfire_lims[[2]],...)
-	plotMap((100/14)*(contr - trend)/norm, dfire_lims[[3]], ...)
+	plotMap((100/14)*(contr - trend)/norm, dfire_lims[[3]], ..., mapType = 'trend')
 	
 	areaIncreaseDecrease <- function(x) {
 		a  = raster::area(x, na.rm = TRUE)
