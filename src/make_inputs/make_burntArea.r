@@ -32,9 +32,7 @@ openHDFandConvert2Nc <- function(month, fname) {
 	return(dat)
 }
 
-dat = layer.apply(files, function(...)
-				 layer.apply(1:12, openHDFandConvert2Nc, ...))
-				 
+dat = layer.apply(files, function(...) layer.apply(1:12, openHDFandConvert2Nc, ...))				 
 names(fileDate) = paste(names(fileDate), 'obtained on')
 				 
 comment = list('Data from GFEDv4.1s' =
