@@ -153,7 +153,7 @@ plotVar <- function(i, xlim, ylim, name, title, xlab, log = '', plotFun,...) {
 FUNcrop <- function() lines(c(0,100), c(0, -100), col = 'blue')
 FUNpas  <- function() lines(c(0,100), c(0,  100), col = 'blue')
 FUNpopd <- function() lines(c(0.00001, 9E9), c(0, 0), col = 'blue')
-	
+
 png('figs/human_impact.png', width = 7.2, height = 5.5, res = 300, unit = 'in')
     par(oma = c(0, 4, 1.5, 0))
     layout(rbind(1:3, 4:6, 7:9, 10:12, c(0, 13:14)),
@@ -170,7 +170,7 @@ png('figs/human_impact.png', width = 7.2, height = 5.5, res = 300, unit = 'in')
 			       transpose = FALSE, plot_loc = c(0.05, 0.95, 0.75, 0.9), 
                                ylabposScling=1.5,  oneSideLabels = FALSE, add = FALSE,
                                extend_max = TRUE, extend_min = TRUE)
-	    mtext(units, side = 1, line = -1)
+	    mtext(units, side = 1, line = 0)
 	}
 	
 	
@@ -183,7 +183,16 @@ png('figs/human_impact.png', width = 7.2, height = 5.5, res = 300, unit = 'in')
 	mtext.units('Change in burnt area (% ~month-1~)', side = 2, line = 1, cex = 0.8, outer = TRUE, adj = 0.67 * 4.3/4)
 dev.off()
 
-
+pdf('figs/human_impact_slim.pdf', width = 7.2, height = 2)
+    par(oma = c(1, 4, 1.5, 0))
+    layout(rbind(1:3, c(0, 4:5)), widths = c(0.1, 1, 1), heights = c(1, 0.3))
+    plotVar(4, c(0.001, 100), c(-100, 100), vars[[4]], "All human drivers", '', FUNpopd)
+    addLegend(dfire_lims[[1]], '%')
+	#addLegend(dfire_lims[[2]], '% change in normalised burnt area')
+    addLegend(dfire_lims[[3]], '%/yr')
+    mapply(mtext, c("Annual Average", "Trend"), adj = c(0.25, 0.75), 
+	   MoreArgs = list(side = 3, outer = TRUE))
+dev.off()
 
 
 
