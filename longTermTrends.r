@@ -17,11 +17,12 @@ yrE = c(2019, 2018, 2018, 2018)
 yrSkip = list(c(), 1994, c(), c())
 
 aaLimits = c(0, 1, 2, 5, 10, 20, 50)
-anomLimits1 = c(-2, -1, -0.5, -0.2, -0.1, 0.1, 0.2, 0.5, 1, 2)
+anomLimits1 = c(-10, -5, -2, -1, -0.5, -0.2, -0.1, 0.1, 0.2, 0.5, 1, 2, 5, 10)
 anomLimits2 = c(1.1, 1.2, 1.5, 2, 5)
 anomLimits2 = c(rev(1/anomLimits2), anomLimits2)
 aaCols = c('#ffffcc','#ffeda0','#fed976','#feb24c','#fd8d3c','#fc4e2a','#e31a1c','#bd0026','#800026')
 anomCols = rev(c('#b2182b','#d6604d','#f4a582','#fddbc7','#f7f7f7','#d1e5f0','#92c5de','#4393c3','#2166ac'))
+anomCols = rev(c('#a50026','#d73027','#f46d43','#fdae61','#fee090','#ffffbf','#e0f3f8','#abd9e9','#74add1','#4575b4','#313695'))
 
 
 whenCols = c("#161843", "#FFFF00", "#a50026")
@@ -35,22 +36,30 @@ FUN <- function(urlS, urlE, urlD, yrS, yrE, yrSkip) {
         
         if (any(yrSkip == yr)) yr = yr-1
         url = paste0(urlS, yr, "/", yr, mn, urlE)
-        dest = paste0("data/CCI_long_term/burntArea-", urlD, '-', yr, "-", mn, ".nc")
+    
+        destDis = paste0("temp/CCI_long_term_burntArea-DIS", urlD, '-', yr, "-", mn, ".nc")
 
-        if (!file.exists(dest) ) {
+        if (!file.exists(destDis)) {
+            dest = paste0("data/CCI_long_term/burntArea-", urlD, '-', yr, "-", mn, ".nc")
+
+            if (!file.exists(dest) ) {
             
-            dwn = try(download.file(url, dest))
-            if (class(dwn) == "try-error") {
-                url = paste0(urlS, yr, "/new-corrected/", yr, mn, urlE)
                 dwn = try(download.file(url, dest))
                 if (class(dwn) == "try-error") {
-                    try(file.remove(dest))
-                    if (yr == yrE) return(invisible())
-                    else stop()
-                }
-            }
+                    url = paste0(urlS, yr, "/new-corrected/", yr, mn, urlE)
+                    dwn = try(download.file(url, dest))
+                    if (class(dwn) == "try-error") {
+                        try(file.remove(dest))
+                        if (yr == yrE) return(invisible())
+                        else stop()
+                    }
+                }            
+            } else  dest = raster(dest, varname = "burned_area")
+            
+            dest = raster::disaggregate(dest, fact = 3, method = 'bilinear')
+            dest = writeRaster(dest, file = destDis)
         }
-        raster(dest, varname = "burned_area")
+        raster( destDis)
     }    
     
     dat = layer.apply(yrS:yrE, function(yr) layer.apply(1:12, openYrMon, yr))
@@ -70,12 +79,25 @@ FUN <- function(urlS, urlE, urlD, yrS, yrE, yrSkip) {
     aadat = 12*mean(adat)/darea
     aadat5 = 12*mean(adat[[(nlayers(adat)-4):nlayers(adat)]])/darea
     
-    maxDat = mean(dat[[1:3]])
+    #memSafeFile.initialise("temp/")
+    #disMem <- function(r) {
+    #    file = memSafeFile()
+    #    print(file)
+    #    r = raster::disaggregate(r, fact = 4, method = 'bilinear')
+    #    r = writeRaster(r, file, overwrite = TRUE)
+    #    return(r)
+    #}
+    #disFile =  paste0("/longTermRecord_sinlePlot-", urlD, '--','disagged', ".nc")
+    #if (file.exists(disFile)) dat = brick(disFile) 
+    #else dat = writeRaster( layer.apply(dat, disMem), disFile)
+    
+    
+    maxDat = mean(dat[[1:2]])
     wmxDat = maxDat
     wmxDat[] = NaN
-    for (mn in 3:(nlayers(dat)-1)) {
+    for (mn in 3:(nlayers(dat))) {
         print(mn)
-        dati = mean(dat[[(mn-1):(mn+1)]])
+        dati = mean(dat[[(mn-1):mn]])
         test = dati > maxDat
         maxDat[test] = dati[test]
         wmxDat[test] = mn
@@ -99,11 +121,21 @@ FUN <- function(urlS, urlE, urlD, yrS, yrE, yrSkip) {
         title = gsub(' ', '_', title)        
         title = gsub('/', 'OVER', title)
         file = paste0("outputs/longTermRecord_", urlD, '--', title, ".nc") 
+        print(file)
         writeRaster.gitInfo(r, filename = file, overwrite = TRUE)
+        fname = paste0("figs/longTermRecord_sinlePlot-", urlD, '--', title, ".pdf") 
+        pdf(fname, width = 7.2, height = 0.5*5 * 5/3 * 7.2/9)
+            par(mar = c(0,0,0,0), oma = c(0.33+0.75,0,0,0))
+            plotStandardMap(r, '', limits, cols = cols, add_legend = FALSE)
+            standard_legend(cols, limits, r, add = T, ylabposScling = 0.8,
+                            plot_loc = c(0.35, 0.9, 0.05, 0.085), ...)
+        dev.off() 
+        
+        print("PDFED")   
     }
     graphics.off()
     png(paste0("figs/longTermRecord_", urlD, '_', yrS, '-', yrE, ".png"),
-        height = 5.1*1.3, width = 7.2*1.3, units = 'in', res = 300)
+        height = 5.1*1.3*5, width = 7.2*1.3*5, units = 'in', res = 300)
         par(mar = c(2, 0, 0, 0), mfcol = c(3,2), oma = rep(1, 4))
         
         
@@ -151,7 +183,7 @@ FUN <- function(urlS, urlE, urlD, yrS, yrE, yrSkip) {
         test = nchar(labelss) == 2
         labelss[test] = paste0("`", labelss[test])
         plotFun(wmxDat, seq(12, nlayers(dat)-1, by = 12), cols = whenCols,
-                'Month of max. burnt area',
+                paste0(mnStr, yrS, '-', mnEnd, yrE, ' ', 'Month of max. burnt area'),
                 TRUE, labelss = labelss, oneSideLabels = FALSE)
         
     dev.off()
