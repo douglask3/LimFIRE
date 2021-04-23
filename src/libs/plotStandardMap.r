@@ -12,7 +12,8 @@ plotStandardMap <- function(x, txt, limits, cols, e = NULL, recrop_e = TRUE, plo
     }
     
     FUN(...)
-    for (i in 1:4) addCoastlineAndIce2map()
+    addCoastlineAndIce2map()
+    #for (i in 1:4) addCoastlineAndIce2map()
     
     #if (recrop_e && !is.null(e)) c(e, nn) := cropIndonesia(e, mask)
     #c(x, mask) := cropIndonesia(x, mask)
