@@ -244,7 +244,7 @@ plot_pmod <- function(i, let, index = NULL, normalise = FALSE, combineLetter = F
     pmods = ensambleSum[[i]]
 
     lab = labs[i]    
-    let = paste(let, ')', sep = '')
+    if (let != '') let = paste(let, ')', sep = '')
 
     pmods = pmods[-1] # remove first element of simulated fire
     #pmod = mapply(function(pm, FUN) FUN(pm), pmods, FUNs)
@@ -311,12 +311,13 @@ plot_Lims <- function(whichPlots = 1:6,...) {
         file_ID = paste0(c("standard", "potential", "sensitivity"),
                          c(rep('annual_average',3), rep('fire_season', 3)), sep = '-')
     }
-    pc_out = mapply(plot_pmod, whichPlots, lets, file_ID = file_ID, MoreArgs = list(...))
-    
-    par(mar = c(3, 2, 0, 2))
+    if (length(whichPlots) == 1) 
+        pc_out = plot_pmod(whichPlots, '', file_ID, ...)        
+       else pc_out = mapply(plot_pmod, whichPlots, lets, file_ID = file_ID, MoreArgs = list(...))
+     par(mar = c(3, 2, 0, 2))
     if (dominant) {
         plot.new()
-        if (all(whichPlots == 1:6)) { ncol = 1; horiz = TRUE; pos = "top"}
+        if (all(whichPlots == 1:6) || length(whichPlots) == 1) { ncol = 1; horiz = TRUE; pos = "top"}
             else { ncol = 2; horiz = FALSE; pos = "bottom"}
         legend(pos, c("Fuel", "Moisture", "Ignitions", "Suppression"),
                 pch = 15, ncol = ncol, pt.cex = 2, horiz = horiz,
@@ -348,11 +349,20 @@ plot_Lims <- function(whichPlots = 1:6,...) {
 
 plotAddLimTypes <- function(fname, ...) {
 ## Set up plotting window
-	figName = paste0(fig_fname, '-', fname, 'dominant', dominant, '.png')	
-	png(figName, width = 7.2, height = 6 * 4/3 * 7.2/9, unit = 'in', res = 600)
+	figName = paste0(fig_fname, '-', fname, 'dominant', dominant, '.pdf')	
+	pdf(figName, width = 7.2, height = 6 * 4/3 * 7.2/9)#, unit = 'in', res = 600)
 	layout(rbind(cbind(1:3,4:6),7))#, heights = c(4.5, 4.5, 1))
     
 	plot_Lims(1:6, ...)
+}
+
+plotAddLimTypes_SuperSlim <- function(fname, ...) {
+## Set up plotting window
+	figName = paste0(fig_fname, '-superSlim-', fname, 'dominant', dominant, '.pdf')	
+	pdf(figName, width = 7.2, height = 5 * 5/3 * 7.2/9)#, unit = 'in', res = 600)
+	layout(rbind(1, 2))#, heights = c(4.5, 4.5, 1))
+    
+	plot_Lims(6, ...)
 }
 
 plotAddLimTypes_slimed <- function(fname, ...) {
@@ -366,7 +376,7 @@ plotAddLimTypes_slimed <- function(fname, ...) {
 #maxLim <- function(i) i[[1]] + i[[2]]
 #minLim <- function(i) i[[1]] - i[[2]]
 
-#plotAddLimTypes_slimed('', NULL)
+plotAddLimTypes_SuperSlim('', NULL)
 plotAddLimTypes('', NULL)
 browser()
 plotAddLimTypes_slimed('maxFuel', c(3, rep(2, 3)))
