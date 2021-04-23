@@ -329,15 +329,20 @@ pdf(fname, height = sum(heights), width = 7.10866)#4 * 7.2/6.3)#, units = 'in', 
 	
 dev.off()
 controls2 = round(raster::disaggregate(controls, fact = 5, method = 'bilinear'))
-controls2 = controls
+#controls2 = controls
 map = controls2[[1:2]]
 map[!is.na(map)] = 0
 
 
 SimplePlot <- function(map, cols, leg, fname, addleg = TRUE, limitmax = 2.5, useMap2NC = TRUE, ...) {
     cols =  c('white', cols)
-    png(paste0("figs/", fname, ".png"), height = 4, width = 4*360/150, units = 'in', res = 300)
-    par(mar = rep(0,4))
+    #png(paste0("figs/", fname, "png"), height = 4, width = 4*360/150, units = 'in', res = 300)
+    #par(mar = rep(0,4))
+
+    pdf(paste0("figs/", fname, ".pdf"), width = 7.2, height = 5 * 5/3 * 7.2/9)
+    par(mar = c(0,0,0.67,0), oma = c(0,0,1.5,0))
+    layout(rbind(1, 2))#, heights = c(4.5, 4.5, 1))
+
     plotStandardMap(map, '', limits = 0.5:limitmax, 
                     cols  = cols, #  
 	    	    e = map[[2]], e_lims = 0.5,  
@@ -366,7 +371,6 @@ SimplePlot <- function(map, cols, leg, fname, addleg = TRUE, limitmax = 2.5, use
                        comment = comment, overwrite = TRUE)
     if (addleg) dev.off()
 }
-
 ## Increase fuel and decrese moisture
 test = controls2[[1]] == 1 & controls2[[2]] == 1
 map[[1]][test] = 1
@@ -382,7 +386,7 @@ map[[1]][test] = 3
 ## Decrease suppession
 test = controls[[4]] == 1
 map[[2]][test] = 1
-
+browser()
 SimplePlot(map, c( '#a50026', '#80cdc1', '#dfc27d'),
            c("Drying conditions", "Increasing fuel", "both", "Decreased suppression"),
              "increasingFireControls")
